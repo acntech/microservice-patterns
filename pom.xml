@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- PROJECT -->
+    <groupId>no.acntech</groupId>
+    <artifactId>microservice-patterns</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>Microservice Patterns</description>
+
+    <developers>
+        <developer>
+            <id>thomas.johansen</id>
+            <name>Thomas Johansen</name>
+            <email>thomas.johansen@accenture.com</email>
+        </developer>
+        <developer>
+            <id>jorgen.ringen</id>
+            <name>Jørgen Ringen</name>
+            <email>jorgen.ringen@accenture.com</email>
+        </developer>
+    </developers>
+
+    <!-- MODULES -->
+    <modules>
+        <module>ipc-patterns-events</module>
+    </modules>
+</project>
