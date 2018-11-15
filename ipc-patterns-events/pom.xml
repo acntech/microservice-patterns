@@ -14,5 +14,6 @@
 
     <!-- MODULES -->
     <modules>
+        <module>event-notification</module>
     </modules>
 </project>
