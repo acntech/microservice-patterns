@@ -10,17 +10,17 @@ import no.acntech.warehouse.entity.Inventory;
 import no.acntech.warehouse.repository.InventoryRepository;
 
 @SpringBootApplication
-public class WarehouseApplication {
+public class RestWarehouseApplication {
 
     private final InventoryRepository inventoryRepository;
 
     @Autowired
-    public WarehouseApplication(InventoryRepository inventoryRepository) {
+    public RestWarehouseApplication(InventoryRepository inventoryRepository) {
         this.inventoryRepository = inventoryRepository;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(WarehouseApplication.class, args);
+        SpringApplication.run(RestWarehouseApplication.class, args);
     }
 
     @Bean
