@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>products</artifactId>
+    <artifactId>warehouse</artifactId>
     <packaging>war</packaging>
 
     <dependencies>

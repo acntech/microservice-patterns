@@ -6,12 +6,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
-
-import org.springframework.data.annotation.LastModifiedDate;
 
 import no.acntech.product.model.Product;
 
@@ -27,7 +27,6 @@ public class Inventory {
     private Product product;
     @NotNull
     private Long quantity;
-    @LastModifiedDate
     private ZonedDateTime modified;
 
     public Long getId() {
@@ -44,5 +43,45 @@ public class Inventory {
 
     public ZonedDateTime getModified() {
         return modified;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        modified = ZonedDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        modified = ZonedDateTime.now();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+
+        private Product product;
+        private Long quantity;
+
+        private Builder() {
+        }
+
+        public Builder product(Product product) {
+            this.product = product;
+            return this;
+        }
+
+        public Builder quantity(Long quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Inventory build() {
+            Inventory inventory = new Inventory();
+            inventory.product = this.product;
+            inventory.quantity = this.quantity;
+            return inventory;
+        }
     }
 }

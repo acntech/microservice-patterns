@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import org.springframework.data.annotation.CreatedDate;
-
 @Table(name = "PRODUCTS")
 @Entity
 public class Product {
@@ -26,7 +24,6 @@ public class Product {
     @NotBlank
     private String name;
     private String description;
-    @CreatedDate
     private ZonedDateTime created;
 
     public Long getId() {
@@ -52,5 +49,36 @@ public class Product {
     @PrePersist
     public void prePersist() {
         productId = UUID.randomUUID();
+        created = ZonedDateTime.now();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+
+        private String name;
+        private String description;
+
+        private Builder() {
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Product build() {
+            Product product = new Product();
+            product.description = this.description;
+            product.name = this.name;
+            return product;
+        }
     }
 }

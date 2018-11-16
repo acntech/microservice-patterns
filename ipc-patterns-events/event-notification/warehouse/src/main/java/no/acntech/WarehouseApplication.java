@@ -5,12 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import no.acntech.converter.UUIDAttributeConverter;
 import no.acntech.converter.ZonedDateTimeAttributeConverter;
 
 @EnableJpaRepositories(basePackages = {
-        "no.acntech.product.repository"
+        "no.acntech.product.repository",
+        "no.acntech.inventory.repository"
 })
 @EntityScan(
         basePackageClasses = {
@@ -18,8 +20,10 @@ import no.acntech.converter.ZonedDateTimeAttributeConverter;
                 ZonedDateTimeAttributeConverter.class,
                 UUIDAttributeConverter.class},
         basePackages = {
-                "no.acntech.product.model"
+                "no.acntech.product.model",
+                "no.acntech.inventory.model"
         })
+@EnableTransactionManagement
 @SpringBootApplication
 public class WarehouseApplication {
 
