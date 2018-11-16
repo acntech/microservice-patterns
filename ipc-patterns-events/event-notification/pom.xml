@@ -25,7 +25,10 @@
     </properties>
 
     <modules>
-        <module>orders</module>
+        <module>warehouse</module>
+        <module>ordering</module>
+        <module>billing</module>
+        <module>shipping</module>
     </modules>
 
     <dependencies>
