@@ -28,5 +28,6 @@
     <!-- MODULES -->
     <modules>
         <module>ipc-patterns-events</module>
+        <module>ipc-patterns-rest-synchronous</module>
     </modules>
 </project>
