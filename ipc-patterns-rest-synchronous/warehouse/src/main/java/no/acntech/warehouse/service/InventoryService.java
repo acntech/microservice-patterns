@@ -5,6 +5,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import no.acntech.warehouse.service.exception.UnknownProductException;
 @Service
 @Transactional
 public class InventoryService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InventoryService.class);
 
     private final InventoryRepository inventoryRepository;
 
@@ -41,9 +45,8 @@ public class InventoryService {
                 throw new OutOfStockException(productId, quantity);
             }
         });
-    }
 
-    public List<Inventory> findAllProducts() {
-        return inventoryRepository.findAll();
+        LOGGER.info("Inventory reserved for order with orderId={}", reservation.getOrderId());
+
     }
 }

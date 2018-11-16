@@ -13,6 +13,6 @@ import java.util.Map;
 @Setter
 public class InventoryReservation {
 
-    private String customerId;
+    private String orderId;
     private Map<String, Integer> productQuantityMap;
 }

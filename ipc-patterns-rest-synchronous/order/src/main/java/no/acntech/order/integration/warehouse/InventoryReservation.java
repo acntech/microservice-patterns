@@ -1,4 +1,4 @@
-package no.acntech.order.integration;
+package no.acntech.order.integration.warehouse;
 
 import lombok.Data;
 import lombok.Getter;
@@ -15,12 +15,12 @@ import no.acntech.order.entity.Orderline;
 @ToString
 class InventoryReservation {
 
-    private String customerId;
+    private Long orderId;
     private Map<String, Integer> productQuantityMap;
 
     static InventoryReservation createFromOrder(Order order) {
         InventoryReservation inventoryReservation = new InventoryReservation();
-        inventoryReservation.customerId = order.getCustomerId();
+        inventoryReservation.orderId = order.getId();
         inventoryReservation.productQuantityMap = order.getOrderlines().stream()
                 .collect(Collectors.toMap(Orderline::getProductId, Orderline::getQuantity));
 

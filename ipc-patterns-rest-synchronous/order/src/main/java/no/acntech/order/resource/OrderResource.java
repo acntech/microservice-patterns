@@ -21,8 +21,8 @@ public class OrderResource {
     }
 
     @PostMapping
-    public ResponseEntity opprett(@RequestBody Order order) {
-        Order createdOrder = orderService.create(order);
+    public ResponseEntity submit(@RequestBody Order order) {
+        Order createdOrder = orderService.submit(order);
         return ResponseEntity.ok(createdOrder);
     }
 

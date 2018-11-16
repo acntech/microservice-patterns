@@ -29,6 +29,7 @@ public class Order {
     private Orderstatus orderstatus;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Orderline> orderlines = new ArrayList<>();
-    private String customerId;
+    private String warehouseReservationId;
+    private boolean shipped;
 
 }
