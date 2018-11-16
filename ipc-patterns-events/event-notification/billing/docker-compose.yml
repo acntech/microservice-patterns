@@ -5,7 +5,7 @@ services:
     image: openjdk:8-jre-alpine
       container_name: orders
       ports:
-      - 8081:8080
+      - 9010:9010
       environment:
       - SPRING_PROFILES_ACTIVE=default
       networks:
