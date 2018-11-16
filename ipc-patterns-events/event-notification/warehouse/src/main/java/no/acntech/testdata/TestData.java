@@ -1,4 +1,4 @@
-package no.acntech.data;
+package no.acntech.testdata;
 
 import javax.annotation.PostConstruct;
 
