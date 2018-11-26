@@ -24,17 +24,6 @@ public class Customer {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
-    @PrePersist
-    public void prePersist() {
-        this.customerId = UUID.randomUUID();
-        this.created = ZonedDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.modified = ZonedDateTime.now();
-    }
-
     public Long getId() {
         return id;
     }
@@ -61,6 +50,17 @@ public class Customer {
 
     public ZonedDateTime getModified() {
         return modified;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.customerId = UUID.randomUUID();
+        this.created = ZonedDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.modified = ZonedDateTime.now();
     }
 
     public static Builder builder() {

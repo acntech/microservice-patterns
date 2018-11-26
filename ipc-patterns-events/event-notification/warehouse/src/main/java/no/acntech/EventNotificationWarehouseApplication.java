@@ -12,8 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableJpaRepositories(basePackages = {
-        "no.acntech.product.repository",
-        "no.acntech.inventory.repository"
+        "no.acntech.product.repository"
 })
 @EntityScan(
         basePackageClasses = {
@@ -21,8 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
                 ZonedDateTimeAttributeConverter.class,
                 UUIDAttributeConverter.class},
         basePackages = {
-                "no.acntech.product.model",
-                "no.acntech.inventory.model"
+                "no.acntech.product.model"
         })
 @EnableTransactionManagement
 @SpringBootApplication

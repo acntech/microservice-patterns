@@ -1,4 +1,4 @@
-package no.acntech.converter;
+package no.acntech.order.converter;
 
 import no.acntech.order.model.CreateOrderLine;
 import no.acntech.order.model.OrderLine;

@@ -1,20 +1,14 @@
 package no.acntech.shipment.model;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
-import java.time.ZonedDateTime;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-@Table(name = "ORDERS")
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
+@Table(name = "SHIPMENTS")
 @Entity
 public class Shipment {
 
@@ -22,7 +16,9 @@ public class Shipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private Long customerId;
+    private UUID shipmentId;
+    @NotNull
+    private UUID orderId;
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -35,12 +31,20 @@ public class Shipment {
         return id;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public UUID getShipmentId() {
+        return shipmentId;
+    }
+
+    public UUID getOrderId() {
+        return orderId;
     }
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public ZonedDateTime getCreated() {
@@ -51,9 +55,44 @@ public class Shipment {
         return modified;
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.shipmentId = UUID.randomUUID();
+        this.status = Status.CREATED;
+        this.created = ZonedDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.modified = ZonedDateTime.now();
+    }
+
     public enum Status {
         CREATED,
         PENDING,
         COMPLETED
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+
+        private UUID orderId;
+
+        private Builder() {
+        }
+
+        public Builder orderId(UUID orderId) {
+            this.orderId = orderId;
+            return this;
+        }
+
+        public Shipment build() {
+            Shipment shipment = new Shipment();
+            shipment.orderId = this.orderId;
+            return shipment;
+        }
     }
 }

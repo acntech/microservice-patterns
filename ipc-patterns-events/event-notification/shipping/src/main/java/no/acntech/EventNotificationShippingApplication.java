@@ -1,5 +1,6 @@
 package no.acntech;
 
+import no.acntech.converter.UUIDAttributeConverter;
 import no.acntech.converter.ZonedDateTimeAttributeConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +16,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(
         basePackageClasses = {
                 Jsr310JpaConverters.class,
-                ZonedDateTimeAttributeConverter.class},
+                ZonedDateTimeAttributeConverter.class,
+                UUIDAttributeConverter.class},
         basePackages = {
                 "no.acntech.shipment.model"
         })
