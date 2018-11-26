@@ -1,6 +1,4 @@
-package no.acntech.inventory.model;
-
-import no.acntech.product.model.Product;
+package no.acntech.product.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
