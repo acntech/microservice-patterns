@@ -37,5 +37,6 @@ logging:
 
 # Server
 server:
+  port: 9040
   servlet:
     context-path: /api

@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  orders:
+    image: openjdk:8-jre-alpine
+      container_name: event-notification-warehouse
+      ports:
+      - 9040:9040
+      environment:
+      - SPRING_PROFILES_ACTIVE=default
+      networks:
+      - kafka
+
+networks:
+  kafka:
+    external: true

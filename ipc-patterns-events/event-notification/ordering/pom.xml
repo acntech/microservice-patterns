@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>orders</artifactId>
+    <artifactId>event-notification-ordering</artifactId>
     <packaging>war</packaging>
 
     <dependencies>

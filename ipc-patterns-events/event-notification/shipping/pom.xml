@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>shipping</artifactId>
+    <artifactId>event-notification-shipping</artifactId>
     <packaging>war</packaging>
 
     <dependencies>
