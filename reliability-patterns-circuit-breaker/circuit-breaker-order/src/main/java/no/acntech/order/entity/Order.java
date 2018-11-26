@@ -1,10 +1,6 @@
 package no.acntech.order.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,7 +21,6 @@ public class Order {
     private Orderstatus orderstatus;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Orderline> orderlines = new ArrayList<>();
-    private String warehouseReservationId;
-    private boolean shipped;
+    private String shippingId;
 
 }
