@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.acntech.synchronous</groupId>
+    <groupId>no.acntech</groupId>
     <artifactId>microservice-ipc-patterns-rest-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -18,9 +18,9 @@
     </properties>
 
     <modules>
-        <module>order</module>
-        <module>warehouse</module>
-        <module>shipping</module>
+        <module>rest-order</module>
+        <module>rest-warehouse</module>
+        <module>rest-shipping</module>
     </modules>
 
 </project>
