@@ -17,7 +17,7 @@ public class InvoiceService {
         this.invoiceRepository = invoiceRepository;
     }
 
-    public List<Invoice> findOrders() {
+    public List<Invoice> findInvoices() {
         return invoiceRepository.findAll();
     }
 }

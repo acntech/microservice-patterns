@@ -3,7 +3,7 @@
 ########################
 spring:
   application:
-    name: billing
+    name: customer
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL
@@ -37,6 +37,6 @@ logging:
 
 # Server
 server:
-  port: 9020
+  port: 9000
   servlet:
     context-path: /api

@@ -21,6 +21,6 @@ public class InvoiceResource {
 
     @GetMapping
     public List<Invoice> get() {
-        return invoiceService.findOrders();
+        return invoiceService.findInvoices();
     }
 }

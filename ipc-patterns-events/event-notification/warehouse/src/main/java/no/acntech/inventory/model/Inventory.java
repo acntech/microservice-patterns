@@ -1,19 +1,10 @@
 package no.acntech.inventory.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
-import java.time.ZonedDateTime;
-
 import no.acntech.product.model.Product;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 
 @Table(name = "INVENTORIES")
 @Entity
@@ -39,6 +30,10 @@ public class Inventory {
 
     public Long getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 
     public ZonedDateTime getModified() {

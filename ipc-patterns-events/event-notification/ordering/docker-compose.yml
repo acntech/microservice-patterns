@@ -3,9 +3,9 @@ version: '3.5'
 services:
   orders:
     image: openjdk:8-jre-alpine
-      container_name: orders
+      container_name: event-notification-ordering
       ports:
-      - 9000:9000
+      - 9010:9010
       environment:
       - SPRING_PROFILES_ACTIVE=default
       networks:

@@ -3,9 +3,9 @@ version: '3.5'
 services:
   orders:
     image: openjdk:8-jre-alpine
-      container_name: orders
+      container_name: event-notification-shipping
       ports:
-      - 9020:9020
+      - 9030:9030
       environment:
       - SPRING_PROFILES_ACTIVE=default
       networks:

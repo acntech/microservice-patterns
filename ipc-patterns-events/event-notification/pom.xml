@@ -25,11 +25,11 @@
     </properties>
 
     <modules>
+        <module>customers</module>
         <module>warehouse</module>
         <module>ordering</module>
         <module>billing</module>
         <module>shipping</module>
-        <module>customer</module>
     </modules>
 
     <dependencies>

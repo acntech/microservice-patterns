@@ -37,6 +37,6 @@ logging:
 
 # Server
 server:
-  port: 9000
+  port: 9010
   servlet:
     context-path: /api

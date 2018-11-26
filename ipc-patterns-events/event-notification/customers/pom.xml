@@ -10,8 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>event-notification-billing</artifactId>
-    <packaging>war</packaging>
+    <artifactId>event-notification-customers</artifactId>
 
     <dependencies>
         <dependency>
@@ -45,13 +44,4 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
