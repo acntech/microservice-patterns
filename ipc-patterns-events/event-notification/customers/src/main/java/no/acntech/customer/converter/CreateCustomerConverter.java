@@ -1,4 +1,4 @@
-package no.acntech.converter;
+package no.acntech.customer.converter;
 
 import no.acntech.customer.model.CreateCustomer;
 import no.acntech.customer.model.Customer;

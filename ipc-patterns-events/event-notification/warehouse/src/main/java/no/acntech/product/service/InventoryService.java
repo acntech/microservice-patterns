@@ -1,10 +1,10 @@
-package no.acntech.inventory.service;
+package no.acntech.product.service;
 
-import no.acntech.inventory.exception.InventoryQuantityNotSufficientException;
-import no.acntech.inventory.model.Inventory;
-import no.acntech.inventory.model.UpdateInventory;
-import no.acntech.inventory.repository.InventoryRepository;
+import no.acntech.product.exception.InventoryQuantityNotSufficientException;
 import no.acntech.product.exception.ProductNotFoundException;
+import no.acntech.product.model.Inventory;
+import no.acntech.product.model.UpdateInventory;
+import no.acntech.product.repository.InventoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +30,8 @@ public class InventoryService {
     }
 
     @Transactional
-    public Inventory updateInventory(UpdateInventory updateInventory) {
-        UUID productId = updateInventory.getProductId();
+    public Inventory updateInventory(final UUID productId,
+                                     final UpdateInventory updateInventory) {
         Long changeQuantity = updateInventory.getQuantity();
 
         Inventory inventory = inventoryRepository.findByProduct_ProductId(productId)

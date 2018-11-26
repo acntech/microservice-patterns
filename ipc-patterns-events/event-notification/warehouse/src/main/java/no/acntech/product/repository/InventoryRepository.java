@@ -1,6 +1,6 @@
-package no.acntech.inventory.repository;
+package no.acntech.product.repository;
 
-import no.acntech.inventory.model.Inventory;
+import no.acntech.product.model.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
