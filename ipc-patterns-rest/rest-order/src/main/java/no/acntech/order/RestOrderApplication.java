@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement(proxyTargetClass = true)
-public class OrderApplication {
+public class RestOrderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderApplication.class, args);
+        SpringApplication.run(RestOrderApplication.class, args);
     }
 }

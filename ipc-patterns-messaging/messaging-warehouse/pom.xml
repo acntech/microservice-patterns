@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>no.acntech</groupId>
-    <artifactId>rest-warehouse</artifactId>
+    <artifactId>messaging-warehouse</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -23,12 +23,21 @@
 
     <dependencies>
         <dependency>
+            <groupId>no.acntech</groupId>
+            <artifactId>messaging-message-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
