@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @Entity(name = "orders")
 public class Order {
-
+kompileringsfeil
     @Id
     @GeneratedValue
     private Long id;
