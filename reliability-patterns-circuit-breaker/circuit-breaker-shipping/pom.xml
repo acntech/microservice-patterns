@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>no.acntech</groupId>
-    <artifactId>rest-shipping</artifactId>
+    <artifactId>circuit-breaker-shipping</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 

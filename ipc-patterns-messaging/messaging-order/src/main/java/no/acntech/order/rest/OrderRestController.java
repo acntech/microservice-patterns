@@ -5,12 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.acntech.order.entity.Order;
 import no.acntech.order.service.OrderService;
 
-@RestController("orders")
+@RestController
+@RequestMapping("orders")
 public class OrderRestController {
 
     private final OrderService orderService;
