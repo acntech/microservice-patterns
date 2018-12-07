@@ -1,6 +1,8 @@
 # Microservice Patterns
 Projects for exploring different microservice architectures and patterns
 
+[![Build Status](https://travis-ci.org/acntech/microservice-patterns.svg?branch=develop)](https://travis-ci.org/acntech/microservice-patterns)
+
 * Microservices
   * Cirquit Breaker
   * Monitoring
