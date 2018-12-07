@@ -30,5 +30,6 @@
         <module>ipc-patterns-events</module>
         <module>ipc-patterns-rest</module>
         <module>ipc-patterns-messaging</module>
+        <module>reliability-patterns-circuit-breaker</module>
     </modules>
 </project>
