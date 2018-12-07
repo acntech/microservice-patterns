@@ -1,6 +1,7 @@
 package no.acntech.order.service;
 
 import no.acntech.order.model.*;
+import no.acntech.order.producer.OrderEventProducer;
 import no.acntech.order.repository.OrderLineRepository;
 import no.acntech.order.repository.OrderRepository;
 import org.springframework.core.convert.ConversionService;
@@ -18,18 +19,21 @@ public class OrderService {
     private final ConversionService conversionService;
     private final OrderRepository orderRepository;
     private final OrderLineRepository orderLineRepository;
+    private final OrderEventProducer orderEventProducer;
 
     public OrderService(final ConversionService conversionService,
                         final OrderRepository orderRepository,
-                        final OrderLineRepository orderLineRepository) {
+                        final OrderLineRepository orderLineRepository,
+                        final OrderEventProducer orderEventProducer) {
         this.conversionService = conversionService;
         this.orderRepository = orderRepository;
         this.orderLineRepository = orderLineRepository;
+        this.orderEventProducer = orderEventProducer;
     }
 
     public List<Order> findOrders(OrderQuery orderQuery) {
         UUID customerId = orderQuery.getCustomerId();
-        Order.Status status = orderQuery.getStatus();
+        OrderStatus status = orderQuery.getStatus();
         if (customerId != null && status != null) {
             return orderRepository.findAllByCustomerIdAndStatus(customerId, status);
         } else if (customerId != null) {
@@ -48,7 +52,9 @@ public class OrderService {
     @Transactional
     public Order createOrder(@NotNull CreateOrder createOrder) {
         Order order = conversionService.convert(createOrder, Order.class);
-        return orderRepository.save(order);
+        Order createdOrder = orderRepository.save(order);
+        orderEventProducer.orderCreated(createdOrder.getOrderId());
+        return createdOrder;
     }
 
     @Transactional
@@ -56,10 +62,9 @@ public class OrderService {
         Order order = orderRepository.findByOrderId(orderId);
         createOrderLine.setOrderId(order.getId());
         OrderLine orderLine = conversionService.convert(createOrderLine, OrderLine.class);
-
         orderLineRepository.save(orderLine);
-
         order.preUpdate();
+        orderEventProducer.orderUpdated(orderId, createOrderLine.getProductId(), createOrderLine.getQuantity());
         return order;
     }
 }

@@ -5,11 +5,13 @@ import javax.annotation.PostConstruct;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import no.acntech.order.model.Order;
 import no.acntech.order.repository.OrderRepository;
 
+@Profile("testdata")
 @Component
 public class TestData {
 

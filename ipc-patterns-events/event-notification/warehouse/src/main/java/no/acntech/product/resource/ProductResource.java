@@ -1,10 +1,7 @@
 package no.acntech.product.resource;
 
 import no.acntech.product.model.CreateProduct;
-import no.acntech.product.model.Inventory;
 import no.acntech.product.model.Product;
-import no.acntech.product.model.UpdateInventory;
-import no.acntech.product.service.InventoryService;
 import no.acntech.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +18,9 @@ import java.util.UUID;
 public class ProductResource {
 
     private final ProductService productService;
-    private final InventoryService inventoryService;
 
-    public ProductResource(final ProductService productService,
-                           final InventoryService inventoryService) {
+    public ProductResource(final ProductService productService) {
         this.productService = productService;
-        this.inventoryService = inventoryService;
     }
 
     @GetMapping
@@ -48,16 +42,5 @@ public class ProductResource {
                 .buildAndExpand(product.getProductId())
                 .toUri();
         return ResponseEntity.created(location).build();
-    }
-
-    @GetMapping(path = "{productId}/inventory")
-    public ResponseEntity<Inventory> getInventory(@Valid @NotNull @PathVariable("productId") final UUID productId) {
-        return ResponseEntity.ok(inventoryService.getInventory(productId));
-    }
-
-    @PutMapping(path = "{productId}/inventory")
-    public ResponseEntity<Inventory> putInventory(@Valid @NotNull @PathVariable("productId") final UUID productId,
-                                                  @Valid @RequestBody final UpdateInventory updateInventory) {
-        return ResponseEntity.ok(inventoryService.updateInventory(productId, updateInventory));
     }
 }

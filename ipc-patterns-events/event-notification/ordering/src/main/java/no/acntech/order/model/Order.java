@@ -1,26 +1,13 @@
 package no.acntech.order.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.SortNatural;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import org.hibernate.annotations.SortNatural;
 
 @Table(name = "ORDERS")
 @Entity
@@ -35,7 +22,7 @@ public class Order {
     private UUID customerId;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus status;
     @SortNatural
     @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL)
     private List<OrderLine> orderLines = new ArrayList<>();
@@ -54,11 +41,11 @@ public class Order {
         return customerId;
     }
 
-    public Status getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -77,19 +64,13 @@ public class Order {
     @PrePersist
     public void prePersist() {
         orderId = UUID.randomUUID();
-        status = Status.CREATED;
+        status = OrderStatus.CREATED;
         created = ZonedDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate() {
         modified = ZonedDateTime.now();
-    }
-
-    public enum Status {
-        CREATED,
-        PENDING,
-        COMPLETED
     }
 
     public static Builder builder() {

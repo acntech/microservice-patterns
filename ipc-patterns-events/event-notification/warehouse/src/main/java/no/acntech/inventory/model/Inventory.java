@@ -1,10 +1,12 @@
-package no.acntech.product.model;
+package no.acntech.inventory.model;
+
+import no.acntech.product.model.Product;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
-@Table(name = "INVENTORIES")
+@Table(name = "INVENTORY")
 @Entity
 public class Inventory {
 
@@ -16,6 +18,7 @@ public class Inventory {
     private Product product;
     @NotNull
     private Long quantity;
+    private ZonedDateTime created;
     private ZonedDateTime modified;
 
     public Long getId() {
@@ -34,13 +37,17 @@ public class Inventory {
         this.quantity = quantity;
     }
 
+    public ZonedDateTime getCreated() {
+        return created;
+    }
+
     public ZonedDateTime getModified() {
         return modified;
     }
 
     @PrePersist
     public void prePersist() {
-        modified = ZonedDateTime.now();
+        created = ZonedDateTime.now();
     }
 
     @PreUpdate
