@@ -6,6 +6,8 @@ import no.acntech.reservation.model.Reservation;
 import no.acntech.reservation.model.SaveReservation;
 import no.acntech.reservation.producer.ReservationEventProducer;
 import no.acntech.reservation.repository.ReservationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ import java.util.UUID;
 
 @Service
 public class ReservationService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
 
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
@@ -48,6 +52,7 @@ public class ReservationService {
             Reservation reservation = existingReservation.get();
             reservation.setQuantity(quantity);
             reservationRepository.save(reservation);
+            LOGGER.debug("Updated reservation for order-id {} and product-id {}", orderId, productId);
             reservationEventProducer.reservationUpdated(orderId, productId);
         } else {
             Optional<Product> existingProduct = productRepository.findByProductId(productId);
@@ -59,8 +64,10 @@ public class ReservationService {
                         .quantity(quantity)
                         .build();
                 reservationRepository.save(reservation);
+                LOGGER.debug("Created reservation for order-id {} and product-id {}", orderId, productId);
                 reservationEventProducer.reservationCreated(orderId, productId);
             } else {
+                LOGGER.debug("Cannot make reservation for order-id {} due to unknown product-id {}", orderId, productId);
                 reservationEventProducer.productNotFound(orderId, productId);
             }
         }

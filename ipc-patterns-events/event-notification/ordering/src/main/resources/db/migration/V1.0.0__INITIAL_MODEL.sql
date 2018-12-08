@@ -14,6 +14,7 @@ CREATE TABLE ORDER_LINES
 , ORDER_ID                                  NUMBER(19)                NOT NULL
 , PRODUCT_ID                                VARCHAR2(36 CHAR)         NOT NULL
 , QUANTITY                                  NUMBER (19)               NOT NULL
+, STATUS                                    VARCHAR2(20 CHAR)         NOT NULL
 , CREATED                                   TIMESTAMP(6)              NOT NULL
 , MODIFIED                                  TIMESTAMP(6)
 , CONSTRAINT ORDER_LINES_PK                 PRIMARY KEY (ID)

@@ -1,14 +1,7 @@
 package no.acntech.order.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -25,6 +18,9 @@ public class OrderLine {
     private UUID productId;
     @NotNull
     private Long quantity;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private OrderLineStatus status;
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
@@ -44,6 +40,14 @@ public class OrderLine {
         return quantity;
     }
 
+    public OrderLineStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderLineStatus status) {
+        this.status = status;
+    }
+
     public ZonedDateTime getCreated() {
         return created;
     }
@@ -54,6 +58,7 @@ public class OrderLine {
 
     @PrePersist
     public void prePersist() {
+        status = OrderLineStatus.PENDING;
         created = ZonedDateTime.now();
     }
 

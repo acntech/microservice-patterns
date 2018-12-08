@@ -1,10 +1,9 @@
 package no.acntech.order.model;
 
-public enum OrderStatus {
+public enum OrderLineStatus {
 
-    CREATED,
     PENDING,
-    COMPLETED,
+    CONFIRMED,
     CANCELED,
     REJECTED
 }
