@@ -1,7 +1,7 @@
 package no.acntech.reservation.consumer;
 
-import no.acntech.order.model.OrderLineStatus;
-import no.acntech.order.model.UpdateOrderLine;
+import no.acntech.order.model.ItemStatus;
+import no.acntech.order.model.UpdateItem;
 import no.acntech.order.service.OrderService;
 import no.acntech.reservation.model.ReservationEvent;
 import no.acntech.reservation.model.ReservationEventType;
@@ -45,22 +45,19 @@ public class ReservationEventConsumer {
                     ReservationEvent reservationEvent = record.value();
                     if (reservationEvent == null) {
                         LOGGER.debug("Reservation event was null");
-                    } else if (ReservationEventType.PRODUCT_NOT_FOUND != reservationEvent.getType()) {
-                        LOGGER.debug("Processing order event type {}", reservationEvent.getType());
-                        UpdateOrderLine updateOrderLine = UpdateOrderLine.builder()
-                                .orderId(reservationEvent.getOrderId())
-                                .productId(reservationEvent.getProductId())
-                                .status(OrderLineStatus.REJECTED)
-                                .build();
-                        orderService.updateOrderLine(updateOrderLine);
                     } else {
                         LOGGER.debug("Processing order event type {}", reservationEvent.getType());
-                        UpdateOrderLine updateOrderLine = UpdateOrderLine.builder()
+                        ItemStatus status = ItemStatus.CONFIRMED;
+                        if (ReservationEventType.PRODUCT_NOT_FOUND == reservationEvent.getType()) {
+                            status = ItemStatus.REJECTED;
+                        }
+
+                        UpdateItem updateItem = UpdateItem.builder()
                                 .orderId(reservationEvent.getOrderId())
                                 .productId(reservationEvent.getProductId())
-                                .status(OrderLineStatus.CONFIRMED)
+                                .status(status)
                                 .build();
-                        orderService.updateOrderLine(updateOrderLine);
+                        orderService.updateItem(updateItem);
                     }
                 });
             }

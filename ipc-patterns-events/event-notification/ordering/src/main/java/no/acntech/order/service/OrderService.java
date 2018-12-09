@@ -3,7 +3,7 @@ package no.acntech.order.service;
 import no.acntech.order.exception.OrderNotFoundException;
 import no.acntech.order.model.*;
 import no.acntech.order.producer.OrderEventProducer;
-import no.acntech.order.repository.OrderLineRepository;
+import no.acntech.order.repository.ItemRepository;
 import no.acntech.order.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +22,14 @@ public class OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
-    private final OrderLineRepository orderLineRepository;
+    private final ItemRepository itemRepository;
     private final OrderEventProducer orderEventProducer;
 
     public OrderService(final OrderRepository orderRepository,
-                        final OrderLineRepository orderLineRepository,
+                        final ItemRepository itemRepository,
                         final OrderEventProducer orderEventProducer) {
         this.orderRepository = orderRepository;
-        this.orderLineRepository = orderLineRepository;
+        this.itemRepository = itemRepository;
         this.orderEventProducer = orderEventProducer;
     }
 
@@ -64,19 +64,19 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrderLine(@NotNull UUID orderId, @NotNull CreateOrderLine createOrderLine) {
-        UUID productId = createOrderLine.getProductId();
-        Long quantity = createOrderLine.getQuantity();
+    public Order createItem(@NotNull UUID orderId, @NotNull CreateItem createItem) {
+        UUID productId = createItem.getProductId();
+        Long quantity = createItem.getQuantity();
 
         Order order = getOrder(orderId);
 
-        OrderLine orderLine = OrderLine.builder()
+        Item item = Item.builder()
                 .orderId(order.getId())
                 .productId(productId)
                 .quantity(quantity)
                 .build();
 
-        orderLineRepository.save(orderLine);
+        itemRepository.save(item);
         order.preUpdate();
 
         LOGGER.debug("Updated order with order-id {} for product-id {}", orderId, productId);
@@ -85,24 +85,24 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderLine(@NotNull UpdateOrderLine updateOrderLine) {
-        UUID orderId = updateOrderLine.getOrderId();
-        UUID productId = updateOrderLine.getProductId();
-        OrderLineStatus status = updateOrderLine.getStatus();
+    public void updateItem(@NotNull UpdateItem updateItem) {
+        UUID orderId = updateItem.getOrderId();
+        UUID productId = updateItem.getProductId();
+        ItemStatus status = updateItem.getStatus();
 
         Order order = getOrder(orderId);
-        Optional<OrderLine> orderLineOptional = orderLineRepository.findByOrderIdAndProductId(order.getId(), productId);
+        Optional<Item> itemOptional = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
 
-        if (orderLineOptional.isPresent()) {
-            OrderLine orderLine = orderLineOptional.get();
-            orderLine.setStatus(status);
+        if (itemOptional.isPresent()) {
+            Item item = itemOptional.get();
+            item.setStatus(status);
 
-            orderLineRepository.save(orderLine);
+            itemRepository.save(item);
             order.preUpdate();
 
             LOGGER.debug("Updated order with order-id {} for product-id {}", orderId, productId);
         } else {
-            LOGGER.debug("Order line for order-id {} for product-id {} not found", orderId, productId);
+            LOGGER.debug("Order item for order-id {} for product-id {} not found", orderId, productId);
         }
     }
 }

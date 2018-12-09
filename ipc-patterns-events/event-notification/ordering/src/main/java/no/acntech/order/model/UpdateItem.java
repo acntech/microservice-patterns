@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Valid
-public class UpdateOrderLine {
+public class UpdateItem {
 
     @NotNull
     private UUID orderId;
@@ -15,7 +15,7 @@ public class UpdateOrderLine {
     @Min(1)
     private Long quantity;
     @NotNull
-    private OrderLineStatus status;
+    private ItemStatus status;
 
     public UUID getOrderId() {
         return orderId;
@@ -29,7 +29,7 @@ public class UpdateOrderLine {
         return quantity;
     }
 
-    public OrderLineStatus getStatus() {
+    public ItemStatus getStatus() {
         return status;
     }
 
@@ -42,7 +42,7 @@ public class UpdateOrderLine {
         private UUID orderId;
         private UUID productId;
         private Long quantity;
-        private OrderLineStatus status;
+        private ItemStatus status;
 
         private Builder() {
         }
@@ -62,18 +62,18 @@ public class UpdateOrderLine {
             return this;
         }
 
-        public Builder status(OrderLineStatus status) {
+        public Builder status(ItemStatus status) {
             this.status = status;
             return this;
         }
 
-        public UpdateOrderLine build() {
-            UpdateOrderLine updateOrderLine = new UpdateOrderLine();
-            updateOrderLine.productId = this.productId;
-            updateOrderLine.orderId = this.orderId;
-            updateOrderLine.status = this.status;
-            updateOrderLine.quantity = this.quantity;
-            return updateOrderLine;
+        public UpdateItem build() {
+            UpdateItem updateItem = new UpdateItem();
+            updateItem.productId = this.productId;
+            updateItem.orderId = this.orderId;
+            updateItem.status = this.status;
+            updateItem.quantity = this.quantity;
+            return updateItem;
         }
     }
 }

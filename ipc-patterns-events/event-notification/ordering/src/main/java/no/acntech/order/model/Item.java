@@ -5,9 +5,9 @@ import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@Table(name = "ORDER_LINES")
+@Table(name = "ITEMS")
 @Entity
-public class OrderLine {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class OrderLine {
     private Long quantity;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private OrderLineStatus status;
+    private ItemStatus status;
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
@@ -40,11 +40,11 @@ public class OrderLine {
         return quantity;
     }
 
-    public OrderLineStatus getStatus() {
+    public ItemStatus getStatus() {
         return status;
     }
 
-    public void setStatus(OrderLineStatus status) {
+    public void setStatus(ItemStatus status) {
         this.status = status;
     }
 
@@ -58,7 +58,7 @@ public class OrderLine {
 
     @PrePersist
     public void prePersist() {
-        status = OrderLineStatus.PENDING;
+        status = ItemStatus.PENDING;
         created = ZonedDateTime.now();
     }
 
@@ -95,12 +95,12 @@ public class OrderLine {
             return this;
         }
 
-        public OrderLine build() {
-            OrderLine orderLine = new OrderLine();
-            orderLine.orderId = this.orderId;
-            orderLine.productId = this.productId;
-            orderLine.quantity = this.quantity;
-            return orderLine;
+        public Item build() {
+            Item item = new Item();
+            item.orderId = this.orderId;
+            item.productId = this.productId;
+            item.quantity = this.quantity;
+            return item;
         }
     }
 }

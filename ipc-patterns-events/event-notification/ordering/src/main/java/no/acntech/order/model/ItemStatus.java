@@ -1,6 +1,6 @@
 package no.acntech.order.model;
 
-public enum OrderLineStatus {
+public enum ItemStatus {
 
     PENDING,
     CONFIRMED,

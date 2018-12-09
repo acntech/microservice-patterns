@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Valid
-public class CreateOrderLine {
+public class CreateItem {
 
     @NotNull
     private UUID productId;

@@ -25,7 +25,7 @@ public class Order {
     private OrderStatus status;
     @SortNatural
     @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL)
-    private List<OrderLine> orderLines = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
@@ -49,8 +49,8 @@ public class Order {
         this.status = status;
     }
 
-    public List<OrderLine> getOrderLines() {
-        return orderLines;
+    public List<Item> getItems() {
+        return items;
     }
 
     public ZonedDateTime getCreated() {

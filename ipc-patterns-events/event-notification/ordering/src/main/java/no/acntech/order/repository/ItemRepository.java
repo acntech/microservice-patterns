@@ -1,6 +1,6 @@
 package no.acntech.order.repository;
 
-import no.acntech.order.model.OrderLine;
+import no.acntech.order.model.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface OrderLineRepository extends JpaRepository<OrderLine, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    Optional<OrderLine> findByOrderIdAndProductId(Long orderId, UUID productId);
+    Optional<Item> findByOrderIdAndProductId(Long orderId, UUID productId);
 }
