@@ -1,7 +1,7 @@
 package no.acntech.order.resource;
 
 import no.acntech.order.model.CreateOrder;
-import no.acntech.order.model.CreateOrderLine;
+import no.acntech.order.model.CreateItem;
 import no.acntech.order.model.Order;
 import no.acntech.order.model.OrderQuery;
 import no.acntech.order.service.OrderService;
@@ -45,10 +45,10 @@ public class OrderResource {
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping(path = "{orderId}/lines")
-    public ResponseEntity postLine(@PathVariable("orderId") final UUID orderId,
-                                   @Valid @RequestBody final CreateOrderLine createOrderLine) {
-        Order order = orderService.createOrderLine(orderId, createOrderLine);
+    @PostMapping(path = "{orderId}/items")
+    public ResponseEntity postItem(@PathVariable("orderId") final UUID orderId,
+                                   @Valid @RequestBody final CreateItem createItem) {
+        Order order = orderService.createItem(orderId, createItem);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{orderId}")

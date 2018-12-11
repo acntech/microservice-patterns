@@ -1,35 +1,41 @@
 package no.acntech.order.service;
 
+import no.acntech.order.exception.OrderNotFoundException;
 import no.acntech.order.model.*;
-import no.acntech.order.repository.OrderLineRepository;
+import no.acntech.order.producer.OrderEventProducer;
+import no.acntech.order.repository.ItemRepository;
 import no.acntech.order.repository.OrderRepository;
-import org.springframework.core.convert.ConversionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class OrderService {
 
-    private final ConversionService conversionService;
-    private final OrderRepository orderRepository;
-    private final OrderLineRepository orderLineRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
-    public OrderService(final ConversionService conversionService,
-                        final OrderRepository orderRepository,
-                        final OrderLineRepository orderLineRepository) {
-        this.conversionService = conversionService;
+    private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
+    private final OrderEventProducer orderEventProducer;
+
+    public OrderService(final OrderRepository orderRepository,
+                        final ItemRepository itemRepository,
+                        final OrderEventProducer orderEventProducer) {
         this.orderRepository = orderRepository;
-        this.orderLineRepository = orderLineRepository;
+        this.itemRepository = itemRepository;
+        this.orderEventProducer = orderEventProducer;
     }
 
     public List<Order> findOrders(OrderQuery orderQuery) {
         UUID customerId = orderQuery.getCustomerId();
-        Order.Status status = orderQuery.getStatus();
+        OrderStatus status = orderQuery.getStatus();
         if (customerId != null && status != null) {
             return orderRepository.findAllByCustomerIdAndStatus(customerId, status);
         } else if (customerId != null) {
@@ -42,24 +48,61 @@ public class OrderService {
     }
 
     public Order getOrder(UUID orderId) {
-        return orderRepository.findByOrderId(orderId);
+        return orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
     @Transactional
     public Order createOrder(@NotNull CreateOrder createOrder) {
-        Order order = conversionService.convert(createOrder, Order.class);
-        return orderRepository.save(order);
+        Order order = Order.builder()
+                .customerId(createOrder.getCustomerId())
+                .build();
+        Order createdOrder = orderRepository.save(order);
+        LOGGER.debug("Created order with order-id {}", createdOrder.getOrderId());
+        orderEventProducer.orderCreated(createdOrder.getOrderId());
+        return createdOrder;
     }
 
     @Transactional
-    public Order createOrderLine(@NotNull UUID orderId, @NotNull CreateOrderLine createOrderLine) {
-        Order order = orderRepository.findByOrderId(orderId);
-        createOrderLine.setOrderId(order.getId());
-        OrderLine orderLine = conversionService.convert(createOrderLine, OrderLine.class);
+    public Order createItem(@NotNull UUID orderId, @NotNull CreateItem createItem) {
+        UUID productId = createItem.getProductId();
+        Long quantity = createItem.getQuantity();
 
-        orderLineRepository.save(orderLine);
+        Order order = getOrder(orderId);
 
+        Item item = Item.builder()
+                .orderId(order.getId())
+                .productId(productId)
+                .quantity(quantity)
+                .build();
+
+        itemRepository.save(item);
         order.preUpdate();
+
+        LOGGER.debug("Updated order with order-id {} for product-id {}", orderId, productId);
+        orderEventProducer.orderUpdated(orderId, productId, quantity);
         return order;
+    }
+
+    @Transactional
+    public void updateItem(@NotNull UpdateItem updateItem) {
+        UUID orderId = updateItem.getOrderId();
+        UUID productId = updateItem.getProductId();
+        ItemStatus status = updateItem.getStatus();
+
+        Order order = getOrder(orderId);
+        Optional<Item> itemOptional = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
+
+        if (itemOptional.isPresent()) {
+            Item item = itemOptional.get();
+            item.setStatus(status);
+
+            itemRepository.save(item);
+            order.preUpdate();
+
+            LOGGER.debug("Updated order with order-id {} for product-id {}", orderId, productId);
+        } else {
+            LOGGER.debug("Order item for order-id {} for product-id {} not found", orderId, productId);
+        }
     }
 }

@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
-import no.acntech.product.model.Inventory;
-import no.acntech.product.repository.InventoryRepository;
+import no.acntech.inventory.model.Inventory;
+import no.acntech.inventory.repository.InventoryRepository;
 import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 
