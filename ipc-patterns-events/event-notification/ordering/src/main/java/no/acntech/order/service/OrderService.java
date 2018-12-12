@@ -64,6 +64,26 @@ public class OrderService {
     }
 
     @Transactional
+    public Order updateOrder(@NotNull UUID orderId, @NotNull UpdateOrder updateOrder) {
+        Order order = getOrder(orderId);
+        order.setStatus(updateOrder.getStatus());
+
+        Order updatedOrder = orderRepository.save(order);
+
+        if (order.getStatus() == OrderStatus.COMPLETED) {
+            LOGGER.debug("Completed order with order-id {}", updatedOrder.getOrderId());
+            orderEventProducer.orderCompleted(updatedOrder.getOrderId());
+        } else if (order.getStatus() == OrderStatus.CANCELED) {
+            LOGGER.debug("Canceled order with order-id {}", updatedOrder.getOrderId());
+            orderEventProducer.orderCanceled(updatedOrder.getOrderId());
+        } else {
+            LOGGER.debug("Rejected order with order-id {}", updatedOrder.getOrderId());
+            orderEventProducer.orderRejected(updatedOrder.getOrderId());
+        }
+        return updatedOrder;
+    }
+
+    @Transactional
     public Order createItem(@NotNull UUID orderId, @NotNull CreateItem createItem) {
         UUID productId = createItem.getProductId();
         Long quantity = createItem.getQuantity();
