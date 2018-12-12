@@ -24,30 +24,36 @@ public class OrderEventProducer {
 
     @Transactional
     public void orderCreated(UUID orderId) {
-        LOGGER.debug("Sending event type {} for order-id {} to topic {}", OrderEventType.ORDER_CREATED, orderId, KAFKA_TOPIC);
-        kafkaTemplate.send(KAFKA_TOPIC, OrderEvent.builder()
-                .type(OrderEventType.ORDER_CREATED)
-                .orderId(orderId)
-                .build());
+        publish(OrderEventType.ORDER_CREATED, orderId, null, null);
     }
 
     @Transactional
     public void orderUpdated(UUID orderId, UUID productId, Long quantity) {
-        LOGGER.debug("Sending event type {} for order-id {} to topic {}", OrderEventType.ORDER_UPDATED, orderId, KAFKA_TOPIC);
-        kafkaTemplate.send(KAFKA_TOPIC, OrderEvent.builder()
-                .type(OrderEventType.ORDER_UPDATED)
-                .orderId(orderId)
-                .productId(productId)
-                .quantity(quantity)
-                .build());
+        publish(OrderEventType.ORDER_UPDATED, orderId, productId, quantity);
     }
 
     @Transactional
     public void orderCompleted(UUID orderId) {
-        LOGGER.debug("Sending event type {} for order-id {} to topic {}", OrderEventType.ORDER_COMPLETED, orderId, KAFKA_TOPIC);
+        publish(OrderEventType.ORDER_COMPLETED, orderId, null, null);
+    }
+
+    @Transactional
+    public void orderCanceled(UUID orderId) {
+        publish(OrderEventType.ORDER_CANCELED, orderId, null, null);
+    }
+
+    @Transactional
+    public void orderRejected(UUID orderId) {
+        publish(OrderEventType.ORDER_REJECTED, orderId, null, null);
+    }
+
+    private void publish(OrderEventType eventType, UUID orderId, UUID productId, Long quantity) {
+        LOGGER.debug("Sending event type {} for order-id {} to topic {}", eventType, orderId, KAFKA_TOPIC);
         kafkaTemplate.send(KAFKA_TOPIC, OrderEvent.builder()
-                .type(OrderEventType.ORDER_COMPLETED)
+                .type(eventType)
                 .orderId(orderId)
+                .productId(productId)
+                .quantity(quantity)
                 .build());
     }
 }

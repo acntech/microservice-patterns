@@ -1,5 +1,6 @@
 package no.acntech.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import no.acntech.product.model.Product;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Inventory {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
+    @JsonIgnore
     public Long getId() {
         return id;
     }

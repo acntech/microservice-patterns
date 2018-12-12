@@ -1,5 +1,6 @@
 package no.acntech.shipment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -27,6 +28,7 @@ public class Shipment {
     @LastModifiedDate
     private ZonedDateTime modified;
 
+    @JsonIgnore
     public Long getId() {
         return id;
     }

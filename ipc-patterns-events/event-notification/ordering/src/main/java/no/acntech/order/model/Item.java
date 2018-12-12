@@ -1,5 +1,7 @@
 package no.acntech.order.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
@@ -24,6 +26,7 @@ public class Item {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
+    @JsonIgnore
     public Long getId() {
         return id;
     }

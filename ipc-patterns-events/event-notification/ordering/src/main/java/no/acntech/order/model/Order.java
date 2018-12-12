@@ -1,5 +1,6 @@
 package no.acntech.order.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Order {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
+    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -64,7 +66,7 @@ public class Order {
     @PrePersist
     public void prePersist() {
         orderId = UUID.randomUUID();
-        status = OrderStatus.CREATED;
+        status = OrderStatus.PENDING;
         created = ZonedDateTime.now();
     }
 

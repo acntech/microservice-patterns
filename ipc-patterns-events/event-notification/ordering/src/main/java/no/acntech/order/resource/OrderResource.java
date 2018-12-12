@@ -1,9 +1,6 @@
 package no.acntech.order.resource;
 
-import no.acntech.order.model.CreateOrder;
-import no.acntech.order.model.CreateItem;
-import no.acntech.order.model.Order;
-import no.acntech.order.model.OrderQuery;
+import no.acntech.order.model.*;
 import no.acntech.order.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +40,13 @@ public class OrderResource {
                 .buildAndExpand(order.getOrderId())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping(path = "{orderId}")
+    public ResponseEntity put(@PathVariable("orderId") final UUID orderId,
+                              @Valid @RequestBody final UpdateOrder updateOrder) {
+        Order order = orderService.updateOrder(orderId, updateOrder);
+        return ResponseEntity.ok(order);
     }
 
     @PostMapping(path = "{orderId}/items")
