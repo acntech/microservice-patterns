@@ -20,6 +20,7 @@ public class ShippingResource {
 
     @PostMapping
     public ResponseEntity ship(@RequestBody String orderId) {
+        // Trigger error-situations in order to demonstrate circuit breaker upstream
         if (orderId.toLowerCase().endsWith("3") || orderId.toLowerCase().endsWith("6")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } else if (orderId.toLowerCase().endsWith("5") || orderId.toLowerCase().endsWith("9")) {

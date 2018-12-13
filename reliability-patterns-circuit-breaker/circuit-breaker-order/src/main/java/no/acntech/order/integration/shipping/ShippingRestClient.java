@@ -27,6 +27,8 @@ public class ShippingRestClient {
     }
 
     /**
+     * Example of hystrix command
+     *
      * List of hystrix command properties: https://github.com/Netflix/Hystrix/wiki/Configuration#CommandExecution
      * <p>
      * The following configuration specifies:
@@ -50,8 +52,13 @@ public class ShippingRestClient {
         return shippingIdResponseEntity.getBody();
     }
 
+    /**
+     * Fallback for the {@link this#ship} hystrix command.
+     * Simply returns -1 in this simple example. Fallback logic needs functional mapping (retry shipping, etc?)
+     */
+    @SuppressWarnings("unused")
     public String shipFallback(Order order) {
-        LOGGER.debug("BACKUP!");
+        LOGGER.debug("Shipment failed for orderId=" + order.getId());
         return "-1";
     }
 }
