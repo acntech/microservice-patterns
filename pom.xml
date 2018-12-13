@@ -32,6 +32,7 @@
         <module>ipc-patterns-messaging</module>
         <module>reliability-patterns-circuit-breaker</module>
         <module>reliability-patterns-timeout</module>
+        <module>ipc-patterns-reactive</module>
         <module>reliability-patterns-retry</module>
     </modules>
 </project>
