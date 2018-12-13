@@ -19,7 +19,7 @@ Examples of this will follow.
 ##### Run example
 Build and start each application (spring-boot). 
 
-Call the order services by doinga `POST` to `localhost:8080/orders` with the following requestbody:
+Call the order services by doing a `POST` to `localhost:8080/orders` with the following requestbody:
 ```js
 {
     "orderlines": [
