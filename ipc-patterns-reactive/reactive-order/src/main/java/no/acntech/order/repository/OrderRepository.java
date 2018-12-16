@@ -1,9 +1,9 @@
 package no.acntech.order.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import no.acntech.order.entity.Order;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends ReactiveMongoRepository<Order, String> {
 
 }

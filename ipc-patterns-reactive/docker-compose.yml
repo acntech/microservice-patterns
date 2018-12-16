@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    command: --smallfiles
+    networks:
+      - mongo
+
+  mongo-client:
+    image: mongoclient/mongoclient
+    ports:
+      - 3030:3000
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+    networks:
+      - mongo
+
+networks:
+  mongo:
+    name: mongo

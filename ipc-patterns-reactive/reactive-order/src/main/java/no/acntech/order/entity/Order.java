@@ -1,31 +1,27 @@
 package no.acntech.order.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 @Data
-@Entity(name = "orders")
+@Document(collection = "orders")
 public class Order {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
+    @CreatedDate
+    private LocalDateTime createdDate;
     private Orderstatus orderstatus;
-    @OneToMany(cascade = CascadeType.ALL)
     private List<Orderline> orderlines = new ArrayList<>();
     private String warehouseReservationId;
     private boolean shipped;
+
 
 }
