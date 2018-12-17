@@ -24,14 +24,33 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+
+        <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
+        <spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
     </properties>
 
     <!-- MODULES -->
     <modules>
+        <module>authorization-server</module>
         <module>ordering</module>
     </modules>
 
     <!-- DEPENDENCIES -->
     <dependencies>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>${spring-security-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security.oauth</groupId>
+                <artifactId>spring-security-oauth2</artifactId>
+                <version>${spring-security-oauth2.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

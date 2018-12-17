@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- PROJECT -->
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>event-notification</artifactId>
@@ -11,7 +12,9 @@
     </parent>
 
     <artifactId>event-notification-customers</artifactId>
+    <packaging>war</packaging>
 
+    <!-- DEPENDENCIES -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -44,4 +47,14 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
     </dependencies>
+
+    <!-- BUILD -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
