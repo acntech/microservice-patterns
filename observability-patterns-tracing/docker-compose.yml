@@ -1,0 +1,8 @@
+version: "2.1"
+
+services:
+
+  activemq:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
