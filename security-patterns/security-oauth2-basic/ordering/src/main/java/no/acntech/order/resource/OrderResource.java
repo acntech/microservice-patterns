@@ -3,6 +3,7 @@ package no.acntech.order.resource;
 import no.acntech.order.model.*;
 import no.acntech.order.service.OrderService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,16 +22,19 @@ public class OrderResource {
         this.orderService = orderService;
     }
 
+    @PreAuthorize("#oauth2.hasScope('read')")
     @GetMapping
     public List<Order> get(final OrderQuery orderQuery) {
         return orderService.findOrders(orderQuery);
     }
 
+    @PreAuthorize("#oauth2.hasScope('read')")
     @GetMapping(path = "{orderId}")
     public Order get(@PathVariable("orderId") final UUID orderId) {
         return orderService.getOrder(orderId);
     }
 
+    @PreAuthorize("#oauth2.hasScope('write')")
     @PostMapping
     public ResponseEntity post(@Valid @RequestBody final CreateOrder createOrder) {
         Order order = orderService.createOrder(createOrder);
@@ -42,6 +46,7 @@ public class OrderResource {
         return ResponseEntity.created(location).build();
     }
 
+    @PreAuthorize("#oauth2.hasScope('write')")
     @PutMapping(path = "{orderId}")
     public ResponseEntity put(@PathVariable("orderId") final UUID orderId,
                               @Valid @RequestBody final UpdateOrder updateOrder) {
@@ -50,6 +55,7 @@ public class OrderResource {
     }
 
     @SuppressWarnings("Duplicates")
+    @PreAuthorize("#oauth2.hasScope('write')")
     @PostMapping(path = "{orderId}/items")
     public ResponseEntity postItem(@PathVariable("orderId") final UUID orderId,
                                    @Valid @RequestBody final CreateItem createItem) {

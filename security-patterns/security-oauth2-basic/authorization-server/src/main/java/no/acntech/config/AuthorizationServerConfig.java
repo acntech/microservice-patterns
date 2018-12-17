@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -27,7 +26,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
-                .passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder())
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
@@ -40,15 +38,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("implicit")
                 .scopes("read")
                 .autoApprove(true)
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(18000)
                 .and()
                 .withClient("password-client-id")
                 .secret("{noop}secret")
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-                .scopes("read")
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(18000);
+                .scopes("read", "write")
+                .redirectUris("http://localhost:9010/api");
     }
 
     @Override
