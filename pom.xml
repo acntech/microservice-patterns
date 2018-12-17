@@ -33,5 +33,6 @@
         <module>reliability-patterns-circuit-breaker</module>
         <module>reliability-patterns-timeout</module>
         <module>reliability-patterns-retry</module>
+        <module>security-patterns</module>
     </modules>
 </project>
