@@ -1,21 +1,23 @@
 package no.acntech.warehouse.resource;
 
-import java.util.UUID;
+import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.acntech.warehouse.service.InventoryReservation;
 import no.acntech.warehouse.service.InventoryService;
-import no.acntech.warehouse.service.exception.OutOfStockException;
-import no.acntech.warehouse.service.exception.UnknownProductException;
+
+import static io.netty.handler.codec.http.HttpHeaders.Values.APPLICATION_JSON;
 
 @RestController
 @RequestMapping("reservations")
@@ -30,14 +32,22 @@ public class ReservationResource {
         this.inventoryService = inventoryService;
     }
 
-    @PostMapping
-    public ResponseEntity reserve(@RequestBody InventoryReservation inventoryReservation) {
-        try {
-            inventoryService.reserve(inventoryReservation);
-        } catch (OutOfStockException | UnknownProductException e){
-            LOGGER.error("Error in order reservation - returning 500", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        return ResponseEntity.ok(UUID.randomUUID().toString());
+    @PostMapping(consumes = APPLICATION_JSON)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Void> reserve(@RequestBody @Valid InventoryReservation inventoryReservation) {
+        System.out.println("test");
+        return inventoryService.reserve(inventoryReservation);
+
     }
+
+    //    @PostMapping
+    //    public ResponseEntity reserve(@RequestBody InventoryReservation inventoryReservation) {
+    //        try {
+    //            inventoryService.reserve(inventoryReservation);
+    //        } catch (OutOfStockException | UnknownProductException e){
+    //            LOGGER.error("Error in order reservation - returning 500", e);
+    //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    //        }
+    //        return ResponseEntity.ok(UUID.randomUUID().toString());
+    //    }
 }

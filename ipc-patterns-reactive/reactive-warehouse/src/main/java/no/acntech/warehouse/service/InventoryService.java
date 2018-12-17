@@ -1,9 +1,7 @@
 package no.acntech.warehouse.service;
 
-import javax.transaction.Transactional;
-
-import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +10,8 @@ import org.springframework.stereotype.Service;
 
 import no.acntech.warehouse.entity.Inventory;
 import no.acntech.warehouse.repository.InventoryRepository;
-import no.acntech.warehouse.service.exception.OutOfStockException;
-import no.acntech.warehouse.service.exception.UnknownProductException;
 
 @Service
-@Transactional
 public class InventoryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InventoryService.class);
@@ -28,25 +23,33 @@ public class InventoryService {
         this.inventoryRepository = inventoryRepository;
     }
 
-    /**
-     * Reduces the quantity in warehouse. If one product fail the whole
-     * reservation failes.
-     */
-    public void reserve(InventoryReservation reservation) {
-        reservation.getProductQuantityMap().forEach((productId, quantity) -> {
-            Optional<Inventory> optionalProduct = inventoryRepository.findByProductId(productId);
-            if (!optionalProduct.isPresent()) {
-                throw new UnknownProductException(productId);
-            }
+    //TODO if we cant find the product or if we cant reserve then we dont reserve. This should probably be handled
+    public Mono<Void> reserve(InventoryReservation reservation) {
+        return Flux.fromStream(reservation.getProductQuantityMap().entrySet().stream())
+                .flatMap(e -> inventoryRepository.findById(e.getKey()).doOnNext(i -> i.reserve(e.getValue())))
+                .flatMap(inventoryRepository::save)
+                .then();
 
-            Inventory inventory = optionalProduct.get();
-            boolean reserved = inventory.reserve(quantity);
-            if (!reserved) {
-                throw new OutOfStockException(productId, quantity);
-            }
-        });
-
-        LOGGER.info("Inventory reserved for order with orderId={}", reservation.getOrderId());
+        //        reservation.getProductQuantityMap().forEach((productId, quantity) -> {
+        //            inventoryRepository.findById(productId)
+        //                    .flatMap(e -> Mono.just(e.reserve(quantity)));
+        //
+        //
+        //        });
+        //        reservation.getProductQuantityMap().forEach((productId, quantity) -> {
+        //            Optional<Inventory> optionalProduct = inventoryRepository.findById(productId);
+        //            if (!optionalProduct.isPresent()) {
+        //                throw new UnknownProductException(productId);
+        //            }
+        //
+        //            Inventory inventory = optionalProduct.get();
+        //            boolean reserved = inventory.reserve(quantity);
+        //            if (!reserved) {
+        //                throw new OutOfStockException(productId, quantity);
+        //            }
+        //        });
+        //
+        //        LOGGER.info("Inventory reserved for order with orderId={}", reservation.getOrderId());
 
     }
 }

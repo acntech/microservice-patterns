@@ -1,15 +1,14 @@
 package no.acntech.warehouse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
-import no.acntech.warehouse.entity.Inventory;
 import no.acntech.warehouse.repository.InventoryRepository;
 
 @SpringBootApplication
+@EnableMongoAuditing
 public class ReactiveWarehouseApplication {
 
     private final InventoryRepository inventoryRepository;
@@ -23,19 +22,4 @@ public class ReactiveWarehouseApplication {
         SpringApplication.run(ReactiveWarehouseApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner() {
-        return args -> {
-            Inventory p1 = new Inventory();
-            p1.setProductId("42");
-            p1.setQuantity(10);
-
-            Inventory p2 = new Inventory();
-            p2.setProductId("43");
-            p2.setQuantity(5);
-
-            inventoryRepository.save(p1);
-            inventoryRepository.save(p2);
-        };
-    }
 }

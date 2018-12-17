@@ -1,12 +1,9 @@
 package no.acntech.warehouse.repository;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import no.acntech.warehouse.entity.Inventory;
 
-public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+public interface InventoryRepository extends ReactiveMongoRepository<Inventory, String> {
 
-    Optional<Inventory> findByProductId(String productId);
 }
