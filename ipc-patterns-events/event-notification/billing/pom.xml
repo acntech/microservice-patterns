@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- PROJECT -->
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>event-notification</artifactId>
@@ -13,6 +14,7 @@
     <artifactId>event-notification-billing</artifactId>
     <packaging>war</packaging>
 
+    <!-- DEPENDENCIES -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -46,6 +48,7 @@
         </dependency>
     </dependencies>
 
+    <!-- BUILD -->
     <build>
         <plugins>
             <plugin>
