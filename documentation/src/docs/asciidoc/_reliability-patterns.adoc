@@ -1,0 +1,76 @@
+ifndef::imagesdir[:imagesdir: {docdir}/images]
+
+== Microservice Reliability Patterns
+
+Microservice architecture relies upon small and distributed independent services. If the services needs to collaborate they need to communicate over a network. This is very different from the monolithic architecture where most of the different components that collaborates lives in the same process.
+
+https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing[The fallacies of distributed computing] sums up some of the false assumptions programmers tends to do when working with distributed services that communicates over a network. When a services calls another there is always a possibility that the other services is unavailable or overloaded with high latency. The failure of one single can also cause cascading failures throughout the whole system.
+
+We need to implement failure tolerant mechanisms that prevents these types of cascading failures in our systems.
+
+<<<
+
+=== Timeouts
+
+==== Description
+Microservices exposes HTTP endpoints (REST typically) and communicate synchronously through HTTP. When one service synchronously invokes another there is always the possibility that the remote service is unavailable or has high latency. Invoking a service consumes resources and usually blocks a thread in the calling service. The failure of one service in the call-chain can potentially cascade to other services and have a ripple effect throughout the system.
+
+Timeouts protects the calling service from services that doesn’t respond or responds slowly. Most client libraries provides simple mechanisms for configurating timeout values.
+
+Remember to set the read timeout in addition to the connection timeout. The remote service could respond slowly and the calling thread will be stuck while waiting.
+
+image::reliability-patterns-timeouts.png["",65%,pdfwidth=65%]
+
+==== Pros
+* Services handles slow connections and responses from remote services
+* Avoids cascading failures
+* Easy to implement
+
+==== Cons
+* Can be challenging to configure the timeout values correctly
+* Doesn’t protect the remote system if it struggles because it’s overloaded. Timeouts often leads to retries which overloads the remote system even more (see circuit breaker to mitigate this)
+
+<<<
+
+=== Retries
+
+==== Description
+Microservices exposes HTTP endpoints (REST typically) and communicate synchronously through HTTP. When a service synchronously invokes another service there is always the possibility that the remote service is unavailable or fails temporarily.
+
+Sometimes we want to do a retry when temporary failures in a remote service occurs. Retries increases resiliency in our services. It also increases the probability of successfully completing the transaction in the calling service due to transient failures. Rollbacks can be expensive and require compensating transactions or manual intervention to clean up.
+
+Care should be taken when we evaluate which operations should be retriable and which shouldn’t. As a general rule retries often requires that the operations we’re calling in the remote service are idempotent. Retries can also put more pressure on already struggling services.
+
+image::reliability-patterns-retries.png["",65%,pdfwidth=65%]
+
+==== Pros
+* Increased resilience and durability
+* Protects the calling service against temporary failures
+* Increases chance of completing transactions in the calling service
+
+==== Cons
+* Care should be taken when identifying retriable operations (idempotency in remote service)
+* Challenging to come up with sensible defaults
+* Can put extra pressure on already struggling systems if we retry on read timeouts, etc
+
+<<<
+
+=== Circuit Breaker
+
+==== Description
+
+Microservices exposes HTTP endpoints (REST typically) and communicate synchronously through HTTP. When one service synchronously invokes another there is always the possibility that the remote service is unavailable, has high latency or responds with errors. Invoking a service consumes resources and usually blocks a thread in the calling service. The failure of one service in the call-chain can potentially cascade to other services and have a ripple effect throughout the system.
+
+The idea behind a circuit breaker is to wrap a function in a circuit breaker object which monitors failures and have fallback functionality. The circuit breaker can be configured in various ways, but the basic idea is that when you reach a given numbers of errors in a given threshold (time-window for example), the circuit breaker trips and fails immediately. This happens for the duration of a timeout period. After the timeout expires the circuit breaker allows a certain number of calls to proceed. If one of those calls fails, the circuit breaker starts another timeout period. If the calls succeeds the circuit breaker goes back into normal operation and monitors.
+
+image::reliability-patterns-circuit-breaker.png["",65%,pdfwidth=65%]
+
+==== Pros
+* Services handles the failure of services they invokes
+* Avoids cascading failures throughout the system
+* Services protects themselves as well as the services they invokes – avoids flooding a services if it’s slow or unstable
+* Fairly easy to implement – supported by a lot of frameworks
+
+==== Cons
+* Can be challenging to configure the circuit breaker correctly
+* Fallback logic must be implemented and aligned to business requirements (reasoning about this can also be seen as a pro)

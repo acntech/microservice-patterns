@@ -1,0 +1,29 @@
+ifndef::imagesdir[:imagesdir: {docdir}/images]
+
+== Microservice Observability Patterns
+
+TODO
+
+<<<
+
+=== Distributed Tracing
+
+==== Description
+
+TODO
+
+==== Pros
+
+==== Cons
+
+<<<
+
+=== Metrics
+
+==== Description
+
+TODO
+
+==== Pros
+
+==== Cons

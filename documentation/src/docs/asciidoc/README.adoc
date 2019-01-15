@@ -1,0 +1,43 @@
+= Microservice Patterns
+AcnTech
+:revnumber: {project-version}
+:example-caption!:
+ifndef::imagesdir[:imagesdir: {docdir}/images]
+
+ifdef::env-github[]
+image::https://travis-ci.org/acntech/microservice-patterns.svg?branch=develop[https://travis-ci.org/acntech/microservice-patterns]
+endif::[]
+
+== Introduction
+
+Projects for exploring different microservice architectures and patterns.
+Each module/example focuses on a specific pattern for Inter-Process Communication (IPC) between microservices.
+
+The same use case is used in all the examples in order to make it easier to compare the different patterns. This use case is that of an ordering system where customers can order products and have them shipped. The architecture of the system is typically comprised of the following microservices:
+
+* Ordering
+** Service where customers can create orders and add order items.
+* Warehouse
+** Service that maintains products and product inventory.
+* Shipping
+** Service that ships an order when it has been completed.
+* Billing
+** Service that sends invoices to customers when orders have been completed and shipped.
+* Customers
+** Service that maintains customer records.
+
+<<<
+
+include::_ipc-patterns.adoc[]
+
+<<<
+
+include::_reliability-patterns.adoc[]
+
+<<<
+
+include::_observability-patterns.adoc[]
+
+<<<
+
+include::_security-patterns.adoc[]

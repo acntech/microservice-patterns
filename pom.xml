@@ -27,6 +27,7 @@
 
     <!-- MODULES -->
     <modules>
+        <module>documentation</module>
         <module>ipc-patterns-events</module>
         <module>ipc-patterns-rest</module>
         <module>ipc-patterns-messaging</module>

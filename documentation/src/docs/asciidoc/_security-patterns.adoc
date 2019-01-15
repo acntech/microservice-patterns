@@ -1,0 +1,17 @@
+ifndef::imagesdir[:imagesdir: {docdir}/images]
+
+== Microservice Security Patterns
+
+The security requirements in a distributed microservice architecture is quite different from a more monolithic application. Security is not only relevant between the application and the end user, but also between microservices, and possibly between external systems and microservices.
+
+<<<
+
+=== OAUTH2
+
+==== Description
+
+TODO
+
+==== Pros
+
+==== Cons
