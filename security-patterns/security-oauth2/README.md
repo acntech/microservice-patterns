@@ -1,4 +1,4 @@
-# OAuth 2 Basic Security Pattern
+# OAuth 2 Security Pattern
 This module explores the use of Spring OAuth2 security to protect REST API.
 
 ### OAuth 2 Roles

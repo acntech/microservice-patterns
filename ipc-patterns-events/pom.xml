@@ -4,9 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- PROJECT -->
-    <groupId>no.acntech</groupId>
+    <parent>
+        <groupId>no.acntech</groupId>
+        <artifactId>microservice-patterns</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
     <artifactId>ipc-patterns-events</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
