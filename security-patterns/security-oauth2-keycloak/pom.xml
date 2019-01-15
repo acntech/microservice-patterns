@@ -10,15 +10,14 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>security-oauth2</artifactId>
+    <artifactId>security-oauth2-keycloak</artifactId>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
-    <description>Security Patterns - OAuth 2.0 Example</description>
+    <description>Security OAuth 2.0 KeyCloak Example</description>
 
     <!-- MODULES -->
     <modules>
-        <module>authorization-server</module>
         <module>ordering</module>
     </modules>
 </project>

@@ -16,9 +16,16 @@
     <name>${project.artifactId}</name>
     <description>Microservice Patterns - Security Patterns</description>
 
+    <!-- PROPERTIES -->
+    <properties>
+        <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
+        <spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
+    </properties>
+
     <!-- MODULES -->
     <modules>
         <module>security-oauth2</module>
+        <module>security-oauth2-keycloak</module>
     </modules>
 
     <!-- DEPENDENCIES -->
