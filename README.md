@@ -38,7 +38,6 @@ This module explores the use of event sourcing. System state is maintained in a 
 * Microservices
   * Circuit Breaker
   * Monitoring
-  * Security
 * Event Driven
   * General
     * Delivery guaranty
@@ -68,3 +67,16 @@ This module explores the use of event sourcing. System state is maintained in a 
   * CQRS
     * Consider access pattern
     * Increased complexity
+* Security
+  * OpenID Connect (OIDC): Authentication layer which is used on top of OAuth2
+  * OAuth2: Authorization protocol
+    * Roles
+      * Resource Owner: End user
+      * Client: Application needing access to Resource Server on behalf of Resource Owner
+      * Resource Server: API that Client want to access
+      * Authorization Server: API that grants access
+    * Grant Types
+      * Authorization Code: Used with server-side Applications
+      * Implicit: used with Mobile Apps or Web Applications (applications that run on the user's device)
+      * Resource Owner Password Credentials: used with trusted Applications, such as those owned by the service itself
+      * Client Credentials: used with Applications API access

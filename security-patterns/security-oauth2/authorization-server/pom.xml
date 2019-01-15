@@ -6,12 +6,12 @@
 
     <!-- PROJECT -->
     <parent>
-        <artifactId>security-oauth2-basic</artifactId>
+        <artifactId>security-oauth2</artifactId>
         <groupId>no.acntech</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>security-oauth2-basic-authorization-server</artifactId>
+    <artifactId>security-oauth2-authorization-server</artifactId>
     <packaging>war</packaging>
 
     <!-- PROPERTIES -->

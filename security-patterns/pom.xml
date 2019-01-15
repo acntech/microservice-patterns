@@ -4,16 +4,39 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- PROJECT -->
-    <groupId>no.acntech</groupId>
+    <parent>
+        <groupId>no.acntech</groupId>
+        <artifactId>microservice-patterns</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
     <artifactId>security-patterns</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
-    <description>Security Patterns</description>
+    <description>Microservice Patterns - Security Patterns</description>
 
     <!-- MODULES -->
     <modules>
-        <module>security-oauth2-basic</module>
+        <module>security-oauth2</module>
     </modules>
+
+    <!-- DEPENDENCIES -->
+    <dependencies>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>${spring-security-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security.oauth</groupId>
+                <artifactId>spring-security-oauth2</artifactId>
+                <version>${spring-security-oauth2.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
