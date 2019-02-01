@@ -18,8 +18,7 @@
 
     <!-- PROPERTIES -->
     <properties>
-        <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
-        <spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
+        <spring-security-oauth2-autoconfigure.version>2.1.2.RELEASE</spring-security-oauth2-autoconfigure.version>
     </properties>
 
     <!-- MODULES -->
@@ -35,14 +34,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-jwt</artifactId>
-                <version>${spring-security-jwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security.oauth</groupId>
-                <artifactId>spring-security-oauth2</artifactId>
-                <version>${spring-security-oauth2.version}</version>
+                <groupId>org.springframework.security.oauth.boot</groupId>
+                <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+                <version>${spring-security-oauth2-autoconfigure.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
