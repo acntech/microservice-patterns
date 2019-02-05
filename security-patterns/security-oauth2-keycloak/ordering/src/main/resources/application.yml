@@ -29,13 +29,43 @@ spring:
     console:
       enabled: true
 
-# Logging
+### Security ###
+security:
+  # OAuth2
+  oauth2:
+    # Common
+    issuer-uri: http://localhost:8888/auth/realms/acntech
+    oidc-uri: ${issuer-uri}/protocol/openid-connect
+    # OAuth2 Client
+    client:
+      client-id: ordering
+      client-secret: 22edc96b-523d-4e9b-a15a-0293447a946c
+      user-authorization-uri: ${oidc-uri}/auth
+      access-token-uri: ${oidc-uri}/token
+      scope:
+        - read
+        - write
+        - openid
+      grant-type: client_credentials
+    # OAuth2 Resource Server
+    resource:
+      id: ordering
+      user-info-uri: ${oidc-uri}/userinfo
+      token-info-uri: ${oidc-uri}/token/introspect
+      jwt:
+        key-value: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk4rfDfGpqvTg83zE/lebD9qZfAeuSAKcKppfYIM64BeGDSuN3v8rmYL6Fu/t6Pw5se00IEUv9T/s+8r3hIYoXsbmdlDiLBu+Cob27/NVUZWE9ZGdmqhYE1KGsmeYzCJ8VIu9OOO1rygyiYuzh4wYcuISH1RRYHZYcZLMUnPqHgI09pTezr70BH5pKnWhiCxPgNgXZ3YIdq8H360v7Nso2drk8hXIjaMQ1543OztE7eSy0aSvX9hg9AJd6IRebdxaO1jsRCERntwcCs8/QCANsz41GkdXmRLFSx9J7SK5ku1zuVIUw3xBzXouUlvnbyOdNEB+bRk2KUIwQr2giLRBkQIDAQAB
+          -----END PUBLIC KEY-----
+
+### Logging ###
 logging:
   level:
     org.springframework: INFO
+    org.springframework.security: DEBUG
     no.acntech: DEBUG
 
-# Server
+### Server ###
 server:
   port: 9010
   servlet:
