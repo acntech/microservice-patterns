@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 
+/**
+ * Configuration class that enables OAuth2 resource server.
+ */
 @EnableResourceServer
 @Configuration
 public class ResourceServerConfig {

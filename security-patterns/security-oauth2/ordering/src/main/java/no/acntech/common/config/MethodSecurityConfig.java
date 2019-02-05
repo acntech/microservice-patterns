@@ -6,6 +6,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 
+/**
+ * Configuration class that enabled expression based method security.
+ */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
