@@ -17,7 +17,7 @@ services:
       - DB_USER=keycloak
       - DB_PASSWORD=keycloak
     ports:
-      - 8080:8080
+      - 8888:8080
     networks:
       - keycloak
 

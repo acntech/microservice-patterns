@@ -41,11 +41,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("read")
                 .autoApprove(true)
                 .and()
-                .withClient("password-client-id")
+                .withClient("ordering")
                 .secret("{noop}secret")
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
                 .scopes("read", "write")
-                .redirectUris("http://localhost:9010/api");
+                .redirectUris("http://localhost:9010/*");
     }
 
     @Override
