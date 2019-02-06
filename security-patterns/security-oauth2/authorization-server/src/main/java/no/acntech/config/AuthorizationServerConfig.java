@@ -42,7 +42,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .autoApprove(true)
                 .and()
                 .withClient("ordering")
-                .secret("{noop}secret")
+                .secret("{noop}8cb58c9a-7077-447e-984d-c8f2de428628")
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
                 .scopes("read", "write")
                 .redirectUris("http://localhost:9010/*");

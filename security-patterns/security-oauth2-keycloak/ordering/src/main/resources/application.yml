@@ -35,13 +35,13 @@ security:
   oauth2:
     # Common
     issuer-uri: http://localhost:8888/auth/realms/acntech
-    oidc-uri: ${issuer-uri}/protocol/openid-connect
+    authorization-server-uri: ${issuer-uri}/protocol/openid-connect
     # OAuth2 Client
     client:
       client-id: ordering
       client-secret: 22edc96b-523d-4e9b-a15a-0293447a946c
-      user-authorization-uri: ${oidc-uri}/auth
-      access-token-uri: ${oidc-uri}/token
+      user-authorization-uri: ${authorization-server-uri}/auth
+      access-token-uri: ${authorization-server-uri}/token
       scope:
         - read
         - write
@@ -50,8 +50,8 @@ security:
     # OAuth2 Resource Server
     resource:
       id: ordering
-      user-info-uri: ${oidc-uri}/userinfo
-      token-info-uri: ${oidc-uri}/token/introspect
+      user-info-uri: ${authorization-server-uri}/userinfo
+      token-info-uri: ${authorization-server-uri}/token/introspect
       jwt:
         key-value: |
           -----BEGIN PUBLIC KEY-----

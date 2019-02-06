@@ -29,13 +29,39 @@ spring:
     console:
       enabled: true
 
-# Logging
+### Security ###
+security:
+  # OAuth2
+  oauth2:
+    # Common
+    issuer-uri: http://localhost:8000/auth
+    authorization-server-uri: ${issuer-uri}
+    # OAuth2 Client
+    client:
+      client-id: ordering
+      client-secret: 8cb58c9a-7077-447e-984d-c8f2de428628
+      user-authorization-uri: ${authorization-server-uri}/auth
+      access-token-uri: ${authorization-server-uri}/token
+      scope:
+        - read
+        - write
+        - openid
+      grant-type: client_credentials
+    # OAuth2 Resource Server
+    resource:
+      id: ordering
+      user-info-uri: ${authorization-server-uri}/userinfo
+      token-info-uri: ${authorization-server-uri}/check_token
+      jwt:
+        key-value: secret
+
+### Logging ###
 logging:
   level:
     org.springframework: INFO
     no.acntech: DEBUG
 
-# Server
+### Server ###
 server:
   port: 9010
   servlet:

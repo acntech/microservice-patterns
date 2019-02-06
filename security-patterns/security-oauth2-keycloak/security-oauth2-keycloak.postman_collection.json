@@ -1,0 +1,53 @@
+{
+	"info": {
+		"_postman_id": "2ae7c37b-c413-4e97-9056-16a91fd8d298",
+		"name": "microservice-patterns-security-oauth2-keycloak",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:9010/api/orders",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJSa3pRVUJVdEhGb1pQcDdkUy1KUDVZd3JRT0ZSZXBrNXYtMmhiWmZrZFdVIn0.eyJqdGkiOiIxZWVlNDAxZS04ZDNjLTRhMjEtODk4Yy00YjZlYjM2NDkyZmQiLCJleHAiOjE1NDk0MjU5NjcsIm5iZiI6MCwiaWF0IjoxNTQ5NDI1NjY3LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0Ojg4ODgvYXV0aC9yZWFsbXMvYWNudGVjaCIsImF1ZCI6WyJvcmRlcmluZyIsImFjY291bnQiXSwic3ViIjoiZTRmZGI3ZDEtNTRmZC00ZThlLThjMjItZGU3MTE4NzZhYjNkIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoib3JkZXJpbmciLCJhdXRoX3RpbWUiOjAsInNlc3Npb25fc3RhdGUiOiIxMGU0NGM5ZS0xZjY4LTQ0NGEtYWRmZS02YTIwOWUzMDRlMTciLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJvcmRlcmluZyI6eyJyb2xlcyI6WyJVU0VSIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InJlYWQiLCJ1c2VyX25hbWUiOiJhY250ZWNoIn0.N4-A9a294j2lDM8x3QMPNDdHSGXeEGnFqotrBqJsjbNsUuhKOodXjqngUUDRI03rMrvPrsBtrdYNEd0xHkFy97BlVCYnhMQYSODvPrUXSl7EEgOmY-3hiT4PhKlvJHFO88FAVV69EGEeom95p_cUTzS58RHHsd0adkdHJ11mFIG3RXQBNNbbkdPjFTN2asgo6VMsBP3z_jJ3R1BO0wsjBpCBAH4IynH0aNGl_QPDvewvVW_eGia8ly6hBnqFUx5yyCtZdQmdt8W9UEf1Fx7W0eeuQ_BbNgXpKRJk40LEAXa-jsuJUPL4YBQmWMVsjbgUmsAYfc0wAFEFpm2VEOov1A",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9010/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9010",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

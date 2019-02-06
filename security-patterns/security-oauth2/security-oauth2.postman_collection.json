@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "0f00c342-b9dd-48d3-95c1-a63fb4733c68",
+		"name": "microservice-patterns-security-oauth2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:9010/api/orders",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDk0NjcyNTksInVzZXJfbmFtZSI6ImFjbnRlY2giLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNzI0Nzg3NTItMTY2ZC00ZmExLTkyZTQtODI3YWMyMTEzNmVkIiwiY2xpZW50X2lkIjoib3JkZXJpbmciLCJzY29wZSI6WyJyZWFkIl19.FhoP8fJ1dbxzsEJq5gUDE3xydqPRTgEJnR41iZRJ-ao",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9010/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9010",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "37e69750-8c72-4387-ad2c-7a96a34d877c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "8e42b71d-d99b-4564-88d4-31f92840fccb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
