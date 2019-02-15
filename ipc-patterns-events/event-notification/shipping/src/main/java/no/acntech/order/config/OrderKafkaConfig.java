@@ -21,8 +21,8 @@ public class OrderKafkaConfig {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        config.put(ConsumerConfig.CLIENT_ID_CONFIG, "shipping");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "shipping");
+        config.put(ConsumerConfig.CLIENT_ID_CONFIG, "event-notification-shipping");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "event-notification-shipping");
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new KafkaConsumer<>(config);
     }

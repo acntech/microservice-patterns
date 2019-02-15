@@ -22,14 +22,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
                 "no.acntech.customer.model"
         })
 @SpringBootApplication
-public class EventNotificationCustomerApplication extends SpringBootServletInitializer {
+public class EventNotificationCustomersApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(EventNotificationCustomerApplication.class, args);
+        SpringApplication.run(EventNotificationCustomersApplication.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(EventNotificationCustomerApplication.class);
+        return application.sources(EventNotificationCustomersApplication.class);
     }
 }
