@@ -79,7 +79,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
 
     private onFormSubmit = () => {
         const { formData } = this.state;
-        const { formNameValue, formDescriptionValue } = formData;
+        const { formNameValue } = formData;
         if (!formNameValue || formNameValue.length < 2) {
             this.setState({
                 formData: {
@@ -98,8 +98,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
             })
         } else {
             this.props.createOrder({
-                name: formNameValue,
-                description: formDescriptionValue
+                customerId: ''
             });
         }
     };

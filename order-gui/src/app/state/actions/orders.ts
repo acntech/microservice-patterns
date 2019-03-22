@@ -32,7 +32,7 @@ const createOrderError = (error: any): CreateOrderErrorAction => ({ type: Create
 
 const rootPath = '/api/orders';
 
-export function getOrder(orderId: number) {
+export function getOrder(orderId: string) {
     return (dispatch) => {
         dispatch(getOrderLoading(true));
         const url = `${rootPath}/${orderId}`;
