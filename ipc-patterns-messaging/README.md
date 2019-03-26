@@ -19,7 +19,7 @@ Go to `http://localhost:8161/admin/` to inspect the ActiveMQ broker (u/p: admin/
 Build and start each application (spring-boot). 
 
 Call the order services by doing a `POST` to `localhost:8080/orders` with the following requestbody:
-```js
+```json
 {
     "orderlines": [
         {

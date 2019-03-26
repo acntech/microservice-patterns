@@ -19,5 +19,6 @@
     <!-- MODULES -->
     <modules>
         <module>event-notification</module>
+        <module>event-state-transfer</module>
     </modules>
 </project>
