@@ -1,21 +1,32 @@
 package no.acntech.order.service;
 
-import no.acntech.order.exception.OrderNotFoundException;
-import no.acntech.order.model.*;
-import no.acntech.order.producer.OrderEventProducer;
-import no.acntech.order.repository.ItemRepository;
-import no.acntech.order.repository.OrderRepository;
+import javax.validation.constraints.NotNull;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import no.acntech.order.exception.OrderNotFoundException;
+import no.acntech.order.model.CreateItem;
+import no.acntech.order.model.CreateOrder;
+import no.acntech.order.model.Item;
+import no.acntech.order.model.ItemStatus;
+import no.acntech.order.model.Order;
+import no.acntech.order.model.OrderQuery;
+import no.acntech.order.model.OrderStatus;
+import no.acntech.order.model.UpdateItem;
+import no.acntech.order.model.UpdateOrder;
+import no.acntech.order.producer.OrderEventProducer;
+import no.acntech.order.repository.ItemRepository;
+import no.acntech.order.repository.OrderRepository;
 
+@SuppressWarnings("Duplicates")
 @Service
 public class OrderService {
 
@@ -100,7 +111,7 @@ public class OrderService {
         order.preUpdate();
 
         LOGGER.debug("Updated order with order-id {} for product-id {}", orderId, productId);
-        orderEventProducer.orderUpdated(orderId, productId, quantity);
+        orderEventProducer.orderUpdated(orderId);
         return order;
     }
 

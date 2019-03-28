@@ -1,4 +1,4 @@
-package no.acntech.common.converter;
+package no.acntech.order.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

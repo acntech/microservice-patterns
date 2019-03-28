@@ -1,7 +1,7 @@
-package no.acntech.common.config;
+package no.acntech.order.config;
 
-import no.acntech.common.converter.UUIDAttributeConverter;
-import no.acntech.common.converter.ZonedDateTimeAttributeConverter;
+import no.acntech.order.converter.UUIDAttributeConverter;
+import no.acntech.order.converter.ZonedDateTimeAttributeConverter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
