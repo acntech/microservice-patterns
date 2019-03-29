@@ -3,9 +3,9 @@
 #########################
 acntech:
   service:
-    warehouse:
+    ordering:
       api:
-        url: http:localhost:9040/api
+        url: http:localhost:9010/api
 
 ########################
 # SPRING Configuration #
@@ -15,15 +15,12 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:ordering;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:warehouse;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password:
   h2:
     console:
       enabled: true
-  kafka:
-    bootstrap-servers:
-      - localhost:9092
 
 # Logging
 logging:
@@ -38,4 +35,4 @@ logging:
 
 # Server
 server:
-  port: 9010
+  port: 9040

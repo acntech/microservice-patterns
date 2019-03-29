@@ -11,10 +11,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import no.acntech.order.config.KafkaTopic;
-import no.acntech.order.model.UpdateItem;
-import no.acntech.order.service.OrderService;
+import no.acntech.common.config.KafkaTopic;
 import no.acntech.reservation.model.ReservationEvent;
+import no.acntech.reservation.service.ReservationService;
 
 @SuppressWarnings("Duplicates")
 @Component
@@ -23,12 +22,12 @@ public class ReservationEventConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationEventConsumer.class);
     private static final Duration POLL_TIMEOUT = Duration.ofMillis(200);
     private final KafkaConsumer<String, ReservationEvent> kafkaConsumer;
-    private final OrderService orderService;
+    private final ReservationService reservationService;
 
     public ReservationEventConsumer(@Qualifier("reservationKafkaConsumer") final KafkaConsumer<String, ReservationEvent> kafkaConsumer,
-                                    final OrderService orderService) {
+                                    final ReservationService reservationService) {
         this.kafkaConsumer = kafkaConsumer;
-        this.orderService = orderService;
+        this.reservationService = reservationService;
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -38,7 +37,7 @@ public class ReservationEventConsumer {
             kafkaConsumer.subscribe(KafkaTopic.RESERVATIONS.toList());
             LOGGER.info("Subscribe to topics {} and starting consumption of messages...", KafkaTopic.RESERVATIONS.toList());
             while (true) {
-                ConsumerRecords<String, ReservationEvent> records = kafkaConsumer.poll(POLL_TIMEOUT);
+                final ConsumerRecords<String, ReservationEvent> records = kafkaConsumer.poll(POLL_TIMEOUT);
                 records.forEach(this::consume);
             }
         } finally {
@@ -50,17 +49,12 @@ public class ReservationEventConsumer {
 
     private void consume(final ConsumerRecord<String, ReservationEvent> record) {
         LOGGER.debug("Received message {}", record);
-        ReservationEvent reservationEvent = record.value();
+        final ReservationEvent reservationEvent = record.value();
         if (reservationEvent == null) {
-            LOGGER.warn("Reservation event was null");
+            LOGGER.error("Reservation event is null");
         } else {
             LOGGER.debug("Processing reservation event for reservation-id {}", reservationEvent.getReservationId());
-            UpdateItem updateItem = UpdateItem.builder()
-                    .orderId(reservationEvent.getOrderId())
-                    .productId(reservationEvent.getProductId())
-                    .status(status)
-                    .build();
-            orderService.updateItem(updateItem);
+            reservationService.receiveReservationEvent(reservationEvent);
         }
     }
 }

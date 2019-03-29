@@ -1,4 +1,4 @@
-package no.acntech.order.config;
+package no.acntech.common.config;
 
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;

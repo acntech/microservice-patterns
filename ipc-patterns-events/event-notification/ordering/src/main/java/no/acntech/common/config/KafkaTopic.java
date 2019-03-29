@@ -1,4 +1,4 @@
-package no.acntech.order.config;
+package no.acntech.common.config;
 
 import java.util.Collections;
 import java.util.List;

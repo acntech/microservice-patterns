@@ -1,25 +1,29 @@
 package no.acntech.reservation.service;
 
+import javax.validation.constraints.NotNull;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import no.acntech.product.exception.ProductNotFoundException;
 import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 import no.acntech.reservation.model.Reservation;
 import no.acntech.reservation.model.SaveReservation;
 import no.acntech.reservation.producer.ReservationEventProducer;
 import no.acntech.reservation.repository.ReservationRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+@SuppressWarnings("Duplicates")
 @Service
 public class ReservationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
-
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
     private final ReservationEventProducer reservationEventProducer;
@@ -32,7 +36,7 @@ public class ReservationService {
         this.reservationEventProducer = reservationEventProducer;
     }
 
-    public List<Reservation> findReservations(final UUID orderId) {
+    public List<Reservation> findReservations(@NotNull final UUID orderId) {
         if (orderId == null) {
             return reservationRepository.findAll();
         } else {
@@ -41,7 +45,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void saveReservation(final SaveReservation saveReservation) {
+    public void saveReservation(@NotNull final SaveReservation saveReservation) {
         UUID orderId = saveReservation.getOrderId();
         UUID productId = saveReservation.getProductId();
         Long quantity = saveReservation.getQuantity();
@@ -51,9 +55,11 @@ public class ReservationService {
         if (existingReservation.isPresent()) {
             Reservation reservation = existingReservation.get();
             reservation.setQuantity(quantity);
-            reservationRepository.save(reservation);
-            LOGGER.debug("Updated reservation for order-id {} and product-id {}", orderId, productId);
-            reservationEventProducer.reservationUpdated(orderId, productId);
+
+            Reservation updatedReservation = reservationRepository.save(reservation);
+
+            LOGGER.debug("Updated reservation for reservation-id {}", updatedReservation.getReservationId());
+            reservationEventProducer.publish(updatedReservation.getReservationId());
         } else {
             Optional<Product> existingProduct = productRepository.findByProductId(productId);
             if (existingProduct.isPresent()) {
@@ -63,12 +69,12 @@ public class ReservationService {
                         .product(product)
                         .quantity(quantity)
                         .build();
-                reservationRepository.save(reservation);
-                LOGGER.debug("Created reservation for order-id {} and product-id {}", orderId, productId);
-                reservationEventProducer.reservationCreated(orderId, productId);
+                Reservation savedReservation = reservationRepository.save(reservation);
+
+                LOGGER.debug("Created reservation for reservation-id {}", savedReservation.getReservationId());
+                reservationEventProducer.publish(savedReservation.getReservationId());
             } else {
-                LOGGER.debug("Cannot make reservation for order-id {} due to unknown product-id {}", orderId, productId);
-                reservationEventProducer.productNotFound(orderId, productId);
+                throw new ProductNotFoundException(productId);
             }
         }
     }

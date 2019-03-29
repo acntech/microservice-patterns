@@ -4,9 +4,11 @@
 acntech:
   service:
     warehouse:
-      endpoint:
-        reservation:
-          uri: ${acntech.serice.warehouse.uri}/reservations
+      api:
+        reservations:
+          url: ${acntech.serice.warehouse.api.url}/reservations
+          single:
+            url: ${acntech.serice.warehouse.api.reservations.url}/{uuid}
 
 ########################
 # SPRING Configuration #

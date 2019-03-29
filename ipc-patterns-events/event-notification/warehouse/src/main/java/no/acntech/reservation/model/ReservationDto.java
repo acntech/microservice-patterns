@@ -1,37 +1,18 @@
 package no.acntech.reservation.model;
 
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public class ReservationDto {
 
-import no.acntech.product.model.Product;
-
-@Table(name = "RESERVATIONS")
-@Entity
-public class Reservation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @NotNull
     private UUID reservationId;
-    @OneToOne
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
+    @NotNull
+    private UUID productId;
     @NotNull
     private UUID orderId;
     @NotNull
@@ -42,17 +23,12 @@ public class Reservation {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
     public UUID getReservationId() {
         return reservationId;
     }
 
-    public Product getProduct() {
-        return product;
+    public UUID getProductId() {
+        return productId;
     }
 
     public UUID getOrderId() {
@@ -79,33 +55,30 @@ public class Reservation {
         return modified;
     }
 
-    @PrePersist
-    public void prePersist() {
-        reservationId = UUID.randomUUID();
-        created = ZonedDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        modified = ZonedDateTime.now();
-    }
-
     public static Builder builder() {
         return new Builder();
     }
 
     public static final class Builder {
 
-        private Product product;
+        private UUID reservationId;
+        private UUID productId;
         private UUID orderId;
         private Long quantity;
         private ReservationStatus status;
+        private ZonedDateTime created;
+        private ZonedDateTime modified;
 
         private Builder() {
         }
 
-        public Builder product(Product product) {
-            this.product = product;
+        public Builder reservationId(UUID reservationId) {
+            this.reservationId = reservationId;
+            return this;
+        }
+
+        public Builder productId(UUID productId) {
+            this.productId = productId;
             return this;
         }
 
@@ -124,13 +97,26 @@ public class Reservation {
             return this;
         }
 
-        public Reservation build() {
-            Reservation reservation = new Reservation();
-            reservation.product = this.product;
-            reservation.orderId = this.orderId;
-            reservation.quantity = this.quantity;
-            reservation.status = this.status;
-            return reservation;
+        public Builder created(ZonedDateTime created) {
+            this.created = created;
+            return this;
+        }
+
+        public Builder modified(ZonedDateTime modified) {
+            this.modified = modified;
+            return this;
+        }
+
+        public ReservationDto build() {
+            ReservationDto reservationDto = new ReservationDto();
+            reservationDto.reservationId = this.reservationId;
+            reservationDto.productId = this.productId;
+            reservationDto.orderId = this.orderId;
+            reservationDto.quantity = quantity;
+            reservationDto.status = this.status;
+            reservationDto.modified = this.modified;
+            reservationDto.created = this.created;
+            return reservationDto;
         }
     }
 }

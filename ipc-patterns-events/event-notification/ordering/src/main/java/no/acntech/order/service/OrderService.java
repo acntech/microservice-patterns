@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import no.acntech.order.exception.ItemNotFoundException;
 import no.acntech.order.exception.OrderNotFoundException;
 import no.acntech.order.model.CreateItem;
 import no.acntech.order.model.CreateOrder;
@@ -70,7 +71,7 @@ public class OrderService {
                 .build();
         Order createdOrder = orderRepository.save(order);
         LOGGER.debug("Created order with order-id {}", createdOrder.getOrderId());
-        orderEventProducer.orderCreated(createdOrder.getOrderId());
+        orderEventProducer.publish(createdOrder.getOrderId());
         return createdOrder;
     }
 
@@ -81,16 +82,8 @@ public class OrderService {
 
         Order updatedOrder = orderRepository.save(order);
 
-        if (order.getStatus() == OrderStatus.COMPLETED) {
-            LOGGER.debug("Completed order with order-id {}", updatedOrder.getOrderId());
-            orderEventProducer.orderCompleted(updatedOrder.getOrderId());
-        } else if (order.getStatus() == OrderStatus.CANCELED) {
-            LOGGER.debug("Canceled order with order-id {}", updatedOrder.getOrderId());
-            orderEventProducer.orderCanceled(updatedOrder.getOrderId());
-        } else {
-            LOGGER.debug("Rejected order with order-id {}", updatedOrder.getOrderId());
-            orderEventProducer.orderRejected(updatedOrder.getOrderId());
-        }
+        LOGGER.debug("Updated order with order-id {}", orderId);
+        orderEventProducer.publish(updatedOrder.getOrderId());
         return updatedOrder;
     }
 
@@ -111,7 +104,7 @@ public class OrderService {
         order.preUpdate();
 
         LOGGER.debug("Updated order with order-id {} for product-id {}", orderId, productId);
-        orderEventProducer.orderUpdated(orderId);
+        orderEventProducer.publish(orderId);
         return order;
     }
 
@@ -122,10 +115,10 @@ public class OrderService {
         ItemStatus status = updateItem.getStatus();
 
         Order order = getOrder(orderId);
-        Optional<Item> itemOptional = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
+        Optional<Item> exitingItem = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
 
-        if (itemOptional.isPresent()) {
-            Item item = itemOptional.get();
+        if (exitingItem.isPresent()) {
+            Item item = exitingItem.get();
             item.setStatus(status);
 
             itemRepository.save(item);
@@ -133,7 +126,7 @@ public class OrderService {
 
             LOGGER.debug("Updated order with order-id {} for product-id {}", orderId, productId);
         } else {
-            LOGGER.debug("Order item for order-id {} for product-id {} not found", orderId, productId);
+            throw new ItemNotFoundException(orderId, productId);
         }
     }
 }
