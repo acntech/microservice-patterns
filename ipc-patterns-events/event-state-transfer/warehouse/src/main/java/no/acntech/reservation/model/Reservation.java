@@ -1,12 +1,23 @@
 package no.acntech.reservation.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import no.acntech.product.model.Product;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import no.acntech.product.model.Product;
 
 @Table(name = "RESERVATIONS")
 @Entity
@@ -19,9 +30,12 @@ public class Reservation {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
     @NotNull
+    @Column(nullable = false)
     private UUID orderId;
     @NotNull
+    @Column(nullable = false)
     private Long quantity;
+    @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
@@ -55,12 +69,12 @@ public class Reservation {
     }
 
     @PrePersist
-    public void prePersist() {
+    private void prePersist() {
         created = ZonedDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    private void preUpdate() {
         modified = ZonedDateTime.now();
     }
 

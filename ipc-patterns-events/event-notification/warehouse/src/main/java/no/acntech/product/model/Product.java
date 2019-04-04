@@ -1,12 +1,20 @@
 package no.acntech.product.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "PRODUCTS")
 @Entity
@@ -16,10 +24,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(nullable = false)
     private UUID productId;
     @NotBlank
+    @Column(nullable = false)
     private String name;
     private String description;
+    @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
@@ -49,13 +60,13 @@ public class Product {
     }
 
     @PrePersist
-    public void prePersist() {
+    private void prePersist() {
         productId = UUID.randomUUID();
         created = ZonedDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    private void preUpdate() {
         modified = ZonedDateTime.now();
     }
 

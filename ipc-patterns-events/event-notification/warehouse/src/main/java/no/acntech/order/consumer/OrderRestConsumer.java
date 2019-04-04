@@ -16,45 +16,44 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import no.acntech.reservation.model.ReservationDto;
+import no.acntech.order.model.OrderDto;
 
 @SuppressWarnings("Duplicates")
 @Component
 public class OrderRestConsumer {
 
+    private static final ParameterizedTypeReference<List<OrderDto>> ORDER_LIST = new ParameterizedTypeReference<List<OrderDto>>() {
+    };
     private final RestTemplate restTemplate;
     private final String url;
-    private final String singleUrl;
+    private final String idUrl;
 
     public OrderRestConsumer(final RestTemplateBuilder restTemplateBuilder,
                              @Value("${acntech.service.ordering.api.orders.url}") final String url,
-                             @Value("${acntech.service.ordering.api.orders.url}") final String singleUrl) {
+                             @Value("${acntech.service.ordering.api.orders.id.url}") final String idUrl) {
         this.restTemplate = restTemplateBuilder.build();
         this.url = url;
-        this.singleUrl = singleUrl;
+        this.idUrl = idUrl;
     }
 
-    public List<ReservationDto> find() {
+    public List<OrderDto> find() {
         final URI uri = UriComponentsBuilder.fromUriString(url)
                 .build()
                 .toUri();
 
-        ParameterizedTypeReference<List<ReservationDto>> typeReference = new ParameterizedTypeReference<List<ReservationDto>>() {
-        };
-        final ResponseEntity<List<ReservationDto>> entity = restTemplate.exchange(uri, HttpMethod.GET, null, typeReference);
+        final ResponseEntity<List<OrderDto>> entity = restTemplate.exchange(uri, HttpMethod.GET, null, ORDER_LIST);
 
         return entity.getBody();
     }
 
-    public ReservationDto get(@NotNull final UUID reservationId) {
-        Assert.notNull(reservationId, "Reservation ID is null");
+    public OrderDto get(@NotNull final UUID orderId) {
+        Assert.notNull(orderId, "Order ID is null");
 
-        final URI uri = UriComponentsBuilder.fromUriString(singleUrl)
-                .pathSegment(reservationId.toString())
-                .build()
+        final URI uri = UriComponentsBuilder.fromUriString(idUrl)
+                .buildAndExpand(orderId.toString())
                 .toUri();
 
-        final ResponseEntity<ReservationDto> entity = restTemplate.getForEntity(uri, ReservationDto.class);
+        final ResponseEntity<OrderDto> entity = restTemplate.getForEntity(uri, OrderDto.class);
         return entity.getBody();
     }
 }

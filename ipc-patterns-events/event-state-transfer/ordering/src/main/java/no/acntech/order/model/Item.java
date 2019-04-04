@@ -1,11 +1,21 @@
 package no.acntech.order.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "ITEMS")
 @Entity
@@ -15,14 +25,19 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(nullable = false)
     private Long orderId;
     @NotNull
+    @Column(nullable = false)
     private UUID productId;
     @NotNull
+    @Column(nullable = false)
     private Long quantity;
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ItemStatus status;
+    @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
@@ -60,13 +75,13 @@ public class Item {
     }
 
     @PrePersist
-    public void prePersist() {
+    private void prePersist() {
         status = ItemStatus.PENDING;
         created = ZonedDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    private void preUpdate() {
         modified = ZonedDateTime.now();
     }
 

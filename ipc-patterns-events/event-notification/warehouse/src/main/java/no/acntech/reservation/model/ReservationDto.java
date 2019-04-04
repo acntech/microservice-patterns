@@ -1,7 +1,5 @@
 package no.acntech.reservation.model;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
@@ -18,8 +16,8 @@ public class ReservationDto {
     @NotNull
     private Long quantity;
     @NotNull
-    @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+    @NotNull
     private ZonedDateTime created;
     private ZonedDateTime modified;
 

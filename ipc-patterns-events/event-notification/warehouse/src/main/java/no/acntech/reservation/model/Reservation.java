@@ -1,5 +1,6 @@
 package no.acntech.reservation.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -28,17 +29,23 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(nullable = false)
     private UUID reservationId;
     @OneToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
     @NotNull
+    @Column(nullable = false)
     private UUID orderId;
     @NotNull
+    @Column(nullable = false)
     private Long quantity;
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ReservationStatus status;
+    @NotNull
+    @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
@@ -80,13 +87,13 @@ public class Reservation {
     }
 
     @PrePersist
-    public void prePersist() {
+    private void prePersist() {
         reservationId = UUID.randomUUID();
         created = ZonedDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    private void preUpdate() {
         modified = ZonedDateTime.now();
     }
 
@@ -119,8 +126,23 @@ public class Reservation {
             return this;
         }
 
-        public Builder status(ReservationStatus status) {
-            this.status = status;
+        public Builder statusConfirmed() {
+            this.status = ReservationStatus.CONFIRMED;
+            return this;
+        }
+
+        public Builder statusRejected() {
+            this.status = ReservationStatus.REJECTED;
+            return this;
+        }
+
+        public Builder statusCanceled() {
+            this.status = ReservationStatus.CANCELED;
+            return this;
+        }
+
+        public Builder statusFailed() {
+            this.status = ReservationStatus.FAILED;
             return this;
         }
 

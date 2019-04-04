@@ -6,9 +6,9 @@ acntech:
     warehouse:
       api:
         reservations:
-          url: ${acntech.serice.warehouse.api.url}/reservations
-          single:
-            url: ${acntech.serice.warehouse.api.reservations.url}/{uuid}
+          url: ${acntech.service.warehouse.api.url}/reservations
+          id:
+            url: ${acntech.service.warehouse.api.reservations.url}/{uuid}
 
 ########################
 # SPRING Configuration #
@@ -42,7 +42,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: *
+        spring.json.trusted.packages: "*"
 
 # Server
 server:

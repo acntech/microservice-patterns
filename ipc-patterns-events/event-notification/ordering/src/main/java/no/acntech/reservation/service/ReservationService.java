@@ -32,9 +32,8 @@ public class ReservationService {
 
     public void receiveReservationEvent(final ReservationEvent reservationEvent) {
         final UUID reservationId = reservationEvent.getReservationId();
-        LOGGER.debug("Received reservation event with ID {}", reservationId);
 
-        LOGGER.debug("Retrieving reservation for ID {}", reservationId);
+        LOGGER.debug("Retrieving reservation for reservation-id {}", reservationId);
         final ReservationDto reservationDto = reservationRestConsumer.get(reservationId);
 
         switch (reservationDto.getStatus()) {
@@ -64,11 +63,10 @@ public class ReservationService {
         if (exitingItem.isPresent()) {
             final ItemStatus itemStatus = ItemStatus.valueOf(reservationStatus.name());
             final UpdateItem updateItem = UpdateItem.builder()
-                    .orderId(orderId)
                     .productId(productId)
                     .status(itemStatus)
                     .build();
-            orderService.updateItem(updateItem);
+            orderService.updateItem(orderId, updateItem);
         } else {
             LOGGER.error("Could not find order item for product-id {} and order-id {}", productId, orderId);
         }

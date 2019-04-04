@@ -48,12 +48,11 @@ public class ReservationEventConsumer {
     }
 
     private void consume(final ConsumerRecord<String, ReservationEvent> record) {
-        LOGGER.debug("Received message {}", record);
         final ReservationEvent reservationEvent = record.value();
         if (reservationEvent == null) {
-            LOGGER.error("Reservation event is null");
+            LOGGER.error("Received reservation event which was null");
         } else {
-            LOGGER.debug("Processing reservation event for reservation-id {}", reservationEvent.getReservationId());
+            LOGGER.debug("Received reservation event with reservation-id {}", reservationEvent.getReservationId());
             reservationService.receiveReservationEvent(reservationEvent);
         }
     }

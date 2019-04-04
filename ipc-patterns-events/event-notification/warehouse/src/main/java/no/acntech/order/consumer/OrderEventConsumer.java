@@ -50,9 +50,9 @@ public class OrderEventConsumer {
         LOGGER.debug("Received message {}", record);
         final OrderEvent orderEvent = record.value();
         if (orderEvent == null) {
-            LOGGER.error("Order event is null");
+            LOGGER.error("Received order event which was null");
         } else {
-            LOGGER.debug("Processing order event for order-id {}", orderEvent.getOrderId());
+            LOGGER.debug("Received order event with order-id {}", orderEvent.getOrderId());
             orderService.receiveOrderEvent(orderEvent);
         }
     }

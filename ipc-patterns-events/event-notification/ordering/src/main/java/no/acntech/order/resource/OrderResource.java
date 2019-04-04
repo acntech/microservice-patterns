@@ -20,6 +20,7 @@ import no.acntech.order.model.CreateItem;
 import no.acntech.order.model.CreateOrder;
 import no.acntech.order.model.Order;
 import no.acntech.order.model.OrderQuery;
+import no.acntech.order.model.UpdateItem;
 import no.acntech.order.model.UpdateOrder;
 import no.acntech.order.service.OrderService;
 
@@ -74,5 +75,12 @@ public class OrderResource {
                 .buildAndExpand(order.getOrderId())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping(path = "{orderId}/items")
+    public ResponseEntity putItem(@PathVariable("orderId") final UUID orderId,
+                                  @Valid @RequestBody final UpdateItem updateItem) {
+        Order order = orderService.updateItem(orderId, updateItem);
+        return ResponseEntity.ok(order);
     }
 }

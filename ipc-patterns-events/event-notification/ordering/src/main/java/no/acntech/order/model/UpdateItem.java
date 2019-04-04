@@ -1,25 +1,17 @@
 package no.acntech.order.model;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 @Valid
 public class UpdateItem {
 
     @NotNull
-    private UUID orderId;
-    @NotNull
     private UUID productId;
-    @Min(1)
     private Long quantity;
-    @NotNull
     private ItemStatus status;
-
-    public UUID getOrderId() {
-        return orderId;
-    }
 
     public UUID getProductId() {
         return productId;
@@ -39,17 +31,11 @@ public class UpdateItem {
 
     public static final class Builder {
 
-        private UUID orderId;
         private UUID productId;
         private Long quantity;
         private ItemStatus status;
 
         private Builder() {
-        }
-
-        public Builder orderId(UUID orderId) {
-            this.orderId = orderId;
-            return this;
         }
 
         public Builder productId(UUID productId) {
@@ -70,7 +56,6 @@ public class UpdateItem {
         public UpdateItem build() {
             UpdateItem updateItem = new UpdateItem();
             updateItem.productId = this.productId;
-            updateItem.orderId = this.orderId;
             updateItem.status = this.status;
             updateItem.quantity = this.quantity;
             return updateItem;

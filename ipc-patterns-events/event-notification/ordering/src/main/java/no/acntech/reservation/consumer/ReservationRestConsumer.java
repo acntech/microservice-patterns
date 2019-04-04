@@ -1,5 +1,6 @@
 package no.acntech.reservation.consumer;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import java.net.URI;
@@ -16,21 +17,26 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.UpdateReservationDto;
 
+@SuppressWarnings("Duplicates")
 @Component
 public class ReservationRestConsumer {
 
+    private static final ParameterizedTypeReference<List<ReservationDto>> RESERVATION_LIST = new ParameterizedTypeReference<List<ReservationDto>>() {
+    };
     private final RestTemplate restTemplate;
     private final String url;
-    private final String singleUrl;
+    private final String idUrl;
 
     public ReservationRestConsumer(final RestTemplateBuilder restTemplateBuilder,
                                    @Value("${acntech.service.warehouse.api.reservations.url}") final String url,
-                                   @Value("${acntech.service.warehouse.api.reservations.single.url}") final String singleUrl) {
+                                   @Value("${acntech.service.warehouse.api.reservations.id.url}") final String idUrl) {
         this.restTemplate = restTemplateBuilder.build();
         this.url = url;
-        this.singleUrl = singleUrl;
+        this.idUrl = idUrl;
     }
 
     public List<ReservationDto> find() {
@@ -38,9 +44,7 @@ public class ReservationRestConsumer {
                 .build()
                 .toUri();
 
-        ParameterizedTypeReference<List<ReservationDto>> typeReference = new ParameterizedTypeReference<List<ReservationDto>>() {
-        };
-        final ResponseEntity<List<ReservationDto>> entity = restTemplate.exchange(uri, HttpMethod.GET, null, typeReference);
+        final ResponseEntity<List<ReservationDto>> entity = restTemplate.exchange(uri, HttpMethod.GET, null, RESERVATION_LIST);
 
         return entity.getBody();
     }
@@ -48,12 +52,27 @@ public class ReservationRestConsumer {
     public ReservationDto get(@NotNull final UUID reservationId) {
         Assert.notNull(reservationId, "Reservation ID is null");
 
-        final URI uri = UriComponentsBuilder.fromUriString(singleUrl)
-                .pathSegment(reservationId.toString())
-                .build()
+        final URI uri = UriComponentsBuilder.fromUriString(idUrl)
+                .buildAndExpand(reservationId.toString())
                 .toUri();
 
         final ResponseEntity<ReservationDto> entity = restTemplate.getForEntity(uri, ReservationDto.class);
         return entity.getBody();
+    }
+
+    public void create(@Valid final CreateReservationDto createReservation) {
+        final URI uri = UriComponentsBuilder.fromUriString(url)
+                .build()
+                .toUri();
+
+        restTemplate.postForEntity(uri, createReservation, Void.class);
+    }
+
+    public void update(@Valid final UpdateReservationDto updateReservation) {
+        final URI uri = UriComponentsBuilder.fromUriString(url)
+                .build()
+                .toUri();
+
+        restTemplate.put(uri, updateReservation);
     }
 }

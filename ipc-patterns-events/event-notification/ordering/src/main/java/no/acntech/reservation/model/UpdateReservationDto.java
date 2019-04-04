@@ -1,11 +1,20 @@
 package no.acntech.reservation.model;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import java.util.UUID;
 
-public class SaveReservation {
+@Valid
+public class UpdateReservationDto {
 
+    @NotNull
     private UUID orderId;
+    @NotNull
     private UUID productId;
+    @Min(1)
+    @NotNull
     private Long quantity;
 
     public UUID getOrderId() {
@@ -28,7 +37,6 @@ public class SaveReservation {
 
         private UUID orderId;
         private UUID productId;
-
         private Long quantity;
 
         private Builder() {
@@ -49,12 +57,12 @@ public class SaveReservation {
             return this;
         }
 
-        public SaveReservation build() {
-            SaveReservation saveReservation = new SaveReservation();
-            saveReservation.orderId = this.orderId;
-            saveReservation.productId = this.productId;
-            saveReservation.quantity = this.quantity;
-            return saveReservation;
+        public UpdateReservationDto build() {
+            UpdateReservationDto updateReservationDto = new UpdateReservationDto();
+            updateReservationDto.orderId = this.orderId;
+            updateReservationDto.productId = this.productId;
+            updateReservationDto.quantity = this.quantity;
+            return updateReservationDto;
         }
     }
 }

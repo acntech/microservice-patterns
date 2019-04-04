@@ -5,7 +5,7 @@ acntech:
   service:
     warehouse:
       api:
-        url: http:localhost:9040/api
+        url: http://localhost:9040/api
 
 ########################
 # SPRING Configuration #

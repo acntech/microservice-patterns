@@ -5,7 +5,7 @@ acntech:
   service:
     ordering:
       api:
-        url: http:localhost:9010/api
+        url: http://localhost:9010/api
 
 ########################
 # SPRING Configuration #
