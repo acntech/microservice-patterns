@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +50,7 @@ public class ReservationRestConsumer {
         return entity.getBody();
     }
 
-    public ReservationDto get(@NotNull final UUID reservationId) {
+    public Optional<ReservationDto> get(@NotNull final UUID reservationId) {
         Assert.notNull(reservationId, "Reservation ID is null");
 
         final URI uri = UriComponentsBuilder.fromUriString(idUrl)
@@ -57,7 +58,8 @@ public class ReservationRestConsumer {
                 .toUri();
 
         final ResponseEntity<ReservationDto> entity = restTemplate.getForEntity(uri, ReservationDto.class);
-        return entity.getBody();
+        return Optional.of(entity)
+                .map(ResponseEntity::getBody);
     }
 
     public void create(@Valid final CreateReservationDto createReservation) {

@@ -8,7 +8,7 @@ import java.util.UUID;
 public class ItemDto {
 
     @NotNull
-    private Long orderId;
+    private UUID orderId;
     @NotNull
     private UUID productId;
     @NotNull
@@ -19,7 +19,7 @@ public class ItemDto {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
-    public Long getOrderId() {
+    public UUID getOrderId() {
         return orderId;
     }
 

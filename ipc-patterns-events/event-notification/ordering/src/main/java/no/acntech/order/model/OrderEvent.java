@@ -1,10 +1,15 @@
 package no.acntech.order.model;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.UUID;
 
+@Valid
 public class OrderEvent implements Serializable {
 
+    @NotNull
     private UUID orderId;
 
     public UUID getOrderId() {

@@ -69,6 +69,7 @@ public class ReservationService {
 
             if (existingProduct.isPresent()) {
                 Product product = existingProduct.get();
+
                 Reservation reservation = Reservation.builder()
                         .orderId(orderId)
                         .product(product)

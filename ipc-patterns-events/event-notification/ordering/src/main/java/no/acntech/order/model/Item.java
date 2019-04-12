@@ -79,13 +79,13 @@ public class Item {
     }
 
     @PrePersist
-    public void prePersist() {
+    private void prePersist() {
         status = ItemStatus.PENDING;
         created = ZonedDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    private void preUpdate() {
         modified = ZonedDateTime.now();
     }
 

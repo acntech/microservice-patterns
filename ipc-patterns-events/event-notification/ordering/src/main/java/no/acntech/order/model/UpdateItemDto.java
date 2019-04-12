@@ -1,12 +1,15 @@
 package no.acntech.order.model;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Valid
-public class UpdateItem {
+public class UpdateItemDto {
 
     @NotNull
     private UUID productId;
@@ -27,6 +30,12 @@ public class UpdateItem {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    @JsonIgnore
+    @AssertTrue
+    public boolean isValid() {
+        return quantity != null || status != null;
     }
 
     public static final class Builder {
@@ -53,8 +62,8 @@ public class UpdateItem {
             return this;
         }
 
-        public UpdateItem build() {
-            UpdateItem updateItem = new UpdateItem();
+        public UpdateItemDto build() {
+            UpdateItemDto updateItem = new UpdateItemDto();
             updateItem.productId = this.productId;
             updateItem.status = this.status;
             updateItem.quantity = this.quantity;

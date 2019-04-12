@@ -47,7 +47,6 @@ public class OrderEventConsumer {
     }
 
     private void consume(final ConsumerRecord<String, OrderEvent> record) {
-        LOGGER.debug("Received message {}", record);
         final OrderEvent orderEvent = record.value();
         if (orderEvent == null) {
             LOGGER.error("Received order event which was null");

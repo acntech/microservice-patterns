@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import no.acntech.order.model.Item;
 import no.acntech.order.model.ItemStatus;
 import no.acntech.order.model.Order;
-import no.acntech.order.model.UpdateItem;
+import no.acntech.order.model.UpdateItemDto;
 import no.acntech.order.service.OrderService;
 import no.acntech.reservation.consumer.ReservationRestConsumer;
 import no.acntech.reservation.model.ReservationDto;
@@ -34,18 +34,24 @@ public class ReservationService {
         final UUID reservationId = reservationEvent.getReservationId();
 
         LOGGER.debug("Retrieving reservation for reservation-id {}", reservationId);
-        final ReservationDto reservationDto = reservationRestConsumer.get(reservationId);
+        final Optional<ReservationDto> reservationOptional = reservationRestConsumer.get(reservationId);
 
-        switch (reservationDto.getStatus()) {
-            case CONFIRMED:
-            case REJECTED:
-                processReservation(reservationDto);
-                break;
-            case CANCELED:
-                LOGGER.debug("Received reservation canceled event. This event will be ignored.");
-                break;
-            default:
-                LOGGER.warn("Received reservation event with invalid status");
+        if (reservationOptional.isPresent()) {
+            ReservationDto reservation = reservationOptional.get();
+
+            switch (reservation.getStatus()) {
+                case CONFIRMED:
+                case REJECTED:
+                    processReservation(reservation);
+                    break;
+                case CANCELED:
+                    LOGGER.debug("Reservation with reservation-id {} has status canceled, and will be ignored", reservationId);
+                    break;
+                default:
+                    LOGGER.error("Reservation with reservation-id {} has invalid status", reservationId);
+            }
+        } else {
+            LOGGER.error("Reservation with reservation-id {} could not be found", reservationId);
         }
     }
 
@@ -61,10 +67,10 @@ public class ReservationService {
                 .filter(item -> item.getProductId().equals(productId))
                 .findFirst();
         if (exitingItem.isPresent()) {
-            final ItemStatus itemStatus = ItemStatus.valueOf(reservationStatus.name());
-            final UpdateItem updateItem = UpdateItem.builder()
+            final ItemStatus status = ItemStatus.valueOf(reservationStatus.name());
+            final UpdateItemDto updateItem = UpdateItemDto.builder()
                     .productId(productId)
-                    .status(itemStatus)
+                    .status(status)
                     .build();
             orderService.updateItem(orderId, updateItem);
         } else {

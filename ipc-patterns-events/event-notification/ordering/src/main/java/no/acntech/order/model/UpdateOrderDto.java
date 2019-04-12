@@ -4,8 +4,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Valid
-public class UpdateOrder {
+public class UpdateOrderDto {
 
     @NotNull
     private OrderStatus status;
@@ -14,6 +16,7 @@ public class UpdateOrder {
         return status;
     }
 
+    @JsonIgnore
     @AssertTrue
     public boolean isValidStatus() {
         switch (status) {
