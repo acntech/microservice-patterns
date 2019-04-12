@@ -1,9 +1,8 @@
 package no.acntech.order.consumer;
 
-import no.acntech.order.model.OrderEvent;
-import no.acntech.order.model.OrderEventType;
-import no.acntech.reservation.model.SaveReservation;
-import no.acntech.reservation.service.ReservationService;
+import java.time.Duration;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
@@ -12,55 +11,48 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
+import no.acntech.common.config.KafkaTopic;
+import no.acntech.order.model.OrderEvent;
+import no.acntech.order.service.OrderService;
 
+@SuppressWarnings("Duplicates")
 @Component
 public class OrderEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderEventConsumer.class);
-    private static final List<String> KAFKA_TOPICS = Collections.singletonList("orders");
-
     private final KafkaConsumer<String, OrderEvent> kafkaConsumer;
-    private final ReservationService reservationService;
+    private final OrderService orderService;
 
     public OrderEventConsumer(@Qualifier("orderKafkaConsumer") final KafkaConsumer<String, OrderEvent> kafkaConsumer,
-                              final ReservationService reservationService) {
+                              final OrderService orderService) {
         this.kafkaConsumer = kafkaConsumer;
-        this.reservationService = reservationService;
+        this.orderService = orderService;
     }
 
-    @SuppressWarnings("Duplicates")
+    @SuppressWarnings("InfiniteLoopStatement")
     @Async
     public void startConsumer() {
         try {
-            kafkaConsumer.subscribe(KAFKA_TOPICS);
-            LOGGER.info("Subscribe to topics {} and starting consumption of messages...", KAFKA_TOPICS);
+            kafkaConsumer.subscribe(KafkaTopic.ORDERS.toList());
+            LOGGER.info("Subscribe to topics {} and starting consumption of messages...", KafkaTopic.ORDERS.toList());
             while (true) {
-                ConsumerRecords<String, OrderEvent> records = kafkaConsumer.poll(Duration.ofMillis(200));
-                records.forEach(record -> {
-                    LOGGER.debug("Received message {}", record);
-                    OrderEvent orderEvent = record.value();
-                    if (orderEvent == null) {
-                        LOGGER.debug("Order event was null");
-                    } else if (OrderEventType.ORDER_UPDATED != orderEvent.getType()) {
-                        LOGGER.debug("Ignoring order event of type {}", orderEvent.getType());
-                    } else {
-                        LOGGER.debug("Processing order event type {}", orderEvent.getType());
-                        SaveReservation saveReservation = SaveReservation.builder()
-                                .orderId(orderEvent.getOrderId())
-                                .productId(orderEvent.getProductId())
-                                .quantity(orderEvent.getQuantity())
-                                .build();
-                        reservationService.saveReservation(saveReservation);
-                    }
-                });
+                final ConsumerRecords<String, OrderEvent> records = kafkaConsumer.poll(Duration.ofMillis(200));
+                records.forEach(this::consume);
             }
         } finally {
-            LOGGER.info("Unsubscribe from topics {} and ending consumption of messages...", KAFKA_TOPICS);
+            LOGGER.info("Unsubscribe from topics {} and ending consumption of messages...", KafkaTopic.ORDERS.toList());
             kafkaConsumer.unsubscribe();
             kafkaConsumer.close();
+        }
+    }
+
+    private void consume(final ConsumerRecord<String, OrderEvent> record) {
+        final OrderEvent orderEvent = record.value();
+        if (orderEvent == null) {
+            LOGGER.error("Received order event which was null");
+        } else {
+            LOGGER.debug("Received order event with order-id {}", orderEvent.getOrderId());
+            orderService.receiveOrderEvent(orderEvent);
         }
     }
 }

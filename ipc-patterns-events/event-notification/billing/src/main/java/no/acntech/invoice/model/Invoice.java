@@ -1,13 +1,21 @@
 package no.acntech.invoice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "INVOICES")
 @Entity
@@ -17,15 +25,17 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(nullable = false)
     private UUID invoiceId;
     @NotNull
+    @Column(nullable = false)
     private UUID orderId;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Status status;
-    @CreatedDate
+    @Column(nullable = false)
+    private InvoiceStatus status;
+    @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
-    @LastModifiedDate
     private ZonedDateTime modified;
 
     @JsonIgnore
@@ -41,11 +51,11 @@ public class Invoice {
         return orderId;
     }
 
-    public Status getStatus() {
+    public InvoiceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
 
@@ -58,21 +68,15 @@ public class Invoice {
     }
 
     @PrePersist
-    public void prePersist() {
+    private void prePersist() {
         this.invoiceId = UUID.randomUUID();
-        this.status = Status.CREATED;
+        this.status = InvoiceStatus.CREATED;
         this.created = ZonedDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    private void preUpdate() {
         this.modified = ZonedDateTime.now();
-    }
-
-    public enum Status {
-        CREATED,
-        PENDING,
-        COMPLETED
     }
 
     public static Builder builder() {

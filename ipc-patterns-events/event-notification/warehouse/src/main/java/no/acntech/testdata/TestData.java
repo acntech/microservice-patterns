@@ -11,6 +11,7 @@ import no.acntech.inventory.repository.InventoryRepository;
 import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 
+@SuppressWarnings("Duplicates")
 @Component
 public class TestData {
 

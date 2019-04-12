@@ -22,7 +22,7 @@ public class InventoryResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<Inventory>> get(@RequestParam(name = "productId", required = false) final UUID productId) {
+    public ResponseEntity<List<Inventory>> find(@RequestParam(name = "productId", required = false) final UUID productId) {
         return ResponseEntity.ok(inventoryService.findInventories(productId));
     }
 }
