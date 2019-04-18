@@ -1,0 +1,30 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL92Dialect
+  datasource:
+    platform: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://ip-10-0-1-4.us-east-2.compute.internal:5432/customers
+    username: customers
+    password: 3Ky9cToKN9CQ
+
+# Logging
+logging:
+  level:
+    org.springframework: INFO
+    org.hibernate: WARN
+    org.apache.kafka: WARN
+    org.apache.kafka.clients.admin.AdminClientConfig: WARN
+    org.apache.kafka.clients.consumer.ConsumerConfig: WARN
+    org.apache.kafka.clients.producer.ProducerConfig: WARN
+    org.apache.kafka.streams.StreamsConfig: WARN
+    no.acntech: DEBUG
+
+# Server
+server:
+  port: 9000
+  servlet:
+    context-path: /customers/api

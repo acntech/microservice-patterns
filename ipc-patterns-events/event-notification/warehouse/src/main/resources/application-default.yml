@@ -14,6 +14,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
   datasource:
+    platform: oracle
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:warehouse;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
@@ -21,6 +22,9 @@ spring:
   h2:
     console:
       enabled: true
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
 
 # Logging
 logging:
@@ -37,3 +41,5 @@ logging:
 # Server
 server:
   port: 9040
+  servlet:
+    context-path: /api

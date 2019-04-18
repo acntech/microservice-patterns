@@ -16,32 +16,16 @@ spring:
   aop:
     proxy-target-class: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
+    open-in-view: false
     hibernate:
       ddl-auto: none
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:customers;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-
-# Logging
-logging:
-  level:
-    org.springframework: INFO
-    org.apache.kafka: WARN
-    org.apache.kafka.clients.admin.AdminClientConfig: WARN
-    org.apache.kafka.clients.consumer.ConsumerConfig: WARN
-    org.apache.kafka.clients.producer.ProducerConfig: WARN
-    org.apache.kafka.streams.StreamsConfig: WARN
-    no.acntech: DEBUG
+  flyway:
+    locations:
+      - classpath:db/vendor/${spring.datasource.platform}
+      - classpath:db/migration
 
 # Server
 server:
-  port: 9000
   servlet:
     context-path: /api

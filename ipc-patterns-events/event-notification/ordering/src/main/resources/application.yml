@@ -32,6 +32,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
+  flyway:
+    locations:
+      - classpath:db/vendor/${spring.datasource.platform}
+      - classpath:db/migration
   kafka:
     producer:
       client-id: ${spring.application.name}
@@ -44,8 +48,3 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
-
-# Server
-server:
-  servlet:
-    context-path: /api

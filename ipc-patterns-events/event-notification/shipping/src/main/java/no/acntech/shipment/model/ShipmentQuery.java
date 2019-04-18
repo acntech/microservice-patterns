@@ -5,13 +5,13 @@ import java.util.UUID;
 public class ShipmentQuery {
 
     private UUID orderId;
-    private Shipment.Status status;
+    private ShipmentStatus status;
 
     public UUID getOrderId() {
         return orderId;
     }
 
-    public Shipment.Status getStatus() {
+    public ShipmentStatus getStatus() {
         return status;
     }
 }

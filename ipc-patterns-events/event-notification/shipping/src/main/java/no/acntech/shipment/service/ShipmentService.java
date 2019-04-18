@@ -4,6 +4,7 @@ import no.acntech.shipment.exception.ShipmentNotFoundException;
 import no.acntech.shipment.model.CreateShipment;
 import no.acntech.shipment.model.Shipment;
 import no.acntech.shipment.model.ShipmentQuery;
+import no.acntech.shipment.model.ShipmentStatus;
 import no.acntech.shipment.repository.ShipmentRepository;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
@@ -27,7 +28,7 @@ public class ShipmentService {
     @SuppressWarnings("Duplicates")
     public List<Shipment> findShipments(final ShipmentQuery shipmentQuery) {
         UUID orderId = shipmentQuery.getOrderId();
-        Shipment.Status status = shipmentQuery.getStatus();
+        ShipmentStatus status = shipmentQuery.getStatus();
         if (orderId != null && status != null) {
             return shipmentRepository.findAllByOrderIdAndStatus(orderId, status);
         } else if (orderId != null) {

@@ -12,4 +12,6 @@ import no.acntech.customer.model.Customer;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByCustomerId(UUID customerId);
+
+    Optional<Customer> findByFirstNameAndLastName(String firstName, String lastName);
 }

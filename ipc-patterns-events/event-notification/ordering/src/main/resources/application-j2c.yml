@@ -5,26 +5,23 @@ acntech:
   service:
     warehouse:
       api:
-        url: http://localhost:9040/api
+        url: http://internal-j2c-p1-elb-private-http-56999450.us-east-2.elb.amazonaws.com/warehouse/api
 
 ########################
 # SPRING Configuration #
 ########################
 spring:
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQL92Dialect
   datasource:
-    platform: oracle
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:ordering;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
+    platform: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://ip-10-0-1-4.us-east-2.compute.internal:5432/ordering
+    username: ordering
+    password: 7f15MUKYFRtb
   kafka:
     bootstrap-servers:
-      - localhost:9092
+      - ip-10-0-1-91.us-east-2.compute.internal:9092
 
 # Logging
 logging:
@@ -42,4 +39,4 @@ logging:
 server:
   port: 9010
   servlet:
-    context-path: /api
+    context-path: /ordering/api

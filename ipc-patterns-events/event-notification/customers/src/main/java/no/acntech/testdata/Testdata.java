@@ -14,25 +14,29 @@ import no.acntech.customer.repository.CustomerRepository;
 @Component
 public class Testdata {
 
-    private static final List<String> firstNames = Arrays.asList("Ørjan", "Jon", "Jørgen", "Thomas", "Kamilla");
-    private static final List<String> lastNames = Arrays.asList("Rust", "Johansen", "Ringen", "Fagerholm");
+    private static final List<String> FIRST_NAMES = Arrays.asList("Ørjan", "Jon", "Jørgen", "Thomas", "Kamilla", "Ismar", "Simon");
+    private static final List<String> LAST_NAMES = Arrays.asList("Rust", "Johansen", "Ringen", "Fagerholm", "Slomic", "Dowerdock", "Litlehamar");
     private static final Random RANDOM = new Random();
 
     private final CustomerRepository customerRepository;
 
-    public Testdata(CustomerRepository customerRepository) {
+    public Testdata(final CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
     @PostConstruct
     private void lagTestdata() {
-        for (int i = 0; i < 10.; i++) {
-            customerRepository.save(Customer.builder()
-                    .firstName(firstNames.get(RANDOM.nextInt(firstNames.size())))
-                    .lastname(lastNames.get(RANDOM.nextInt(lastNames.size())))
-                    .address("Rolfsbuktveien 2")
-                    .build());
+        List<Customer> customers = customerRepository.findAll();
 
+        if (customers.isEmpty()) {
+            for (int i = 0; i < 10.; i++) {
+                customerRepository.save(Customer.builder()
+                        .firstName(FIRST_NAMES.get(RANDOM.nextInt(FIRST_NAMES.size())))
+                        .lastname(LAST_NAMES.get(RANDOM.nextInt(LAST_NAMES.size())))
+                        .address("Rolfsbuktveien 2")
+                        .build());
+
+            }
         }
     }
 }
