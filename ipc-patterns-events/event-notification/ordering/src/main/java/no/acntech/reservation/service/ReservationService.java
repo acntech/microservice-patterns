@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import no.acntech.order.model.Item;
 import no.acntech.order.model.ItemStatus;
 import no.acntech.order.model.Order;
-import no.acntech.order.model.UpdateItemDto;
-import no.acntech.order.service.OrderService;
+import no.acntech.order.repository.ItemRepository;
+import no.acntech.order.repository.OrderRepository;
 import no.acntech.reservation.consumer.ReservationRestConsumer;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.ReservationEvent;
@@ -22,12 +22,15 @@ public class ReservationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
     private final ReservationRestConsumer reservationRestConsumer;
-    private final OrderService orderService;
+    private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
 
     public ReservationService(final ReservationRestConsumer reservationRestConsumer,
-                              final OrderService orderService) {
+                              final OrderRepository orderRepository,
+                              final ItemRepository itemRepository) {
         this.reservationRestConsumer = reservationRestConsumer;
-        this.orderService = orderService;
+        this.orderRepository = orderRepository;
+        this.itemRepository = itemRepository;
     }
 
     public void receiveReservationEvent(final ReservationEvent reservationEvent) {
@@ -42,10 +45,8 @@ public class ReservationService {
             switch (reservation.getStatus()) {
                 case CONFIRMED:
                 case REJECTED:
-                    processReservation(reservation);
-                    break;
                 case CANCELED:
-                    LOGGER.debug("Reservation with reservation-id {} has status canceled, and will be ignored", reservationId);
+                    processReservation(reservation);
                     break;
                 default:
                     LOGGER.error("Reservation with reservation-id {} has invalid status", reservationId);
@@ -59,22 +60,30 @@ public class ReservationService {
         final UUID reservationId = reservationDto.getReservationId();
         final UUID orderId = reservationDto.getOrderId();
         final UUID productId = reservationDto.getProductId();
+        final Long quantity = reservationDto.getQuantity();
         final ReservationStatus reservationStatus = reservationDto.getStatus();
         LOGGER.debug("Processing reservation confirmation {}", reservationId);
 
-        final Order order = orderService.getOrder(orderId);
-        Optional<Item> exitingItem = order.getItems().stream()
-                .filter(item -> item.getProductId().equals(productId))
-                .findFirst();
-        if (exitingItem.isPresent()) {
-            final ItemStatus status = ItemStatus.valueOf(reservationStatus.name());
-            final UpdateItemDto updateItem = UpdateItemDto.builder()
-                    .productId(productId)
-                    .status(status)
-                    .build();
-            orderService.updateItem(orderId, updateItem);
+        Optional<Order> existingOrder = orderRepository.findByOrderId(orderId);
+
+        if (existingOrder.isPresent()) {
+            Order order = existingOrder.get();
+
+            Optional<Item> exitingItem = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
+
+            if (exitingItem.isPresent()) {
+                Item item = exitingItem.get();
+                ItemStatus status = ItemStatus.valueOf(reservationStatus.name());
+                item.setStatus(status);
+                item.setQuantity(quantity);
+
+                itemRepository.save(item);
+            } else {
+                LOGGER.error("Could not find order item for product-id {} and order-id {}", productId, orderId);
+            }
         } else {
-            LOGGER.error("Could not find order item for product-id {} and order-id {}", productId, orderId);
+            LOGGER.error("Could not find order for order-id {}", orderId);
+
         }
     }
 }

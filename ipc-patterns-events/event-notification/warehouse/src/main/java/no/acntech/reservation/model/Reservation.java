@@ -78,6 +78,10 @@ public class Reservation {
         return status;
     }
 
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
+    }
+
     public ZonedDateTime getCreated() {
         return created;
     }

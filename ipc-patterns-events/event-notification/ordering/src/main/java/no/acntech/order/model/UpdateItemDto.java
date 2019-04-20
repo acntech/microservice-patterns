@@ -28,46 +28,17 @@ public class UpdateItemDto {
         return status;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @JsonIgnore
     @AssertTrue
     public boolean isValid() {
-        return quantity != null || status != null;
+        return isValidUpdateQuantity() || isValidUpdateStatus();
     }
 
-    public static final class Builder {
+    public boolean isValidUpdateQuantity() {
+        return productId != null && quantity != null;
+    }
 
-        private UUID productId;
-        private Long quantity;
-        private ItemStatus status;
-
-        private Builder() {
-        }
-
-        public Builder productId(UUID productId) {
-            this.productId = productId;
-            return this;
-        }
-
-        public Builder quantity(Long quantity) {
-            this.quantity = quantity;
-            return this;
-        }
-
-        public Builder status(ItemStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public UpdateItemDto build() {
-            UpdateItemDto updateItem = new UpdateItemDto();
-            updateItem.productId = this.productId;
-            updateItem.status = this.status;
-            updateItem.quantity = this.quantity;
-            return updateItem;
-        }
+    private boolean isValidUpdateStatus() {
+        return status != null && status == ItemStatus.CANCELED;
     }
 }

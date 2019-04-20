@@ -16,13 +16,13 @@ public class UpdateOrderDto {
         return status;
     }
 
+    @SuppressWarnings("Duplicates")
     @JsonIgnore
     @AssertTrue
-    public boolean isValidStatus() {
+    public boolean isValid() {
         switch (status) {
-            case COMPLETED:
+            case CONFIRMED:
             case CANCELED:
-            case REJECTED:
                 return Boolean.TRUE;
             default:
                 return Boolean.FALSE;

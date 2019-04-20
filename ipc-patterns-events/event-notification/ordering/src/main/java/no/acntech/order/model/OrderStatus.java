@@ -3,7 +3,7 @@ package no.acntech.order.model;
 public enum OrderStatus {
 
     PENDING,
-    COMPLETED,
+    CONFIRMED,
     CANCELED,
     REJECTED
 }

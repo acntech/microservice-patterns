@@ -30,6 +30,7 @@ import no.acntech.order.repository.ItemRepository;
 import no.acntech.order.repository.OrderRepository;
 import no.acntech.reservation.consumer.ReservationRestConsumer;
 import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.ReservationStatus;
 import no.acntech.reservation.model.UpdateReservationDto;
 
 @SuppressWarnings("Duplicates")
@@ -37,6 +38,7 @@ import no.acntech.reservation.model.UpdateReservationDto;
 public class OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
+    private static final Sort SORT_BY_ID = Sort.by("id");
 
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
@@ -63,7 +65,7 @@ public class OrderService {
         } else if (status != null) {
             return orderRepository.findAllByStatus(status);
         } else {
-            return orderRepository.findAll(Sort.by("id"));
+            return orderRepository.findAll(SORT_BY_ID);
         }
     }
 
@@ -85,14 +87,20 @@ public class OrderService {
 
     @Transactional
     public Order updateOrder(@NotNull final UUID orderId, @Valid final UpdateOrderDto updateOrder) {
+        OrderStatus orderStatus = updateOrder.getStatus();
         Order order = getOrder(orderId);
-        order.setStatus(updateOrder.getStatus());
 
-        Order updatedOrder = orderRepository.save(order);
+        ReservationStatus reservationStatus = ReservationStatus.valueOf(orderStatus.name());
+
+        UpdateReservationDto updateReservation = UpdateReservationDto.builder()
+                .orderId(orderId)
+                .status(reservationStatus)
+                .build();
+        reservationRestConsumer.update(updateReservation);
 
         LOGGER.debug("Updated order with order-id {}", orderId);
-        orderEventProducer.publish(updatedOrder.getOrderId());
-        return updatedOrder;
+        orderEventProducer.publish(orderId);
+        return order;
     }
 
     @Transactional
@@ -130,29 +138,29 @@ public class OrderService {
     @Transactional
     public Order updateItem(@NotNull final UUID orderId, @Valid final UpdateItemDto updateItem) {
         UUID productId = updateItem.getProductId();
-        Long quantity = updateItem.getQuantity();
-        ItemStatus status = updateItem.getStatus();
 
         Order order = getOrder(orderId);
         Optional<Item> exitingItem = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
 
         if (exitingItem.isPresent()) {
-            Item item = exitingItem.get();
 
-            if (quantity != null) {
-                item.setQuantity(quantity);
-            }
-            if (status != null) {
-                item.setStatus(status);
-            }
+            if (updateItem.isValidUpdateQuantity()) {
+                Long quantity = updateItem.getQuantity();
 
-            itemRepository.save(item);
-
-            if (quantity != null) {
                 UpdateReservationDto updateReservation = UpdateReservationDto.builder()
                         .orderId(orderId)
                         .productId(productId)
                         .quantity(quantity)
+                        .build();
+                reservationRestConsumer.update(updateReservation);
+            } else {
+                ItemStatus itemStatus = updateItem.getStatus();
+                ReservationStatus reservationStatus = ReservationStatus.valueOf(itemStatus.name());
+
+                UpdateReservationDto updateReservation = UpdateReservationDto.builder()
+                        .orderId(orderId)
+                        .productId(productId)
+                        .status(reservationStatus)
                         .build();
                 reservationRestConsumer.update(updateReservation);
             }

@@ -17,6 +17,7 @@ import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.Reservation;
+import no.acntech.reservation.model.ReservationStatus;
 import no.acntech.reservation.model.UpdateReservationDto;
 import no.acntech.reservation.producer.ReservationEventProducer;
 import no.acntech.reservation.repository.ReservationRepository;
@@ -97,6 +98,14 @@ public class ReservationService {
     @Async
     @Transactional
     public void updateReservation(@Valid final UpdateReservationDto updateReservation) {
+        if (updateReservation.isValidUpdateQuantity()) {
+            updateReservationQuantity(updateReservation);
+        } else {
+            updateReservationStatus(updateReservation);
+        }
+    }
+
+    private void updateReservationQuantity(final UpdateReservationDto updateReservation) {
         UUID orderId = updateReservation.getOrderId();
         UUID productId = updateReservation.getProductId();
         Long quantity = updateReservation.getQuantity();
@@ -109,28 +118,44 @@ public class ReservationService {
 
             Reservation savedReservation = reservationRepository.save(reservation);
 
-            LOGGER.debug("Updated reservation for reservation-id {}", savedReservation.getReservationId());
+            LOGGER.debug("Updated reservation for reservation-id {} with quantity {}", savedReservation.getReservationId(), quantity);
             reservationEventProducer.publish(savedReservation.getReservationId());
         } else {
             LOGGER.error("No reservation found for for order-id {} and product-id", orderId, productId);
         }
     }
 
-    @Async
-    @Transactional
-    public void deleteReservation(@NotNull final UUID reservationId) {
-        Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
+    private void updateReservationStatus(final UpdateReservationDto updateReservation) {
+        UUID orderId = updateReservation.getOrderId();
+        UUID productId = updateReservation.getProductId();
+        ReservationStatus status = updateReservation.getStatus();
 
-        if (existingReservation.isPresent()) {
-            Reservation reservation = existingReservation.get();
-
-            reservationRepository.delete(reservation);
-
-            LOGGER.debug("Deleted reservation for reservation-id {}", reservation.getReservationId());
-            reservationEventProducer.publish(reservation.getReservationId());
+        if (productId == null) {
+            List<Reservation> existingReservations = reservationRepository.findAllByOrderId(orderId);
+            if (existingReservations.isEmpty()) {
+                LOGGER.error("No reservations found for order-id {}", orderId);
+            } else {
+                existingReservations.forEach(reservation -> {
+                    reservation.setStatus(status);
+                    deleteReservation(reservation);
+                });
+            }
         } else {
-            LOGGER.error("No reservation found for reservation-id {}", reservationId);
-            reservationEventProducer.publish(reservationId);
+            Optional<Reservation> existingReservation = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
+            if (existingReservation.isPresent()) {
+                Reservation reservation = existingReservation.get();
+                reservation.setStatus(status);
+                deleteReservation(reservation);
+            } else {
+                LOGGER.error("No reservation found for order-id {} and product-id", orderId, productId);
+            }
         }
+    }
+
+    private void deleteReservation(final Reservation reservation) {
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        LOGGER.debug("Updated reservation for reservation-id {} with status {}", savedReservation.getReservationId(), savedReservation.getStatus().name());
+        reservationEventProducer.publish(savedReservation.getReservationId());
     }
 }

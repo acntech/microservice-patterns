@@ -1,21 +1,21 @@
 package no.acntech.reservation.model;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Valid
 public class UpdateReservationDto {
 
     @NotNull
     private UUID orderId;
-    @NotNull
     private UUID productId;
-    @Min(1)
-    @NotNull
     private Long quantity;
+    private ReservationStatus status;
 
     public UUID getOrderId() {
         return orderId;
@@ -29,6 +29,24 @@ public class UpdateReservationDto {
         return quantity;
     }
 
+    public ReservationStatus getStatus() {
+        return status;
+    }
+
+    @JsonIgnore
+    @AssertTrue
+    public boolean isValid() {
+        return isValidUpdateQuantity() || isValidUpdateStatus();
+    }
+
+    private boolean isValidUpdateQuantity() {
+        return productId != null && quantity != null;
+    }
+
+    private boolean isValidUpdateStatus() {
+        return status != null && (status == ReservationStatus.CANCELED || status == ReservationStatus.REJECTED);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -38,6 +56,8 @@ public class UpdateReservationDto {
         private UUID orderId;
         private UUID productId;
         private Long quantity;
+
+        private ReservationStatus status;
 
         private Builder() {
         }
@@ -57,11 +77,17 @@ public class UpdateReservationDto {
             return this;
         }
 
+        public Builder status(ReservationStatus status) {
+            this.status = status;
+            return this;
+        }
+
         public UpdateReservationDto build() {
             UpdateReservationDto updateReservationDto = new UpdateReservationDto();
             updateReservationDto.orderId = this.orderId;
-            updateReservationDto.productId = this.productId;
             updateReservationDto.quantity = this.quantity;
+            updateReservationDto.productId = this.productId;
+            updateReservationDto.status = this.status;
             return updateReservationDto;
         }
     }
