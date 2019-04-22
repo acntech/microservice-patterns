@@ -20,8 +20,10 @@ public class OrderDtoConverter implements Converter<Order, OrderDto> {
         return OrderDto.builder()
                 .orderId(order.getOrderId())
                 .customerId(order.getCustomerId())
-                .items(convertItems(order))
+                .name(order.getName())
+                .description(order.getDescription())
                 .status(order.getStatus())
+                .items(convertItems(order))
                 .created(order.getCreated())
                 .modified(order.getModified())
                 .build();

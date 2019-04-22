@@ -10,11 +10,15 @@ import {
 
 export interface CreateOrder {
     customerId: string;
+    name: string;
+    description?: string;
 }
 
 export interface Order {
     orderId: string;
     customerId: string;
+    name: string;
+    description?: string;
     status: OrderStatus;
     orderLines: OrderLine[];
     created: string;
@@ -70,7 +74,7 @@ export interface CreateOrderLoadingAction {
 
 export interface CreateOrderSuccessAction {
     type: CreateOrderActionType.SUCCESS,
-    payload: Order
+    headers: any
 }
 
 export interface CreateOrderErrorAction {

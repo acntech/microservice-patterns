@@ -32,7 +32,7 @@ public class Testdata {
             for (int i = 0; i < 10.; i++) {
                 customerRepository.save(Customer.builder()
                         .firstName(FIRST_NAMES.get(RANDOM.nextInt(FIRST_NAMES.size())))
-                        .lastname(LAST_NAMES.get(RANDOM.nextInt(LAST_NAMES.size())))
+                        .lastName(LAST_NAMES.get(RANDOM.nextInt(LAST_NAMES.size())))
                         .address("Rolfsbuktveien 2")
                         .build());
 

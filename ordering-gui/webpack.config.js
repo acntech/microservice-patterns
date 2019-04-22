@@ -6,13 +6,15 @@ const PostCssFlexbugsFixes = require('postcss-flexbugs-fixes');
 // Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 // Variables
 const outputDir = 'dist';
 const publicDir = 'public';
 const outputPath = path.resolve(__dirname, outputDir);
 const indexFile = path.resolve(__dirname, publicDir, 'index.html');
 const devServerHost = process.env.NODE_PUBLIC_HOST || 'localhost:3000';
-const apiServerUrl = process.env.API_URL || 'http://localhost:9010';
+const customersApiServerUrl = process.env.CUSTOMERS_API_URL || 'http://localhost:9000';
+const ordersApiServerUrl = process.env.ORDERS_API_URL || 'http://localhost:9010';
 const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
@@ -94,7 +96,8 @@ module.exports = {
         historyApiFallback: true,
         public: devServerHost,
         proxy: {
-            '/api': apiServerUrl
+            '/api/customers': customersApiServerUrl,
+            '/api/orders': ordersApiServerUrl
         },
         open: false
     },
@@ -107,6 +110,7 @@ module.exports = {
         new WebpackCleanupPlugin(),
         new HtmlWebpackPlugin({
             template: indexFile
-        })
+        }),
+        new ManifestPlugin()
     ]
 };

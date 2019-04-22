@@ -1,5 +1,6 @@
 package no.acntech.customer.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,5 +14,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByCustomerId(UUID customerId);
 
-    Optional<Customer> findByFirstNameAndLastName(String firstName, String lastName);
+    List<Customer> findAllByFirstName(String firstName);
+
+    List<Customer> findAllByLastName(String lastName);
+
+    List<Customer> findAllByFirstNameAndLastName(String firstName, String lastName);
 }

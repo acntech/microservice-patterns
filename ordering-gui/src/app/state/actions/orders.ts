@@ -27,7 +27,7 @@ const findOrdersSuccess = (payload: Order[]): FindOrdersSuccessAction => ({ type
 const findOrdersError = (error: any): FindOrdersErrorAction => ({ type: FindOrdersActionType.ERROR, error });
 
 const createOrderLoading = (loading: boolean): CreateOrderLoadingAction => ({ type: CreateOrderActionType.LOADING, loading });
-const createOrderSuccess = (payload: Order): CreateOrderSuccessAction => ({ type: CreateOrderActionType.SUCCESS, payload });
+const createOrderSuccess = (headers: any): CreateOrderSuccessAction => ({ type: CreateOrderActionType.SUCCESS, headers });
 const createOrderError = (error: any): CreateOrderErrorAction => ({ type: CreateOrderActionType.ERROR, error });
 
 const rootPath = '/api/orders';
@@ -41,6 +41,9 @@ export function getOrder(orderId: string) {
                 return dispatch(getOrderSuccess(response.data));
             })
             .catch((error) => {
+                const { data } = error.response;
+                const message = data && data.message;
+                dispatch(showError('Error getting order', message, true));
                 return dispatch(getOrderError(error));
             });
     };
@@ -55,7 +58,8 @@ export function findOrders(orderName?: string) {
                 return dispatch(findOrdersSuccess(response.data));
             })
             .catch((error) => {
-                const { message } = error.response.data;
+                const { data } = error.response;
+                const message = data && data.message;
                 dispatch(showError('Error finding orders', message, true));
                 return dispatch(findOrdersError(error));
             });
@@ -69,11 +73,12 @@ export function createOrder(order: CreateOrder) {
         return axios.post(url, order)
             .then((response) => {
                 dispatch(showSuccess('Order created successfully'));
-                return dispatch(createOrderSuccess(response.data));
+                return dispatch(createOrderSuccess(response.headers));
             })
             .catch((error) => {
-                const { message } = error.response.data;
-                dispatch(showError('Error creating order', message));
+                const { data } = error.response;
+                const message = data && data.message;
+                dispatch(showError('Error creating order', message, true));
                 return dispatch(createOrderError(error));
             });
     };

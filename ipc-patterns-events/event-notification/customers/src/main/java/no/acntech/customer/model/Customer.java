@@ -95,7 +95,7 @@ public class Customer {
             return this;
         }
 
-        public Builder lastname(final String lastName) {
+        public Builder lastName(final String lastName) {
             this.lastName = lastName;
             return this;
         }

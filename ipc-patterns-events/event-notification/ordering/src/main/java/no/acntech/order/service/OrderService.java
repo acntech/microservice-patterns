@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,15 +41,18 @@ public class OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
     private static final Sort SORT_BY_ID = Sort.by("id");
 
+    private final ConversionService conversionService;
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
     private final OrderEventProducer orderEventProducer;
     private final ReservationRestConsumer reservationRestConsumer;
 
-    public OrderService(final OrderRepository orderRepository,
+    public OrderService(final ConversionService conversionService,
+                        final OrderRepository orderRepository,
                         final ItemRepository itemRepository,
                         final OrderEventProducer orderEventProducer,
                         final ReservationRestConsumer reservationRestConsumer) {
+        this.conversionService = conversionService;
         this.orderRepository = orderRepository;
         this.itemRepository = itemRepository;
         this.orderEventProducer = orderEventProducer;
@@ -76,9 +80,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(@Valid final CreateOrderDto createOrder) {
-        Order order = Order.builder()
-                .customerId(createOrder.getCustomerId())
-                .build();
+        Order order = conversionService.convert(createOrder, Order.class);
         Order createdOrder = orderRepository.save(order);
         LOGGER.debug("Created order with order-id {}", createdOrder.getOrderId());
         orderEventProducer.publish(createdOrder.getOrderId());

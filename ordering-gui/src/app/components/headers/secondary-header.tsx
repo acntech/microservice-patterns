@@ -65,10 +65,10 @@ class SecondaryHeaderComponent extends Component<ComponentProps> {
         const { notifications } = this.props.notificationState;
 
         return (
-            <div>
+            <Segment basic className="secondary-header">
                 <HeaderFragment title={title} subtitle={subtitle} children={children} />
                 <MessagesFragment notifications={notifications} onDismissMessage={this.onDismissMessage} />
-            </div>
+            </Segment>
         );
     }
 
@@ -87,8 +87,8 @@ const HeaderFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
     const { title, subtitle, children } = props;
 
     return (
-        <Segment basic className="secondary-header">
-            <Header>{children ? children : title}</Header>
+        <Segment basic>
+            <Header as='h2' floated='left'>{children ? children : title}</Header>
             {subtitle ? <Header.Subheader>{subtitle}</Header.Subheader> : null}
         </Segment>
     );

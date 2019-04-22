@@ -11,7 +11,13 @@
                 "import-sources-order": "any",
                 "named-imports-order": "any"
             }
-        ]
+        ],
+        "interface-name": [
+            true,
+            "never-prefix"
+        ],
+        "object-literal-sort-keys": false,
+        "object-literal-shorthand": false
     },
     "linterOptions": {
         "exclude": [

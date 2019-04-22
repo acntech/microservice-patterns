@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Component, ReactNode, FunctionComponent } from 'react';
+import { Component, FunctionComponent, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { Button, ButtonGroup, Container, Icon, Segment, Table } from 'semantic-ui-react';
-
-import { Order, OrderState, RootState } from '../../models';
-import { getOrder } from '../../state/actions';
-import { LoadingIndicator, PrimaryHeader } from '../../components';
+import { Button, ButtonGroup, Container, Icon, Label, Segment, Table } from 'semantic-ui-react';
 import { NotFoundErrorContainer } from '../';
+import { LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
+
+import { getStatusLabelColor, Order, OrderState, RootState } from '../../models';
+import { getOrder } from '../../state/actions';
 
 interface RouteProps {
     match: any;
@@ -39,29 +39,29 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         this.state = initialState;
     }
 
-    componentDidMount() {
-        const { orderId } = this.props.match.params;
+    public componentDidMount() {
+        const {orderId} = this.props.match.params;
         this.props.getOrder(orderId);
     }
 
-    componentDidUpdate() {
-        const { orderId } = this.props.match.params;
-        const { loading } = this.props.orderState;
-        const { order } = this.state;
+    public componentDidUpdate() {
+        const {orderId} = this.props.match.params;
+        const {loading} = this.props.orderState;
+        const {order} = this.state;
 
         if (!loading && !order) {
-            const { orders } = this.props.orderState;
-            const currentOrder = orders.find(order => order.orderId == orderId);
+            const {orders} = this.props.orderState;
+            const currentOrder = orders.find(o => o.orderId === orderId);
             if (currentOrder) {
-                this.setState({ order: currentOrder });
+                this.setState({order: currentOrder});
             }
         }
     }
 
     public render(): ReactNode {
-        const { orderId } = this.props.match.params;
-        const { loading } = this.props.orderState;
-        const { back, order } = this.state;
+        const {orderId} = this.props.match.params;
+        const {loading} = this.props.orderState;
+        const {back, order} = this.state;
 
         if (back) {
             return <Redirect to='/' />;
@@ -81,8 +81,8 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
     }
 
     private onBackButtonClick = () => {
-        this.setState({ back: true });
-    }
+        this.setState({back: true});
+    };
 }
 
 interface OrderFragmentProps {
@@ -91,14 +91,16 @@ interface OrderFragmentProps {
 }
 
 const OrderFragment: FunctionComponent<OrderFragmentProps> = (props) => {
-    const { onBackButtonClick, order } = props;
-    const { orderId, customerId, status, created, modified } = order;
+    const {onBackButtonClick, order} = props;
+    const {orderId, customerId, name, description, status, created, modified} = order;
+    const statusColor = getStatusLabelColor(status);
 
     return (
         <Container>
             <PrimaryHeader />
+            <SecondaryHeader>Order</SecondaryHeader>
             <Segment basic>
-            <Table celled>
+                <Table celled>
                     <Table.Body>
                         <Table.Row>
                             <Table.Cell width={2}><b>Order ID</b></Table.Cell>
@@ -109,8 +111,16 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props) => {
                             <Table.Cell width={10}>{customerId}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
+                            <Table.Cell width={2}><b>Name</b></Table.Cell>
+                            <Table.Cell width={10}>{name}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell width={2}><b>Description</b></Table.Cell>
+                            <Table.Cell width={10}>{description}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
                             <Table.Cell width={2}><b>Status</b></Table.Cell>
-                            <Table.Cell width={10}>{status}</Table.Cell>
+                            <Table.Cell width={10}><Label color={statusColor}>{status}</Label></Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2}><b>Created</b></Table.Cell>
@@ -123,9 +133,9 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props) => {
                     </Table.Body>
                 </Table>
                 <ButtonGroup>
-                <Button 
-                secondary size='tiny'
-                            onClick={onBackButtonClick}><Icon name='arrow left' />Back</Button>
+                    <Button
+                        secondary size='tiny'
+                        onClick={onBackButtonClick}><Icon name='arrow left' />Back</Button>
                 </ButtonGroup>
             </Segment>
         </Container>
@@ -133,11 +143,11 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props) => {
 };
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
-    orderState: state.orderState,
+    orderState: state.orderState
 });
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
-    getOrder: (orderId: string) => dispatch(getOrder(orderId)),
+    getOrder: (orderId: string) => dispatch(getOrder(orderId))
 });
 
 const ConnectedOrderContainer = connect(mapStateToProps, mapDispatchToProps)(OrderContainer);

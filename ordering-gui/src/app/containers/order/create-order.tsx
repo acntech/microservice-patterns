@@ -1,24 +1,16 @@
 import * as React from 'react';
-import { ChangeEventHandler, Component, ReactNode, FunctionComponent } from 'react';
+import { ChangeEventHandler, Component, FunctionComponent, ReactNode } from 'react';
+import { InjectedIntlProps } from 'react-intl';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { InjectedIntlProps } from 'react-intl';
-import {
-    Button,
-    Container,
-    Form,
-    Icon,
-    InputOnChangeData,
-    TextAreaProps,
-    Message,
-    Segment
-} from 'semantic-ui-react';
-
-import { CreateOrder, OrderState, RootState, ActionType } from '../../models';
-import { createOrder } from '../../state/actions';
+import { Button, Container, Form, Icon, InputOnChangeData, Message, Segment, TextAreaProps } from 'semantic-ui-react';
 import { LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
 
+import { ActionType, CreateOrder, CustomerState, OrderState, RootState } from '../../models';
+import { createOrder } from '../../state/actions';
+
 interface ComponentStateProps {
+    customerState: CustomerState;
     orderState: OrderState;
 }
 
@@ -56,56 +48,60 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public render(): ReactNode {
-        const { cancel, formData } = this.state;
-        const { orderState } = this.props;
-        const { loading, modified } = orderState;
+        const {cancel, formData} = this.state;
+        const {orderState} = this.props;
+        const {loading, modified} = orderState;
 
         if (cancel) {
             return <Redirect to='/' />;
         } else if (loading) {
             return <LoadingIndicator />;
-        } else if (modified && modified.actionType == ActionType.CREATE) {
-            const { id: orderId } = modified;
-            return <Redirect to={`/orders/${orderId}`} />
+        } else if (modified && modified.actionType === ActionType.CREATE) {
+            const {id: orderId} = modified;
+            return <Redirect to={`/orders/${orderId}`} />;
         } else {
             return <CreateOrderFragment
                 onCancelButtonClick={this.onCancelButtonClick}
                 onFormSubmit={this.onFormSubmit}
                 onFormInputChange={this.onFormInputChange}
                 onFormTextAreaChange={this.onFormTextAreaChange}
-                formData={formData} />
+                formData={formData} />;
         }
     }
 
     private onFormSubmit = () => {
-        const { formData } = this.state;
-        const { formNameValue } = formData;
-        if (!formNameValue || formNameValue.length < 2) {
+        const {user} = this.props.customerState;
+        const {customerId} = user || {customerId: ''};
+        const {formData} = this.state;
+        const {formNameValue: orderName, formDescriptionValue: orderDescription} = formData;
+        if (!orderName || orderName.length < 2) {
             this.setState({
                 formData: {
                     ...formData,
                     formError: true,
-                    formErrorMessage: 'Order customerId must be at least 2 letters long'
+                    formErrorMessage: 'Order name must be at least 2 characters long'
                 }
             });
-        } else if (/\s/.test(formNameValue)) {
+        } else if (orderName.length > 50) {
             this.setState({
                 formData: {
                     ...formData,
                     formError: true,
-                    formErrorMessage: 'Order customerId cannot contain any spaces'
+                    formErrorMessage: 'Order name cannot be over 50 characters long'
                 }
-            })
+            });
         } else {
             this.props.createOrder({
-                customerId: ''
+                customerId: customerId,
+                name: orderName,
+                description: orderDescription
             });
         }
     };
 
     private onFormInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-        const { value } = event.currentTarget;
-        const { formData } = this.state;
+        const {value} = event.currentTarget;
+        const {formData} = this.state;
         this.setState({
             formData: {
                 ...formData,
@@ -117,8 +113,8 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
     };
 
     private onFormTextAreaChange: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-        const { value } = event.currentTarget;
-        const { formData } = this.state;
+        const {value} = event.currentTarget;
+        const {formData} = this.state;
         this.setState({
             formData: {
                 ...formData,
@@ -130,8 +126,8 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
     };
 
     private onCancelButtonClick = () => {
-        this.setState({ cancel: true });
-    }
+        this.setState({cancel: true});
+    };
 }
 
 interface CreateOrderFragmentProps {
@@ -195,6 +191,7 @@ const CreateOrderFragment: FunctionComponent<CreateOrderFragmentProps> = (props)
 };
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
+    customerState: state.customerState,
     orderState: state.orderState
 });
 

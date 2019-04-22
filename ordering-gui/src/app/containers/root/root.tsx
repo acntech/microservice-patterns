@@ -8,19 +8,12 @@ import { RootState } from '../../models';
 import {
     CreateOrderContainer,
     HomeContainer,
+    LoginContainer,
     OrderContainer,
     PageNotFoundErrorContainer
 } from '../';
 
-interface ComponentStateProps {
-}
-
-interface ComponentDispatchProps {
-}
-
-type ComponentProps = ComponentDispatchProps & ComponentStateProps;
-
-class RootContainer extends Component<ComponentProps> {
+class RootContainer extends Component<{}> {
 
     public render(): ReactNode {
         return (
@@ -28,6 +21,7 @@ class RootContainer extends Component<ComponentProps> {
                 <Switch>
                     <Route path="/orders/:orderId?" exact component={OrderContainer} />
                     <Route path="/create" exact component={CreateOrderContainer} />
+                    <Route path="/login" exact component={LoginContainer} />
                     <Route path="/" exact component={HomeContainer} />
                     <Route component={PageNotFoundErrorContainer} />
                 </Switch>
@@ -36,10 +30,10 @@ class RootContainer extends Component<ComponentProps> {
     }
 }
 
-const mapStateToProps = (state: RootState): ComponentStateProps => ({
+const mapStateToProps = (state: RootState) => ({
 });
 
-const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
+const mapDispatchToProps = (dispatch) => ({
 });
 
 const ConnectedRootContainer = connect(mapStateToProps, mapDispatchToProps)(RootContainer);

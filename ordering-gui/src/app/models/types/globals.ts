@@ -1,5 +1,6 @@
 import {
     ActionType,
+    CustomerState,
     EntityType,
     OrderState,
     NotificationState
@@ -7,6 +8,7 @@ import {
 
 export interface RootState {
     notificationState: NotificationState;
+    customerState: CustomerState;
     orderState: OrderState;
 }
 

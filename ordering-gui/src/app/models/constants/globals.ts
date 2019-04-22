@@ -1,5 +1,6 @@
 
 export enum EntityType {
+    CUSTOMERS = 'customers',
     ORDERS = 'orders'
 }
 

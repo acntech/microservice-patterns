@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Component, ReactNode, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { Button, Container, Icon, Segment, Table } from 'semantic-ui-react';
+import { Button, Container, Icon, Label, Segment, Table } from 'semantic-ui-react';
 
-import { Order, OrderState, RootState } from '../../models';
+import { getStatusLabelColor, Order, OrderState, RootState } from '../../models';
 import { findOrders } from '../../state/actions';
 import { LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
 
@@ -34,7 +34,7 @@ class HomeContainer extends Component<ComponentProps, ComponentState> {
         this.state = initialState;
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.findOrders();
     }
 
@@ -90,17 +90,21 @@ const OrdersFragment: FunctionComponent<OrdersFragmentProps> = (props) => {
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell width={4}>ID</Table.HeaderCell>
-                            <Table.HeaderCell width={10}>Status</Table.HeaderCell>
+                            <Table.HeaderCell width={4}>Name</Table.HeaderCell>
+                            <Table.HeaderCell width={10}>Description</Table.HeaderCell>
+                            <Table.HeaderCell width={4}>Status</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {orders.map((order, index) => {
-                            const { orderId, customerId, status } = order;
+                            const { orderId, name, description, status } = order;
+                            const statusColor = getStatusLabelColor(status);
+
                             return (
                                 <Table.Row key={index} className='clickable-table-row' onClick={() => onTableRowClick(orderId)}>
-                                    <Table.Cell>{customerId}</Table.Cell>
-                                    <Table.Cell>{status}</Table.Cell>
+                                    <Table.Cell>{name}</Table.Cell>
+                                    <Table.Cell>{description}</Table.Cell>
+                                    <Table.Cell><Label color={statusColor}>{status}</Label></Table.Cell>
                                 </Table.Row>
                             );
                         })}

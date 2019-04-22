@@ -15,6 +15,9 @@ public class OrderDto {
     @NotNull
     private UUID customerId;
     @NotNull
+    private String name;
+    private String description;
+    @NotNull
     private OrderStatus status;
     @NotNull
     private List<ItemDto> items;
@@ -28,6 +31,14 @@ public class OrderDto {
 
     public UUID getCustomerId() {
         return customerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public OrderStatus getStatus() {
@@ -54,16 +65,14 @@ public class OrderDto {
 
         private UUID orderId;
         private UUID customerId;
+        private String name;
+        private String description;
         private OrderStatus status;
         private List<ItemDto> items;
         private ZonedDateTime created;
         private ZonedDateTime modified;
 
         private Builder() {
-        }
-
-        public static Builder anOrderDto() {
-            return new Builder();
         }
 
         public Builder orderId(UUID orderId) {
@@ -73,6 +82,16 @@ public class OrderDto {
 
         public Builder customerId(UUID customerId) {
             this.customerId = customerId;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
             return this;
         }
 
@@ -100,6 +119,8 @@ public class OrderDto {
             OrderDto orderDto = new OrderDto();
             orderDto.customerId = this.customerId;
             orderDto.orderId = this.orderId;
+            orderDto.name = this.name;
+            orderDto.description = this.description;
             orderDto.status = this.status;
             orderDto.modified = this.modified;
             orderDto.items = this.items;

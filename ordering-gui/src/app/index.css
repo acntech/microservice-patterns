@@ -6,10 +6,18 @@
     color: #000;
 }
 
+.ui.header.primary-header-login {
+    font-size: .75rem;
+}
+
 .clickable-table-row {
     cursor: pointer;
 }
 
 .loading-indicator-body {
     padding: 2rem;
+}
+
+.login-grid {
+    max-width: 450px;
 }

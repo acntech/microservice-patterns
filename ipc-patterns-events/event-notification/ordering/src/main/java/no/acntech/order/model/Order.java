@@ -38,6 +38,10 @@ public class Order {
     @Column(nullable = false)
     private UUID customerId;
     @NotNull
+    @Column(nullable = false)
+    private String name;
+    private String description;
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
@@ -59,6 +63,14 @@ public class Order {
 
     public UUID getCustomerId() {
         return customerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public OrderStatus getStatus() {
@@ -100,6 +112,8 @@ public class Order {
     public static final class Builder {
 
         private UUID customerId;
+        private String name;
+        private String description;
 
         private Builder() {
         }
@@ -109,9 +123,21 @@ public class Order {
             return this;
         }
 
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
         public Order build() {
             Order order = new Order();
             order.customerId = this.customerId;
+            order.name = this.name;
+            order.description = this.description;
             return order;
         }
     }

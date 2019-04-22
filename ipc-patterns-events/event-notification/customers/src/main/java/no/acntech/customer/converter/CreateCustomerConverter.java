@@ -1,12 +1,13 @@
 package no.acntech.customer.converter;
 
-import no.acntech.customer.model.CreateCustomer;
-import no.acntech.customer.model.Customer;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import no.acntech.customer.model.CreateCustomer;
+import no.acntech.customer.model.Customer;
 
 @Component
 public class CreateCustomerConverter implements Converter<CreateCustomer, Customer> {
@@ -15,7 +16,7 @@ public class CreateCustomerConverter implements Converter<CreateCustomer, Custom
     public Customer convert(@Valid @NotNull final CreateCustomer createCustomer) {
         return Customer.builder()
                 .firstName(createCustomer.getFirstName())
-                .lastname(createCustomer.getLastName())
+                .lastName(createCustomer.getLastName())
                 .address(createCustomer.getAddress())
                 .build();
     }

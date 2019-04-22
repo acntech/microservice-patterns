@@ -43,8 +43,8 @@ public class OrderResource {
 
     @GetMapping
     public ResponseEntity<List<OrderDto>> get(final OrderQuery orderQuery) {
-        List<Order> orders = orderService.findOrders(orderQuery);
-        List<OrderDto> orderDtos = orders.stream()
+        final List<Order> orders = orderService.findOrders(orderQuery);
+        final List<OrderDto> orderDtos = orders.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(orderDtos);
@@ -90,7 +90,7 @@ public class OrderResource {
     @PutMapping(path = "{orderId}/items")
     public ResponseEntity putItem(@PathVariable("orderId") final UUID orderId,
                                   @Valid @RequestBody final UpdateItemDto updateItem) {
-        Order order = orderService.updateItem(orderId, updateItem);
+        final Order order = orderService.updateItem(orderId, updateItem);
         return ResponseEntity.ok(order);
     }
 
