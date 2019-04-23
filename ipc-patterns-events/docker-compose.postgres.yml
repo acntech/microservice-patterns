@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+  postgres_1:
+    image: postgres
+    container_name: postgres_1
+    environment:
+      - POSTGRES_PASSWORD=aadJP1T5F50r
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+volumes:
+  postgres:
+    name: postgres
+
+networks:
+  postgres:
+    name: postgres

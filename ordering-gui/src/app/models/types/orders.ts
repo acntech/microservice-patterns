@@ -5,7 +5,8 @@ import {
     OrderStatus,
     UpdateOrderActionType,
     Error,
-    Modified
+    Modified,
+    ItemStatus
 } from '../';
 
 export interface CreateOrder {
@@ -20,14 +21,18 @@ export interface Order {
     name: string;
     description?: string;
     status: OrderStatus;
-    orderLines: OrderLine[];
+    items: Item[];
     created: string;
     modified: string;
 }
 
-export interface OrderLine {
+export interface Item {
+    orderId: string;
     productId: string;
     quantity: number;
+    status: ItemStatus;
+    created: string;
+    modified: string;
 }
 
 export interface OrderState {

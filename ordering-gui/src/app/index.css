@@ -14,8 +14,13 @@
     cursor: pointer;
 }
 
+.loading-indicator {
+    margin-top: 2rem;
+}
+
 .loading-indicator-body {
     padding: 2rem;
+    min-height: 200px;
 }
 
 .login-grid {

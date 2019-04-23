@@ -156,7 +156,7 @@ const CreateOrderFragment: FunctionComponent<CreateOrderFragmentProps> = (props)
     return (
         <Container>
             <PrimaryHeader />
-            <SecondaryHeader>Create Order</SecondaryHeader>
+            <SecondaryHeader />
             <Segment basic>
                 <Form onSubmit={onFormSubmit} error={formError}>
                     <Form.Group>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ChangeEventHandler, Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { Container, Form, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react';
+import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
 import { LoadingIndicator } from '../../components';
 import { Customer, CustomerState, RootState } from '../../models';
@@ -58,30 +58,38 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public componentDidUpdate(): void {
-        const {loading, user, customers} = this.props.customerState;
-        const {customerId} = this.state;
+        const {loading, error, user, customers} = this.props.customerState;
+        const {customerId, formData} = this.state;
+        const {formSubmitted} = formData;
 
         if (user) {
             this.setState(initialState);
-        } else {
-            if (customerId && !loading) {
-                const customer = customers.find(c => c.customerId === customerId);
-                if (customer) {
-                    this.props.loginCustomer(customer);
-                } else {
-                    this.props.getCustomer(customerId);
-                }
-            }
-        }
+        } else if (customerId && !loading && (!error || formSubmitted)) {
+            const customer = customers.find(c => c.customerId === customerId);
 
+            if (customer) {
+                this.props.loginCustomer(customer);
+            } else {
+                this.props.getCustomer(customerId);
+            }
+
+            this.setState(initialState);
+        }
     }
 
     public render(): ReactNode {
-        const {loading, user} = this.props.customerState;
+        const {loading, error, user} = this.props.customerState;
         const {formData} = this.state;
-        const {formSubmitted, formError, formErrorMessage} = formData;
+        let {formError, formErrorMessage} = formData;
+        let formWarning = false;
 
-        if (formSubmitted || loading) {
+        if (error) {
+            formError = true;
+            formErrorMessage = error.message;
+            formWarning = true;
+        }
+
+        if (!error && loading) {
             return <LoadingIndicator />;
         } else if (user) {
             return <Redirect to='/' />;
@@ -92,11 +100,12 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
                         <Grid textAlign='center'>
                             <Grid.Column className='login-grid'>
                                 <Header as='h1'>Login</Header>
-                                <Form size='large' onSubmit={this.onFormSubmit} error={formError}>
+                                <Form size='large' onSubmit={this.onFormSubmit} error={formError} warning={formWarning}>
                                     <Segment stacked>
-                                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Customer ID' onChange={this.onFormInputChange} error={formError} />
+                                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Customer ID' onChange={this.onFormInputChange} />
                                         <Form.Button primary fluid size='large'>Login</Form.Button>
-                                        <Message error><Icon name='ban' /> {formErrorMessage}</Message>
+                                        <Message error icon='ban' content={formErrorMessage} />
+                                        <Message warning icon='warning sign' content='customer-id might come from the login cookie' />
                                     </Segment>
                                 </Form>
                             </Grid.Column>
@@ -110,7 +119,6 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     private onFormSubmit = (): void => {
         const {formData} = this.state;
         const {formCustomerIdValue: customerId} = formData;
-
         if (!customerId || customerId.length !== 36) {
             this.setState({
                 formData: {

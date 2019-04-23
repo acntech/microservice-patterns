@@ -7,7 +7,14 @@ export enum OrderStatus {
     REJECTED = 'REJECTED'
 }
 
-export const getStatusLabelColor = (status: OrderStatus): SemanticCOLORS => {
+export enum ItemStatus {
+    PENDING = 'PENDING',
+    CONFIRMED = 'CONFIRMED',
+    CANCELED = 'CANCELED',
+    REJECTED = 'REJECTED'
+}
+
+export const getStatusLabelColor = (status: OrderStatus | ItemStatus): SemanticCOLORS => {
     switch (status) {
         case OrderStatus.PENDING: {
             return 'blue';

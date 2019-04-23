@@ -90,6 +90,7 @@ const OrdersFragment: FunctionComponent<OrdersFragmentProps> = (props) => {
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
+                            <Table.HeaderCell width={6}>Order ID</Table.HeaderCell>
                             <Table.HeaderCell width={4}>Name</Table.HeaderCell>
                             <Table.HeaderCell width={10}>Description</Table.HeaderCell>
                             <Table.HeaderCell width={4}>Status</Table.HeaderCell>
@@ -102,6 +103,7 @@ const OrdersFragment: FunctionComponent<OrdersFragmentProps> = (props) => {
 
                             return (
                                 <Table.Row key={index} className='clickable-table-row' onClick={() => onTableRowClick(orderId)}>
+                                    <Table.Cell collapsing={false}>{orderId}</Table.Cell>
                                     <Table.Cell>{name}</Table.Cell>
                                     <Table.Cell>{description}</Table.Cell>
                                     <Table.Cell><Label color={statusColor}>{status}</Label></Table.Cell>

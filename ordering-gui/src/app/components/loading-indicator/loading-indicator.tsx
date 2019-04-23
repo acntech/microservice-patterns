@@ -8,7 +8,7 @@ class LoadingIndicatorComponent extends Component<{}> {
 
     public render(): ReactNode {
         return (
-            <Container>
+            <Container className='loading-indicator'>
                 <PrimaryHeader />
                 <Segment loading>
                     <div className='loading-indicator-body' />
