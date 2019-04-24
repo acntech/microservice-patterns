@@ -5,8 +5,9 @@ import { Redirect } from 'react-router';
 import { Button, ButtonGroup, Container, Icon, Label, Segment, Table } from 'semantic-ui-react';
 import { NotFoundErrorContainer } from '../';
 import { LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
+import { getItemStatusLabelColor, getOrderStatusLabelColor } from '../../core/utils';
 
-import { getStatusLabelColor, Order, OrderState, RootState } from '../../models';
+import { Order, OrderState, RootState } from '../../models';
 import { getOrder } from '../../state/actions';
 
 interface RouteProps {
@@ -25,11 +26,13 @@ type ComponentProps = ComponentDispatchProps & ComponentStateProps & RouteProps;
 
 interface ComponentState {
     back: boolean;
+    createItem: boolean;
     order?: Order;
 }
 
 const initialState: ComponentState = {
-    back: false
+    back: false,
+    createItem: false
 };
 
 class OrderContainer extends Component<ComponentProps, ComponentState> {
@@ -61,10 +64,12 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
     public render(): ReactNode {
         const {orderId} = this.props.match.params;
         const {loading} = this.props.orderState;
-        const {back, order} = this.state;
+        const {back, createItem, order} = this.state;
 
         if (back) {
             return <Redirect to='/' />;
+        } else if (createItem) {
+            return <Redirect to={`/orders/${orderId}/create`} />;
         } else if (loading) {
             return <LoadingIndicator />;
         } else if (!order) {
@@ -74,26 +79,33 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
                 heading='No order found'
                 content={`Could not find order for ID ${orderId}`} />;
         } else {
-            return <OrderFragment
-                onBackButtonClick={this.onBackButtonClick}
-                order={order} />;
+            return <OrderFragment order={order} onBackButtonClick={this.onBackButtonClick} onCreateItemButtonClick={this.onCreateItemButtonClick} />;
         }
     }
 
     private onBackButtonClick = () => {
-        this.setState({back: true});
+        this.setState({
+            back: true,
+            createItem: false
+        });
+    };
+
+    private onCreateItemButtonClick = () => {
+        this.setState({
+            back: false,
+            createItem: true
+        });
     };
 }
 
 interface OrderFragmentProps {
-    onBackButtonClick: () => void;
     order: Order;
+    onBackButtonClick: () => void;
+    onCreateItemButtonClick: () => void;
 }
 
 const OrderFragment: FunctionComponent<OrderFragmentProps> = (props) => {
-    const {onBackButtonClick, order} = props;
-    const {orderId, name, description, status: orderStatus, items} = order;
-    const orderStatusColor = getStatusLabelColor(orderStatus);
+    const {order, onBackButtonClick, onCreateItemButtonClick} = props;
 
     return (
         <Container>
@@ -101,63 +113,88 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props) => {
             <SecondaryHeader />
             <Segment basic>
                 <ButtonGroup>
-                    <Button
-                        secondary size='tiny'
-                        onClick={onBackButtonClick}><Icon name='arrow left' />Back</Button>
+                    <Button secondary size='tiny' onClick={onBackButtonClick}><Icon name='arrow left' />Back</Button>
                 </ButtonGroup>
-                <Table celled>
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.Cell width={2}><b>Order ID</b></Table.Cell>
-                            <Table.Cell width={10}>{orderId}</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell width={2}><b>Name</b></Table.Cell>
-                            <Table.Cell width={10}>{name}</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell width={2}><b>Description</b></Table.Cell>
-                            <Table.Cell width={10}>{description}</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell width={2}><b>Status</b></Table.Cell>
-                            <Table.Cell width={10}><Label color={orderStatusColor}>{orderStatus}</Label></Table.Cell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
-                <Table celled>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell width={6}>Product ID</Table.HeaderCell>
-                            <Table.HeaderCell width={8}>Product Name</Table.HeaderCell>
-                            <Table.HeaderCell width={4}>Quantity</Table.HeaderCell>
-                            <Table.HeaderCell width={4}>Status</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {items.map((item, index) => {
-                            const { productId, quantity, status: itemStatus } = item;
-                            const itemStatusColor = getStatusLabelColor(itemStatus);
-
-                            return (
-                                <Table.Row key={index}>
-                                    <Table.Cell>{productId}</Table.Cell>
-                                    <Table.Cell>N/A</Table.Cell>
-                                    <Table.Cell>{quantity}</Table.Cell>
-                                    <Table.Cell><Label color={itemStatusColor}>{itemStatus}</Label></Table.Cell>
-                                </Table.Row>
-                            );
-                        })}
-                    </Table.Body>
-                </Table>
                 <ButtonGroup>
-                    <Button
-                        secondary size='tiny'
-                        onClick={onBackButtonClick}><Icon name='arrow left' />Back</Button>
+                    <Button primary size='tiny' onClick={onCreateItemButtonClick}><Icon name='dolly' />New Item</Button>
                 </ButtonGroup>
+                <OrderDisplayFragment order={order} />
+                <ItemsDisplayFragment order={order} />
             </Segment>
         </Container>
     );
+};
+
+interface OrderDisplayFragmentProps {
+    order: Order;
+}
+
+const OrderDisplayFragment: FunctionComponent<OrderDisplayFragmentProps> = (props) => {
+    const {orderId, name, description, status} = props.order;
+    const statusColor = getOrderStatusLabelColor(status);
+
+    return (
+        <Table celled>
+            <Table.Body>
+                <Table.Row>
+                    <Table.Cell width={2}><b>Order ID</b></Table.Cell>
+                    <Table.Cell width={10}>{orderId}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell width={2}><b>Name</b></Table.Cell>
+                    <Table.Cell width={10}>{name}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell width={2}><b>Description</b></Table.Cell>
+                    <Table.Cell width={10}>{description}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell width={2}><b>Status</b></Table.Cell>
+                    <Table.Cell width={10}><Label color={statusColor}>{status}</Label></Table.Cell>
+                </Table.Row>
+            </Table.Body>
+        </Table>
+    );
+};
+
+interface ItemsDisplayFragmentProps {
+    order: Order;
+}
+
+const ItemsDisplayFragment: FunctionComponent<ItemsDisplayFragmentProps> = (props) => {
+    const {items} = props.order;
+
+    if (items && items.length > 0) {
+        return (
+            <Table celled>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell width={6}>Product ID</Table.HeaderCell>
+                        <Table.HeaderCell width={8}>Product Name</Table.HeaderCell>
+                        <Table.HeaderCell width={4}>Quantity</Table.HeaderCell>
+                        <Table.HeaderCell width={4}>Status</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {items.map((item, index) => {
+                        const {productId, quantity, status: itemStatus} = item;
+                        const itemStatusColor = getItemStatusLabelColor(itemStatus);
+
+                        return (
+                            <Table.Row key={index}>
+                                <Table.Cell>{productId}</Table.Cell>
+                                <Table.Cell>N/A</Table.Cell>
+                                <Table.Cell>{quantity}</Table.Cell>
+                                <Table.Cell><Label color={itemStatusColor}>{itemStatus}</Label></Table.Cell>
+                            </Table.Row>
+                        );
+                    })}
+                </Table.Body>
+            </Table>
+        );
+    } else {
+        return null;
+    }
 };
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({

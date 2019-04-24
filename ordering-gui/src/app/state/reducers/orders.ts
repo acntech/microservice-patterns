@@ -123,7 +123,7 @@ export const find = (state: OrderState = initialOrderState, action: FindOrdersAc
         case FindOrdersActionType.ERROR: {
             const {orders} = state;
             const {data} = action.error.response;
-            const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.GET};
+            const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.FIND};
             return {...initialOrderState, orders: orders, error: error};
         }
 

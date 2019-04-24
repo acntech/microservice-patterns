@@ -1,13 +1,5 @@
-import {
-    CreateOrderActionType,
-    FindOrdersActionType,
-    GetOrderActionType,
-    OrderStatus,
-    UpdateOrderActionType,
-    Error,
-    Modified,
-    ItemStatus
-} from '../';
+import { CreateOrderActionType, Error, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
+import { Item } from './';
 
 export interface CreateOrder {
     customerId: string;
@@ -22,15 +14,6 @@ export interface Order {
     description?: string;
     status: OrderStatus;
     items: Item[];
-    created: string;
-    modified: string;
-}
-
-export interface Item {
-    orderId: string;
-    productId: string;
-    quantity: number;
-    status: ItemStatus;
     created: string;
     modified: string;
 }

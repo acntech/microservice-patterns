@@ -6,10 +6,11 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { RootState } from '../../models';
 import {
-    CreateOrderContainer,
     HomeContainer,
     LoginContainer,
     OrderContainer,
+    CreateOrderContainer,
+    CreateItemContainer,
     PageNotFoundErrorContainer
 } from '../';
 
@@ -20,6 +21,7 @@ class RootContainer extends Component<{}> {
             <BrowserRouter>
                 <Switch>
                     <Route path="/orders/:orderId?" exact component={OrderContainer} />
+                    <Route path="/orders/:orderId?/create" exact component={CreateItemContainer} />
                     <Route path="/create" exact component={CreateOrderContainer} />
                     <Route path="/login" exact component={LoginContainer} />
                     <Route path="/" exact component={HomeContainer} />

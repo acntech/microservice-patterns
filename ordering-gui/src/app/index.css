@@ -6,6 +6,10 @@
     color: #000;
 }
 
+.ui.buttons {
+    margin-right: 1.1rem;
+}
+
 .ui.header.primary-header-login {
     font-size: .75rem;
 }

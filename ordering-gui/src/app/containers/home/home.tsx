@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { Component, ReactNode, FunctionComponent } from 'react';
+import { Component, FunctionComponent, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { Button, Container, Icon, Label, Segment, Table } from 'semantic-ui-react';
-
-import { getStatusLabelColor, Order, OrderState, RootState } from '../../models';
-import { findOrders } from '../../state/actions';
 import { LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
+import { getOrderStatusLabelColor } from '../../core/utils';
+
+import { Order, OrderState, RootState } from '../../models';
+import { findOrders } from '../../state/actions';
 
 interface ComponentStateProps {
     orderState: OrderState;
@@ -39,9 +40,9 @@ class HomeContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public render(): ReactNode {
-        const { orderId, createOrder } = this.state;
-        const { orderState } = this.props;
-        const { orders, loading } = orderState;
+        const {orderId, createOrder} = this.state;
+        const {orderState} = this.props;
+        const {orders, loading} = orderState;
 
         if (orderId) {
             return <Redirect to={`/orders/${orderId}`} />;
@@ -60,11 +61,11 @@ class HomeContainer extends Component<ComponentProps, ComponentState> {
     }
 
     private onTableRowClick = (orderId: string) => {
-        this.setState({ orderId: orderId });
+        this.setState({orderId: orderId});
     };
 
     private onCreateOrderButtonClick = () => {
-        this.setState({ createOrder: true });
+        this.setState({createOrder: true});
     };
 }
 
@@ -75,7 +76,7 @@ interface OrdersFragmentProps {
 }
 
 const OrdersFragment: FunctionComponent<OrdersFragmentProps> = (props) => {
-    const { orders, onTableRowClick, onCreateOrderButtonClick } = props;
+    const {orders, onTableRowClick, onCreateOrderButtonClick} = props;
 
     return (
         <Container>
@@ -98,8 +99,8 @@ const OrdersFragment: FunctionComponent<OrdersFragmentProps> = (props) => {
                     </Table.Header>
                     <Table.Body>
                         {orders.map((order, index) => {
-                            const { orderId, name, description, status } = order;
-                            const statusColor = getStatusLabelColor(status);
+                            const {orderId, name, description, status} = order;
+                            const statusColor = getOrderStatusLabelColor(status);
 
                             return (
                                 <Table.Row key={index} className='clickable-table-row' onClick={() => onTableRowClick(orderId)}>

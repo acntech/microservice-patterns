@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ChangeEventHandler, Component, FunctionComponent, ReactNode } from 'react';
-import { InjectedIntlProps } from 'react-intl';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { Button, Container, Form, Icon, InputOnChangeData, Message, Segment, TextAreaProps } from 'semantic-ui-react';
@@ -18,7 +17,7 @@ interface ComponentDispatchProps {
     createOrder: (createOrder: CreateOrder) => Promise<any>;
 }
 
-type ComponentProps = ComponentDispatchProps & ComponentStateProps & InjectedIntlProps;
+type ComponentProps = ComponentDispatchProps & ComponentStateProps;
 
 interface FormData {
     formError: boolean;
@@ -106,7 +105,6 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
             formData: {
                 ...formData,
                 formError: false,
-                formWarning: false,
                 formNameValue: value
             }
         });
@@ -119,7 +117,6 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
             formData: {
                 ...formData,
                 formError: false,
-                formWarning: false,
                 formDescriptionValue: value
             }
         });

@@ -1,15 +1,10 @@
-import {
-    ActionType,
-    CustomerState,
-    EntityType,
-    OrderState,
-    NotificationState
-} from '../';
+import { ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState } from '../';
 
 export interface RootState {
     notificationState: NotificationState;
     customerState: CustomerState;
     orderState: OrderState;
+    itemState: ItemState;
 }
 
 export interface Error {

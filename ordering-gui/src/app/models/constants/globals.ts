@@ -1,7 +1,8 @@
-
 export enum EntityType {
     CUSTOMERS = 'customers',
-    ORDERS = 'orders'
+    PRODUCTS = 'products',
+    ORDERS = 'orders',
+    ITEMS = 'items'
 }
 
 export enum ActionType {

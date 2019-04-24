@@ -45,3 +45,9 @@ export enum UpdateOrderActionType {
     SUCCESS = '[orders] UPDATE SUCCESS',
     ERROR = '[orders] UPDATE ERROR'
 }
+
+export enum CreateItemActionType {
+    LOADING = '[items] CREATE LOADING',
+    SUCCESS = '[items] CREATE SUCCESS',
+    ERROR = '[items] CREATE ERROR'
+}

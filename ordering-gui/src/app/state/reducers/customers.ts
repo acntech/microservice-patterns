@@ -114,7 +114,7 @@ export const find = (state: CustomerState = initialCustomerState, action: FindCu
         case FindCustomersActionType.ERROR: {
             const {customers} = state;
             const {data} = action.error.response;
-            const error = {...data, entityType: EntityType.CUSTOMERS, actionType: ActionType.GET};
+            const error = {...data, entityType: EntityType.CUSTOMERS, actionType: ActionType.FIND};
             return {...initialCustomerState, customers: customers, error: error};
         }
 
