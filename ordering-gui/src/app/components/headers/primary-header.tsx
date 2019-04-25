@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { Dropdown, Header, Icon, Segment } from 'semantic-ui-react';
+import {Component, ReactNode} from 'react';
+import {connect} from 'react-redux';
+import {Link, Redirect} from 'react-router-dom';
+import {Dropdown, Header, Icon, Segment} from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { CustomerState, RootState } from '../../models';
-import { logoutCustomer } from '../../state/actions';
+import {CustomerState, RootState} from '../../models';
+import {logoutCustomer} from '../../state/actions';
 
 interface ComponentStateProps {
     customerState: CustomerState;
@@ -50,7 +50,7 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
         const {user} = this.props.customerState;
 
         if (!user) {
-            return <Redirect to='/login' />;
+            return <Redirect to='/login'/>;
         } else {
             const browserTitle = this.browserTitle();
             const headerTitle = this.headerTitle();
@@ -62,15 +62,15 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
                 <Segment basic className="primary-header">
                     <Header as='h1' floated='left' className="primary-header-title">
                         <Link to="/">
-                            <Icon name='box' />{headerTitle}
+                            <Icon name='box'/>{headerTitle}
                         </Link>
                     </Header>
                     <Header as='h3' floated='right' className="primary-header-login">
-                        <Icon name='user' />
+                        <Icon name='user'/>
                         <Header.Content>
                             <Dropdown text={name}>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item text='Logout' onClick={this.onLogoutClick} />
+                                    <Dropdown.Item text='Logout' onClick={this.onLogoutClick}/>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </Header.Content>
@@ -115,4 +115,4 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 
 const ConnectedPrimaryHeaderComponent = connect(mapStateToProps, mapDispatchToProps)(PrimaryHeaderComponent);
 
-export { ConnectedPrimaryHeaderComponent as PrimaryHeader };
+export {ConnectedPrimaryHeaderComponent as PrimaryHeader};

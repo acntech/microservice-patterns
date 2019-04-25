@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { ChangeEventHandler, Component, FunctionComponent, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { Button, Container, Form, Icon, InputOnChangeData, Message, Segment } from 'semantic-ui-react';
-import { LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
+import {ChangeEventHandler, Component, ReactNode} from 'react';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
+import {CreateItemForm, CreateItemFormData, initialCreateItemFormData, LoadingIndicator} from '../../components';
 
-import { ActionType, CreateItem, ItemState, RootState } from '../../models';
-import { createItem } from '../../state/actions';
+import {ActionType, CreateItem, ItemState, RootState} from '../../models';
+import {createItem} from '../../state/actions';
 
 interface RouteProps {
     match: any;
@@ -22,37 +21,14 @@ interface ComponentDispatchProps {
 
 type ComponentProps = ComponentDispatchProps & ComponentStateProps & RouteProps;
 
-interface FormInputData {
-    formError: boolean;
-    formValue: string;
-}
-
-interface FormData {
-    formError: boolean;
-    formErrorMessage?: string;
-    formInputProductId: FormInputData;
-    formInputQuantity: FormInputData;
-}
-
-const initialFormInputData: FormInputData = {
-    formError: false,
-    formValue: ''
-};
-
-const initialFormData: FormData = {
-    formError: false,
-    formInputProductId: initialFormInputData,
-    formInputQuantity: initialFormInputData
-};
-
 interface ComponentState {
     cancel: boolean;
-    formData: FormData;
+    formData: CreateItemFormData;
 }
 
 const initialState: ComponentState = {
     cancel: false,
-    formData: initialFormData
+    formData: initialCreateItemFormData
 };
 
 class CreateItemContainer extends Component<ComponentProps, ComponentState> {
@@ -68,18 +44,18 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         const {cancel, formData} = this.state;
 
         if (cancel) {
-            return <Redirect to='/' />;
+            return <Redirect to='/'/>;
         } else if (loading) {
-            return <LoadingIndicator />;
+            return <LoadingIndicator/>;
         } else if (modified && modified.actionType === ActionType.CREATE) {
-            return <Redirect to={`/orders/${orderId}`} />;
+            return <Redirect to={`/orders/${orderId}`}/>;
         } else {
-            return <CreateItemFragment
+            return <CreateItemForm
                 onCancelButtonClick={this.onCancelButtonClick}
                 onFormSubmit={this.onFormSubmit}
-                onFormProductIdChange={this.onFormProductIdChange}
-                onFormQuantityChange={this.onFormQuantityChange}
-                formData={formData} />;
+                onFormInputProductIdChange={this.onFormInputProductIdChange}
+                onFormInputQuantityChange={this.onFormInputQuantityChange}
+                formData={formData}/>;
         }
     }
 
@@ -99,7 +75,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         }
     };
 
-    private formInputProductIdIsValid = (formData: FormData): boolean => {
+    private formInputProductIdIsValid = (formData: CreateItemFormData): boolean => {
         const {formInputProductId} = formData;
         const {formValue: productId} = formInputProductId;
 
@@ -122,7 +98,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         }
     };
 
-    private formInputQuantityIsValid = (formData: FormData): boolean => {
+    private formInputQuantityIsValid = (formData: CreateItemFormData): boolean => {
         const {formInputQuantity} = formData;
         const {formValue: quantity} = formInputQuantity;
 
@@ -146,7 +122,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         }
     };
 
-    private onFormProductIdChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    private onFormInputProductIdChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const {value} = event.currentTarget;
         const {formData} = this.state;
         const {formInputProductId} = formData;
@@ -164,7 +140,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         });
     };
 
-    private onFormQuantityChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    private onFormInputQuantityChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const {value} = event.currentTarget;
         const {formData} = this.state;
         const {formInputQuantity} = formData;
@@ -187,75 +163,6 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
     };
 }
 
-interface CreateItemFragmentProps {
-    onCancelButtonClick: () => void;
-    onFormSubmit: () => void;
-    onFormProductIdChange: (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
-    onFormQuantityChange: (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
-    formData: FormData;
-}
-
-const CreateItemFragment: FunctionComponent<CreateItemFragmentProps> = (props) => {
-    const {
-        onCancelButtonClick,
-        onFormSubmit,
-        onFormProductIdChange,
-        onFormQuantityChange,
-        formData
-    } = props;
-    const {
-        formError,
-        formErrorMessage,
-        formInputProductId,
-        formInputQuantity
-    } = formData;
-    const {
-        formError: formProductIdError,
-        formValue: formProductIdValue
-    } = formInputProductId;
-    const {
-        formError: formQuantityError,
-        formValue: formQuantityValue
-    } = formInputQuantity;
-
-    return (
-        <Container>
-            <PrimaryHeader />
-            <SecondaryHeader />
-            <Segment basic>
-                <Form onSubmit={onFormSubmit} error={formError}>
-                    <Form.Group>
-                        <Form.Input
-                            error={formProductIdError}
-                            width={10}
-                            label='Product ID'
-                            placeholder='Enter product ID...'
-                            value={formProductIdValue}
-                            onChange={onFormProductIdChange} />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Input
-                            error={formQuantityError}
-                            width={10}
-                            label='Quantity'
-                            placeholder='Enter quantity...'
-                            value={formQuantityValue}
-                            onChange={onFormQuantityChange} />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Button
-                            primary size='tiny'><Icon name='dolly' />Add Item</Form.Button>
-                        <Button
-                            secondary size='tiny'
-                            onClick={onCancelButtonClick}><Icon name='cancel' />Cancel</Button>
-                    </Form.Group>
-                    <Message error><Icon name='ban' /> {formErrorMessage}</Message>
-                </Form>
-            </Segment>
-        </Container>
-    );
-};
-
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
     itemState: state.itemState
 });
@@ -266,4 +173,4 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 
 const ConnectedCreateItemContainer = connect(mapStateToProps, mapDispatchToProps)(CreateItemContainer);
 
-export { ConnectedCreateItemContainer as CreateItemContainer };
+export {ConnectedCreateItemContainer as CreateItemContainer};

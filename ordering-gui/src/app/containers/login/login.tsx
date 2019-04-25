@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ChangeEventHandler, Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import {ChangeEventHandler, Component, ReactNode} from 'react';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
+import {Container, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { LoadingIndicator } from '../../components';
-import { Customer, CustomerState, RootState } from '../../models';
-import { getCustomer, loginCustomer } from '../../state/actions';
+import {LoadingIndicator} from '../../components';
+import {Customer, CustomerState, RootState} from '../../models';
+import {getCustomer, loginCustomer} from '../../state/actions';
 
 interface ComponentStateProps {
     customerState: CustomerState;
@@ -78,7 +78,8 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public render(): ReactNode {
-        const {loading, error, user} = this.props.customerState;
+        const {customerState} = this.props;
+        const {loading, error, user} = customerState;
         const {formData} = this.state;
         let {formError, formErrorMessage} = formData;
         let formWarning = false;
@@ -90,9 +91,9 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
         }
 
         if (!error && loading) {
-            return <LoadingIndicator />;
+            return <LoadingIndicator/>;
         } else if (user) {
-            return <Redirect to='/' />;
+            return <Redirect to='/'/>;
         } else {
             return (
                 <Container>
@@ -102,10 +103,12 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
                                 <Header as='h1'>Login</Header>
                                 <Form size='large' onSubmit={this.onFormSubmit} error={formError} warning={formWarning}>
                                     <Segment stacked>
-                                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Customer ID' onChange={this.onFormInputChange} />
+                                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Customer ID'
+                                                    onChange={this.onFormInputChange}/>
                                         <Form.Button primary fluid size='large'>Login</Form.Button>
-                                        <Message error icon='ban' content={formErrorMessage} />
-                                        <Message warning icon='warning sign' content='customer-id might come from the login cookie' />
+                                        <Message error icon='ban' content={formErrorMessage}/>
+                                        <Message warning icon='warning sign'
+                                                 content='customer-id might come from the login cookie'/>
                                     </Segment>
                                 </Form>
                             </Grid.Column>
@@ -177,4 +180,4 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 
 const ConnectedLoginContainer = connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
 
-export { ConnectedLoginContainer as LoginContainer };
+export {ConnectedLoginContainer as LoginContainer};

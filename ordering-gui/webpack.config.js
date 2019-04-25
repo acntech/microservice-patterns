@@ -12,9 +12,15 @@ const outputDir = 'dist';
 const publicDir = 'public';
 const outputPath = path.resolve(__dirname, outputDir);
 const indexFile = path.resolve(__dirname, publicDir, 'index.html');
+
+const j2cApiServerUrl = 'http://j2c-p1-elb-public-1592238471.us-east-2.elb.amazonaws.com';
+const customersApiServerUrl = j2cApiServerUrl;
+const productsApiServerUrl = j2cApiServerUrl;
+const ordersApiServerUrl = j2cApiServerUrl;
+const reservationsApiServerUrl = j2cApiServerUrl;
+//const ordersApiServerUrl = process.env.ORDERS_API_URL || 'http://localhost:9010';
+//const customersApiServerUrl = process.env.CUSTOMERS_API_URL || 'http://localhost:9000';
 const devServerHost = process.env.NODE_PUBLIC_HOST || 'localhost:3000';
-const customersApiServerUrl = process.env.CUSTOMERS_API_URL || 'http://localhost:9000';
-const ordersApiServerUrl = process.env.ORDERS_API_URL || 'http://localhost:9010';
 const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
@@ -89,7 +95,6 @@ module.exports = {
         maxAssetSize: 1000000,
         hints: false
     },
-    mode: mode,
     devtool: (mode === 'development') ? 'source-map' : false,
     devServer: {
         port: 3000,
@@ -97,7 +102,9 @@ module.exports = {
         public: devServerHost,
         proxy: {
             '/api/customers': customersApiServerUrl,
-            '/api/orders': ordersApiServerUrl
+            '/api/products': productsApiServerUrl,
+            '/api/orders': ordersApiServerUrl,
+            '/api/reservations': reservationsApiServerUrl
         },
         open: false
     },
