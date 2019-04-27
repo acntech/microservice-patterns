@@ -14,6 +14,7 @@ spring:
   profiles:
     include:
       - postgres
+      - j2c
   datasource:
     url: jdbc:postgresql://ip-10-0-1-4.us-east-2.compute.internal:5432/ordering
   kafka:
@@ -36,4 +37,4 @@ logging:
 server:
   port: 9010
   servlet:
-    context-path: /ordering/api
+    context-path: /api

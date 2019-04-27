@@ -3,9 +3,9 @@
 #########################
 acntech:
   service:
-    warehouse:
+    ordering:
       api:
-        url: http://localhost:9040/api
+        url: http://localhost:9010/api
 
 ########################
 # SPRING Configuration #
@@ -13,8 +13,8 @@ acntech:
 spring:
   profiles:
     include:
-      - h2
-      - default
+      - postgres
+      - development
   kafka:
     bootstrap-servers:
       - localhost:9092
@@ -33,6 +33,6 @@ logging:
 
 # Server
 server:
-  port: 9010
+  port: 9040
   servlet:
     context-path: /api

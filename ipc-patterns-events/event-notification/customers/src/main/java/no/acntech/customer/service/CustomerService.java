@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import no.acntech.customer.exception.CustomerNotFoundException;
-import no.acntech.customer.model.CreateCustomer;
+import no.acntech.customer.model.CreateCustomerDto;
 import no.acntech.customer.model.Customer;
 import no.acntech.customer.model.CustomerQuery;
 import no.acntech.customer.repository.CustomerRepository;
@@ -46,7 +46,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer createCustomer(final CreateCustomer createCustomer) {
+    public Customer createCustomer(final CreateCustomerDto createCustomer) {
         Customer customer = conversionService.convert(createCustomer, Customer.class);
         return customerRepository.save(customer);
     }

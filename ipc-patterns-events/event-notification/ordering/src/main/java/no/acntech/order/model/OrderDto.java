@@ -21,9 +21,9 @@ public class OrderDto {
     private OrderStatus status;
     @NotNull
     private List<ItemDto> items;
-    private ZonedDateTime created;
     @NotNull
     private ZonedDateTime modified;
+    private ZonedDateTime created;
 
     public UUID getOrderId() {
         return orderId;

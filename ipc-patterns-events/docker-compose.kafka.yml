@@ -12,8 +12,7 @@ services:
     depends_on:
       - zookeeper_1
     networks:
-      - kafka
-      - zookeeper
+      - event_bus
 
   zookeeper_1:
     image: acntechie/zookeeper
@@ -22,10 +21,8 @@ services:
       - ZOOKEEPER_ID=1
       - ZOOKEEPER_HOSTS=zookeeper_1:2888:3888
     networks:
-      - zookeeper
+      - event_bus
 
 networks:
-  kafka:
-    name: kafka
-  zookeeper:
-    name: zookeeper
+  event_bus:
+    name: event_bus

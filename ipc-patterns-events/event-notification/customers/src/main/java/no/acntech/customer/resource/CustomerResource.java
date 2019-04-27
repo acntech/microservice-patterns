@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import no.acntech.customer.model.CreateCustomer;
+import no.acntech.customer.model.CreateCustomerDto;
 import no.acntech.customer.model.Customer;
 import no.acntech.customer.model.CustomerDto;
 import no.acntech.customer.model.CustomerQuery;
@@ -54,7 +54,7 @@ public class CustomerResource {
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody final CreateCustomer createCustomer) {
+    public ResponseEntity post(@Valid @RequestBody final CreateCustomerDto createCustomer) {
         final Customer customer = customerService.createCustomer(createCustomer);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

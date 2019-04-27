@@ -1,4 +1,4 @@
-import { CustomerState, ItemState, NotificationState, OrderState, RootState } from '../../models';
+import { CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState } from '../../models';
 
 export const initialNotificationState: NotificationState = {
     notifications: []
@@ -7,6 +7,11 @@ export const initialNotificationState: NotificationState = {
 export const initialCustomerState: CustomerState = {
     loading: false,
     customers: []
+};
+
+export const initialProductState: ProductState = {
+    loading: false,
+    products: []
 };
 
 export const initialOrderState: OrderState = {
@@ -21,6 +26,7 @@ export const initialItemState: ItemState = {
 export const initialRootState: RootState = {
     notificationState: initialNotificationState,
     customerState: initialCustomerState,
+    productState: initialProductState,
     orderState: initialOrderState,
     itemState: initialItemState
 };

@@ -1,8 +1,9 @@
-import { ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState } from '../';
+import { ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState } from '../';
 
 export interface RootState {
     notificationState: NotificationState;
     customerState: CustomerState;
+    productState: ProductState;
     orderState: OrderState;
     itemState: ItemState;
 }

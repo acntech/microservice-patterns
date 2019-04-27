@@ -13,7 +13,7 @@ acntech:
 spring:
   profiles:
     include:
-      - h2
+      - postgres
       - default
   kafka:
     bootstrap-servers:
