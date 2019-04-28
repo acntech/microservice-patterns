@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Redirect} from 'react-router';
 import {CreateItemForm, CreateItemFormData, initialCreateItemFormData, LoadingIndicator} from '../../components';
 
-import {ActionType, CreateItem, ItemState, RootState} from '../../models';
+import {ActionType, CreateItem, EntityType, ItemState, RootState} from '../../models';
 import {createItem} from '../../state/actions';
 
 interface RouteProps {
@@ -40,14 +40,16 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
 
     public render(): ReactNode {
         const {orderId} = this.props.match.params;
-        const {loading, modified} = this.props.itemState;
+        const {loading} = this.props.itemState;
         const {cancel, formData} = this.state;
+
+        console.log("CREATE ITEM", this.state);
 
         if (cancel) {
             return <Redirect to='/'/>;
         } else if (loading) {
             return <LoadingIndicator/>;
-        } else if (modified && modified.actionType === ActionType.CREATE) {
+        } else if (this.shouldRedirectToOrder()) {
             return <Redirect to={`/orders/${orderId}`}/>;
         } else {
             return <CreateItemForm
@@ -59,14 +61,30 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         }
     }
 
+    private shouldRedirectToOrder = (): boolean => {
+        const {modified} = this.props.itemState;
+        const {formSubmitted} = this.state.formData;
+        return formSubmitted &&
+            modified != undefined &&
+            modified.entityType === EntityType.ITEMS &&
+            modified.actionType === ActionType.CREATE;
+    };
+
     private onFormSubmit = () => {
         const {orderId} = this.props.match.params;
         const {formData} = this.state;
         const {formInputProductId, formInputQuantity} = formData;
-        const {formValue: productId} = formInputProductId;
-        const {formValue: quantity} = formInputQuantity;
+        const {formElementValue: productId} = formInputProductId;
+        const {formElementValue: quantity} = formInputQuantity;
 
         if (this.formInputProductIdIsValid(formData) && this.formInputQuantityIsValid(formData)) {
+            this.setState({
+                formData: {
+                    ...initialCreateItemFormData,
+                    formSubmitted: true
+                }
+            });
+
             this.props.createItem(
                 orderId, {
                     productId: productId,
@@ -77,7 +95,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
 
     private formInputProductIdIsValid = (formData: CreateItemFormData): boolean => {
         const {formInputProductId} = formData;
-        const {formValue: productId} = formInputProductId;
+        const {formElementValue: productId} = formInputProductId;
 
         if (!productId || productId.length !== 36) {
             this.setState({
@@ -87,7 +105,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                     formErrorMessage: 'Product ID must be an UUID of 36 characters',
                     formInputProductId: {
                         ...formInputProductId,
-                        formError: true
+                        formElementError: true
                     }
                 }
             });
@@ -100,7 +118,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
 
     private formInputQuantityIsValid = (formData: CreateItemFormData): boolean => {
         const {formInputQuantity} = formData;
-        const {formValue: quantity} = formInputQuantity;
+        const {formElementValue: quantity} = formInputQuantity;
 
         const quantityNumber = parseInt(quantity, 10);
         if (isNaN(quantityNumber) || quantityNumber < 1) {
@@ -111,7 +129,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                     formErrorMessage: 'Quantity must be a positive number',
                     formInputQuantity: {
                         ...formInputQuantity,
-                        formError: true
+                        formElementError: true
                     }
                 }
             });
@@ -133,8 +151,8 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                 formError: false,
                 formInputProductId: {
                     ...formInputProductId,
-                    formError: false,
-                    formValue: value
+                    formElementError: false,
+                    formElementValue: value
                 }
             }
         });
@@ -151,8 +169,8 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                 formError: false,
                 formInputQuantity: {
                     ...formInputQuantity,
-                    formError: false,
-                    formValue: value
+                    formElementError: false,
+                    formElementValue: value
                 }
             }
         });

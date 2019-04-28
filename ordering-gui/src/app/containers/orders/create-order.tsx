@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Redirect} from 'react-router';
 import {CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator} from '../../components';
 
-import {ActionType, CreateOrder, CustomerState, OrderState, RootState} from '../../models';
+import {ActionType, CreateOrder, CustomerState, EntityType, OrderState, RootState} from '../../models';
 import {createOrder} from '../../state/actions';
 
 interface ComponentStateProps {
@@ -37,14 +37,13 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
 
     public render(): ReactNode {
         const {cancel, formData} = this.state;
-        const {orderState} = this.props;
-        const {loading, modified} = orderState;
+        const {loading, modified} = this.props.orderState;
 
         if (cancel) {
             return <Redirect to='/'/>;
         } else if (loading) {
             return <LoadingIndicator/>;
-        } else if (modified && modified.actionType === ActionType.CREATE) {
+        } else if (modified && this.shouldRedirectToOrder()) {
             const {id: orderId} = modified;
             return <Redirect to={`/orders/${orderId}`}/>;
         } else {
@@ -57,15 +56,31 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
         }
     }
 
+    private shouldRedirectToOrder = (): boolean => {
+        const {modified} = this.props.orderState;
+        const {formSubmitted} = this.state.formData;
+        return formSubmitted &&
+            modified != undefined &&
+            modified.entityType === EntityType.ORDERS &&
+            modified.actionType === ActionType.CREATE;
+    };
+
     private onFormSubmit = () => {
         const {user} = this.props.customerState;
         const {customerId} = user || {customerId: ''};
         const {formData} = this.state;
         const {formInputName, formTextAreaDescription} = formData;
-        const {formValue: name} = formInputName;
-        const {formValue: description} = formTextAreaDescription || {formValue: undefined};
+        const {formElementValue: name} = formInputName;
+        const {formElementValue: description} = formTextAreaDescription || {formElementValue: undefined};
 
         if (this.formInputNameIsValid(formData)) {
+            this.setState({
+                formData: {
+                    ...initialCreateOrderFormData,
+                    formSubmitted: true
+                }
+            });
+
             this.props.createOrder({
                 customerId: customerId,
                 name: name,
@@ -76,7 +91,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
 
     private formInputNameIsValid = (formData: CreateOrderFormData): boolean => {
         const {formInputName} = formData;
-        const {formValue: name} = formInputName;
+        const {formElementValue: name} = formInputName;
 
         if (!name || name.length < 2) {
             this.setFormInputNameError(formData, 'Order name must be at least 2 characters long');
@@ -98,7 +113,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
                 formErrorMessage: errorMessage,
                 formInputName: {
                     ...formInputName,
-                    formError: true
+                    formElementError: true
                 }
             }
         });
@@ -115,8 +130,8 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
                 formError: false,
                 formInputName: {
                     ...formInputName,
-                    formError: false,
-                    formValue: value
+                    formElementError: false,
+                    formElementValue: value
                 }
             }
         });
@@ -133,8 +148,8 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
                 formError: false,
                 formTextAreaDescription: {
                     ...formTextAreaDescription,
-                    formError: false,
-                    formValue: value
+                    formElementError: false,
+                    formElementValue: value
                 }
             }
         });

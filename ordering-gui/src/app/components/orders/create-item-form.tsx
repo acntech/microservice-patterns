@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Component, ReactNode} from 'react';
 import {Button, Container, Form, Icon, InputOnChangeData, Message, Segment} from 'semantic-ui-react';
 import {PrimaryHeader, SecondaryHeader} from '../../components';
+import {FormData, FormElementData} from "../../models";
 
 
 interface ComponentProps {
@@ -12,24 +13,18 @@ interface ComponentProps {
     formData: CreateItemFormData;
 }
 
-export interface CreateItemFormElementData {
-    formError: boolean;
-    formValue: string;
+export interface CreateItemFormData extends FormData {
+    formInputProductId: FormElementData;
+    formInputQuantity: FormElementData;
 }
 
-export interface CreateItemFormData {
-    formError: boolean;
-    formErrorMessage?: string;
-    formInputProductId: CreateItemFormElementData;
-    formInputQuantity: CreateItemFormElementData;
-}
-
-const initialCreateItemFormElementData: CreateItemFormElementData = {
-    formError: false,
-    formValue: ''
+const initialCreateItemFormElementData: FormElementData = {
+    formElementError: false,
+    formElementValue: ''
 };
 
 export const initialCreateItemFormData: CreateItemFormData = {
+    formSubmitted: false,
     formError: false,
     formInputProductId: initialCreateItemFormElementData,
     formInputQuantity: initialCreateItemFormElementData
@@ -52,12 +47,12 @@ class CreateItemFormContainer extends Component<ComponentProps> {
             formInputQuantity
         } = formData;
         const {
-            formError: formProductIdError,
-            formValue: formProductIdValue
+            formElementError: formProductIdError,
+            formElementValue: formProductIdValue
         } = formInputProductId;
         const {
-            formError: formQuantityError,
-            formValue: formQuantityValue
+            formElementError: formQuantityError,
+            formElementValue: formQuantityValue
         } = formInputQuantity;
 
         return (

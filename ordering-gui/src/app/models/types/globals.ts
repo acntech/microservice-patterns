@@ -1,4 +1,4 @@
-import { ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState } from '../';
+import {ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState} from '../';
 
 export interface RootState {
     notificationState: NotificationState;
@@ -28,4 +28,15 @@ export interface Entity {
     created: string;
     modified: string;
     loaded?: number;
+}
+
+export interface FormElementData {
+    formElementError: boolean;
+    formElementValue: string;
+}
+
+export interface FormData {
+    formSubmitted: boolean;
+    formError: boolean;
+    formErrorMessage?: string;
 }

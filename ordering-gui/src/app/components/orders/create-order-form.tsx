@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Component, ReactNode} from 'react';
 import {Button, Container, Form, Icon, InputOnChangeData, Message, Segment, TextAreaProps} from 'semantic-ui-react';
 import {PrimaryHeader, SecondaryHeader} from '../../components';
+import {FormData, FormElementData} from "../../models/types";
 
 interface ComponentProps {
     onCancelButtonClick: () => void;
@@ -11,24 +12,18 @@ interface ComponentProps {
     formData: CreateOrderFormData;
 }
 
-export interface CreateOrderFormElementData {
-    formError: boolean;
-    formValue: string;
+export interface CreateOrderFormData extends FormData {
+    formInputName: FormElementData;
+    formTextAreaDescription?: FormElementData;
 }
 
-export interface CreateOrderFormData {
-    formError: boolean;
-    formErrorMessage?: string;
-    formInputName: CreateOrderFormElementData;
-    formTextAreaDescription?: CreateOrderFormElementData;
-}
-
-const initialCreateOrderFormElementData: CreateOrderFormElementData = {
-    formError: false,
-    formValue: ''
+const initialCreateOrderFormElementData: FormElementData = {
+    formElementError: false,
+    formElementValue: ''
 };
 
 export const initialCreateOrderFormData: CreateOrderFormData = {
+    formSubmitted: false,
     formError: false,
     formInputName: initialCreateOrderFormElementData,
     formTextAreaDescription: initialCreateOrderFormElementData
@@ -51,12 +46,12 @@ class CreateOrderFormContainer extends Component<ComponentProps> {
             formTextAreaDescription
         } = formData;
         const {
-            formError: formNameError,
-            formValue: formNameValue
+            formElementError: formNameError,
+            formElementValue: formNameValue
         } = formInputName;
         const {
-            formValue: formDescriptionValue
-        } = formTextAreaDescription || {formValue: undefined};
+            formElementValue: formDescriptionValue
+        } = formTextAreaDescription || {formElementValue: undefined};
 
         return (
             <Container>

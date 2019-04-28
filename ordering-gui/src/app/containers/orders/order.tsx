@@ -66,6 +66,8 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         const {loading} = this.props.orderState;
         const {back, createItem, order} = this.state;
 
+        console.log("ORDER", this.state);
+
         if (back) {
             return <Redirect to='/' />;
         } else if (createItem) {

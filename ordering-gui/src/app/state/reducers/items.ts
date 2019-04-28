@@ -25,7 +25,7 @@ export const create = (state: ItemState = initialItemState, action: CreateItemAc
 
             if (headers) {
                 const {location} = headers;
-                const orderId = location.split('orders/')[1];
+                const orderId = location.split('items/')[1];
                 modified = {id: orderId, entityType: EntityType.ITEMS, actionType: ActionType.CREATE};
             }
 

@@ -4,8 +4,8 @@
 spring:
   profiles:
     include:
-      - postgres
       - development
+      - postgres
 
 # Logging
 logging:
