@@ -25,8 +25,8 @@ export const find = (state: ProductState = initialProductState, action: FindProd
             const {payload} = action;
 
             if (payload) {
-                payload.forEach(inventory => {
-                    products = replaceOrAppend(products, inventory);
+                payload.forEach(product => {
+                    products = replaceOrAppend(products, product);
                 });
             }
 
@@ -49,7 +49,7 @@ export const find = (state: ProductState = initialProductState, action: FindProd
 const replaceOrAppend = (products: Product[], product: Product) => {
     const index = products.map(p => p.productId).indexOf(product.productId);
 
-    if (~index) {
+    if (index !== -1) {
         products[index] = product;
     } else {
         products = products.concat(product);

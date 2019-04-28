@@ -136,7 +136,7 @@ export const find = (state: OrderState = initialOrderState, action: FindOrdersAc
 const replaceOrAppend = (orders: Order[], order: Order) => {
     const index = orders.map(o => o.orderId).indexOf(order.orderId);
 
-    if (~index) {
+    if (index !== -1) {
         orders[index] = order;
     } else {
         orders = orders.concat(order);

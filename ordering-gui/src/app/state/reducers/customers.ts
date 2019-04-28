@@ -127,7 +127,7 @@ export const find = (state: CustomerState = initialCustomerState, action: FindCu
 const replaceOrAppend = (customers: Customer[], customer: Customer) => {
     const index = customers.map(c => c.customerId).indexOf(customer.customerId);
 
-    if (~index) {
+    if (index !== -1) {
         customers[index] = customer;
     } else {
         customers = customers.concat(customer);

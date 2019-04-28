@@ -1,4 +1,4 @@
-import { CreateOrderActionType, Error, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
+import { CreateOrderActionType, Entity, Error, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
 import { Item } from './';
 
 export interface CreateOrder {
@@ -7,15 +7,13 @@ export interface CreateOrder {
     description?: string;
 }
 
-export interface Order {
+export interface Order extends Entity {
     orderId: string;
     customerId: string;
     name: string;
     description?: string;
     status: OrderStatus;
     items: Item[];
-    created: string;
-    modified: string;
 }
 
 export interface OrderState {

@@ -23,3 +23,9 @@ export interface Modified {
     entityType: EntityType;
     actionType: ActionType;
 }
+
+export interface Entity {
+    created: string;
+    modified: string;
+    loaded?: number;
+}

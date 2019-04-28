@@ -1,15 +1,13 @@
-import { Currency, FindProductsActionType } from '../';
+import { Currency, Entity, FindProductsActionType } from '../';
 import { Error, Modified } from './';
 
-export interface Product {
+export interface Product extends Entity {
     productId: string;
     name: string;
     description: string;
     stock: number;
     price: number;
     currency: Currency;
-    created: string;
-    modified: string;
 }
 
 export interface ProductQuery {

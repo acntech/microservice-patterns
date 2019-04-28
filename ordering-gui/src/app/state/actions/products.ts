@@ -7,7 +7,7 @@ const findInventoriesLoading = (loading: boolean): FindProductsLoadingAction => 
 const findInventoriesSuccess = (payload: Product[]): FindProductsSuccessAction => ({type: FindProductsActionType.SUCCESS, payload});
 const findInventoriesError = (error: any): FindProductsErrorAction => ({type: FindProductsActionType.ERROR, error});
 
-const rootPath = '/api/inventory';
+const rootPath = '/api/products';
 
 export function findProducts(productQuery?: ProductQuery) {
     return (dispatch) => {

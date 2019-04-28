@@ -1,12 +1,10 @@
-import { Error, FindCustomersActionType, GetCustomerActionType, LoginCustomerActionType, Modified } from '../';
+import { Entity, Error, FindCustomersActionType, GetCustomerActionType, LoginCustomerActionType, Modified } from '../';
 
-export interface Customer {
+export interface Customer extends Entity {
     customerId: string;
     firstName: string;
     lastName: string;
     address: string;
-    created: string;
-    modified: string;
 }
 
 export interface CustomerQuery {

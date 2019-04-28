@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Component, ReactNode } from 'react';
-import { Container, Segment } from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react';
 
-import { PrimaryHeader, SecondaryHeader } from '../';
+import { LoadingSegment, PrimaryHeader, SecondaryHeader } from '../';
 
 class LoadingIndicatorComponent extends Component<{}> {
 
@@ -11,9 +11,7 @@ class LoadingIndicatorComponent extends Component<{}> {
             <Container className='loading-indicator'>
                 <PrimaryHeader />
                 <SecondaryHeader />
-                <Segment loading>
-                    <div className='loading-indicator-body' />
-                </Segment>
+                <LoadingSegment />
             </Container>
         );
     }
