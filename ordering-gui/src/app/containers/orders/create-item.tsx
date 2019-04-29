@@ -2,10 +2,19 @@ import * as React from 'react';
 import {ChangeEventHandler, Component, ReactNode} from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router';
-import {CreateItemForm, CreateItemFormData, initialCreateItemFormData, LoadingIndicator} from '../../components';
+import {
+    CreateItemForm,
+    CreateItemFormData,
+    initialCreateItemFormData,
+    LoadingIndicator,
+    PrimaryHeader,
+    SecondaryHeader
+} from '../../components';
 
-import {ActionType, CreateItem, EntityType, ItemState, RootState} from '../../models';
-import {createItem} from '../../state/actions';
+import {ActionType, CreateItem, EntityType, ItemState, Product, ProductState, RootState} from '../../models';
+import {createItem, findProducts} from '../../state/actions';
+import {ShowProductList} from "../../components/orders/show-product-list";
+import {Container} from "semantic-ui-react";
 
 interface RouteProps {
     match: any;
@@ -13,16 +22,19 @@ interface RouteProps {
 
 interface ComponentStateProps {
     itemState: ItemState;
+    productState: ProductState;
 }
 
 interface ComponentDispatchProps {
     createItem: (orderId: string, create: CreateItem) => Promise<any>;
+    findProducts: () => Promise<any>;
 }
 
 type ComponentProps = ComponentDispatchProps & ComponentStateProps & RouteProps;
 
 interface ComponentState {
     cancel: boolean;
+    product?: Product;
     formData: CreateItemFormData;
 }
 
@@ -38,26 +50,44 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         this.state = initialState;
     }
 
+    componentDidMount(): void {
+        this.props.findProducts();
+    }
+
     public render(): ReactNode {
         const {orderId} = this.props.match.params;
-        const {loading} = this.props.itemState;
-        const {cancel, formData} = this.state;
+        const {loading: itemLoading} = this.props.itemState;
+        const {loading: productLoading, products} = this.props.productState;
+        const {cancel, product, formData} = this.state;
 
-        console.log("CREATE ITEM", this.state);
-
-        if (cancel) {
-            return <Redirect to='/'/>;
-        } else if (loading) {
+        if (itemLoading || productLoading) {
             return <LoadingIndicator/>;
-        } else if (this.shouldRedirectToOrder()) {
+        } else if (cancel || this.shouldRedirectToOrder()) {
             return <Redirect to={`/orders/${orderId}`}/>;
+        } else if (product) {
+            return (
+                <Container>
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
+                    <CreateItemForm
+                        onCancelButtonClick={this.onCancelButtonClick}
+                        onFormSubmit={this.onFormSubmit}
+                        onFormInputQuantityChange={this.onFormInputQuantityChange}
+                        product={product}
+                        formData={formData}/>
+                </Container>
+            );
         } else {
-            return <CreateItemForm
-                onCancelButtonClick={this.onCancelButtonClick}
-                onFormSubmit={this.onFormSubmit}
-                onFormInputProductIdChange={this.onFormInputProductIdChange}
-                onFormInputQuantityChange={this.onFormInputQuantityChange}
-                formData={formData}/>;
+            return (
+                <Container>
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
+                    <ShowProductList
+                        products={products}
+                        onCancelButtonClick={this.onCancelButtonClick}
+                        onTableRowClick={this.onTableRowClick}/>
+                </Container>
+            );
         }
     }
 
@@ -70,14 +100,18 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
             modified.actionType === ActionType.CREATE;
     };
 
-    private onFormSubmit = () => {
+    private onTableRowClick = (product: Product) => {
+        this.setState({product: product});
+    };
+
+    private onFormSubmit = (): void => {
         const {orderId} = this.props.match.params;
-        const {formData} = this.state;
-        const {formInputProductId, formInputQuantity} = formData;
-        const {formElementValue: productId} = formInputProductId;
+        const {product, formData} = this.state;
+        const {productId} = product || {productId: ''};
+        const {formInputQuantity} = formData;
         const {formElementValue: quantity} = formInputQuantity;
 
-        if (this.formInputProductIdIsValid(formData) && this.formInputQuantityIsValid(formData)) {
+        if (this.formInputQuantityIsValid(formData)) {
             this.setState({
                 formData: {
                     ...initialCreateItemFormData,
@@ -90,29 +124,6 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                     productId: productId,
                     quantity: parseInt(quantity, 10)
                 });
-        }
-    };
-
-    private formInputProductIdIsValid = (formData: CreateItemFormData): boolean => {
-        const {formInputProductId} = formData;
-        const {formElementValue: productId} = formInputProductId;
-
-        if (!productId || productId.length !== 36) {
-            this.setState({
-                formData: {
-                    ...formData,
-                    formError: true,
-                    formErrorMessage: 'Product ID must be an UUID of 36 characters',
-                    formInputProductId: {
-                        ...formInputProductId,
-                        formElementError: true
-                    }
-                }
-            });
-
-            return false;
-        } else {
-            return true;
         }
     };
 
@@ -140,25 +151,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         }
     };
 
-    private onFormInputProductIdChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-        const {value} = event.currentTarget;
-        const {formData} = this.state;
-        const {formInputProductId} = formData;
-
-        this.setState({
-            formData: {
-                ...formData,
-                formError: false,
-                formInputProductId: {
-                    ...formInputProductId,
-                    formElementError: false,
-                    formElementValue: value
-                }
-            }
-        });
-    };
-
-    private onFormInputQuantityChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    private onFormInputQuantityChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
         const {value} = event.currentTarget;
         const {formData} = this.state;
         const {formInputQuantity} = formData;
@@ -176,17 +169,19 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         });
     };
 
-    private onCancelButtonClick = () => {
+    private onCancelButtonClick = (): void => {
         this.setState({cancel: true});
     };
 }
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
-    itemState: state.itemState
+    itemState: state.itemState,
+    productState: state.productState
 });
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
-    createItem: (orderId: string, create: CreateItem) => dispatch(createItem(orderId, create))
+    createItem: (orderId: string, create: CreateItem) => dispatch(createItem(orderId, create)),
+    findProducts: () => dispatch(findProducts())
 });
 
 const ConnectedCreateItemContainer = connect(mapStateToProps, mapDispatchToProps)(CreateItemContainer);

@@ -1,20 +1,18 @@
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
-import {Button, Container, Form, Icon, InputOnChangeData, Message, Segment} from 'semantic-ui-react';
-import {PrimaryHeader, SecondaryHeader} from '../../components';
-import {FormData, FormElementData} from "../../models";
+import {Button, Form, Icon, InputOnChangeData, Message, Segment, Table} from 'semantic-ui-react';
+import {Currency, FormData, FormElementData, Product} from "../../models";
 
 
 interface ComponentProps {
     onCancelButtonClick: () => void;
     onFormSubmit: () => void;
-    onFormInputProductIdChange: (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
     onFormInputQuantityChange: (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
+    product: Product;
     formData: CreateItemFormData;
 }
 
 export interface CreateItemFormData extends FormData {
-    formInputProductId: FormElementData;
     formInputQuantity: FormElementData;
 }
 
@@ -26,7 +24,6 @@ const initialCreateItemFormElementData: FormElementData = {
 export const initialCreateItemFormData: CreateItemFormData = {
     formSubmitted: false,
     formError: false,
-    formInputProductId: initialCreateItemFormElementData,
     formInputQuantity: initialCreateItemFormElementData
 };
 
@@ -36,60 +33,67 @@ class CreateItemFormContainer extends Component<ComponentProps> {
         const {
             onCancelButtonClick,
             onFormSubmit,
-            onFormInputProductIdChange,
             onFormInputQuantityChange,
+            product,
             formData
         } = this.props;
+        const {productId, name, description, stock, price, currency} = product;
         const {
             formError,
             formErrorMessage,
-            formInputProductId,
             formInputQuantity
         } = formData;
-        const {
-            formElementError: formProductIdError,
-            formElementValue: formProductIdValue
-        } = formInputProductId;
         const {
             formElementError: formQuantityError,
             formElementValue: formQuantityValue
         } = formInputQuantity;
 
         return (
-            <Container>
-                <PrimaryHeader/>
-                <SecondaryHeader/>
-                <Segment basic>
-                    <Form onSubmit={onFormSubmit} error={formError}>
-                        <Form.Group>
-                            <Form.Input
-                                error={formProductIdError}
-                                width={10}
-                                label='Product ID'
-                                placeholder='Enter product ID...'
-                                value={formProductIdValue}
-                                onChange={onFormInputProductIdChange}/>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Input
-                                error={formQuantityError}
-                                width={10}
-                                label='Quantity'
-                                placeholder='Enter quantity...'
-                                value={formQuantityValue}
-                                onChange={onFormInputQuantityChange}/>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Button
-                                primary size='tiny'><Icon name='dolly'/>Add Item</Form.Button>
-                            <Button
-                                secondary size='tiny'
-                                onClick={onCancelButtonClick}><Icon name='cancel'/>Cancel</Button>
-                        </Form.Group>
-                        <Message error><Icon name='ban'/> {formErrorMessage}</Message>
-                    </Form>
-                </Segment>
-            </Container>
+            <Segment basic>
+                <Table celled>
+                    <Table.Body>
+                        <Table.Row>
+                            <Table.Cell width={2}><b>Product ID</b></Table.Cell>
+                            <Table.Cell width={10}>{productId}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell width={2}><b>Name</b></Table.Cell>
+                            <Table.Cell width={10}>{name}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell width={2}><b>Description</b></Table.Cell>
+                            <Table.Cell width={10}>{description}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell width={2}><b>Stock</b></Table.Cell>
+                            <Table.Cell width={10}>{stock}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell width={2}><b>Price</b></Table.Cell>
+                            <Table.Cell width={10}>{Currency[currency]} {price.toFixed(2)}</Table.Cell>
+                        </Table.Row>
+                    </Table.Body>
+                </Table>
+                <Form onSubmit={onFormSubmit} error={formError}>
+                    <Form.Group>
+                        <Form.Input
+                            error={formQuantityError}
+                            width={10}
+                            label='Quantity'
+                            placeholder='Enter quantity...'
+                            value={formQuantityValue}
+                            onChange={onFormInputQuantityChange}/>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Button
+                            primary size='tiny'><Icon name='dolly'/>Add Item</Form.Button>
+                        <Button
+                            secondary size='tiny'
+                            onClick={onCancelButtonClick}><Icon name='cancel'/>Cancel</Button>
+                    </Form.Group>
+                    <Message error><Icon name='ban'/> {formErrorMessage}</Message>
+                </Form>
+            </Segment>
         );
     }
 }

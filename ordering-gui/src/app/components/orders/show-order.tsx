@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Component, FunctionComponent, ReactNode } from 'react';
+import {Component, FunctionComponent, ReactNode} from 'react';
 import Moment from 'react-moment';
-import { Button, ButtonGroup, Container, Icon, Label, Segment, Table } from 'semantic-ui-react';
-import { LoadingSegment, PrimaryHeader, SecondaryHeader } from '../../components';
-import { getItemStatusLabelColor, getOrderStatusLabelColor } from '../../core/utils';
+import {Button, ButtonGroup, Icon, Label, Segment, Table} from 'semantic-ui-react';
+import {getOrderStatusLabelColor} from '../../core/utils';
 
-import { Order, Product, ProductState } from '../../models';
+import {Order, ProductState} from '../../models';
+import {ShowItemList} from "./show-item-list";
 
 interface ComponentProps {
     order: Order;
@@ -22,23 +22,22 @@ class ShowOrderContainer extends Component<ComponentProps> {
         const {order, productState, onBackButtonClick, onCreateItemButtonClick, onRefreshOrderButtonClick, onFetchProducts} = this.props;
 
         return (
-            <Container>
-                <PrimaryHeader />
-                <SecondaryHeader />
-                <Segment basic>
-                    <ButtonGroup>
-                        <Button secondary size='tiny' onClick={onBackButtonClick}><Icon name='arrow left' />Back</Button>
-                    </ButtonGroup>
-                    <ButtonGroup>
-                        <Button primary size='tiny' onClick={onCreateItemButtonClick}><Icon name='dolly' />New Item</Button>
-                    </ButtonGroup>
-                    <ButtonGroup>
-                        <Button secondary size='tiny' onClick={onRefreshOrderButtonClick}><Icon name='redo' />Refresh</Button>
-                    </ButtonGroup>
-                    <OrderFragment order={order} />
-                    <ItemsFragment order={order} productState={productState} onFetchProducts={onFetchProducts} />
-                </Segment>
-            </Container>
+            <Segment basic>
+                <ButtonGroup>
+                    <Button secondary size='tiny' onClick={onBackButtonClick}><Icon name='arrow left'/>Back</Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Button primary size='tiny' onClick={onCreateItemButtonClick}><Icon name='dolly'/>New Item</Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Button secondary size='tiny' onClick={onRefreshOrderButtonClick}><Icon
+                        name='redo'/>Refresh</Button>
+                </ButtonGroup>
+
+                <OrderFragment order={order}/>
+
+                <ShowItemList order={order} productState={productState} onFetchProducts={onFetchProducts}/>
+            </Segment>
         );
     }
 }
@@ -83,66 +82,4 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props: OrderFragme
     );
 };
 
-interface ItemsFragmentProps {
-    order: Order;
-    productState: ProductState;
-    onFetchProducts: () => void;
-}
-
-const ItemsFragment: FunctionComponent<ItemsFragmentProps> = (props: ItemsFragmentProps) => {
-    const {order, productState} = props;
-    const {items} = order;
-    const {loading, products} = productState;
-
-    const showItems = items.map(item => ({
-        productId: item.productId,
-        productName: findProductName(item.productId, products),
-        quantity: item.quantity,
-        status: item.status,
-        statusColor: getItemStatusLabelColor(item.status)
-    }));
-
-    const loadProducts = showItems.filter(item => item.productName).length < items.length;
-
-    if (loadProducts) {
-        if (!loading) {
-            props.onFetchProducts();
-        }
-        return <LoadingSegment />;
-    } else {
-        return (
-            <Table celled>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell width={6}>Product ID</Table.HeaderCell>
-                        <Table.HeaderCell width={8}>Product Name</Table.HeaderCell>
-                        <Table.HeaderCell width={4}>Quantity</Table.HeaderCell>
-                        <Table.HeaderCell width={4}>Status</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {showItems.map((item, index) => {
-                        const {productId, productName, quantity, status, statusColor} = item;
-
-                        return (
-                            <Table.Row key={index}>
-                                <Table.Cell>{productId}</Table.Cell>
-                                <Table.Cell>{productName || 'N/A'}</Table.Cell>
-                                <Table.Cell>{quantity}</Table.Cell>
-                                <Table.Cell>
-                                    <Label color={statusColor}>{status}</Label>
-                                </Table.Cell>
-                            </Table.Row>
-                        );
-                    })}
-                </Table.Body>
-            </Table>
-        );
-    }
-};
-
-const findProductName = (productId: string, products: Product[]) => {
-    return products.filter(product => product.productId === productId).map(product => product.name).pop();
-};
-
-export { ShowOrderContainer as ShowOrder };
+export {ShowOrderContainer as ShowOrder};

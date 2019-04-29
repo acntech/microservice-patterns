@@ -2,10 +2,18 @@ import * as React from 'react';
 import {ChangeEventHandler, Component, ReactNode} from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router';
-import {CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator} from '../../components';
+import {
+    CreateOrderForm,
+    CreateOrderFormData,
+    initialCreateOrderFormData,
+    LoadingIndicator,
+    PrimaryHeader,
+    SecondaryHeader
+} from '../../components';
 
 import {ActionType, CreateOrder, CustomerState, EntityType, OrderState, RootState} from '../../models';
 import {createOrder} from '../../state/actions';
+import {Container} from "semantic-ui-react";
 
 interface ComponentStateProps {
     customerState: CustomerState;
@@ -47,12 +55,18 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
             const {id: orderId} = modified;
             return <Redirect to={`/orders/${orderId}`}/>;
         } else {
-            return <CreateOrderForm
-                onCancelButtonClick={this.onCancelButtonClick}
-                onFormSubmit={this.onFormSubmit}
-                onFormInputNameChange={this.onFormInputNameChange}
-                onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
-                formData={formData}/>;
+            return (
+                <Container>
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
+                    <CreateOrderForm
+                        onCancelButtonClick={this.onCancelButtonClick}
+                        onFormSubmit={this.onFormSubmit}
+                        onFormInputNameChange={this.onFormInputNameChange}
+                        onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
+                        formData={formData}/>
+                </Container>
+            );
         }
     }
 

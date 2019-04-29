@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { NotFoundErrorContainer } from '../';
-import { LoadingIndicator, ShowOrder } from '../../components';
+import {Component, ReactNode} from 'react';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
+import {NotFoundErrorContainer} from '../';
+import {LoadingIndicator, PrimaryHeader, SecondaryHeader, ShowOrder} from '../../components';
 
-import { Order, OrderState, ProductState, RootState } from '../../models';
-import { findProducts, getOrder } from '../../state/actions';
+import {Order, OrderState, ProductState, RootState} from '../../models';
+import {findProducts, getOrder} from '../../state/actions';
+import {Container} from "semantic-ui-react";
 
 interface RouteProps {
     match: any;
@@ -42,12 +43,12 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         this.state = initialState;
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const {orderId} = this.props.match.params;
         this.props.getOrder(orderId);
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(): void {
         const {orderId} = this.props.match.params;
         const {loading} = this.props.orderState;
         const {order} = this.state;
@@ -66,46 +67,50 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         const {loading} = this.props.orderState;
         const {back, createItem, order} = this.state;
 
-        console.log("ORDER", this.state);
-
         if (back) {
-            return <Redirect to='/' />;
+            return <Redirect to='/'/>;
         } else if (createItem) {
-            return <Redirect to={`/orders/${orderId}/create`} />;
+            return <Redirect to={`/orders/${orderId}/create`}/>;
         } else if (loading) {
-            return <LoadingIndicator />;
+            return <LoadingIndicator/>;
         } else if (!order) {
             return <NotFoundErrorContainer
                 header
                 icon='warning sign'
                 heading='No order found'
-                content={`Could not find order for ID ${orderId}`} />;
+                content={`Could not find order for ID ${orderId}`}/>;
         } else {
-            return <ShowOrder
-                order={order}
-                productState={this.props.productState}
-                onBackButtonClick={this.onBackButtonClick}
-                onCreateItemButtonClick={this.onCreateItemButtonClick}
-                onRefreshOrderButtonClick={this.onRefreshOrderButtonClick}
-                onFetchProducts={this.onFetchProducts} />;
+            return (
+                <Container>
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
+                    <ShowOrder
+                        order={order}
+                        productState={this.props.productState}
+                        onBackButtonClick={this.onBackButtonClick}
+                        onCreateItemButtonClick={this.onCreateItemButtonClick}
+                        onRefreshOrderButtonClick={this.onRefreshOrderButtonClick}
+                        onFetchProducts={this.onFetchProducts}/>
+                </Container>
+            );
         }
     }
 
-    private onBackButtonClick = () => {
+    private onBackButtonClick = (): void => {
         this.setState({
             back: true,
             createItem: false
         });
     };
 
-    private onCreateItemButtonClick = () => {
+    private onCreateItemButtonClick = (): void => {
         this.setState({
             back: false,
             createItem: true
         });
     };
 
-    private onRefreshOrderButtonClick = () => {
+    private onRefreshOrderButtonClick = (): void => {
         this.setState({
             back: false,
             createItem: false,
@@ -132,4 +137,4 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 
 const ConnectedOrderContainer = connect(mapStateToProps, mapDispatchToProps)(OrderContainer);
 
-export { ConnectedOrderContainer as OrderContainer };
+export {ConnectedOrderContainer as OrderContainer};
