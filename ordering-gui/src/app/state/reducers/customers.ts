@@ -12,7 +12,7 @@ import {
     LoginCustomerActionType,
     LogoutCustomerAction
 } from '../../models';
-import { initialCustomerState } from '../store/initial-state';
+import {initialCustomerState} from '../store/initial-state';
 
 export const reducer = (state: CustomerState = initialCustomerState, action: CustomerAction): CustomerState => {
     switch (action.type) {
@@ -33,7 +33,7 @@ export const reducer = (state: CustomerState = initialCustomerState, action: Cus
     }
 };
 
-export const login = (state: CustomerState = initialCustomerState, action: LoginCustomerAction): CustomerState => {
+const login = (state: CustomerState = initialCustomerState, action: LoginCustomerAction): CustomerState => {
     switch (action.type) {
         case LoginCustomerActionType.LOGIN: {
             const {user} = action;
@@ -46,7 +46,7 @@ export const login = (state: CustomerState = initialCustomerState, action: Login
     }
 };
 
-export const logout = (state: CustomerState = initialCustomerState, action: LogoutCustomerAction): CustomerState => {
+const logout = (state: CustomerState = initialCustomerState, action: LogoutCustomerAction): CustomerState => {
     switch (action.type) {
         case LoginCustomerActionType.LOGOUT: {
             return {...initialCustomerState, user: undefined};
@@ -58,7 +58,7 @@ export const logout = (state: CustomerState = initialCustomerState, action: Logo
     }
 };
 
-export const get = (state: CustomerState = initialCustomerState, action: GetCustomerAction): CustomerState => {
+const get = (state: CustomerState = initialCustomerState, action: GetCustomerAction): CustomerState => {
     switch (action.type) {
         case GetCustomerActionType.LOADING: {
             const {customers} = state;
@@ -90,7 +90,7 @@ export const get = (state: CustomerState = initialCustomerState, action: GetCust
     }
 };
 
-export const find = (state: CustomerState = initialCustomerState, action: FindCustomersAction): CustomerState => {
+const find = (state: CustomerState = initialCustomerState, action: FindCustomersAction): CustomerState => {
     switch (action.type) {
         case FindCustomersActionType.LOADING: {
             const {customers} = state;

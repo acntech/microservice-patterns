@@ -1,8 +1,22 @@
-import { ActionType, EntityType, FindProductsAction, FindProductsActionType, Product, ProductAction, ProductState } from '../../models';
-import { initialProductState } from '../store/initial-state';
+import {
+    ActionType,
+    EntityType,
+    FindProductsAction,
+    FindProductsActionType,
+    GetProductAction,
+    GetProductActionType,
+    Product,
+    ProductAction,
+    ProductState
+} from '../../models';
+import {initialProductState} from '../store/initial-state';
 
 export const reducer = (state: ProductState = initialProductState, action: ProductAction): ProductState => {
     switch (action.type) {
+        case GetProductActionType.LOADING:
+        case GetProductActionType.SUCCESS:
+        case GetProductActionType.ERROR:
+            return get(state, action);
         case FindProductsActionType.LOADING:
         case FindProductsActionType.SUCCESS:
         case FindProductsActionType.ERROR:
@@ -12,7 +26,39 @@ export const reducer = (state: ProductState = initialProductState, action: Produ
     }
 };
 
-export const find = (state: ProductState = initialProductState, action: FindProductsAction): ProductState => {
+const get = (state: ProductState = initialProductState, action: GetProductAction): ProductState => {
+    switch (action.type) {
+        case GetProductActionType.LOADING: {
+            const {products} = state;
+            const {loading} = action;
+            return {...initialProductState, products: products, loading: loading};
+        }
+
+        case GetProductActionType.SUCCESS: {
+            let {products} = state;
+            const {payload} = action;
+
+            if (payload) {
+                products = replaceOrAppend(products, payload);
+            }
+
+            return {...initialProductState, products: products};
+        }
+
+        case GetProductActionType.ERROR: {
+            const {products} = state;
+            const {data} = action.error.response;
+            const error = {...data, entityType: EntityType.PRODUCTS, actionType: ActionType.FIND};
+            return {...initialProductState, products: products, error: error};
+        }
+
+        default: {
+            return state;
+        }
+    }
+};
+
+const find = (state: ProductState = initialProductState, action: FindProductsAction): ProductState => {
     switch (action.type) {
         case FindProductsActionType.LOADING: {
             const {products} = state;

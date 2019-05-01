@@ -29,11 +29,6 @@
     <!-- DEVELOPERS -->
     <developers>
         <developer>
-            <id>thomas.johansen</id>
-            <name>Thomas Johansen</name>
-            <email>thomas.johansen@accenture.com</email>
-        </developer>
-        <developer>
             <id>jorgen.ringen</id>
             <name>Jørgen Ringen</name>
             <email>jorgen.ringen@accenture.com</email>
@@ -42,6 +37,11 @@
             <id>orjan.johansen</id>
             <name>Ørjan Johansen</name>
             <email>orjan.johansen@accenture.com</email>
+        </developer>
+        <developer>
+            <id>thomas.johansen</id>
+            <name>Thomas Johansen</name>
+            <email>thomas.johansen@accenture.com</email>
         </developer>
     </developers>
 

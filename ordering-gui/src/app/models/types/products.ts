@@ -1,5 +1,5 @@
-import { Currency, Entity, FindProductsActionType } from '../';
-import { Error, Modified } from './';
+import {Currency, Entity, FindProductsActionType, GetProductActionType} from '../';
+import {Error, Modified} from './';
 
 export interface Product extends Entity {
     productId: string;
@@ -21,6 +21,21 @@ export interface ProductState {
     modified?: Modified;
 }
 
+export interface GetProductLoadingAction {
+    type: GetProductActionType.LOADING,
+    loading: boolean
+}
+
+export interface GetProductSuccessAction {
+    type: GetProductActionType.SUCCESS,
+    payload: Product
+}
+
+export interface GetProductErrorAction {
+    type: GetProductActionType.ERROR,
+    error: any
+}
+
 export interface FindProductsLoadingAction {
     type: FindProductsActionType.LOADING,
     loading: boolean
@@ -36,6 +51,7 @@ export interface FindProductsErrorAction {
     error: any
 }
 
+export type GetProductAction = GetProductLoadingAction | GetProductSuccessAction | GetProductErrorAction;
 export type FindProductsAction = FindProductsLoadingAction | FindProductsSuccessAction | FindProductsErrorAction;
 
-export type ProductAction = FindProductsAction;
+export type ProductAction = GetProductAction | FindProductsAction;

@@ -9,6 +9,7 @@ import {Item, ItemStatus, Order, ProductState} from '../../models';
 interface ComponentProps {
     order: Order;
     productState: ProductState;
+    onTableRowClick: (productId: string) => void;
     onFetchProducts: () => void;
 }
 
@@ -27,8 +28,9 @@ class ShowItemListContainer extends Component<ComponentProps> {
     }
 
     public render(): ReactNode {
-        const {loading} = this.props.productState;
-        const {items} = this.props.order;
+        const {order, productState, onTableRowClick} = this.props;
+        const {loading} = productState;
+        const {items} = order;
 
         if (loading) {
             return <LoadingSegment/>;
@@ -50,7 +52,8 @@ class ShowItemListContainer extends Component<ComponentProps> {
                             const {productId, name, quantity, status, statusColor} = item;
 
                             return (
-                                <Table.Row key={index}>
+                                <Table.Row key={index} className='clickable-table-row'
+                                           onClick={() => onTableRowClick(productId)}>
                                     <Table.Cell>{productId}</Table.Cell>
                                     <Table.Cell>{name || 'N/A'}</Table.Cell>
                                     <Table.Cell>{quantity}</Table.Cell>

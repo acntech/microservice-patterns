@@ -1,5 +1,5 @@
-import { ActionType, CreateItemAction, CreateItemActionType, EntityType, ItemAction, ItemState } from '../../models';
-import { initialItemState } from '../store/initial-state';
+import {ActionType, CreateItemAction, CreateItemActionType, EntityType, ItemAction, ItemState} from '../../models';
+import {initialItemState} from '../store/initial-state';
 
 export const reducer = (state: ItemState = initialItemState, action: ItemAction): ItemState => {
     switch (action.type) {
@@ -12,7 +12,7 @@ export const reducer = (state: ItemState = initialItemState, action: ItemAction)
     }
 };
 
-export const create = (state: ItemState = initialItemState, action: CreateItemAction): ItemState => {
+const create = (state: ItemState = initialItemState, action: CreateItemAction): ItemState => {
     switch (action.type) {
         case CreateItemActionType.LOADING: {
             const {loading} = action;

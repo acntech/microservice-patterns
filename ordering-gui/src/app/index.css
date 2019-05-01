@@ -30,3 +30,8 @@
 .login-grid {
     max-width: 450px;
 }
+
+.table-header {
+    background-color: #f9fafb;
+    font-weight: 700;
+}

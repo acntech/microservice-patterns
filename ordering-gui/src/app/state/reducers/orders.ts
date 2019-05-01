@@ -11,7 +11,7 @@ import {
     OrderAction,
     OrderState
 } from '../../models';
-import { initialOrderState } from '../store/initial-state';
+import {initialOrderState} from '../store/initial-state';
 
 export const reducer = (state: OrderState = initialOrderState, action: OrderAction): OrderState => {
     switch (action.type) {
@@ -32,7 +32,7 @@ export const reducer = (state: OrderState = initialOrderState, action: OrderActi
     }
 };
 
-export const create = (state: OrderState = initialOrderState, action: CreateOrderAction): OrderState => {
+const create = (state: OrderState = initialOrderState, action: CreateOrderAction): OrderState => {
     switch (action.type) {
         case CreateOrderActionType.LOADING: {
             const {orders} = state;
@@ -46,7 +46,7 @@ export const create = (state: OrderState = initialOrderState, action: CreateOrde
             let modified;
 
             if (headers) {
-                const { location } = headers;
+                const {location} = headers;
                 const orderId = location.split('orders/')[1];
                 modified = {id: orderId, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
             }
@@ -67,7 +67,7 @@ export const create = (state: OrderState = initialOrderState, action: CreateOrde
     }
 };
 
-export const get = (state: OrderState = initialOrderState, action: GetOrderAction): OrderState => {
+const get = (state: OrderState = initialOrderState, action: GetOrderAction): OrderState => {
     switch (action.type) {
         case GetOrderActionType.LOADING: {
             const {orders} = state;
@@ -99,7 +99,7 @@ export const get = (state: OrderState = initialOrderState, action: GetOrderActio
     }
 };
 
-export const find = (state: OrderState = initialOrderState, action: FindOrdersAction): OrderState => {
+const find = (state: OrderState = initialOrderState, action: FindOrdersAction): OrderState => {
     switch (action.type) {
         case FindOrdersActionType.LOADING: {
             const {orders} = state;
