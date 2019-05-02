@@ -21,7 +21,7 @@ interface ComponentStateProps {
 }
 
 interface ComponentDispatchProps {
-    createOrder: (createOrder: CreateOrder) => Promise<any>;
+    createOrder: (order: CreateOrder) => Promise<any>;
 }
 
 type ComponentProps = ComponentDispatchProps & ComponentStateProps;
@@ -180,7 +180,7 @@ const mapStateToProps = (state: RootState): ComponentStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
-    createOrder: (create: CreateOrder) => dispatch(createOrder(create))
+    createOrder: (order: CreateOrder) => dispatch(createOrder(order))
 });
 
 const ConnectedCreateOrderContainer = connect(mapStateToProps, mapDispatchToProps)(CreateOrderContainer);

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import no.acntech.product.model.Currency;
@@ -14,6 +15,7 @@ import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 
 @SuppressWarnings("Duplicates")
+@Profile("test-data")
 @Component
 public class TestData {
 

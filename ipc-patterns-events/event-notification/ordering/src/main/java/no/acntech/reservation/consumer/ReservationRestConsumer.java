@@ -1,26 +1,24 @@
 package no.acntech.reservation.consumer;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.PendingReservationDto;
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.UpdateReservationDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.ReservationDto;
-import no.acntech.reservation.model.UpdateReservationDto;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @SuppressWarnings("Duplicates")
 @Component
@@ -30,14 +28,11 @@ public class ReservationRestConsumer {
     };
     private final RestTemplate restTemplate;
     private final String url;
-    private final String idUrl;
 
     public ReservationRestConsumer(final RestTemplateBuilder restTemplateBuilder,
-                                   @Value("${acntech.service.warehouse.api.reservations.url}") final String url,
-                                   @Value("${acntech.service.warehouse.api.reservations.id.url}") final String idUrl) {
+                                   @Value("${acntech.service.warehouse.api.reservations.url}") final String url) {
         this.restTemplate = restTemplateBuilder.build();
         this.url = url;
-        this.idUrl = idUrl;
     }
 
     public List<ReservationDto> find() {
@@ -51,10 +46,9 @@ public class ReservationRestConsumer {
     }
 
     public Optional<ReservationDto> get(@NotNull final UUID reservationId) {
-        Assert.notNull(reservationId, "Reservation ID is null");
-
-        final URI uri = UriComponentsBuilder.fromUriString(idUrl)
-                .buildAndExpand(reservationId.toString())
+        final URI uri = UriComponentsBuilder.fromUriString(url)
+                .pathSegment(reservationId.toString())
+                .build()
                 .toUri();
 
         final ResponseEntity<ReservationDto> entity = restTemplate.getForEntity(uri, ReservationDto.class);
@@ -62,19 +56,32 @@ public class ReservationRestConsumer {
                 .map(ResponseEntity::getBody);
     }
 
-    public void create(@Valid final CreateReservationDto createReservation) {
+    public Optional<PendingReservationDto> create(@Valid final CreateReservationDto createReservation) {
         final URI uri = UriComponentsBuilder.fromUriString(url)
                 .build()
                 .toUri();
 
-        restTemplate.postForEntity(uri, createReservation, Void.class);
+        ResponseEntity<PendingReservationDto> entity = restTemplate.postForEntity(uri, createReservation, PendingReservationDto.class);
+        return Optional.of(entity)
+                .map(ResponseEntity::getBody);
     }
 
-    public void update(@Valid final UpdateReservationDto updateReservation) {
+    public void update(@NotNull final UUID reservationId,
+                       @Valid final UpdateReservationDto updateReservation) {
         final URI uri = UriComponentsBuilder.fromUriString(url)
+                .pathSegment(reservationId.toString())
                 .build()
                 .toUri();
 
         restTemplate.put(uri, updateReservation);
+    }
+
+    public void delete(@NotNull final UUID reservationId) {
+        final URI uri = UriComponentsBuilder.fromUriString(url)
+                .pathSegment(reservationId.toString())
+                .build()
+                .toUri();
+
+        restTemplate.delete(uri);
     }
 }

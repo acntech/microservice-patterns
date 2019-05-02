@@ -6,6 +6,7 @@ spring:
     include:
       - h2
       - default
+      - test-data
 
 # Logging
 logging:
@@ -18,9 +19,3 @@ logging:
     org.apache.kafka.clients.producer.ProducerConfig: WARN
     org.apache.kafka.streams.StreamsConfig: WARN
     no.acntech: DEBUG
-
-# Server
-server:
-  port: 9000
-  servlet:
-    context-path: /api

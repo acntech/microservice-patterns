@@ -1,21 +1,11 @@
 package no.acntech.order.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "ITEMS")
 @Entity
@@ -30,6 +20,8 @@ public class Item {
     @NotNull
     @Column(nullable = false)
     private UUID productId;
+    @Column
+    private UUID reservationId;
     @NotNull
     @Column(nullable = false)
     private Long quantity;
@@ -52,6 +44,14 @@ public class Item {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public UUID getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(UUID reservationId) {
+        this.reservationId = reservationId;
     }
 
     public Long getQuantity() {

@@ -2,7 +2,6 @@ package no.acntech.order.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -13,6 +12,7 @@ public class ItemDto {
     private UUID orderId;
     @NotNull
     private UUID productId;
+    private UUID reservationId;
     @NotNull
     private Long quantity;
     @NotNull
@@ -27,6 +27,10 @@ public class ItemDto {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public UUID getReservationId() {
+        return reservationId;
     }
 
     public Long getQuantity() {
@@ -53,16 +57,13 @@ public class ItemDto {
 
         private UUID orderId;
         private UUID productId;
+        private UUID reservationId;
         private Long quantity;
         private ItemStatus status;
         private ZonedDateTime created;
         private ZonedDateTime modified;
 
         private Builder() {
-        }
-
-        public static Builder anItemDto() {
-            return new Builder();
         }
 
         public Builder orderId(UUID orderId) {
@@ -72,6 +73,11 @@ public class ItemDto {
 
         public Builder productId(UUID productId) {
             this.productId = productId;
+            return this;
+        }
+
+        public Builder reservationId(UUID reservationId) {
+            this.reservationId = reservationId;
             return this;
         }
 
@@ -100,6 +106,7 @@ public class ItemDto {
             itemDto.orderId = this.orderId;
             itemDto.modified = this.modified;
             itemDto.productId = this.productId;
+            itemDto.reservationId = this.reservationId;
             itemDto.status = this.status;
             itemDto.quantity = this.quantity;
             itemDto.created = this.created;

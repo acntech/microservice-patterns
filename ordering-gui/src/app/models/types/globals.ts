@@ -19,7 +19,7 @@ export interface Error {
 }
 
 export interface Modified {
-    id: number;
+    id: string;
     entityType: EntityType;
     actionType: ActionType;
 }

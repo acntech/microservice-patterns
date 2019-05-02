@@ -2,28 +2,37 @@ import * as React from 'react';
 import {Component, ReactNode} from 'react';
 import {Button, ButtonGroup, Icon, Label, Segment, Table} from 'semantic-ui-react';
 
-import {Currency, Item, Product} from '../../models';
-import {getItemStatusLabelColor} from "../../core/utils";
+import {Currency, getItemStatusLabelColor, Item, ItemStatus, Product} from '../../models';
 
 interface ComponentProps {
     item: Item;
     product: Product;
     onBackButtonClick: () => void;
+    onDeleteButtonClick: () => void;
 }
 
 class ShowItemContainer extends Component<ComponentProps> {
 
     public render(): ReactNode {
-        const {item, product, onBackButtonClick} = this.props;
+        const {item, product, onBackButtonClick, onDeleteButtonClick} = this.props;
         const {productId, quantity, status} = item;
         const {name, description, price, currency} = product;
+
         const statusColor = getItemStatusLabelColor(status);
         const totalPrice = price * quantity;
+        const deleteButtonActive = this.deleteButtonActive();
 
         return (
             <Segment basic>
                 <ButtonGroup>
                     <Button secondary size='tiny' onClick={onBackButtonClick}><Icon name='arrow left'/>Back</Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Button negative={deleteButtonActive}
+                            disabled={!deleteButtonActive}
+                            size='tiny'
+                            onClick={onDeleteButtonClick}>
+                        <Icon name='delete'/>Delete</Button>
                 </ButtonGroup>
                 <Table celled>
                     <Table.Body>
@@ -65,6 +74,11 @@ class ShowItemContainer extends Component<ComponentProps> {
                 </Table>
             </Segment>
         );
+    }
+
+    private deleteButtonActive = (): boolean => {
+        const {item} = this.props;
+        return item.status === ItemStatus.RESERVED;
     }
 }
 

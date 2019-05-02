@@ -26,7 +26,7 @@ interface ComponentStateProps {
 }
 
 interface ComponentDispatchProps {
-    createItem: (orderId: string, create: CreateItem) => Promise<any>;
+    createItem: (orderId: string, item: CreateItem) => Promise<any>;
     findProducts: () => Promise<any>;
 }
 
@@ -180,7 +180,7 @@ const mapStateToProps = (state: RootState): ComponentStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
-    createItem: (orderId: string, create: CreateItem) => dispatch(createItem(orderId, create)),
+    createItem: (orderId: string, item: CreateItem) => dispatch(createItem(orderId, item)),
     findProducts: () => dispatch(findProducts())
 });
 

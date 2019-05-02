@@ -1,25 +1,12 @@
 package no.acntech.reservation.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import no.acntech.product.model.Product;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import no.acntech.product.model.Product;
 
 @Table(name = "RESERVATIONS")
 @Entity
@@ -92,7 +79,6 @@ public class Reservation {
 
     @PrePersist
     private void prePersist() {
-        reservationId = UUID.randomUUID();
         created = ZonedDateTime.now();
     }
 
@@ -107,12 +93,18 @@ public class Reservation {
 
     public static final class Builder {
 
+        private UUID reservationId;
         private Product product;
         private UUID orderId;
         private Long quantity;
         private ReservationStatus status;
 
         private Builder() {
+        }
+
+        public Builder reservationId(UUID reservationId) {
+            this.reservationId = reservationId;
+            return this;
         }
 
         public Builder product(Product product) {
@@ -130,18 +122,13 @@ public class Reservation {
             return this;
         }
 
-        public Builder statusConfirmed() {
-            this.status = ReservationStatus.CONFIRMED;
+        public Builder statusReserved() {
+            this.status = ReservationStatus.RESERVED;
             return this;
         }
 
         public Builder statusRejected() {
             this.status = ReservationStatus.REJECTED;
-            return this;
-        }
-
-        public Builder statusCanceled() {
-            this.status = ReservationStatus.CANCELED;
             return this;
         }
 
@@ -152,6 +139,7 @@ public class Reservation {
 
         public Reservation build() {
             Reservation reservation = new Reservation();
+            reservation.reservationId = this.reservationId;
             reservation.product = this.product;
             reservation.orderId = this.orderId;
             reservation.quantity = this.quantity;

@@ -16,6 +16,7 @@
     "scripts": {
         "clean": "rm -rf ./dist && mkdir ./dist",
         "build": "webpack -p --progress --colors",
+        "package": "tar -czf ./dist/$npm_package_name-$npm_package_version.tar.gz ./dist/*",
         "start": "webpack-dev-server --mode production --hot --progress --color --host 0.0.0.0 --port 3000",
         "dev-start": "webpack-dev-server --mode development --hot --progress --color --host 0.0.0.0 --port 3000"
     },

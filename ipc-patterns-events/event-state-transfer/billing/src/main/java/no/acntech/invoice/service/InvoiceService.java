@@ -4,6 +4,7 @@ import no.acntech.invoice.exception.InvoiceNotFoundException;
 import no.acntech.invoice.model.CreateInvoice;
 import no.acntech.invoice.model.Invoice;
 import no.acntech.invoice.model.InvoiceQuery;
+import no.acntech.invoice.model.InvoiceStatus;
 import no.acntech.invoice.repository.InvoiceRepository;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
@@ -27,7 +28,7 @@ public class InvoiceService {
     @SuppressWarnings("Duplicates")
     public List<Invoice> findInvoices(final InvoiceQuery invoiceQuery) {
         UUID orderId = invoiceQuery.getOrderId();
-        Invoice.Status status = invoiceQuery.getStatus();
+        InvoiceStatus status = invoiceQuery.getStatus();
         if (orderId != null && status != null) {
             return invoiceRepository.findAllByOrderIdAndStatus(orderId, status);
         } else if (orderId != null) {

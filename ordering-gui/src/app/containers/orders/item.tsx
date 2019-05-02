@@ -5,8 +5,18 @@ import {Redirect} from 'react-router';
 import {NotFoundErrorContainer} from '../';
 import {LoadingIndicator, PrimaryHeader, SecondaryHeader} from '../../components';
 
-import {Item, OrderState, Product, ProductState, RootState} from '../../models';
-import {getOrder, getProduct} from '../../state/actions';
+import {
+    ActionType,
+    DeleteItem,
+    EntityType,
+    Item,
+    ItemState,
+    OrderState,
+    Product,
+    ProductState,
+    RootState
+} from '../../models';
+import {deleteItem, getOrder, getProduct} from '../../state/actions';
 import {Container} from "semantic-ui-react";
 import {ShowItem} from "../../components/orders/show-item";
 
@@ -17,11 +27,13 @@ interface RouteProps {
 interface ComponentStateProps {
     orderState: OrderState;
     productState: ProductState;
+    itemState: ItemState;
 }
 
 interface ComponentDispatchProps {
     getOrder: (orderId: string) => Promise<any>;
     getProduct: (productId: string) => Promise<any>;
+    deleteItem: (orderId: string, item: DeleteItem) => Promise<any>;
 }
 
 type ComponentProps = ComponentDispatchProps & ComponentStateProps & RouteProps;
@@ -76,11 +88,12 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
         const {orderId, productId} = this.props.match.params;
         const {loading: orderLoading} = this.props.orderState;
         const {loading: productLoading} = this.props.productState;
+        const {loading: itemLoading} = this.props.itemState;
         const {back, item, product} = this.state;
 
-        if (back) {
+        if (back || this.itemDeleted()) {
             return <Redirect to={`/orders/${orderId}`}/>;
-        } else if (orderLoading || productLoading) {
+        } else if (orderLoading || productLoading || itemLoading) {
             return <LoadingIndicator/>;
         } else if (!item) {
             return <NotFoundErrorContainer
@@ -102,7 +115,8 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
                     <ShowItem
                         item={item}
                         product={product}
-                        onBackButtonClick={this.onBackButtonClick}/>
+                        onBackButtonClick={this.onBackButtonClick}
+                        onDeleteButtonClick={this.onDeleteButtonClick}/>
                 </Container>
             );
         }
@@ -113,16 +127,28 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
             back: true,
         });
     };
+
+    private onDeleteButtonClick = (): void => {
+        const {orderId, productId} = this.props.match.params;
+        this.props.deleteItem(orderId, {productId: productId});
+    };
+
+    private itemDeleted = (): boolean => {
+        const {modified} = this.props.itemState;
+        return modified != undefined && modified.entityType === EntityType.ITEMS && modified.actionType === ActionType.DELETE;
+    };
 }
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
     orderState: state.orderState,
-    productState: state.productState
+    productState: state.productState,
+    itemState: state.itemState
 });
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
     getOrder: (orderId: string) => dispatch(getOrder(orderId)),
-    getProduct: (productId: string) => dispatch(getProduct(productId))
+    getProduct: (productId: string) => dispatch(getProduct(productId)),
+    deleteItem: (orderId: string, item: DeleteItem) => dispatch(deleteItem(orderId, item))
 });
 
 const ConnectedItemContainer = connect(mapStateToProps, mapDispatchToProps)(ItemContainer);

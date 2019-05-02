@@ -1,11 +1,12 @@
 package no.acntech.order.model;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Valid
 public class OrderDto {
 
     @NotNull
@@ -13,11 +14,15 @@ public class OrderDto {
     @NotNull
     private UUID customerId;
     @NotNull
+    private String name;
+    private String description;
+    @NotNull
     private OrderStatus status;
     @NotNull
     private List<ItemDto> items;
-    private ZonedDateTime created;
+    @NotNull
     private ZonedDateTime modified;
+    private ZonedDateTime created;
 
     public UUID getOrderId() {
         return orderId;
@@ -27,12 +32,16 @@ public class OrderDto {
         return customerId;
     }
 
-    public OrderStatus getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    public String getDescription() {
+        return description;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
     }
 
     public List<ItemDto> getItems() {

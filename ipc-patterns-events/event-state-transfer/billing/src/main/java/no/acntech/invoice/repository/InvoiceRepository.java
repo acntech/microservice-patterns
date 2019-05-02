@@ -1,6 +1,7 @@
 package no.acntech.invoice.repository;
 
 import no.acntech.invoice.model.Invoice;
+import no.acntech.invoice.model.InvoiceStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     List<Invoice> findAllByOrderId(UUID orderId);
 
-    List<Invoice> findAllByStatus(Invoice.Status status);
+    List<Invoice> findAllByStatus(InvoiceStatus status);
 
-    List<Invoice> findAllByOrderIdAndStatus(UUID orderId, Invoice.Status status);
+    List<Invoice> findAllByOrderIdAndStatus(UUID orderId, InvoiceStatus status);
 }

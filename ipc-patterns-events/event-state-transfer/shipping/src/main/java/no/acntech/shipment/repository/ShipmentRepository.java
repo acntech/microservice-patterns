@@ -1,6 +1,7 @@
 package no.acntech.shipment.repository;
 
 import no.acntech.shipment.model.Shipment;
+import no.acntech.shipment.model.ShipmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
     List<Shipment> findAllByOrderId(UUID orderId);
 
-    List<Shipment> findAllByStatus(Shipment.Status status);
+    List<Shipment> findAllByStatus(ShipmentStatus status);
 
-    List<Shipment> findAllByOrderIdAndStatus(UUID orderId, Shipment.Status status);
+    List<Shipment> findAllByOrderIdAndStatus(UUID orderId, ShipmentStatus status);
 }

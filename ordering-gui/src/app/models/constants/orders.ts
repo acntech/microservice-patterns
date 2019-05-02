@@ -1,9 +1,31 @@
+import {SemanticCOLORS} from "semantic-ui-react";
+
 export enum OrderStatus {
     PENDING = 'PENDING',
     CONFIRMED = 'CONFIRMED',
     CANCELED = 'CANCELED',
     REJECTED = 'REJECTED'
 }
+
+export const getOrderStatusLabelColor = (status: OrderStatus): SemanticCOLORS => {
+    switch (status) {
+        case OrderStatus.PENDING: {
+            return 'blue';
+        }
+        case OrderStatus.CONFIRMED: {
+            return 'green';
+        }
+        case OrderStatus.CANCELED: {
+            return 'yellow';
+        }
+        case OrderStatus.REJECTED: {
+            return 'red';
+        }
+        default: {
+            return 'grey';
+        }
+    }
+};
 
 export enum GetOrderActionType {
     LOADING = '[orders] GET LOADING',
@@ -27,10 +49,4 @@ export enum UpdateOrderActionType {
     LOADING = '[orders] UPDATE LOADING',
     SUCCESS = '[orders] UPDATE SUCCESS',
     ERROR = '[orders] UPDATE ERROR'
-}
-
-export enum CreateItemActionType {
-    LOADING = '[items] CREATE LOADING',
-    SUCCESS = '[items] CREATE SUCCESS',
-    ERROR = '[items] CREATE ERROR'
 }

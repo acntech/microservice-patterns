@@ -1,8 +1,12 @@
-import { CreateItemActionType, Entity, Error, ItemStatus, Modified } from '../';
+import {CreateItemActionType, DeleteItemActionType, Entity, Error, ItemStatus, Modified} from '../';
 
 export interface CreateItem {
     productId: string;
     quantity: number;
+}
+
+export interface DeleteItem {
+    productId: string;
 }
 
 export interface Item extends Entity {
@@ -33,6 +37,22 @@ export interface CreateItemErrorAction {
     error: any
 }
 
-export type CreateItemAction = CreateItemLoadingAction | CreateItemSuccessAction | CreateItemErrorAction;
+export interface DeleteItemLoadingAction {
+    type: DeleteItemActionType.LOADING,
+    loading: boolean
+}
 
-export type ItemAction = CreateItemAction;
+export interface DeleteItemSuccessAction {
+    type: DeleteItemActionType.SUCCESS,
+    orderId: string
+}
+
+export interface DeleteItemErrorAction {
+    type: DeleteItemActionType.ERROR,
+    error: any
+}
+
+export type CreateItemAction = CreateItemLoadingAction | CreateItemSuccessAction | CreateItemErrorAction;
+export type DeleteItemAction = DeleteItemLoadingAction | DeleteItemSuccessAction | DeleteItemErrorAction;
+
+export type ItemAction = CreateItemAction | DeleteItemAction;

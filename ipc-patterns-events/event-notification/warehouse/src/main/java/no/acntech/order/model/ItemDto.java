@@ -1,16 +1,18 @@
 package no.acntech.order.model;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@Valid
 public class ItemDto {
 
     @NotNull
     private UUID orderId;
     @NotNull
     private UUID productId;
+    private UUID reservationId;
     @NotNull
     private Long quantity;
     @NotNull
@@ -27,16 +29,16 @@ public class ItemDto {
         return productId;
     }
 
+    public UUID getReservationId() {
+        return reservationId;
+    }
+
     public Long getQuantity() {
         return quantity;
     }
 
     public ItemStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(ItemStatus status) {
-        this.status = status;
     }
 
     public ZonedDateTime getCreated() {

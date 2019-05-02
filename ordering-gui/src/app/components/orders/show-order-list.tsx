@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {Component, ReactNode} from 'react';
 import {Button, Icon, Label, Segment, Table} from 'semantic-ui-react';
-import {getOrderStatusLabelColor} from '../../core/utils';
 
-import {Order} from '../../models';
+import {getOrderStatusLabelColor, Order} from '../../models';
 
 interface ComponentProps {
     orders: Order[];

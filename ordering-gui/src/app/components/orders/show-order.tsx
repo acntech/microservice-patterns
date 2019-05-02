@@ -2,9 +2,8 @@ import * as React from 'react';
 import {Component, FunctionComponent, ReactNode} from 'react';
 import Moment from 'react-moment';
 import {Button, ButtonGroup, Icon, Label, Segment, Table} from 'semantic-ui-react';
-import {getOrderStatusLabelColor} from '../../core/utils';
 
-import {Order, ProductState} from '../../models';
+import {getOrderStatusLabelColor, ItemStatus, Order, ProductState} from '../../models';
 import {ShowItemList} from "./show-item-list";
 
 interface ComponentProps {
@@ -30,6 +29,8 @@ class ShowOrderContainer extends Component<ComponentProps> {
             onFetchProducts
         } = this.props;
 
+        const confirmButtonActive = this.confirmButtonActive();
+
         return (
             <Segment basic>
                 <ButtonGroup>
@@ -39,7 +40,10 @@ class ShowOrderContainer extends Component<ComponentProps> {
                     <Button primary size='tiny' onClick={onCreateItemButtonClick}><Icon name='dolly'/>New Item</Button>
                 </ButtonGroup>
                 <ButtonGroup>
-                    <Button disabled size='tiny'><Icon name='check'/>Confirm</Button>
+                    <Button positive={confirmButtonActive}
+                            disabled={!confirmButtonActive}
+                            size='tiny'>
+                        <Icon name='check'/>Confirm</Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button secondary size='tiny' onClick={onRefreshOrderButtonClick}><Icon
@@ -54,6 +58,11 @@ class ShowOrderContainer extends Component<ComponentProps> {
                               onFetchProducts={onFetchProducts}/>
             </Segment>
         );
+    }
+
+    private confirmButtonActive = (): boolean => {
+        const {order} = this.props;
+        return order.items.length > 0 && order.items.filter(i => i.status !== ItemStatus.CONFIRMED).length == 0;
     }
 }
 
