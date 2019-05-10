@@ -25,13 +25,13 @@ import no.acntech.customer.service.CustomerService;
 
 @RequestMapping(path = "customers")
 @RestController
-public class CustomerResource {
+public class CustomersResource {
 
     private final ConversionService conversionService;
     private final CustomerService customerService;
 
-    public CustomerResource(final ConversionService conversionService,
-                            final CustomerService customerService) {
+    public CustomersResource(final ConversionService conversionService,
+                             final CustomerService customerService) {
         this.conversionService = conversionService;
         this.customerService = customerService;
     }

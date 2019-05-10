@@ -26,13 +26,13 @@ import no.acntech.product.service.ProductService;
 
 @RequestMapping(path = "products")
 @RestController
-public class ProductResource {
+public class ProductsResource {
 
     private final ConversionService conversionService;
     private final ProductService productService;
 
-    public ProductResource(final ConversionService conversionService,
-                           final ProductService productService) {
+    public ProductsResource(final ConversionService conversionService,
+                            final ProductService productService) {
         this.conversionService = conversionService;
         this.productService = productService;
     }

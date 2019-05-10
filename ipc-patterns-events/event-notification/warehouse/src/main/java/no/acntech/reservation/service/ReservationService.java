@@ -1,11 +1,13 @@
 package no.acntech.reservation.service;
 
-import no.acntech.product.model.Product;
-import no.acntech.product.repository.ProductRepository;
-import no.acntech.reservation.exception.ReservationNotFoundException;
-import no.acntech.reservation.model.*;
-import no.acntech.reservation.producer.ReservationEventProducer;
-import no.acntech.reservation.repository.ReservationRepository;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
@@ -13,12 +15,17 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import no.acntech.product.model.Product;
+import no.acntech.product.repository.ProductRepository;
+import no.acntech.reservation.exception.ReservationNotFoundException;
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.PendingReservationDto;
+import no.acntech.reservation.model.Reservation;
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.ReservationStatus;
+import no.acntech.reservation.model.UpdateReservationDto;
+import no.acntech.reservation.producer.ReservationEventProducer;
+import no.acntech.reservation.repository.ReservationRepository;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -132,12 +139,20 @@ public class ReservationService {
     public void updateReservation(@NotNull final UUID reservationId,
                                   @Valid final UpdateReservationDto updateReservation) {
         final Long quantity = updateReservation.getQuantity();
+        final ReservationStatus status = updateReservation.getStatus();
 
         final Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
 
         if (existingReservation.isPresent()) {
             final Reservation reservation = existingReservation.get();
-            reservation.setQuantity(quantity);
+
+            if (quantity != null) {
+                reservation.setQuantity(quantity);
+            }
+            if (status != null) {
+                reservation.setStatus(status);
+            }
+
             reservationRepository.save(reservation);
 
             LOGGER.info("Updated reservation for reservation-id {}", reservationId);
@@ -145,6 +160,7 @@ public class ReservationService {
         } else {
             LOGGER.error("No reservation found for for reservation-id {}", reservationId);
         }
+
     }
 
     @Async

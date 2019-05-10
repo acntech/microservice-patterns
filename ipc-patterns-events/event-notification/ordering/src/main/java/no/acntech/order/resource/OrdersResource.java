@@ -14,11 +14,11 @@ import java.util.UUID;
 @SuppressWarnings("Duplicates")
 @RequestMapping(path = "orders")
 @RestController
-public class OrderResource {
+public class OrdersResource {
 
     private final OrderService orderService;
 
-    public OrderResource(final OrderService orderService) {
+    public OrdersResource(final OrderService orderService) {
         this.orderService = orderService;
     }
 

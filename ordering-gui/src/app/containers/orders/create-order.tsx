@@ -74,7 +74,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
         const {modified} = this.props.orderState;
         const {formSubmitted} = this.state.formData;
         return formSubmitted &&
-            modified != undefined &&
+            modified !== undefined &&
             modified.entityType === EntityType.ORDERS &&
             modified.actionType === ActionType.CREATE;
     };

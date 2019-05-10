@@ -1,4 +1,4 @@
-import {SemanticCOLORS} from "semantic-ui-react";
+import { SemanticCOLORS } from 'semantic-ui-react';
 
 export enum OrderStatus {
     PENDING = 'PENDING',
@@ -49,4 +49,10 @@ export enum UpdateOrderActionType {
     LOADING = '[orders] UPDATE LOADING',
     SUCCESS = '[orders] UPDATE SUCCESS',
     ERROR = '[orders] UPDATE ERROR'
+}
+
+export enum DeleteOrderActionType {
+    LOADING = '[orders] DELETE LOADING',
+    SUCCESS = '[orders] DELETE SUCCESS',
+    ERROR = '[orders] DELETE ERROR'
 }

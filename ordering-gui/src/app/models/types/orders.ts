@@ -1,4 +1,4 @@
-import { CreateOrderActionType, Entity, Error, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
+import { CreateOrderActionType, DeleteOrderActionType, Entity, Error, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
 import { Item } from './';
 
 export interface CreateOrder {
@@ -83,9 +83,25 @@ export interface UpdateOrderErrorAction {
     error: any
 }
 
+export interface DeleteOrderLoadingAction {
+    type: DeleteOrderActionType.LOADING,
+    loading: boolean
+}
+
+export interface DeleteOrderSuccessAction {
+    type: DeleteOrderActionType.SUCCESS,
+    payload: Order
+}
+
+export interface DeleteOrderErrorAction {
+    type: DeleteOrderActionType.ERROR,
+    error: any
+}
+
 export type GetOrderAction = GetOrderLoadingAction | GetOrderSuccessAction | GetOrderErrorAction;
 export type FindOrdersAction = FindOrdersLoadingAction | FindOrdersSuccessAction | FindOrdersErrorAction;
 export type CreateOrderAction = CreateOrderLoadingAction | CreateOrderSuccessAction | CreateOrderErrorAction;
 export type UpdateOrderAction = UpdateOrderLoadingAction | UpdateOrderSuccessAction | UpdateOrderErrorAction;
+export type DeleteOrderAction = DeleteOrderLoadingAction | DeleteOrderSuccessAction | DeleteOrderErrorAction;
 
-export type OrderAction = GetOrderAction | FindOrdersAction | CreateOrderAction | UpdateOrderAction;
+export type OrderAction = GetOrderAction | FindOrdersAction | CreateOrderAction | UpdateOrderAction | DeleteOrderAction;

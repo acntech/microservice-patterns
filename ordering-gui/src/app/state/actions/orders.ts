@@ -6,6 +6,10 @@ import {
     CreateOrderErrorAction,
     CreateOrderLoadingAction,
     CreateOrderSuccessAction,
+    DeleteOrderActionType,
+    DeleteOrderErrorAction,
+    DeleteOrderLoadingAction,
+    DeleteOrderSuccessAction,
     FindOrdersActionType,
     FindOrdersErrorAction,
     FindOrdersLoadingAction,
@@ -14,7 +18,11 @@ import {
     GetOrderErrorAction,
     GetOrderLoadingAction,
     GetOrderSuccessAction,
-    Order
+    Order,
+    UpdateOrderActionType,
+    UpdateOrderErrorAction,
+    UpdateOrderLoadingAction,
+    UpdateOrderSuccessAction
 } from '../../models';
 import { showError, showSuccess } from '../actions';
 
@@ -29,6 +37,14 @@ const findOrdersError = (error: any): FindOrdersErrorAction => ({type: FindOrder
 const createOrderLoading = (loading: boolean): CreateOrderLoadingAction => ({type: CreateOrderActionType.LOADING, loading});
 const createOrderSuccess = (headers: any): CreateOrderSuccessAction => ({type: CreateOrderActionType.SUCCESS, headers});
 const createOrderError = (error: any): CreateOrderErrorAction => ({type: CreateOrderActionType.ERROR, error});
+
+const updateOrderLoading = (loading: boolean): UpdateOrderLoadingAction => ({type: UpdateOrderActionType.LOADING, loading});
+const updateOrderSuccess = (payload: any): UpdateOrderSuccessAction => ({type: UpdateOrderActionType.SUCCESS, payload});
+const updateOrderError = (error: any): UpdateOrderErrorAction => ({type: UpdateOrderActionType.ERROR, error});
+
+const deleteOrderLoading = (loading: boolean): DeleteOrderLoadingAction => ({type: DeleteOrderActionType.LOADING, loading});
+const deleteOrderSuccess = (payload: any): DeleteOrderSuccessAction => ({type: DeleteOrderActionType.SUCCESS, payload});
+const deleteOrderError = (error: any): DeleteOrderErrorAction => ({type: DeleteOrderActionType.ERROR, error});
 
 const rootPath = '/api/orders';
 
@@ -80,6 +96,42 @@ export function createOrder(order: CreateOrder) {
                 const message = data && data.message;
                 dispatch(showError('Error creating order', message, true));
                 return dispatch(createOrderError(error));
+            });
+    };
+}
+
+export function updateOrder(orderId: string) {
+    return (dispatch) => {
+        dispatch(updateOrderLoading(true));
+        const url = `${rootPath}/${orderId}`;
+        return axios.put(url)
+            .then((response) => {
+                dispatch(showSuccess('Order updated successfully'));
+                return dispatch(updateOrderSuccess(response.data));
+            })
+            .catch((error) => {
+                const {data} = error.response;
+                const message = data && data.message;
+                dispatch(showError('Error updating order', message, true));
+                return dispatch(updateOrderError(error));
+            });
+    };
+}
+
+export function deleteOrder(orderId: string) {
+    return (dispatch) => {
+        dispatch(deleteOrderLoading(true));
+        const url = `${rootPath}/${orderId}`;
+        return axios.delete(url)
+            .then((response) => {
+                dispatch(showSuccess('Order deleted successfully'));
+                return dispatch(deleteOrderSuccess(response.data));
+            })
+            .catch((error) => {
+                const {data} = error.response;
+                const message = data && data.message;
+                dispatch(showError('Error deleting order', message, true));
+                return dispatch(deleteOrderError(error));
             });
     };
 }

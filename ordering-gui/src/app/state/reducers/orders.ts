@@ -2,6 +2,8 @@ import {
     ActionType,
     CreateOrderAction,
     CreateOrderActionType,
+    DeleteOrderAction,
+    DeleteOrderActionType,
     EntityType,
     FindOrdersAction,
     FindOrdersActionType,
@@ -9,16 +11,14 @@ import {
     GetOrderActionType,
     Order,
     OrderAction,
-    OrderState
+    OrderState,
+    UpdateOrderAction,
+    UpdateOrderActionType
 } from '../../models';
-import {initialOrderState} from '../store/initial-state';
+import { initialOrderState } from '../store/initial-state';
 
 export const reducer = (state: OrderState = initialOrderState, action: OrderAction): OrderState => {
     switch (action.type) {
-        case CreateOrderActionType.LOADING:
-        case CreateOrderActionType.SUCCESS:
-        case CreateOrderActionType.ERROR:
-            return create(state, action);
         case GetOrderActionType.LOADING:
         case GetOrderActionType.SUCCESS:
         case GetOrderActionType.ERROR:
@@ -27,43 +27,20 @@ export const reducer = (state: OrderState = initialOrderState, action: OrderActi
         case FindOrdersActionType.SUCCESS:
         case FindOrdersActionType.ERROR:
             return find(state, action);
+        case CreateOrderActionType.LOADING:
+        case CreateOrderActionType.SUCCESS:
+        case CreateOrderActionType.ERROR:
+            return create(state, action);
+        case UpdateOrderActionType.LOADING:
+        case UpdateOrderActionType.SUCCESS:
+        case UpdateOrderActionType.ERROR:
+            return update(state, action);
+        case DeleteOrderActionType.LOADING:
+        case DeleteOrderActionType.SUCCESS:
+        case DeleteOrderActionType.ERROR:
+            return remove(state, action);
         default:
             return state;
-    }
-};
-
-const create = (state: OrderState = initialOrderState, action: CreateOrderAction): OrderState => {
-    switch (action.type) {
-        case CreateOrderActionType.LOADING: {
-            const {orders} = state;
-            const {loading} = action;
-            return {...initialOrderState, orders: orders, loading: loading};
-        }
-
-        case CreateOrderActionType.SUCCESS: {
-            const {orders} = state;
-            const {headers} = action;
-            let modified;
-
-            if (headers) {
-                const {location} = headers;
-                const orderId = location.split('orders/')[1];
-                modified = {id: orderId, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
-            }
-
-            return {...initialOrderState, orders: orders, modified: modified};
-        }
-
-        case CreateOrderActionType.ERROR: {
-            const {orders} = state;
-            const {data} = action.error.response;
-            const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
-            return {...initialOrderState, orders: orders, error: error};
-        }
-
-        default: {
-            return state;
-        }
     }
 };
 
@@ -124,6 +101,109 @@ const find = (state: OrderState = initialOrderState, action: FindOrdersAction): 
             const {orders} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.FIND};
+            return {...initialOrderState, orders: orders, error: error};
+        }
+
+        default: {
+            return state;
+        }
+    }
+};
+
+const create = (state: OrderState = initialOrderState, action: CreateOrderAction): OrderState => {
+    switch (action.type) {
+        case CreateOrderActionType.LOADING: {
+            const {orders} = state;
+            const {loading} = action;
+            return {...initialOrderState, orders: orders, loading: loading};
+        }
+
+        case CreateOrderActionType.SUCCESS: {
+            const {orders} = state;
+            const {headers} = action;
+            let modified;
+
+            if (headers) {
+                const {location} = headers;
+                const orderId = location.split('orders/')[1];
+                modified = {id: orderId, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
+            }
+
+            return {...initialOrderState, orders: orders, modified: modified};
+        }
+
+        case CreateOrderActionType.ERROR: {
+            const {orders} = state;
+            const {data} = action.error.response;
+            const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
+            return {...initialOrderState, orders: orders, error: error};
+        }
+
+        default: {
+            return state;
+        }
+    }
+};
+
+const update = (state: OrderState = initialOrderState, action: UpdateOrderAction): OrderState => {
+    switch (action.type) {
+        case UpdateOrderActionType.LOADING: {
+            const {orders} = state;
+            const {loading} = action;
+            return {...initialOrderState, orders: orders, loading: loading};
+        }
+
+        case UpdateOrderActionType.SUCCESS: {
+            let {orders} = state;
+            const {payload} = action;
+            let modified;
+
+            if (payload) {
+                orders = replaceOrAppend(orders, payload);
+                modified = {id: payload.orderId, entityType: EntityType.ORDERS, actionType: ActionType.UPDATE};
+            }
+
+            return {...initialOrderState, orders: orders, modified: modified};
+        }
+
+        case UpdateOrderActionType.ERROR: {
+            const {orders} = state;
+            const {data} = action.error.response;
+            const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.UPDATE};
+            return {...initialOrderState, orders: orders, error: error};
+        }
+
+        default: {
+            return state;
+        }
+    }
+};
+
+const remove = (state: OrderState = initialOrderState, action: DeleteOrderAction): OrderState => {
+    switch (action.type) {
+        case DeleteOrderActionType.LOADING: {
+            const {orders} = state;
+            const {loading} = action;
+            return {...initialOrderState, orders: orders, loading: loading};
+        }
+
+        case DeleteOrderActionType.SUCCESS: {
+            let {orders} = state;
+            const {payload} = action;
+            let modified;
+
+            if (payload) {
+                orders = replaceOrAppend(orders, payload);
+                modified = {id: payload.orderId, entityType: EntityType.ORDERS, actionType: ActionType.DELETE};
+            }
+
+            return {...initialOrderState, orders: orders, modified: modified};
+        }
+
+        case DeleteOrderActionType.ERROR: {
+            const {orders} = state;
+            const {data} = action.error.response;
+            const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.DELETE};
             return {...initialOrderState, orders: orders, error: error};
         }
 

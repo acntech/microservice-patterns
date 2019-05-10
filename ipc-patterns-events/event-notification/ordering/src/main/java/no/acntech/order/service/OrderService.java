@@ -1,16 +1,13 @@
 package no.acntech.order.service;
 
-import no.acntech.order.exception.ItemAlreadyExistsException;
-import no.acntech.order.exception.ItemNotFoundException;
-import no.acntech.order.exception.OrderNotFoundException;
-import no.acntech.order.model.*;
-import no.acntech.order.producer.OrderEventProducer;
-import no.acntech.order.repository.ItemRepository;
-import no.acntech.order.repository.OrderRepository;
-import no.acntech.reservation.consumer.ReservationRestConsumer;
-import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.PendingReservationDto;
-import no.acntech.reservation.model.UpdateReservationDto;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
@@ -18,12 +15,25 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import no.acntech.order.exception.ItemAlreadyExistsException;
+import no.acntech.order.exception.ItemNotFoundException;
+import no.acntech.order.exception.OrderNotFoundException;
+import no.acntech.order.model.CreateItemDto;
+import no.acntech.order.model.CreateOrderDto;
+import no.acntech.order.model.DeleteItemDto;
+import no.acntech.order.model.Item;
+import no.acntech.order.model.Order;
+import no.acntech.order.model.OrderDto;
+import no.acntech.order.model.OrderQuery;
+import no.acntech.order.model.OrderStatus;
+import no.acntech.order.model.UpdateItemDto;
+import no.acntech.order.producer.OrderEventProducer;
+import no.acntech.order.repository.ItemRepository;
+import no.acntech.order.repository.OrderRepository;
+import no.acntech.reservation.consumer.ReservationRestConsumer;
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.PendingReservationDto;
+import no.acntech.reservation.model.UpdateReservationDto;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -96,10 +106,10 @@ public class OrderService {
 
     @Transactional
     public OrderDto updateOrder(@NotNull final UUID orderId) {
-        OrderDto order = getOrder(orderId);
+        Order order = getOrderByOrderId(orderId);
 
         order.getItems().stream()
-                .map(ItemDto::getReservationId)
+                .map(Item::getReservationId)
                 .forEach(reservationId -> {
                     final UpdateReservationDto updateReservation = UpdateReservationDto.builder()
                             .statusConfirmed()
@@ -110,21 +120,27 @@ public class OrderService {
         LOGGER.debug("Updated order with order-id {}", orderId);
         orderEventProducer.publish(orderId);
 
-        return order;
+        order.setStatus(OrderStatus.CONFIRMED);
+        Order updatedOrder = orderRepository.save(order);
+
+        return convert(updatedOrder);
     }
 
     @Transactional
     public OrderDto deleteOrder(@NotNull final UUID orderId) {
-        OrderDto order = getOrder(orderId);
+        Order order = getOrderByOrderId(orderId);
 
         order.getItems().stream()
-                .map(ItemDto::getReservationId)
+                .map(Item::getReservationId)
                 .forEach(reservationRestConsumer::delete);
 
         LOGGER.debug("Delete order with order-id {}", orderId);
         orderEventProducer.publish(orderId);
 
-        return order;
+        order.setStatus(OrderStatus.CANCELED);
+        Order deletedOrder = orderRepository.save(order);
+
+        return convert(deletedOrder);
     }
 
     @Transactional

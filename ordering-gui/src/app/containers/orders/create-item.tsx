@@ -95,7 +95,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         const {modified} = this.props.itemState;
         const {formSubmitted} = this.state.formData;
         return formSubmitted &&
-            modified != undefined &&
+            modified !== undefined &&
             modified.entityType === EntityType.ITEMS &&
             modified.actionType === ActionType.CREATE;
     };

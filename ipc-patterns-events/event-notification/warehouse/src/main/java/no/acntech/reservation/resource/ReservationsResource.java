@@ -11,11 +11,11 @@ import java.util.UUID;
 
 @RequestMapping(path = "reservations")
 @RestController
-public class ReservationResource {
+public class ReservationsResource {
 
     private final ReservationService reservationService;
 
-    public ReservationResource(final ReservationService reservationService) {
+    public ReservationsResource(final ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 

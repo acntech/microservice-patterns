@@ -135,7 +135,7 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
 
     private itemDeleted = (): boolean => {
         const {modified} = this.props.itemState;
-        return modified != undefined && modified.entityType === EntityType.ITEMS && modified.actionType === ActionType.DELETE;
+        return modified !== undefined && modified.entityType === EntityType.ITEMS && modified.actionType === ActionType.DELETE;
     };
 }
 

@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {Component, ReactNode} from 'react';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router';
-import {NotFoundErrorContainer} from '../';
-import {LoadingIndicator, PrimaryHeader, SecondaryHeader, ShowOrder} from '../../components';
+import { Component, ReactNode } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { Container } from 'semantic-ui-react';
+import { NotFoundErrorContainer } from '../';
+import { LoadingIndicator, PrimaryHeader, SecondaryHeader, ShowOrder } from '../../components';
 
-import {Order, OrderState, ProductState, RootState} from '../../models';
-import {findProducts, getOrder} from '../../state/actions';
-import {Container} from "semantic-ui-react";
+import { Order, OrderState, ProductState, RootState } from '../../models';
+import { deleteOrder, findProducts, getOrder, updateOrder } from '../../state/actions';
 
 interface RouteProps {
     match: any;
@@ -21,6 +21,8 @@ interface ComponentStateProps {
 interface ComponentDispatchProps {
     getOrder: (orderId: string) => Promise<any>;
     findProducts: () => Promise<any>;
+    updateOrder: (orderId: string) => Promise<any>;
+    deleteOrder: (orderId: string) => Promise<any>;
 }
 
 type ComponentProps = ComponentDispatchProps & ComponentStateProps & RouteProps;
@@ -69,32 +71,34 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         const {back, createItem, order, productId} = this.state;
 
         if (back) {
-            return <Redirect to='/'/>;
+            return <Redirect to='/' />;
         } else if (createItem) {
-            return <Redirect to={`/orders/${orderId}/create`}/>;
+            return <Redirect to={`/orders/${orderId}/create`} />;
         } else if (productId) {
-            return <Redirect to={`/orders/${orderId}/items/${productId}`}/>;
+            return <Redirect to={`/orders/${orderId}/items/${productId}`} />;
         } else if (loading) {
-            return <LoadingIndicator/>;
+            return <LoadingIndicator />;
         } else if (!order) {
             return <NotFoundErrorContainer
                 header
                 icon='warning sign'
                 heading='No order found'
-                content={`Could not find order for ID ${orderId}`}/>;
+                content={`Could not find order for ID ${orderId}`} />;
         } else {
             return (
                 <Container>
-                    <PrimaryHeader/>
-                    <SecondaryHeader/>
+                    <PrimaryHeader />
+                    <SecondaryHeader />
                     <ShowOrder
                         order={order}
                         productState={this.props.productState}
                         onBackButtonClick={this.onBackButtonClick}
                         onCreateItemButtonClick={this.onCreateItemButtonClick}
+                        onConfirmOrderButtonClick={this.onConfirmOrderButtonClick}
+                        onCancelOrderButtonClick={this.onCancelOrderButtonClick}
                         onRefreshOrderButtonClick={this.onRefreshOrderButtonClick}
                         onTableRowClick={this.onTableRowClick}
-                        onFetchProducts={this.onFetchProducts}/>
+                        onFetchProducts={this.onFetchProducts} />
                 </Container>
             );
         }
@@ -102,22 +106,39 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
 
     private onBackButtonClick = (): void => {
         this.setState({
-            back: true,
-            createItem: false
+            ...initialState,
+            back: true
         });
     };
 
     private onCreateItemButtonClick = (): void => {
         this.setState({
-            back: false,
+            ...initialState,
             createItem: true
         });
     };
 
+    private onConfirmOrderButtonClick = (): void => {
+        this.setState({
+            ...initialState,
+            order: undefined
+        });
+        const {orderId} = this.props.match.params;
+        this.props.updateOrder(orderId);
+    };
+
+    private onCancelOrderButtonClick = (): void => {
+        this.setState({
+            ...initialState,
+            order: undefined
+        });
+        const {orderId} = this.props.match.params;
+        this.props.deleteOrder(orderId);
+    };
+
     private onRefreshOrderButtonClick = (): void => {
         this.setState({
-            back: false,
-            createItem: false,
+            ...initialState,
             order: undefined
         });
         const {orderId} = this.props.match.params;
@@ -140,9 +161,11 @@ const mapStateToProps = (state: RootState): ComponentStateProps => ({
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
     getOrder: (orderId: string) => dispatch(getOrder(orderId)),
-    findProducts: () => dispatch(findProducts())
+    findProducts: () => dispatch(findProducts()),
+    updateOrder: (orderId: string) => dispatch(updateOrder(orderId)),
+    deleteOrder: (orderId: string) => dispatch(deleteOrder(orderId))
 });
 
 const ConnectedOrderContainer = connect(mapStateToProps, mapDispatchToProps)(OrderContainer);
 
-export {ConnectedOrderContainer as OrderContainer};
+export { ConnectedOrderContainer as OrderContainer };
