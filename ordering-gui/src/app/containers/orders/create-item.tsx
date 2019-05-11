@@ -1,20 +1,15 @@
 import * as React from 'react';
-import {ChangeEventHandler, Component, ReactNode} from 'react';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router';
-import {
-    CreateItemForm,
-    CreateItemFormData,
-    initialCreateItemFormData,
-    LoadingIndicator,
-    PrimaryHeader,
-    SecondaryHeader
-} from '../../components';
+import { ChangeEventHandler, Component, ReactNode } from 'react';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { Container } from 'semantic-ui-react';
+import { CreateItemForm, CreateItemFormData, initialCreateItemFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
+import { ShowProductList } from '../../components/orders/show-product-list';
 
-import {ActionType, CreateItem, EntityType, ItemState, Product, ProductState, RootState} from '../../models';
-import {createItem, findProducts} from '../../state/actions';
-import {ShowProductList} from "../../components/orders/show-product-list";
-import {Container} from "semantic-ui-react";
+import { ActionType, CreateItem, EntityType, ItemState, Product, ProductState, RootState } from '../../models';
+import { createItem, findProducts } from '../../state/actions';
+import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface RouteProps {
     match: any;
@@ -30,7 +25,7 @@ interface ComponentDispatchProps {
     findProducts: () => Promise<any>;
 }
 
-type ComponentProps = ComponentDispatchProps & ComponentStateProps & RouteProps;
+type ComponentProps = ComponentDispatchProps & ComponentStateProps & RouteProps & InjectedIntlProps;
 
 interface ComponentState {
     cancel: boolean;
@@ -50,7 +45,7 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         this.state = initialState;
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.props.findProducts();
     }
 
@@ -61,31 +56,31 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         const {cancel, product, formData} = this.state;
 
         if (itemLoading || productLoading) {
-            return <LoadingIndicator/>;
+            return <LoadingIndicator />;
         } else if (cancel || this.shouldRedirectToOrder()) {
-            return <Redirect to={`/orders/${orderId}`}/>;
+            return <Redirect to={`/orders/${orderId}`} />;
         } else if (product) {
             return (
                 <Container>
-                    <PrimaryHeader/>
-                    <SecondaryHeader/>
+                    <PrimaryHeader />
+                    <SecondaryHeader />
                     <CreateItemForm
                         onCancelButtonClick={this.onCancelButtonClick}
                         onFormSubmit={this.onFormSubmit}
                         onFormInputQuantityChange={this.onFormInputQuantityChange}
                         product={product}
-                        formData={formData}/>
+                        formData={formData} />
                 </Container>
             );
         } else {
             return (
                 <Container>
-                    <PrimaryHeader/>
-                    <SecondaryHeader/>
+                    <PrimaryHeader />
+                    <SecondaryHeader />
                     <ShowProductList
                         products={products}
                         onCancelButtonClick={this.onCancelButtonClick}
-                        onTableRowClick={this.onTableRowClick}/>
+                        onTableRowClick={this.onTableRowClick} />
                 </Container>
             );
         }
@@ -133,11 +128,13 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
 
         const quantityNumber = parseInt(quantity, 10);
         if (isNaN(quantityNumber) || quantityNumber < 1) {
+            const errorMessage = this.props.intl.formatMessage({id: 'form.validation.item-quantity.text'});
+
             this.setState({
                 formData: {
                     ...formData,
                     formError: true,
-                    formErrorMessage: 'Quantity must be a positive number',
+                    formErrorMessage: errorMessage,
                     formInputQuantity: {
                         ...formInputQuantity,
                         formElementError: true
@@ -184,6 +181,8 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
     findProducts: () => dispatch(findProducts())
 });
 
-const ConnectedCreateItemContainer = connect(mapStateToProps, mapDispatchToProps)(CreateItemContainer);
+const IntlCreateItemContainer = injectIntl(CreateItemContainer);
 
-export {ConnectedCreateItemContainer as CreateItemContainer};
+const ConnectedCreateItemContainer = connect(mapStateToProps, mapDispatchToProps)(IntlCreateItemContainer);
+
+export { ConnectedCreateItemContainer as CreateItemContainer };

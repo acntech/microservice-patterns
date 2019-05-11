@@ -15,16 +15,16 @@ class ErrorHandlerProvider extends Component<ComponentProps, ComponentState> {
 
     constructor(props: ComponentProps) {
         super(props);
-        this.state = { hasError: false };
+        this.state = {hasError: false};
     }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        this.setState({ hasError: true });
+    public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+        this.setState({hasError: true});
     }
 
     public render(): ReactNode {
-        const { hasError } = this.state;
-        const { children } = this.props;
+        const {hasError} = this.state;
+        const {children} = this.props;
         if (hasError) {
             return (
                 <Container>

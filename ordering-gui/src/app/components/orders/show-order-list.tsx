@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {Component, ReactNode} from 'react';
-import {Button, Icon, Label, Segment, Table} from 'semantic-ui-react';
+import { Component, ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Button, Icon, Label, Segment, Table } from 'semantic-ui-react';
 
-import {getOrderStatusLabelColor, Order} from '../../models';
+import { getOrderStatusLabelColor, Order } from '../../models';
 
 interface ComponentProps {
     orders: Order[];
@@ -10,7 +11,7 @@ interface ComponentProps {
     onCreateOrderButtonClick: () => void;
 }
 
-class ShowOrderListContainer extends Component<ComponentProps> {
+class ShowOrderListComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
         const {orders, onTableRowClick, onCreateOrderButtonClick} = this.props;
@@ -18,17 +19,17 @@ class ShowOrderListContainer extends Component<ComponentProps> {
         return (
             <Segment basic>
                 <Button.Group>
-                    <Button primary size='tiny' onClick={onCreateOrderButtonClick}>
-                        <Icon name='dolly'/>New Order
+                    <Button primary size="tiny" onClick={onCreateOrderButtonClick}>
+                        <Icon name="dolly" /><FormattedMessage id="button.new-order.text" />
                     </Button>
                 </Button.Group>
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell width={6}>Order ID</Table.HeaderCell>
-                            <Table.HeaderCell width={4}>Name</Table.HeaderCell>
-                            <Table.HeaderCell width={10}>Description</Table.HeaderCell>
-                            <Table.HeaderCell width={4}>Status</Table.HeaderCell>
+                            <Table.HeaderCell width={6}><FormattedMessage id="label.order-id.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={4}><FormattedMessage id="label.order-name.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={10}><FormattedMessage id="label.order-description.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={4}><FormattedMessage id="label.order-status.text" /></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -37,12 +38,16 @@ class ShowOrderListContainer extends Component<ComponentProps> {
                             const statusColor = getOrderStatusLabelColor(status);
 
                             return (
-                                <Table.Row key={index} className='clickable-table-row'
-                                           onClick={() => onTableRowClick(orderId)}>
+                                <Table.Row key={index} className="clickable-table-row"
+                                    onClick={() => onTableRowClick(orderId)}>
                                     <Table.Cell>{orderId}</Table.Cell>
                                     <Table.Cell>{name}</Table.Cell>
                                     <Table.Cell>{description}</Table.Cell>
-                                    <Table.Cell><Label color={statusColor}>{status}</Label></Table.Cell>
+                                    <Table.Cell>
+                                        <Label color={statusColor}>
+                                            <FormattedMessage id={`enum.order-status.${status}`} />
+                                        </Label>
+                                    </Table.Cell>
                                 </Table.Row>
                             );
                         })}
@@ -53,4 +58,4 @@ class ShowOrderListContainer extends Component<ComponentProps> {
     }
 }
 
-export {ShowOrderListContainer as ShowOrderList};
+export { ShowOrderListComponent as ShowOrderList };

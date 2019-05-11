@@ -3,8 +3,7 @@ import { Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { Container } from 'semantic-ui-react';
-import { NotFoundErrorContainer } from '../';
-import { LoadingIndicator, PrimaryHeader, SecondaryHeader, ShowOrder } from '../../components';
+import { LoadingIndicator, NotFoundError, PrimaryHeader, SecondaryHeader, ShowOrder } from '../../components';
 
 import { Order, OrderState, ProductState, RootState } from '../../models';
 import { deleteOrder, findProducts, getOrder, updateOrder } from '../../state/actions';
@@ -71,7 +70,7 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         const {back, createItem, order, productId} = this.state;
 
         if (back) {
-            return <Redirect to='/' />;
+            return <Redirect to="/" />;
         } else if (createItem) {
             return <Redirect to={`/orders/${orderId}/create`} />;
         } else if (productId) {
@@ -79,11 +78,15 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         } else if (loading) {
             return <LoadingIndicator />;
         } else if (!order) {
-            return <NotFoundErrorContainer
-                header
-                icon='warning sign'
-                heading='No order found'
-                content={`Could not find order for ID ${orderId}`} />;
+            return (
+                <Container className="error error-not-found">
+                    <PrimaryHeader />
+                    <NotFoundError
+                        icon="warning sign"
+                        header={{id: 'error.order-not-found.header.text'}}
+                        content={{id: 'error.order-not-found.content.text', values: {orderId: orderId}}} />
+                </Container>
+            );
         } else {
             return (
                 <Container>

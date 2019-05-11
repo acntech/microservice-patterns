@@ -1,6 +1,8 @@
-import {ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState} from '../';
+import { IntlState } from 'react-intl-redux';
+import { ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState } from '../';
 
 export interface RootState {
+    intl: IntlState;
     notificationState: NotificationState;
     customerState: CustomerState;
     productState: ProductState;
@@ -39,4 +41,10 @@ export interface FormData {
     formSubmitted: boolean;
     formError: boolean;
     formErrorMessage?: string;
+}
+
+export interface Translation {
+    id: string;
+    defaultMessage?: string;
+    values?: {[key: string]: string}
 }

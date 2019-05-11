@@ -7,7 +7,7 @@ class LoadingSegmentComponent extends Component<{}> {
     public render(): ReactNode {
         return (
             <Segment loading>
-                <div className='loading-indicator-body' />
+                <div className="loading-indicator-body" />
             </Segment>
         );
     }

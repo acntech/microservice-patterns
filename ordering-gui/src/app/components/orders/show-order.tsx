@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Component, FunctionComponent, ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Moment from 'react-moment';
 import { Button, ButtonGroup, Icon, Label, Segment, Table } from 'semantic-ui-react';
 
@@ -18,7 +19,7 @@ interface ComponentProps {
     onFetchProducts: () => void;
 }
 
-class ShowOrderContainer extends Component<ComponentProps> {
+class ShowOrderComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
         const {
@@ -40,29 +41,35 @@ class ShowOrderContainer extends Component<ComponentProps> {
         return (
             <Segment basic>
                 <ButtonGroup>
-                    <Button secondary size='tiny' onClick={onBackButtonClick}><Icon name='arrow left' />Back</Button>
+                    <Button secondary size="tiny" onClick={onBackButtonClick}>
+                        <Icon name="arrow left" /><FormattedMessage id="button.back.text" />
+                    </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button primary={createItemButtonActive}
                         disabled={!createItemButtonActive}
-                        size='tiny' onClick={onCreateItemButtonClick}>
-                        <Icon name='dolly' />New Item</Button>
+                        size="tiny" onClick={onCreateItemButtonClick}>
+                        <Icon name="dolly" /><FormattedMessage id="button.new-item.text" />
+                    </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button positive={confirmOrderButtonActive}
                         disabled={!confirmOrderButtonActive}
-                        size='tiny' onClick={onConfirmOrderButtonClick}>
-                        <Icon name='check' />Confirm</Button>
+                        size="tiny" onClick={onConfirmOrderButtonClick}>
+                        <Icon name="check" /><FormattedMessage id="button.confirm.text" />
+                    </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button negative={cancelOrderButtonActive}
                         disabled={!cancelOrderButtonActive}
-                        size='tiny' onClick={onCancelOrderButtonClick}>
-                        <Icon name='delete' />Cancel</Button>
+                        size="tiny" onClick={onCancelOrderButtonClick}>
+                        <Icon name="delete" /><FormattedMessage id="button.cancel.text" />
+                    </Button>
                 </ButtonGroup>
                 <ButtonGroup>
-                    <Button secondary size='tiny' onClick={onRefreshOrderButtonClick}><Icon
-                        name='redo' />Refresh</Button>
+                    <Button secondary size='tiny' onClick={onRefreshOrderButtonClick}>
+                        <Icon name="redo" /><FormattedMessage id="button.refresh.text" />
+                    </Button>
                 </ButtonGroup>
 
                 <OrderFragment order={order} />
@@ -103,27 +110,29 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props: OrderFragme
         <Table celled>
             <Table.Body>
                 <Table.Row>
-                    <Table.Cell width={2} className='table-header'>Order ID</Table.Cell>
+                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-id.text" /></Table.Cell>
                     <Table.Cell width={10}>{orderId}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className='table-header'>Name</Table.Cell>
+                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-name.text" /></Table.Cell>
                     <Table.Cell width={10}>{name}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className='table-header'>Description</Table.Cell>
+                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-description.text" /></Table.Cell>
                     <Table.Cell width={10}>{description}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className='table-header'>Created</Table.Cell>
+                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.created.text" /></Table.Cell>
                     <Table.Cell width={10}>
                         <Moment>{created}</Moment>
                     </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className='table-header'>Status</Table.Cell>
+                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-status.text" /></Table.Cell>
                     <Table.Cell width={10}>
-                        <Label color={statusColor}>{status}</Label>
+                        <Label color={statusColor}>
+                            <FormattedMessage id={`enum.order-status.${status}`} />
+                        </Label>
                     </Table.Cell>
                 </Table.Row>
             </Table.Body>
@@ -131,4 +140,4 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props: OrderFragme
     );
 };
 
-export { ShowOrderContainer as ShowOrder };
+export { ShowOrderComponent as ShowOrder };

@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {Component, ReactNode} from 'react';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router';
-import {LoadingIndicator, PrimaryHeader, SecondaryHeader, ShowOrderList} from '../../components';
+import { Component, ReactNode } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { Container } from 'semantic-ui-react';
+import { LoadingIndicator, PrimaryHeader, SecondaryHeader, ShowOrderList } from '../../components';
 
-import {OrderState, RootState} from '../../models';
-import {findOrders} from '../../state/actions';
-import {Container} from "semantic-ui-react";
+import { OrderState, RootState } from '../../models';
+import { findOrders } from '../../state/actions';
 
 interface ComponentStateProps {
     orderState: OrderState;
@@ -44,20 +44,20 @@ class HomeContainer extends Component<ComponentProps, ComponentState> {
         const {orders, loading} = orderState;
 
         if (orderId) {
-            return <Redirect to={`/orders/${orderId}`}/>;
+            return <Redirect to={`/orders/${orderId}`} />;
         } else if (loading) {
-            return <LoadingIndicator/>;
+            return <LoadingIndicator />;
         } else if (createOrder) {
-            return <Redirect to='/create'/>;
+            return <Redirect to="/create" />;
         } else {
             return (
                 <Container>
-                    <PrimaryHeader/>
-                    <SecondaryHeader/>
+                    <PrimaryHeader />
+                    <SecondaryHeader />
                     <ShowOrderList
                         orders={orders}
                         onTableRowClick={this.onTableRowClick}
-                        onCreateOrderButtonClick={this.onCreateOrderButtonClick}/>
+                        onCreateOrderButtonClick={this.onCreateOrderButtonClick} />
                 </Container>
             );
         }
@@ -82,4 +82,4 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 
 const ConnectedHomeContainer = connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
 
-export {ConnectedHomeContainer as HomeContainer};
+export { ConnectedHomeContainer as HomeContainer };

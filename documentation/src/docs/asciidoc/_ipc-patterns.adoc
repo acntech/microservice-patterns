@@ -38,7 +38,7 @@ image::ipc-patterns-synchronous-calls.png["",75%,pdfwidth=75%]
 === Asynchronous Messaging Between Services
 
 ==== Description
-Microservices communicate asynchronously through messaging infrastructure. Reading, processing and delivery of messages can be performed in a highly consistent manner and be part of each microservices local transactional boundary.
+Microservices communicate asynchronously through messaging infrastructure. Reading, processing and delivery of index can be performed in a highly consistent manner and be part of each microservices local transactional boundary.
 
 There exists several architectural strategies when it comes to asynchronous messaging that has different characteristics related to reliability and consistency. Choice of messaging infrastructure technology also plays a big role and different products have different reliability guarantees. This needs to be mapped to the specific use-case and domain.
 
@@ -46,7 +46,7 @@ image::ipc-patterns-asynchronous-messaging.png["",75%,pdfwidth=75%]
 
 ==== Pros
 * High performance and scalability
-* No runtime dependency between services for asynchronous messages - can submit orders if warehouse is down, etc
+* No runtime dependency between services for asynchronous index - can submit orders if warehouse is down, etc
 * High consistency and reliability between services (eventual consistency)
 * Messaging infrastructure has built-in reliability guarantees
 
@@ -64,7 +64,7 @@ image::ipc-patterns-asynchronous-messaging.png["",75%,pdfwidth=75%]
 
 ==== Description
 
-Microservices communicate asynchronously using event notification. When the state of a service is modified it will publish an notification event. The events are "thin" messages that are distributed between the microservices using a message broker in a publish/subscribe fashion.
+Microservices communicate asynchronously using event notification. When the state of a service is modified it will publish an notification event. The events are "thin" index that are distributed between the microservices using a message broker in a publish/subscribe fashion.
 
 In this example the events are a mix between notifications and passive/aggressive commands. This is because the source microservice expects something to happen on the basis of an event.
 

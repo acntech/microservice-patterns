@@ -1,15 +1,19 @@
 import * as React from 'react';
-import {Component, ReactNode} from 'react';
-import {Button, Form, Icon, InputOnChangeData, Message, Segment, TextAreaProps} from 'semantic-ui-react';
-import {FormData, FormElementData} from "../../models/types";
+import { Component, ReactNode } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Button, Form, Icon, InputOnChangeData, Message, Segment, TextAreaProps } from 'semantic-ui-react';
+import { FormData, FormElementData } from '../../models/types';
+import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
-interface ComponentProps {
+interface ComponentParamProps {
     onCancelButtonClick: () => void;
     onFormSubmit: () => void;
     onFormInputNameChange: (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
     onFormTextAreaDescriptionChange: (event: React.SyntheticEvent<HTMLTextAreaElement>, data: TextAreaProps) => void;
     formData: CreateOrderFormData;
 }
+
+type ComponentProps = ComponentParamProps & InjectedIntlProps;
 
 export interface CreateOrderFormData extends FormData {
     formInputName: FormElementData;
@@ -28,7 +32,7 @@ export const initialCreateOrderFormData: CreateOrderFormData = {
     formTextAreaDescription: initialCreateOrderFormElementData
 };
 
-class CreateOrderFormContainer extends Component<ComponentProps> {
+class CreateOrderFormComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
         const {
@@ -36,7 +40,8 @@ class CreateOrderFormContainer extends Component<ComponentProps> {
             onFormSubmit,
             onFormInputNameChange,
             onFormTextAreaDescriptionChange,
-            formData
+            formData,
+            intl
         } = this.props;
         const {
             formError,
@@ -51,6 +56,10 @@ class CreateOrderFormContainer extends Component<ComponentProps> {
         const {
             formElementValue: formDescriptionValue
         } = formTextAreaDescription || {formElementValue: undefined};
+        const orderNameText = intl.formatMessage({id: 'label.order-name.text'});
+        const orderNamePlaceholderText = intl.formatMessage({id: 'form.placeholder.order-name.text'});
+        const orderDescriptionText = intl.formatMessage({id: 'label.order-description.text'});
+        const orderDescriptionPlaceholderText = intl.formatMessage({id: 'form.placeholder.order-description.text'});
 
         return (
             <Segment basic>
@@ -59,31 +68,34 @@ class CreateOrderFormContainer extends Component<ComponentProps> {
                         <Form.Input
                             error={formNameError}
                             width={10}
-                            label='Order Name'
-                            placeholder='Enter order name...'
+                            label={orderNameText}
+                            placeholder={orderNamePlaceholderText}
                             value={formNameValue}
-                            onChange={onFormInputNameChange}/>
+                            onChange={onFormInputNameChange} />
                     </Form.Group>
                     <Form.Group>
                         <Form.TextArea
                             width={10}
-                            label='Order Description'
-                            placeholder='Enter order description...'
+                            label={orderDescriptionText}
+                            placeholder={orderDescriptionPlaceholderText}
                             value={formDescriptionValue}
-                            onChange={onFormTextAreaDescriptionChange}/>
+                            onChange={onFormTextAreaDescriptionChange} />
                     </Form.Group>
                     <Form.Group>
-                        <Form.Button
-                            primary size='tiny'><Icon name='dolly'/>Create Order</Form.Button>
-                        <Button
-                            secondary size='tiny'
-                            onClick={onCancelButtonClick}><Icon name='cancel'/>Cancel</Button>
+                        <Form.Button primary size="tiny">
+                            <Icon name="dolly" /><FormattedMessage id="button.create-order.text" />
+                        </Form.Button>
+                        <Button secondary size="tiny" onClick={onCancelButtonClick}>
+                            <Icon name="cancel" /><FormattedMessage id="button.cancel.text" />
+                        </Button>
                     </Form.Group>
-                    <Message error><Icon name='ban'/> {formErrorMessage}</Message>
+                    <Message error><Icon name="ban" /> {formErrorMessage}</Message>
                 </Form>
             </Segment>
         );
     }
 }
 
-export {CreateOrderFormContainer as CreateOrderForm};
+const IntlCreateOrderFormComponent = injectIntl(CreateOrderFormComponent);
+
+export { IntlCreateOrderFormComponent as CreateOrderForm };

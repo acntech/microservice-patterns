@@ -1,24 +1,13 @@
 import * as React from 'react';
-import {Component, ReactNode} from 'react';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router';
-import {NotFoundErrorContainer} from '../';
-import {LoadingIndicator, PrimaryHeader, SecondaryHeader} from '../../components';
+import { Component, ReactNode } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { Container } from 'semantic-ui-react';
+import { LoadingIndicator, NotFoundError, PrimaryHeader, SecondaryHeader } from '../../components';
+import { ShowItem } from '../../components/orders/show-item';
 
-import {
-    ActionType,
-    DeleteItem,
-    EntityType,
-    Item,
-    ItemState,
-    OrderState,
-    Product,
-    ProductState,
-    RootState
-} from '../../models';
-import {deleteItem, getOrder, getProduct} from '../../state/actions';
-import {Container} from "semantic-ui-react";
-import {ShowItem} from "../../components/orders/show-item";
+import { ActionType, DeleteItem, EntityType, Item, ItemState, OrderState, Product, ProductState, RootState } from '../../models';
+import { deleteItem, getOrder, getProduct } from '../../state/actions';
 
 interface RouteProps {
     match: any;
@@ -45,7 +34,7 @@ interface ComponentState {
 }
 
 const initialState: ComponentState = {
-    back: false,
+    back: false
 };
 
 class ItemContainer extends Component<ComponentProps, ComponentState> {
@@ -72,12 +61,12 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
             const order = orders.find(o => o.orderId === orderId);
             if (order) {
                 const {products} = this.props.productState;
-                const item = order.items.find(i => i.productId === productId);
-                const product = products.find(p => p.productId === productId);
-                if (item && product) {
+                const selectedItem = order.items.find(i => i.productId === productId);
+                const selectedProduct = products.find(p => p.productId === productId);
+                if (selectedItem && selectedProduct) {
                     this.setState({
-                        item: item,
-                        product: product
+                        item: selectedItem,
+                        product: selectedProduct
                     });
                 }
             }
@@ -92,31 +81,39 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
         const {back, item, product} = this.state;
 
         if (back || this.itemDeleted()) {
-            return <Redirect to={`/orders/${orderId}`}/>;
+            return <Redirect to={`/orders/${orderId}`} />;
         } else if (orderLoading || productLoading || itemLoading) {
-            return <LoadingIndicator/>;
+            return <LoadingIndicator />;
         } else if (!item) {
-            return <NotFoundErrorContainer
-                header
-                icon='warning sign'
-                heading='No order item found'
-                content={`Could not find order item for order-id ${orderId} and product-id ${productId}`}/>;
+            return (
+                <Container className="error error-not-found">
+                    <PrimaryHeader />
+                    <NotFoundError
+                        icon="warning sign"
+                        header={{id: 'error.item-not-found.header.text'}}
+                        content={{id: 'error.item-not-found.content.text', values: {orderId: orderId, productId: productId}}} />
+                </Container>
+            );
         } else if (!product) {
-            return <NotFoundErrorContainer
-                header
-                icon='warning sign'
-                heading='No product found'
-                content={`Could not find product for product-id ${productId}`}/>;
+            return (
+                <Container className="error error-not-found">
+                    <PrimaryHeader />
+                    <NotFoundError
+                        icon="warning sign"
+                        header={{id: 'error.product-not-found.header.text'}}
+                        content={{id: 'error.product-not-found.content.text', values: {productId: productId}}} />
+                </Container>
+            );
         } else {
             return (
                 <Container>
-                    <PrimaryHeader/>
-                    <SecondaryHeader/>
+                    <PrimaryHeader />
+                    <SecondaryHeader />
                     <ShowItem
                         item={item}
                         product={product}
                         onBackButtonClick={this.onBackButtonClick}
-                        onDeleteButtonClick={this.onDeleteButtonClick}/>
+                        onDeleteButtonClick={this.onDeleteButtonClick} />
                 </Container>
             );
         }
@@ -124,7 +121,7 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
 
     private onBackButtonClick = (): void => {
         this.setState({
-            back: true,
+            back: true
         });
     };
 
@@ -153,4 +150,4 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 
 const ConnectedItemContainer = connect(mapStateToProps, mapDispatchToProps)(ItemContainer);
 
-export {ConnectedItemContainer as ItemContainer};
+export { ConnectedItemContainer as ItemContainer };

@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Component, ReactNode} from 'react';
-import {Label, SemanticCOLORS, Table} from 'semantic-ui-react';
-import {LoadingSegment} from '../../components';
+import { Component, ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Label, SemanticCOLORS, Table } from 'semantic-ui-react';
+import { LoadingSegment } from '../../components';
 
-import {getItemStatusLabelColor, Item, ItemStatus, Order, ProductState} from '../../models';
+import { getItemStatusLabelColor, Item, ItemStatus, Order, ProductState } from '../../models';
 
 interface ComponentProps {
     order: Order;
@@ -20,9 +21,9 @@ interface ShowItem {
     statusColor: SemanticCOLORS;
 }
 
-class ShowItemListContainer extends Component<ComponentProps> {
+class ShowItemListComponent extends Component<ComponentProps> {
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.props.onFetchProducts();
     }
 
@@ -32,7 +33,7 @@ class ShowItemListContainer extends Component<ComponentProps> {
         const {items} = order;
 
         if (loading) {
-            return <LoadingSegment/>;
+            return <LoadingSegment />;
         } else {
             const showItems: ShowItem[] = items.map(this.enrichItem);
 
@@ -40,10 +41,10 @@ class ShowItemListContainer extends Component<ComponentProps> {
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell width={6}>Product ID</Table.HeaderCell>
-                            <Table.HeaderCell width={8}>Product Name</Table.HeaderCell>
-                            <Table.HeaderCell width={4}>Quantity</Table.HeaderCell>
-                            <Table.HeaderCell width={4}>Status</Table.HeaderCell>
+                            <Table.HeaderCell width={6}><FormattedMessage id="label.product-id.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={6}><FormattedMessage id="label.product-name.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={2}><FormattedMessage id="label.item-quantity.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={8}><FormattedMessage id="label.item-status.text" /></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -51,13 +52,15 @@ class ShowItemListContainer extends Component<ComponentProps> {
                             const {productId, name, quantity, status, statusColor} = item;
 
                             return (
-                                <Table.Row key={index} className='clickable-table-row'
-                                           onClick={() => onTableRowClick(productId)}>
+                                <Table.Row key={index} className="clickable-table-row"
+                                    onClick={() => onTableRowClick(productId)}>
                                     <Table.Cell>{productId}</Table.Cell>
                                     <Table.Cell>{name || 'N/A'}</Table.Cell>
                                     <Table.Cell>{quantity}</Table.Cell>
                                     <Table.Cell>
-                                        <Label color={statusColor}>{status}</Label>
+                                        <Label color={statusColor}>
+                                            <FormattedMessage id={`enum.item-status.${status}`} />
+                                        </Label>
                                     </Table.Cell>
                                 </Table.Row>
                             );
@@ -84,4 +87,4 @@ class ShowItemListContainer extends Component<ComponentProps> {
     };
 }
 
-export {ShowItemListContainer as ShowItemList};
+export { ShowItemListComponent as ShowItemList };

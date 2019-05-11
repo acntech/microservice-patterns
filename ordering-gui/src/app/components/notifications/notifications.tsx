@@ -66,14 +66,7 @@ class NotificationsComponent extends Component<ComponentProps> {
                 <Segment basic className="secondary-header">
                     {notifications.map((notification, index) => {
                         const {uuid, severity, title, content, permanent} = notification;
-                        const {
-                            icon,
-                            info,
-                            warning,
-                            error,
-                            success,
-                            timeout
-                        } = notificationDetails[severity];
+                        const {icon, info, warning, error, success, timeout} = notificationDetails[severity];
 
                         if (!permanent) {
                             window.setTimeout(() => this.props.dismissNotification(uuid), timeout);

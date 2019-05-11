@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Component, FunctionComponent, ReactNode } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Header, Segment } from 'semantic-ui-react';
 
 import { Notifications } from '../';
@@ -35,10 +36,26 @@ const HeaderFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
 
     return (
         <Segment basic>
-            <Header as='h2' floated='left'>{children ? children : title}</Header>
-            {subtitle ? <Header.Subheader>{subtitle}</Header.Subheader> : null}
+            <TitleFragment title={title} children={children} />
+            <SubtitleFragment subtitle={subtitle} />
         </Segment>
     );
+};
+
+const TitleFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
+    const {title, children} = props;
+    if (children) {
+        return <Header as="h2" floated="left">{children}</Header>;
+    } else if (title) {
+        return <Header as="h2" floated="left"><FormattedMessage id={title} /></Header>;
+    } else {
+        return null;
+    }
+};
+
+const SubtitleFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
+    const {subtitle} = props;
+    return (subtitle ? <Header.Subheader><FormattedMessage id={subtitle} /></Header.Subheader> : null);
 };
 
 export { SecondaryHeaderComponent as SecondaryHeader };

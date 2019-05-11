@@ -1,19 +1,14 @@
 import * as React from 'react';
-import {ChangeEventHandler, Component, ReactNode} from 'react';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router';
-import {
-    CreateOrderForm,
-    CreateOrderFormData,
-    initialCreateOrderFormData,
-    LoadingIndicator,
-    PrimaryHeader,
-    SecondaryHeader
-} from '../../components';
+import { ChangeEventHandler, Component, ReactNode } from 'react';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { Container } from 'semantic-ui-react';
+import { CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
 
-import {ActionType, CreateOrder, CustomerState, EntityType, OrderState, RootState} from '../../models';
-import {createOrder} from '../../state/actions';
-import {Container} from "semantic-ui-react";
+import { ActionType, CreateOrder, CustomerState, EntityType, OrderState, RootState } from '../../models';
+import { createOrder } from '../../state/actions';
+import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentStateProps {
     customerState: CustomerState;
@@ -24,7 +19,7 @@ interface ComponentDispatchProps {
     createOrder: (order: CreateOrder) => Promise<any>;
 }
 
-type ComponentProps = ComponentDispatchProps & ComponentStateProps;
+type ComponentProps = ComponentDispatchProps & ComponentStateProps & InjectedIntlProps;
 
 interface ComponentState {
     cancel: boolean;
@@ -48,23 +43,23 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
         const {loading, modified} = this.props.orderState;
 
         if (cancel) {
-            return <Redirect to='/'/>;
+            return <Redirect to="/" />;
         } else if (loading) {
-            return <LoadingIndicator/>;
+            return <LoadingIndicator />;
         } else if (modified && this.shouldRedirectToOrder()) {
             const {id: orderId} = modified;
-            return <Redirect to={`/orders/${orderId}`}/>;
+            return <Redirect to={`/orders/${orderId}`} />;
         } else {
             return (
                 <Container>
-                    <PrimaryHeader/>
-                    <SecondaryHeader/>
+                    <PrimaryHeader />
+                    <SecondaryHeader />
                     <CreateOrderForm
                         onCancelButtonClick={this.onCancelButtonClick}
                         onFormSubmit={this.onFormSubmit}
                         onFormInputNameChange={this.onFormInputNameChange}
                         onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
-                        formData={formData}/>
+                        formData={formData} />
                 </Container>
             );
         }
@@ -106,12 +101,16 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
     private formInputNameIsValid = (formData: CreateOrderFormData): boolean => {
         const {formInputName} = formData;
         const {formElementValue: name} = formInputName;
+        const minLength = 2;
+        const maxLength = 50;
 
-        if (!name || name.length < 2) {
-            this.setFormInputNameError(formData, 'Order name must be at least 2 characters long');
+        if (!name || name.length < minLength) {
+            const errorMessage = this.props.intl.formatMessage({id: 'form.validation.order-name.min-length.text'}, {length: minLength});
+            this.setFormInputNameError(formData, errorMessage);
             return false;
-        } else if (name.length > 50) {
-            this.setFormInputNameError(formData, 'Order name cannot be over 50 characters long');
+        } else if (name.length > maxLength) {
+            const errorMessage = this.props.intl.formatMessage({id: 'form.validation.order-name.max-length.text'}, {length: maxLength});
+            this.setFormInputNameError(formData, errorMessage);
             return false;
         } else {
             return true;
@@ -183,6 +182,8 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
     createOrder: (order: CreateOrder) => dispatch(createOrder(order))
 });
 
-const ConnectedCreateOrderContainer = connect(mapStateToProps, mapDispatchToProps)(CreateOrderContainer);
+const IntlCreateOrderContainer = injectIntl(CreateOrderContainer);
 
-export {ConnectedCreateOrderContainer as CreateOrderContainer};
+const ConnectedCreateOrderContainer = connect(mapStateToProps, mapDispatchToProps)(IntlCreateOrderContainer);
+
+export { ConnectedCreateOrderContainer as CreateOrderContainer };

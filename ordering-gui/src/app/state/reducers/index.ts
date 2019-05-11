@@ -1,3 +1,4 @@
+import { intlReducer } from 'react-intl-redux';
 import { combineReducers } from 'redux';
 
 import { RootState } from '../../models';
@@ -14,6 +15,7 @@ const {reducer: ordersReducer} = orders;
 const {reducer: itemsReducer} = items;
 
 export const rootReducer = combineReducers<RootState>({
+    intl: intlReducer,
     notificationState: notificationsReducer,
     customerState: customersReducer,
     productState: productsReducer,
