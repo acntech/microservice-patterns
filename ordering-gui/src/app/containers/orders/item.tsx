@@ -109,11 +109,10 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
                 <Container>
                     <PrimaryHeader />
                     <SecondaryHeader />
-                    <ShowItem
-                        item={item}
-                        product={product}
-                        onBackButtonClick={this.onBackButtonClick}
-                        onDeleteButtonClick={this.onDeleteButtonClick} />
+                    <ShowItem item={item}
+                              product={product}
+                              onBackButtonClick={this.onBackButtonClick}
+                              onDeleteButtonClick={this.onDeleteButtonClick} />
                 </Container>
             );
         }

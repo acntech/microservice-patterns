@@ -39,7 +39,7 @@ class ShowOrderListComponent extends Component<ComponentProps> {
 
                             return (
                                 <Table.Row key={index} className="clickable-table-row"
-                                    onClick={() => onTableRowClick(orderId)}>
+                                           onClick={() => onTableRowClick(orderId)}>
                                     <Table.Cell>{orderId}</Table.Cell>
                                     <Table.Cell>{name}</Table.Cell>
                                     <Table.Cell>{description}</Table.Cell>

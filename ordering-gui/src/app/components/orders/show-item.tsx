@@ -32,9 +32,9 @@ class ShowItemComponent extends Component<ComponentProps> {
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button negative={deleteButtonActive}
-                        disabled={!deleteButtonActive}
-                        size="tiny"
-                        onClick={onDeleteButtonClick}>
+                            disabled={!deleteButtonActive}
+                            size="tiny"
+                            onClick={onDeleteButtonClick}>
                         <Icon name="delete" /><FormattedMessage id="button.delete.text" />
                     </Button>
                 </ButtonGroup>

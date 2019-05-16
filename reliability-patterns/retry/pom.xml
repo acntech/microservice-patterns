@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- PROJECT -->
+    <parent>
+        <groupId>no.acntech</groupId>
+        <artifactId>reliability-patterns</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>reliability-patterns-retry</artifactId>
+    <packaging>pom</packaging>
+
+    <description>Convenience pom for aggregate IDE-import, building, etc</description>
+
+    <!-- MODULES -->
+    <modules>
+        <module>retry-order</module>
+        <module>retry-shipping</module>
+    </modules>
+</project>

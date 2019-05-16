@@ -38,7 +38,7 @@ class ShowProductListComponent extends Component<ComponentProps> {
 
                             return (
                                 <Table.Row key={index} className="clickable-table-row"
-                                    onClick={() => onTableRowClick(product)}>
+                                           onClick={() => onTableRowClick(product)}>
                                     <Table.Cell singleLine>{productId}</Table.Cell>
                                     <Table.Cell singleLine>{name}</Table.Cell>
                                     <Table.Cell>{stock}</Table.Cell>

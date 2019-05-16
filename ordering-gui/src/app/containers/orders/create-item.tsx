@@ -64,12 +64,11 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                 <Container>
                     <PrimaryHeader />
                     <SecondaryHeader />
-                    <CreateItemForm
-                        onCancelButtonClick={this.onCancelButtonClick}
-                        onFormSubmit={this.onFormSubmit}
-                        onFormInputQuantityChange={this.onFormInputQuantityChange}
-                        product={product}
-                        formData={formData} />
+                    <CreateItemForm onCancelButtonClick={this.onCancelButtonClick}
+                                    onFormSubmit={this.onFormSubmit}
+                                    onFormInputQuantityChange={this.onFormInputQuantityChange}
+                                    product={product}
+                                    formData={formData} />
                 </Container>
             );
         } else {
@@ -77,10 +76,9 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                 <Container>
                     <PrimaryHeader />
                     <SecondaryHeader />
-                    <ShowProductList
-                        products={products}
-                        onCancelButtonClick={this.onCancelButtonClick}
-                        onTableRowClick={this.onTableRowClick} />
+                    <ShowProductList products={products}
+                                     onCancelButtonClick={this.onCancelButtonClick}
+                                     onTableRowClick={this.onTableRowClick} />
                 </Container>
             );
         }

@@ -54,12 +54,11 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
                 <Container>
                     <PrimaryHeader />
                     <SecondaryHeader />
-                    <CreateOrderForm
-                        onCancelButtonClick={this.onCancelButtonClick}
-                        onFormSubmit={this.onFormSubmit}
-                        onFormInputNameChange={this.onFormInputNameChange}
-                        onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
-                        formData={formData} />
+                    <CreateOrderForm onCancelButtonClick={this.onCancelButtonClick}
+                                     onFormSubmit={this.onFormSubmit}
+                                     onFormInputNameChange={this.onFormInputNameChange}
+                                     onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
+                                     formData={formData} />
                 </Container>
             );
         }

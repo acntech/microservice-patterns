@@ -65,21 +65,19 @@ class CreateOrderFormComponent extends Component<ComponentProps> {
             <Segment basic>
                 <Form onSubmit={onFormSubmit} error={formError}>
                     <Form.Group>
-                        <Form.Input
-                            error={formNameError}
-                            width={10}
-                            label={orderNameText}
-                            placeholder={orderNamePlaceholderText}
-                            value={formNameValue}
-                            onChange={onFormInputNameChange} />
+                        <Form.Input error={formNameError}
+                                    width={10}
+                                    label={orderNameText}
+                                    placeholder={orderNamePlaceholderText}
+                                    value={formNameValue}
+                                    onChange={onFormInputNameChange} />
                     </Form.Group>
                     <Form.Group>
-                        <Form.TextArea
-                            width={10}
-                            label={orderDescriptionText}
-                            placeholder={orderDescriptionPlaceholderText}
-                            value={formDescriptionValue}
-                            onChange={onFormTextAreaDescriptionChange} />
+                        <Form.TextArea width={10}
+                                       label={orderDescriptionText}
+                                       placeholder={orderDescriptionPlaceholderText}
+                                       value={formDescriptionValue}
+                                       onChange={onFormTextAreaDescriptionChange} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Button primary size="tiny">

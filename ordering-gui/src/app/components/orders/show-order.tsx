@@ -47,22 +47,22 @@ class ShowOrderComponent extends Component<ComponentProps> {
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button primary={createItemButtonActive}
-                        disabled={!createItemButtonActive}
-                        size="tiny" onClick={onCreateItemButtonClick}>
+                            disabled={!createItemButtonActive}
+                            size="tiny" onClick={onCreateItemButtonClick}>
                         <Icon name="dolly" /><FormattedMessage id="button.new-item.text" />
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button positive={confirmOrderButtonActive}
-                        disabled={!confirmOrderButtonActive}
-                        size="tiny" onClick={onConfirmOrderButtonClick}>
+                            disabled={!confirmOrderButtonActive}
+                            size="tiny" onClick={onConfirmOrderButtonClick}>
                         <Icon name="check" /><FormattedMessage id="button.confirm.text" />
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button negative={cancelOrderButtonActive}
-                        disabled={!cancelOrderButtonActive}
-                        size="tiny" onClick={onCancelOrderButtonClick}>
+                            disabled={!cancelOrderButtonActive}
+                            size="tiny" onClick={onCancelOrderButtonClick}>
                         <Icon name="delete" /><FormattedMessage id="button.cancel.text" />
                     </Button>
                 </ButtonGroup>
@@ -75,9 +75,9 @@ class ShowOrderComponent extends Component<ComponentProps> {
                 <OrderFragment order={order} />
 
                 <ShowItemList order={order}
-                    productState={productState}
-                    onTableRowClick={onTableRowClick}
-                    onFetchProducts={onFetchProducts} />
+                              productState={productState}
+                              onTableRowClick={onTableRowClick}
+                              onFetchProducts={onFetchProducts} />
             </Segment>
         );
     }
@@ -110,25 +110,35 @@ const OrderFragment: FunctionComponent<OrderFragmentProps> = (props: OrderFragme
         <Table celled>
             <Table.Body>
                 <Table.Row>
-                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-id.text" /></Table.Cell>
+                    <Table.Cell width={2} className="table-header">
+                        <FormattedMessage id="label.order-id.text" />
+                    </Table.Cell>
                     <Table.Cell width={10}>{orderId}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-name.text" /></Table.Cell>
+                    <Table.Cell width={2} className="table-header">
+                        <FormattedMessage id="label.order-name.text" />
+                    </Table.Cell>
                     <Table.Cell width={10}>{name}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-description.text" /></Table.Cell>
+                    <Table.Cell width={2} className="table-header">
+                        <FormattedMessage id="label.order-description.text" />
+                    </Table.Cell>
                     <Table.Cell width={10}>{description}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.created.text" /></Table.Cell>
+                    <Table.Cell width={2} className="table-header">
+                        <FormattedMessage id="label.created.text" />
+                    </Table.Cell>
                     <Table.Cell width={10}>
                         <Moment>{created}</Moment>
                     </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                    <Table.Cell width={2} className="table-header"><FormattedMessage id="label.order-status.text" /></Table.Cell>
+                    <Table.Cell width={2} className="table-header">
+                        <FormattedMessage id="label.order-status.text" />
+                    </Table.Cell>
                     <Table.Cell width={10}>
                         <Label color={statusColor}>
                             <FormattedMessage id={`enum.order-status.${status}`} />

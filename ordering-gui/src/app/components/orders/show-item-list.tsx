@@ -53,7 +53,7 @@ class ShowItemListComponent extends Component<ComponentProps> {
 
                             return (
                                 <Table.Row key={index} className="clickable-table-row"
-                                    onClick={() => onTableRowClick(productId)}>
+                                           onClick={() => onTableRowClick(productId)}>
                                     <Table.Cell>{productId}</Table.Cell>
                                     <Table.Cell>{name || 'N/A'}</Table.Cell>
                                     <Table.Cell>{quantity}</Table.Cell>

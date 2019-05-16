@@ -92,16 +92,15 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
                 <Container>
                     <PrimaryHeader />
                     <SecondaryHeader />
-                    <ShowOrder
-                        order={order}
-                        productState={this.props.productState}
-                        onBackButtonClick={this.onBackButtonClick}
-                        onCreateItemButtonClick={this.onCreateItemButtonClick}
-                        onConfirmOrderButtonClick={this.onConfirmOrderButtonClick}
-                        onCancelOrderButtonClick={this.onCancelOrderButtonClick}
-                        onRefreshOrderButtonClick={this.onRefreshOrderButtonClick}
-                        onTableRowClick={this.onTableRowClick}
-                        onFetchProducts={this.onFetchProducts} />
+                    <ShowOrder order={order}
+                               productState={this.props.productState}
+                               onBackButtonClick={this.onBackButtonClick}
+                               onCreateItemButtonClick={this.onCreateItemButtonClick}
+                               onConfirmOrderButtonClick={this.onConfirmOrderButtonClick}
+                               onCancelOrderButtonClick={this.onCancelOrderButtonClick}
+                               onRefreshOrderButtonClick={this.onRefreshOrderButtonClick}
+                               onTableRowClick={this.onTableRowClick}
+                               onFetchProducts={this.onFetchProducts} />
                 </Container>
             );
         }
