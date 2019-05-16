@@ -1,0 +1,37 @@
+.primary-header a {
+    color: #000;
+}
+
+.primary-header a:hover {
+    color: #000;
+}
+
+.ui.buttons {
+    margin-right: 1.1rem;
+}
+
+.ui.header.primary-header-login {
+    font-size: .75rem;
+}
+
+.clickable-table-row {
+    cursor: pointer;
+}
+
+.loading-indicator {
+    margin-top: 2rem;
+}
+
+.loading-indicator-body {
+    padding: 2rem;
+    min-height: 200px;
+}
+
+.login-grid {
+    max-width: 450px;
+}
+
+.table-header {
+    background-color: #f9fafb;
+    font-weight: 700;
+}

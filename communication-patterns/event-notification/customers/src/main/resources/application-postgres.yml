@@ -1,0 +1,12 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL92Dialect
+  datasource:
+    platform: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/customers
+    username: customers
+    password: 3Ky9cToKN9CQ
