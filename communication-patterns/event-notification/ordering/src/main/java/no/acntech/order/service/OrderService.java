@@ -14,10 +14,12 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import no.acntech.order.exception.ItemAlreadyExistsException;
 import no.acntech.order.exception.ItemNotFoundException;
 import no.acntech.order.exception.OrderNotFoundException;
+import no.acntech.order.exception.ReservationIdNotReceivedException;
 import no.acntech.order.model.CreateItemDto;
 import no.acntech.order.model.CreateOrderDto;
 import no.acntech.order.model.DeleteItemDto;
@@ -95,6 +97,7 @@ public class OrderService {
     @Transactional
     public OrderDto createOrder(@Valid final CreateOrderDto createOrder) {
         Order order = conversionService.convert(createOrder, Order.class);
+        Assert.notNull(order, "Failed to convert order");
 
         Order createdOrder = orderRepository.save(order);
 
@@ -110,20 +113,21 @@ public class OrderService {
 
         order.getItems().stream()
                 .map(Item::getReservationId)
-                .forEach(reservationId -> {
-                    final UpdateReservationDto updateReservation = UpdateReservationDto.builder()
-                            .statusConfirmed()
-                            .build();
-                    reservationRestConsumer.update(reservationId, updateReservation);
-                });
+                .forEach(this::confirmReservation);
 
         LOGGER.debug("Updated order with order-id {}", orderId);
         orderEventProducer.publish(orderId);
 
-        order.setStatus(OrderStatus.CONFIRMED);
-        Order updatedOrder = orderRepository.save(order);
+        return convert(order);
+    }
 
-        return convert(updatedOrder);
+    private void confirmReservation(UUID reservationId) {
+        final UpdateReservationDto updateReservation = UpdateReservationDto.builder()
+                .statusConfirmed()
+                .build();
+
+        LOGGER.debug("Updating reservation status to {} for reservation-id {}", updateReservation.getStatus().name(), reservationId);
+        reservationRestConsumer.update(reservationId, updateReservation);
     }
 
     @Transactional
@@ -137,10 +141,7 @@ public class OrderService {
         LOGGER.debug("Delete order with order-id {}", orderId);
         orderEventProducer.publish(orderId);
 
-        order.setStatus(OrderStatus.CANCELED);
-        Order deletedOrder = orderRepository.save(order);
-
-        return convert(deletedOrder);
+        return convert(order);
     }
 
     @Transactional
@@ -152,30 +153,34 @@ public class OrderService {
         Optional<Item> exitingItem = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
 
         if (!exitingItem.isPresent()) {
-            Item item = Item.builder()
-                    .orderId(order.getId())
-                    .productId(productId)
-                    .quantity(quantity)
-                    .build();
-
-            Item savedItem = itemRepository.save(item);
-
             CreateReservationDto createReservation = CreateReservationDto.builder()
                     .orderId(orderId)
                     .productId(productId)
                     .quantity(quantity)
                     .build();
+
             Optional<PendingReservationDto> pendingReservationOptional = reservationRestConsumer.create(createReservation);
 
             if (pendingReservationOptional.isPresent()) {
                 PendingReservationDto pendingReservation = pendingReservationOptional.get();
-                savedItem.setReservationId(pendingReservation.getReservationId());
+
+                Item item = Item.builder()
+                        .orderId(order.getId())
+                        .productId(productId)
+                        .reservationId(pendingReservation.getReservationId())
+                        .quantity(quantity)
+                        .build();
+
+                itemRepository.save(item);
+
+                LOGGER.debug("Created order item with product-id {} for order-id {}", orderId, productId);
+                orderEventProducer.publish(orderId);
+
+                Order updatedOrder = getOrderByOrderId(orderId);
+                return convert(updatedOrder);
+            } else {
+                throw new ReservationIdNotReceivedException(orderId, productId);
             }
-
-            LOGGER.debug("Created order item with product-id {} for order-id {}", orderId, productId);
-            orderEventProducer.publish(orderId);
-
-            return convert(order);
         } else {
             throw new ItemAlreadyExistsException(orderId, productId);
         }
@@ -185,53 +190,48 @@ public class OrderService {
     public OrderDto updateItem(@NotNull final UUID orderId, @Valid final UpdateItemDto updateItem) {
         UUID productId = updateItem.getProductId();
 
-        final Order order = getOrderByOrderId(orderId);
-        final Optional<Item> exitingItem = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
+        Order order = getOrderByOrderId(orderId);
+        Item item = getItemByOrderAndProductId(order, productId);
 
-        if (exitingItem.isPresent()) {
-            final Item item = exitingItem.get();
-            final UUID reservationId = item.getReservationId();
-            final Long quantity = updateItem.getQuantity();
+        UUID reservationId = item.getReservationId();
+        Long quantity = updateItem.getQuantity();
 
-            final UpdateReservationDto updateReservation = UpdateReservationDto.builder()
-                    .quantity(quantity)
-                    .build();
-            reservationRestConsumer.update(reservationId, updateReservation);
+        UpdateReservationDto updateReservation = UpdateReservationDto.builder()
+                .quantity(quantity)
+                .build();
+        reservationRestConsumer.update(reservationId, updateReservation);
 
-            LOGGER.debug("Updated order item for order-id {} and product-id {}", orderId, productId);
-            orderEventProducer.publish(orderId);
+        LOGGER.debug("Updated order item for order-id {} and product-id {}", orderId, productId);
+        orderEventProducer.publish(orderId);
 
-            return convert(order);
-        } else {
-            throw new ItemNotFoundException(orderId, productId);
-        }
+        return convert(order);
     }
 
     @Transactional
     public OrderDto deleteItem(@NotNull final UUID orderId, @Valid final DeleteItemDto deleteItemDto) {
         UUID productId = deleteItemDto.getProductId();
 
-        final Order order = getOrderByOrderId(orderId);
-        final Optional<Item> exitingItem = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
+        Order order = getOrderByOrderId(orderId);
+        Item item = getItemByOrderAndProductId(order, productId);
 
-        if (exitingItem.isPresent()) {
-            final Item item = exitingItem.get();
-            final UUID reservationId = item.getReservationId();
+        UUID reservationId = item.getReservationId();
 
-            reservationRestConsumer.delete(reservationId);
+        reservationRestConsumer.delete(reservationId);
 
-            LOGGER.debug("Deleted order item with product-id {} for order-id {}", orderId, productId);
-            orderEventProducer.publish(orderId);
+        LOGGER.debug("Deleted order item with product-id {} for order-id {}", orderId, productId);
+        orderEventProducer.publish(orderId);
 
-            return convert(order);
-        } else {
-            throw new ItemNotFoundException(orderId, productId);
-        }
+        return convert(order);
     }
 
     private Order getOrderByOrderId(final UUID orderId) {
         return orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
+    }
+
+    private Item getItemByOrderAndProductId(final Order order, final UUID productId) {
+        return itemRepository.findByOrderIdAndProductId(order.getId(), productId)
+                .orElseThrow(() -> new ItemNotFoundException(order.getOrderId(), productId));
     }
 
     private OrderDto convert(final Order order) {

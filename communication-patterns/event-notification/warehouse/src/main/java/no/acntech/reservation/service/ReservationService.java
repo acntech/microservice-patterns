@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +23,9 @@ import no.acntech.reservation.model.Reservation;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.ReservationStatus;
 import no.acntech.reservation.model.UpdateReservationDto;
-import no.acntech.reservation.producer.ReservationEventProducer;
 import no.acntech.reservation.repository.ReservationRepository;
 
-@SuppressWarnings("Duplicates")
+@SuppressWarnings({"Duplicates", "WeakerAccess"})
 @Service
 public class ReservationService {
 
@@ -35,16 +33,13 @@ public class ReservationService {
     private final ConversionService conversionService;
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
-    private final ReservationEventProducer reservationEventProducer;
 
     public ReservationService(final ConversionService conversionService,
                               final ReservationRepository reservationRepository,
-                              final ProductRepository productRepository,
-                              final ReservationEventProducer reservationEventProducer) {
+                              final ProductRepository productRepository) {
         this.conversionService = conversionService;
         this.reservationRepository = reservationRepository;
         this.productRepository = productRepository;
-        this.reservationEventProducer = reservationEventProducer;
     }
 
     public ReservationDto getReservation(@NotNull final UUID reservationId) {
@@ -67,19 +62,18 @@ public class ReservationService {
         }
     }
 
-    @Async
     @Transactional
     public void createReservation(@Valid final PendingReservationDto pendingReservation,
                                   @Valid final CreateReservationDto createReservation) {
-        final UUID reservationId = pendingReservation.getReservationId();
-        final UUID orderId = createReservation.getOrderId();
-        final UUID productId = createReservation.getProductId();
-        final Long quantity = createReservation.getQuantity();
+        UUID reservationId = pendingReservation.getReservationId();
+        UUID orderId = createReservation.getOrderId();
+        UUID productId = createReservation.getProductId();
+        Long quantity = createReservation.getQuantity();
 
-        final Optional<Reservation> existingReservation = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
+        Optional<Reservation> existingReservation = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
 
         if (existingReservation.isPresent()) {
-            final Reservation reservation = Reservation.builder()
+            Reservation reservation = Reservation.builder()
                     .reservationId(reservationId)
                     .orderId(orderId)
                     .quantity(quantity)
@@ -88,7 +82,6 @@ public class ReservationService {
             reservationRepository.save(reservation);
 
             LOGGER.error("Reservation already exists for order-id {} and product-id {}", orderId, productId);
-            reservationEventProducer.publish(reservationId);
         } else {
             final Optional<Product> existingProduct = productRepository.findByProductId(productId);
 
@@ -96,7 +89,7 @@ public class ReservationService {
                 Product product = existingProduct.get();
 
                 if (product.getStock() < quantity) {
-                    final Reservation reservation = Reservation.builder()
+                    Reservation reservation = Reservation.builder()
                             .reservationId(reservationId)
                             .orderId(orderId)
                             .product(product)
@@ -107,7 +100,7 @@ public class ReservationService {
 
                     LOGGER.error("Product stock insufficient for reservation-id {}", reservationId);
                 } else {
-                    final Reservation reservation = Reservation.builder()
+                    Reservation reservation = Reservation.builder()
                             .reservationId(reservationId)
                             .orderId(orderId)
                             .product(product)
@@ -119,7 +112,7 @@ public class ReservationService {
                     LOGGER.info("Created reservation for reservation-id {}", reservationId);
                 }
             } else {
-                final Reservation reservation = Reservation.builder()
+                Reservation reservation = Reservation.builder()
                         .reservationId(reservationId)
                         .orderId(orderId)
                         .quantity(quantity)
@@ -129,22 +122,19 @@ public class ReservationService {
 
                 LOGGER.error("No product found for reservation-id {}", reservationId);
             }
-
-            reservationEventProducer.publish(reservationId);
         }
     }
 
-    @Async
     @Transactional
     public void updateReservation(@NotNull final UUID reservationId,
                                   @Valid final UpdateReservationDto updateReservation) {
-        final Long quantity = updateReservation.getQuantity();
-        final ReservationStatus status = updateReservation.getStatus();
+        Long quantity = updateReservation.getQuantity();
+        ReservationStatus status = updateReservation.getStatus();
 
-        final Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
+        Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
 
         if (existingReservation.isPresent()) {
-            final Reservation reservation = existingReservation.get();
+            Reservation reservation = existingReservation.get();
 
             if (quantity != null) {
                 reservation.setQuantity(quantity);
@@ -156,27 +146,24 @@ public class ReservationService {
             reservationRepository.save(reservation);
 
             LOGGER.info("Updated reservation for reservation-id {}", reservationId);
-            reservationEventProducer.publish(reservationId);
         } else {
-            LOGGER.error("No reservation found for for reservation-id {}", reservationId);
+            throw new ReservationNotFoundException(reservationId);
         }
 
     }
 
-    @Async
     @Transactional
     public void deleteReservation(@NotNull final UUID reservationId) {
         Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
 
         if (existingReservation.isPresent()) {
-            final Reservation reservation = existingReservation.get();
+            Reservation reservation = existingReservation.get();
             reservation.setStatus(ReservationStatus.CANCELED);
             reservationRepository.save(reservation);
 
             LOGGER.info("Updated reservation for reservation-id {}", reservationId);
-            reservationEventProducer.publish(reservationId);
         } else {
-            LOGGER.error("No reservations found for reservation-id {}", reservationId);
+            throw new ReservationNotFoundException(reservationId);
         }
     }
 

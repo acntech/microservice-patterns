@@ -1,6 +1,7 @@
 package no.acntech.reservation.converter;
 
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import no.acntech.reservation.model.Reservation;
@@ -10,7 +11,7 @@ import no.acntech.reservation.model.ReservationDto;
 public class ReservationDtoConverter implements Converter<Reservation, ReservationDto> {
 
     @Override
-    public ReservationDto convert(final Reservation reservation) {
+    public ReservationDto convert(@NonNull final Reservation reservation) {
         return ReservationDto.builder()
                 .reservationId(reservation.getReservationId())
                 .orderId(reservation.getOrderId())
