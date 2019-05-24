@@ -6,4 +6,6 @@ ${AnsiColor.RED} | |\/| || | / __|| '__| / _ \ / __| / _ \| '__|\ \ / /| | / __|
 ${AnsiColor.RED} | |  | || || (__ | |   | (_) |\__ \|  __/| |    \ V / | || (__ |  __/    | |    | (_| || |_ | |_ |  __/| |   | | | |\__ \
 ${AnsiColor.RED} \_|  |_/|_| \___||_|    \___/ |___/ \___||_|     \_/  |_| \___| \___|    \_|     \__,_| \__| \__| \___||_|   |_| |_||___/
 ${AnsiColor.RED}
-${AnsiStyle.NORMAL} 
+${AnsiStyle.NORMAL}
+
+:: Spring Boot ::        (${spring-boot.formatted-version})
