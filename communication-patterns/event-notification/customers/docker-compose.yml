@@ -1,15 +1,15 @@
 version: '3.5'
 
 services:
-  orders:
+  customers:
     image: openjdk:8-jre-alpine
       container_name: event-notification-customers
       ports:
-      - 9000:9000
+        - 9000:9000
       environment:
-      - SPRING_PROFILES_ACTIVE=default
+        - SPRING_PROFILES_ACTIVE=default
       networks:
-      - kafka
+        - kafka
 
 networks:
   kafka:

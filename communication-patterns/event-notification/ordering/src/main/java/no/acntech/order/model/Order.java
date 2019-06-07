@@ -77,10 +77,6 @@ public class Order {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
     public List<Item> getItems() {
         return items;
     }
@@ -91,6 +87,14 @@ public class Order {
 
     public ZonedDateTime getModified() {
         return modified;
+    }
+
+    public void confirmOrder() {
+        status = OrderStatus.CONFIRMED;
+    }
+
+    public void cancelOrder() {
+        status = OrderStatus.CANCELED;
     }
 
     @PrePersist

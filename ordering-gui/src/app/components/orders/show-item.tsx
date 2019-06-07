@@ -32,9 +32,9 @@ class ShowItemComponent extends Component<ComponentProps> {
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button negative={deleteButtonActive}
-                            disabled={!deleteButtonActive}
-                            size="tiny"
-                            onClick={onDeleteButtonClick}>
+                        disabled={!deleteButtonActive}
+                        size="tiny"
+                        onClick={onDeleteButtonClick}>
                         <Icon name="delete" /><FormattedMessage id="button.delete.text" />
                     </Button>
                 </ButtonGroup>
@@ -98,7 +98,7 @@ class ShowItemComponent extends Component<ComponentProps> {
 
     private deleteButtonActive = (): boolean => {
         const {item} = this.props;
-        return item.status === ItemStatus.RESERVED;
+        return item.status === ItemStatus.RESERVED || item.status === ItemStatus.REJECTED;
     };
 }
 

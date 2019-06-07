@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import no.acntech.common.config.KafkaTopic;
 import no.acntech.order.model.OrderEvent;
 
-@Transactional
 @Component
 public class OrderEventProducer {
 
@@ -25,6 +24,7 @@ public class OrderEventProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    @Transactional
     public void publish(@NotNull final UUID orderId) {
         LOGGER.debug("Sending event for order-id {} to topic {}", orderId, KafkaTopic.ORDERS.getName());
         OrderEvent orderEvent = OrderEvent.builder()
@@ -33,3 +33,7 @@ public class OrderEventProducer {
         kafkaTemplate.send(KafkaTopic.ORDERS.getName(), orderEvent);
     }
 }
+
+
+
+

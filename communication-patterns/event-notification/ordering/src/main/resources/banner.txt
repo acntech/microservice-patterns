@@ -7,3 +7,4 @@ ${AnsiColor.RED} | |  | || || (__ | |   | (_) |\__ \|  __/| |    \ V / | || (__ 
 ${AnsiColor.RED} \_|  |_/|_| \___||_|    \___/ |___/ \___||_|     \_/  |_| \___| \___|    \_|     \__,_| \__| \__| \___||_|   |_| |_||___/
 ${AnsiColor.RED}
 ${AnsiStyle.NORMAL}
+:: Spring Boot ::        ${spring-boot.formatted-version}

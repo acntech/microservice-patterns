@@ -1,15 +1,15 @@
 version: '3.5'
 
 services:
-  orders:
+  shipping:
     image: openjdk:8-jre-alpine
       container_name: event-notification-shipping
       ports:
-      - 9030:9030
+        - 9030:9030
       environment:
-      - SPRING_PROFILES_ACTIVE=default
+        - SPRING_PROFILES_ACTIVE=default
       networks:
-      - kafka
+        - kafka
 
 networks:
   kafka:

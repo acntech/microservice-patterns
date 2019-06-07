@@ -65,6 +65,7 @@
         "multer": "^1.4.1",
         "postcss-flexbugs-fixes": "^4.1.0",
         "postcss-loader": "^3.0.0",
+        "redux-devtools-extension": "^2.13.8",
         "source-map-loader": "^0.2.4",
         "style-loader": "^0.23.0",
         "ts-loader": "^5.0.0",

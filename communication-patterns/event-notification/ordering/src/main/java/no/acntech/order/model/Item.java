@@ -1,11 +1,21 @@
 package no.acntech.order.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "ITEMS")
 @Entity
@@ -48,10 +58,6 @@ public class Item {
 
     public UUID getReservationId() {
         return reservationId;
-    }
-
-    public void setReservationId(UUID reservationId) {
-        this.reservationId = reservationId;
     }
 
     public Long getQuantity() {
@@ -97,6 +103,7 @@ public class Item {
 
         private Long orderId;
         private UUID productId;
+        private UUID reservationId;
         private Long quantity;
 
         private Builder() {
@@ -112,6 +119,11 @@ public class Item {
             return this;
         }
 
+        public Builder reservationId(UUID reservationId) {
+            this.reservationId = reservationId;
+            return this;
+        }
+
         public Builder quantity(Long quantity) {
             this.quantity = quantity;
             return this;
@@ -121,6 +133,7 @@ public class Item {
             Item item = new Item();
             item.orderId = this.orderId;
             item.productId = this.productId;
+            item.reservationId = this.reservationId;
             item.quantity = this.quantity;
             return item;
         }
