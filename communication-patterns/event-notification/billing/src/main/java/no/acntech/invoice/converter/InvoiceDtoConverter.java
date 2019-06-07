@@ -14,6 +14,7 @@ public class InvoiceDtoConverter implements Converter<Invoice, InvoiceDto> {
     public InvoiceDto convert(@NonNull Invoice source) {
         return InvoiceDto.builder()
                 .invoiceId(source.getInvoiceId())
+                .customerId(source.getCustomerId())
                 .orderId(source.getOrderId())
                 .status(source.getStatus())
                 .created(source.getCreated())

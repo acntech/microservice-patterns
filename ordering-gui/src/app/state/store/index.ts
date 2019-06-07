@@ -1,6 +1,7 @@
 import { addLocaleData } from 'react-intl';
 import * as enLocaleData from 'react-intl/locale-data/en';
-import { applyMiddleware, createStore, Middleware } from 'redux';
+import { applyMiddleware, createStore, Middleware, StoreEnhancer } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
@@ -12,12 +13,16 @@ addLocaleData([
     ...enLocaleData
 ]);
 
-const middlewares: Middleware[] = [];
+let storeEnhancer: StoreEnhancer<RootState>;
+const middleware: Middleware[] = [];
 
-middlewares.push(thunk);
+middleware.push(thunk);
+
 if (process.env.NODE_ENV !== 'production') {
-    middlewares.push(logger);
-
+    middleware.push(logger);
+    storeEnhancer = composeWithDevTools(applyMiddleware(...middleware));
+} else {
+    storeEnhancer = applyMiddleware(...middleware);
 }
 
-export const store = createStore<RootState>(rootReducer, initialRootState, applyMiddleware(...middlewares));
+export const store = createStore<RootState>(rootReducer, initialRootState, storeEnhancer);

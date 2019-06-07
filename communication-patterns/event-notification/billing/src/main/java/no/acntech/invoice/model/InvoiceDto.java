@@ -10,6 +10,8 @@ public class InvoiceDto {
     @NotNull
     private UUID invoiceId;
     @NotNull
+    private UUID customerId;
+    @NotNull
     private UUID orderId;
     @NotNull
     private InvoiceStatus status;
@@ -19,6 +21,10 @@ public class InvoiceDto {
 
     public UUID getInvoiceId() {
         return invoiceId;
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
     }
 
     public UUID getOrderId() {
@@ -44,6 +50,7 @@ public class InvoiceDto {
     public static final class Builder {
 
         private UUID invoiceId;
+        private UUID customerId;
         private UUID orderId;
         private InvoiceStatus status;
         private ZonedDateTime created;
@@ -59,6 +66,11 @@ public class InvoiceDto {
 
         public Builder orderId(UUID orderId) {
             this.orderId = orderId;
+            return this;
+        }
+
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
             return this;
         }
 
@@ -80,6 +92,7 @@ public class InvoiceDto {
         public InvoiceDto build() {
             InvoiceDto invoiceDto = new InvoiceDto();
             invoiceDto.invoiceId = this.invoiceId;
+            invoiceDto.customerId = this.customerId;
             invoiceDto.orderId = this.orderId;
             invoiceDto.modified = this.modified;
             invoiceDto.status = this.status;

@@ -12,6 +12,8 @@ public class ShipmentDto {
     @NotNull
     private UUID shipmentId;
     @NotNull
+    private UUID customerId;
+    @NotNull
     private UUID orderId;
     @NotNull
     private ShipmentStatus status;
@@ -21,6 +23,10 @@ public class ShipmentDto {
 
     public UUID getShipmentId() {
         return shipmentId;
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
     }
 
     public UUID getOrderId() {
@@ -46,6 +52,7 @@ public class ShipmentDto {
     public static final class Builder {
 
         private UUID shipmentId;
+        private UUID customerId;
         private UUID orderId;
         private ShipmentStatus status;
         private ZonedDateTime created;
@@ -56,6 +63,11 @@ public class ShipmentDto {
 
         public Builder shipmentId(UUID shipmentId) {
             this.shipmentId = shipmentId;
+            return this;
+        }
+
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
             return this;
         }
 
@@ -81,11 +93,12 @@ public class ShipmentDto {
 
         public ShipmentDto build() {
             ShipmentDto shipmentDto = new ShipmentDto();
-            shipmentDto.modified = this.modified;
-            shipmentDto.orderId = this.orderId;
-            shipmentDto.created = this.created;
-            shipmentDto.status = this.status;
             shipmentDto.shipmentId = this.shipmentId;
+            shipmentDto.customerId = this.customerId;
+            shipmentDto.orderId = this.orderId;
+            shipmentDto.status = this.status;
+            shipmentDto.created = this.created;
+            shipmentDto.modified = this.modified;
             return shipmentDto;
         }
     }

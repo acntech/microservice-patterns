@@ -5,8 +5,7 @@ spring:
   profiles:
     include:
       - h2
-      - default
-      - test-data
+      - local
 
 # Logging
 logging:

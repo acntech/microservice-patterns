@@ -1,0 +1,16 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    ordering:
+      api:
+        url: http://localhost:9010/api
+
+########################
+# SPRING Configuration #
+########################
+spring:
+  kafka:
+    bootstrap-servers:
+      - localhost:9092

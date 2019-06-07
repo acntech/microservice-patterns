@@ -14,6 +14,7 @@ public class ShipmentDtoConverter implements Converter<Shipment, ShipmentDto> {
     public ShipmentDto convert(@NonNull final Shipment shipment) {
         return ShipmentDto.builder()
                 .shipmentId(shipment.getShipmentId())
+                .customerId(shipment.getCustomerId())
                 .orderId(shipment.getOrderId())
                 .status(shipment.getStatus())
                 .created(shipment.getCreated())

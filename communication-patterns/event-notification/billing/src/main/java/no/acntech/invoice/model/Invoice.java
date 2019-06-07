@@ -29,6 +29,9 @@ public class Invoice {
     private UUID invoiceId;
     @NotNull
     @Column(nullable = false)
+    private UUID customerId;
+    @NotNull
+    @Column(nullable = false)
     private UUID orderId;
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -47,16 +50,16 @@ public class Invoice {
         return invoiceId;
     }
 
+    public UUID getCustomerId() {
+        return customerId;
+    }
+
     public UUID getOrderId() {
         return orderId;
     }
 
     public InvoiceStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(InvoiceStatus status) {
-        this.status = status;
     }
 
     public ZonedDateTime getCreated() {
@@ -85,9 +88,15 @@ public class Invoice {
 
     public static final class Builder {
 
+        private UUID customerId;
         private UUID orderId;
 
         private Builder() {
+        }
+
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
+            return this;
         }
 
         public Builder orderId(UUID orderId) {
@@ -97,6 +106,7 @@ public class Invoice {
 
         public Invoice build() {
             Invoice invoice = new Invoice();
+            invoice.customerId = this.customerId;
             invoice.orderId = this.orderId;
             return invoice;
         }

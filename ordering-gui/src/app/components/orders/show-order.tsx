@@ -47,22 +47,22 @@ class ShowOrderComponent extends Component<ComponentProps> {
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button primary={createItemButtonActive}
-                            disabled={!createItemButtonActive}
-                            size="tiny" onClick={onCreateItemButtonClick}>
+                        disabled={!createItemButtonActive}
+                        size="tiny" onClick={onCreateItemButtonClick}>
                         <Icon name="dolly" /><FormattedMessage id="button.new-item.text" />
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button positive={confirmOrderButtonActive}
-                            disabled={!confirmOrderButtonActive}
-                            size="tiny" onClick={onConfirmOrderButtonClick}>
+                        disabled={!confirmOrderButtonActive}
+                        size="tiny" onClick={onConfirmOrderButtonClick}>
                         <Icon name="check" /><FormattedMessage id="button.confirm.text" />
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button negative={cancelOrderButtonActive}
-                            disabled={!cancelOrderButtonActive}
-                            size="tiny" onClick={onCancelOrderButtonClick}>
+                        disabled={!cancelOrderButtonActive}
+                        size="tiny" onClick={onCancelOrderButtonClick}>
                         <Icon name="delete" /><FormattedMessage id="button.cancel.text" />
                     </Button>
                 </ButtonGroup>
@@ -75,9 +75,9 @@ class ShowOrderComponent extends Component<ComponentProps> {
                 <OrderFragment order={order} />
 
                 <ShowItemList order={order}
-                              productState={productState}
-                              onTableRowClick={onTableRowClick}
-                              onFetchProducts={onFetchProducts} />
+                    productState={productState}
+                    onTableRowClick={onTableRowClick}
+                    onFetchProducts={onFetchProducts} />
             </Segment>
         );
     }
@@ -89,7 +89,9 @@ class ShowOrderComponent extends Component<ComponentProps> {
 
     private confirmOrderButtonActive = (): boolean => {
         const {order} = this.props;
-        return order.status === OrderStatus.PENDING && order.items.length > 0 && order.items.filter(i => i.status !== ItemStatus.RESERVED).length === 0;
+        return order.status === OrderStatus.PENDING &&
+            order.items.length > 0 &&
+            order.items.filter(i => i.status !== ItemStatus.RESERVED && i.status !== ItemStatus.CANCELED).length === 0;
     };
 
     private cancelOrderButtonActive = (): boolean => {

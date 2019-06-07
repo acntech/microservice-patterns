@@ -24,6 +24,7 @@ import no.acntech.order.model.CreateItemDto;
 import no.acntech.order.model.CreateOrderDto;
 import no.acntech.order.model.DeleteItemDto;
 import no.acntech.order.model.Item;
+import no.acntech.order.model.ItemStatus;
 import no.acntech.order.model.Order;
 import no.acntech.order.model.OrderDto;
 import no.acntech.order.model.OrderQuery;
@@ -134,11 +135,13 @@ public class OrderService {
     public OrderDto deleteOrder(@NotNull final UUID orderId) {
         Order order = getOrderByOrderId(orderId);
 
+        order.cancelOrder();
+
         order.getItems().stream()
                 .map(Item::getReservationId)
                 .forEach(reservationRestConsumer::delete);
 
-        LOGGER.debug("Delete order with order-id {}", orderId);
+        LOGGER.debug("Deleting order with order-id {}", orderId);
         orderEventProducer.publish(orderId);
 
         return convert(order);
@@ -224,6 +227,45 @@ public class OrderService {
         return convert(order);
     }
 
+    @Transactional
+    public Optional<UUID> updateItemReservation(@NotNull UUID reservationId, @NotNull Long quantity, @NotNull ItemStatus status) {
+        Optional<Item> exitingItem = itemRepository.findByReservationId(reservationId);
+
+        if (exitingItem.isPresent()) {
+            Item item = exitingItem.get();
+
+            Optional<Order> existingOrder = orderRepository.findById(item.getOrderId());
+
+            if (existingOrder.isPresent()) {
+                Order order = existingOrder.get();
+                UUID orderId = order.getOrderId();
+
+                item.setStatus(status);
+                item.setQuantity(quantity);
+
+                LOGGER.debug("Updating order item status to {} for order-id {} and reservation-id {}", status.name(), orderId, reservationId);
+
+                itemRepository.save(item);
+
+                OrderStatus orderStatus = nextOrderStatus(order);
+
+                if (OrderStatus.CONFIRMED.equals(orderStatus)) {
+                    LOGGER.debug("Updating order status to {} for order-id {}", orderStatus.name(), orderId);
+                    order.confirmOrder();
+                    orderRepository.save(order);
+                }
+
+                return Optional.of(orderId);
+            } else {
+                LOGGER.error("Could not find order for reservation-id {}", reservationId);
+                return Optional.empty();
+            }
+        } else {
+            LOGGER.error("Could not find order item for reservation-id {}", reservationId);
+            return Optional.empty();
+        }
+    }
+
     private Order getOrderByOrderId(final UUID orderId) {
         return orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
@@ -232,6 +274,24 @@ public class OrderService {
     private Item getItemByOrderAndProductId(final Order order, final UUID productId) {
         return itemRepository.findByOrderIdAndProductId(order.getId(), productId)
                 .orElseThrow(() -> new ItemNotFoundException(order.getOrderId(), productId));
+    }
+
+    private OrderStatus nextOrderStatus(final Order order) {
+        if (areAllActiveItemsConfirmed(order)) {
+            return OrderStatus.CONFIRMED;
+        } else {
+            return null;
+        }
+    }
+
+    private boolean areAllActiveItemsConfirmed(final Order order) {
+        List<Item> activeItems = order.getItems().stream()
+                .filter(activeItem -> !ItemStatus.CANCELED.equals(activeItem.getStatus()))
+                .collect(Collectors.toList());
+        boolean allActiveItemsConfirmed = activeItems.stream()
+                .map(Item::getStatus)
+                .allMatch(ItemStatus.CONFIRMED::equals);
+        return !activeItems.isEmpty() && allActiveItemsConfirmed;
     }
 
     private OrderDto convert(final Order order) {

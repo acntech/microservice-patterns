@@ -139,7 +139,7 @@ public class ReservationService {
             if (quantity != null) {
                 reservation.setQuantity(quantity);
             }
-            if (status != null) {
+            if (canUpdateStatus(reservation.getStatus())) {
                 reservation.setStatus(status);
             }
 
@@ -165,6 +165,10 @@ public class ReservationService {
         } else {
             throw new ReservationNotFoundException(reservationId);
         }
+    }
+
+    private boolean canUpdateStatus(ReservationStatus status) {
+        return status != null && status != ReservationStatus.CANCELED && status != ReservationStatus.CONFIRMED;
     }
 
     private ReservationDto convert(final Reservation reservation) {

@@ -32,10 +32,26 @@ public class ShipmentService {
 
     @SuppressWarnings("Duplicates")
     public List<ShipmentDto> findShipments(final ShipmentQuery shipmentQuery) {
+        UUID customerId = shipmentQuery.getCustomerId();
         UUID orderId = shipmentQuery.getOrderId();
         ShipmentStatus status = shipmentQuery.getStatus();
-        if (orderId != null && status != null) {
+        if (customerId != null && orderId != null && status != null) {
+            return shipmentRepository.findAllByCustomerIdAndOrderIdAndStatus(customerId, orderId, status)
+                    .stream()
+                    .map(this::convert)
+                    .collect(Collectors.toList());
+        } else if (customerId != null && status != null) {
+            return shipmentRepository.findAllByCustomerIdAndStatus(customerId, status)
+                    .stream()
+                    .map(this::convert)
+                    .collect(Collectors.toList());
+        } else if (orderId != null && status != null) {
             return shipmentRepository.findAllByOrderIdAndStatus(orderId, status)
+                    .stream()
+                    .map(this::convert)
+                    .collect(Collectors.toList());
+        } else if (customerId != null) {
+            return shipmentRepository.findAllByCustomerId(customerId)
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());

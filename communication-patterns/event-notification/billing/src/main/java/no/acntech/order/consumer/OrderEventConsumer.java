@@ -49,9 +49,9 @@ public class OrderEventConsumer {
     private void consume(final ConsumerRecord<String, OrderEvent> record) {
         final OrderEvent orderEvent = record.value();
         if (orderEvent == null) {
-            LOGGER.error("Received order event which was null");
+            LOGGER.error("Received order event which was null from topic {}", KafkaTopic.ORDERS.getName());
         } else {
-            LOGGER.debug("Received order event with order-id {}", orderEvent.getOrderId());
+            LOGGER.debug("Received order event with order-id {} from topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS.getName());
             orderService.receiveOrderEvent(orderEvent);
         }
     }
