@@ -1,0 +1,21 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  application:
+    name: oauth2-token-relay-microservice
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      adjust-dates-to-context-time-zone: false
+  jmx:
+    enabled: false
+  aop:
+    proxy-target-class: true
+
+# Server
+server:
+  port: 8010
