@@ -1,4 +1,4 @@
-import {SemanticCOLORS} from "semantic-ui-react";
+import { SemanticCOLORS } from 'semantic-ui-react';
 
 export enum ItemStatus {
     PENDING = 'PENDING',
@@ -34,6 +34,12 @@ export const getItemStatusLabelColor = (status: ItemStatus): SemanticCOLORS => {
         }
     }
 };
+
+export enum GetItemActionType {
+    LOADING = '[items] GET LOADING',
+    SUCCESS = '[items] GET SUCCESS',
+    ERROR = '[items] GET ERROR'
+}
 
 export enum CreateItemActionType {
     LOADING = '[items] CREATE LOADING',

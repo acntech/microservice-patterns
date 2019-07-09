@@ -1,28 +1,9 @@
 import axios from 'axios';
 
 import {
-    CreateOrder,
-    CreateOrderActionType,
-    CreateOrderErrorAction,
-    CreateOrderLoadingAction,
-    CreateOrderSuccessAction,
-    DeleteOrderActionType,
-    DeleteOrderErrorAction,
-    DeleteOrderLoadingAction,
-    DeleteOrderSuccessAction,
-    FindOrdersActionType,
-    FindOrdersErrorAction,
-    FindOrdersLoadingAction,
-    FindOrdersSuccessAction,
-    GetOrderActionType,
-    GetOrderErrorAction,
-    GetOrderLoadingAction,
-    GetOrderSuccessAction,
-    Order,
-    UpdateOrderActionType,
-    UpdateOrderErrorAction,
-    UpdateOrderLoadingAction,
-    UpdateOrderSuccessAction
+    CreateOrder, CreateOrderActionType, CreateOrderErrorAction, CreateOrderLoadingAction, CreateOrderSuccessAction, DeleteOrderActionType, DeleteOrderErrorAction, DeleteOrderLoadingAction,
+    DeleteOrderSuccessAction, FindOrdersActionType, FindOrdersErrorAction, FindOrdersLoadingAction, FindOrdersSuccessAction, GetOrderActionType, GetOrderErrorAction, GetOrderLoadingAction,
+    GetOrderSuccessAction, Order, UpdateOrderActionType, UpdateOrderErrorAction, UpdateOrderLoadingAction, UpdateOrderSuccessAction
 } from '../../models';
 import { showError, showSuccess } from '../actions';
 
@@ -39,11 +20,11 @@ const createOrderSuccess = (headers: any): CreateOrderSuccessAction => ({type: C
 const createOrderError = (error: any): CreateOrderErrorAction => ({type: CreateOrderActionType.ERROR, error});
 
 const updateOrderLoading = (loading: boolean): UpdateOrderLoadingAction => ({type: UpdateOrderActionType.LOADING, loading});
-const updateOrderSuccess = (payload: any): UpdateOrderSuccessAction => ({type: UpdateOrderActionType.SUCCESS, payload});
+const updateOrderSuccess = (orderId: string): UpdateOrderSuccessAction => ({type: UpdateOrderActionType.SUCCESS, orderId});
 const updateOrderError = (error: any): UpdateOrderErrorAction => ({type: UpdateOrderActionType.ERROR, error});
 
 const deleteOrderLoading = (loading: boolean): DeleteOrderLoadingAction => ({type: DeleteOrderActionType.LOADING, loading});
-const deleteOrderSuccess = (payload: any): DeleteOrderSuccessAction => ({type: DeleteOrderActionType.SUCCESS, payload});
+const deleteOrderSuccess = (orderId: string): DeleteOrderSuccessAction => ({type: DeleteOrderActionType.SUCCESS, orderId});
 const deleteOrderError = (error: any): DeleteOrderErrorAction => ({type: DeleteOrderActionType.ERROR, error});
 
 const rootPath = '/api/orders';
@@ -105,9 +86,9 @@ export function updateOrder(orderId: string) {
         dispatch(updateOrderLoading(true));
         const url = `${rootPath}/${orderId}`;
         return axios.put(url)
-            .then((response) => {
+            .then(() => {
                 dispatch(showSuccess('Order updated successfully'));
-                return dispatch(updateOrderSuccess(response.data));
+                return dispatch(updateOrderSuccess(orderId));
             })
             .catch((error) => {
                 const {data} = error.response;
@@ -123,9 +104,9 @@ export function deleteOrder(orderId: string) {
         dispatch(deleteOrderLoading(true));
         const url = `${rootPath}/${orderId}`;
         return axios.delete(url)
-            .then((response) => {
+            .then(() => {
                 dispatch(showSuccess('Order deleted successfully'));
-                return dispatch(deleteOrderSuccess(response.data));
+                return dispatch(deleteOrderSuccess(orderId));
             })
             .catch((error) => {
                 const {data} = error.response;

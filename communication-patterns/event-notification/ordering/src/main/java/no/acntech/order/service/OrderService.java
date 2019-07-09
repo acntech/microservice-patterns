@@ -22,8 +22,8 @@ import no.acntech.order.exception.OrderNotFoundException;
 import no.acntech.order.exception.ReservationIdNotReceivedException;
 import no.acntech.order.model.CreateItemDto;
 import no.acntech.order.model.CreateOrderDto;
-import no.acntech.order.model.DeleteItemDto;
 import no.acntech.order.model.Item;
+import no.acntech.order.model.ItemDto;
 import no.acntech.order.model.ItemStatus;
 import no.acntech.order.model.Order;
 import no.acntech.order.model.OrderDto;
@@ -109,7 +109,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto updateOrder(@NotNull final UUID orderId) {
+    public void updateOrder(@NotNull final UUID orderId) {
         Order order = getOrderByOrderId(orderId);
 
         order.getItems().stream()
@@ -118,21 +118,10 @@ public class OrderService {
 
         LOGGER.debug("Updated order with order-id {}", orderId);
         orderEventProducer.publish(orderId);
-
-        return convert(order);
-    }
-
-    private void confirmReservation(UUID reservationId) {
-        final UpdateReservationDto updateReservation = UpdateReservationDto.builder()
-                .statusConfirmed()
-                .build();
-
-        LOGGER.debug("Updating reservation status to {} for reservation-id {}", updateReservation.getStatus().name(), reservationId);
-        reservationRestConsumer.update(reservationId, updateReservation);
     }
 
     @Transactional
-    public OrderDto deleteOrder(@NotNull final UUID orderId) {
+    public void deleteOrder(@NotNull final UUID orderId) {
         Order order = getOrderByOrderId(orderId);
 
         order.cancelOrder();
@@ -143,8 +132,16 @@ public class OrderService {
 
         LOGGER.debug("Deleting order with order-id {}", orderId);
         orderEventProducer.publish(orderId);
+    }
 
-        return convert(order);
+    public ItemDto getItem(@NotNull final UUID itemId) {
+        Item item = getItemByItemId(itemId);
+        Order order = getOrderById(item.getOrderId());
+        OrderDto orderDto = convert(order);
+        return orderDto.getItems().stream()
+                .filter(itemDto -> itemDto.getItemId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new ItemNotFoundException(itemId));
     }
 
     @Transactional
@@ -190,12 +187,12 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto updateItem(@NotNull final UUID orderId, @Valid final UpdateItemDto updateItem) {
-        UUID productId = updateItem.getProductId();
+    public void updateItem(@NotNull final UUID itemId, @Valid final UpdateItemDto updateItem) {
+        Item item = getItemByItemId(itemId);
+        Order order = getOrderById(item.getOrderId());
 
-        Order order = getOrderByOrderId(orderId);
-        Item item = getItemByOrderAndProductId(order, productId);
-
+        UUID orderId = order.getOrderId();
+        UUID productId = item.getProductId();
         UUID reservationId = item.getReservationId();
         Long quantity = updateItem.getQuantity();
 
@@ -206,25 +203,21 @@ public class OrderService {
 
         LOGGER.debug("Updated order item for order-id {} and product-id {}", orderId, productId);
         orderEventProducer.publish(orderId);
-
-        return convert(order);
     }
 
     @Transactional
-    public OrderDto deleteItem(@NotNull final UUID orderId, @Valid final DeleteItemDto deleteItemDto) {
-        UUID productId = deleteItemDto.getProductId();
+    public void deleteItem(@NotNull final UUID itemId) {
+        Item item = getItemByItemId(itemId);
+        Order order = getOrderById(item.getOrderId());
 
-        Order order = getOrderByOrderId(orderId);
-        Item item = getItemByOrderAndProductId(order, productId);
-
+        UUID orderId = order.getOrderId();
+        UUID productId = item.getProductId();
         UUID reservationId = item.getReservationId();
 
         reservationRestConsumer.delete(reservationId);
 
         LOGGER.debug("Deleted order item with product-id {} for order-id {}", orderId, productId);
         orderEventProducer.publish(orderId);
-
-        return convert(order);
     }
 
     @Transactional
@@ -266,14 +259,19 @@ public class OrderService {
         }
     }
 
+    private Order getOrderById(final Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+    }
+
     private Order getOrderByOrderId(final UUID orderId) {
         return orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
-    private Item getItemByOrderAndProductId(final Order order, final UUID productId) {
-        return itemRepository.findByOrderIdAndProductId(order.getId(), productId)
-                .orElseThrow(() -> new ItemNotFoundException(order.getOrderId(), productId));
+    private Item getItemByItemId(final UUID itemId) {
+        return itemRepository.findByItemId(itemId)
+                .orElseThrow(() -> new ItemNotFoundException(itemId));
     }
 
     private OrderStatus nextOrderStatus(final Order order) {
@@ -282,6 +280,15 @@ public class OrderService {
         } else {
             return null;
         }
+    }
+
+    private void confirmReservation(UUID reservationId) {
+        final UpdateReservationDto updateReservation = UpdateReservationDto.builder()
+                .statusConfirmed()
+                .build();
+
+        LOGGER.debug("Updating reservation status to {} for reservation-id {}", updateReservation.getStatus().name(), reservationId);
+        reservationRestConsumer.update(reservationId, updateReservation);
     }
 
     private boolean areAllActiveItemsConfirmed(final Order order) {

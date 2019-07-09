@@ -21,9 +21,9 @@ export default {
     'error.order-not-found.header.text': 'No order found',
     'error.order-not-found.content.text': 'Could not find order for ID {orderId}',
     'error.item-not-found.header.text': 'No order item found',
-    'error.item-not-found.content.text': 'Could not find order item for order-id {orderId} and product-id {productId}',
+    'error.item-not-found.content.text': 'Could not find order item for ID {itemId}',
     'error.product-not-found.header.text': 'No product found',
-    'error.product-not-found.content.text': 'Could not find product for product-id {productId}',
+    'error.product-not-found.content.text': 'Could not find product for item-id {itemId}',
 
     'form.validation.order-name.min-length.text': 'Order name must be at least {length} characters long',
     'form.validation.order-name.max-length.text': 'Order name cannot be over {length} characters long',

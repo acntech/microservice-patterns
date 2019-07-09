@@ -19,10 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import no.acntech.order.model.CreateItemDto;
 import no.acntech.order.model.CreateOrderDto;
-import no.acntech.order.model.DeleteItemDto;
 import no.acntech.order.model.OrderDto;
 import no.acntech.order.model.OrderQuery;
-import no.acntech.order.model.UpdateItemDto;
 import no.acntech.order.service.OrderService;
 
 @SuppressWarnings("Duplicates")
@@ -60,15 +58,15 @@ public class OrdersResource {
     }
 
     @PutMapping(path = "{orderId}")
-    public ResponseEntity<OrderDto> put(@PathVariable("orderId") final UUID orderId) {
-        OrderDto order = orderService.updateOrder(orderId);
-        return ResponseEntity.ok(order);
+    public ResponseEntity put(@PathVariable("orderId") final UUID orderId) {
+        orderService.updateOrder(orderId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "{orderId}")
-    public ResponseEntity<OrderDto> delete(@PathVariable("orderId") final UUID orderId) {
-        OrderDto order = orderService.deleteOrder(orderId);
-        return ResponseEntity.ok(order);
+    public ResponseEntity delete(@PathVariable("orderId") final UUID orderId) {
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path = "{orderId}/items")
@@ -81,19 +79,5 @@ public class OrdersResource {
                 .buildAndExpand(order.getOrderId())
                 .toUri();
         return ResponseEntity.created(location).build();
-    }
-
-    @PutMapping(path = "{orderId}/items")
-    public ResponseEntity<OrderDto> putItem(@PathVariable("orderId") final UUID orderId,
-                                            @Valid @RequestBody final UpdateItemDto updateItem) {
-        OrderDto order = orderService.updateItem(orderId, updateItem);
-        return ResponseEntity.ok(order);
-    }
-
-    @DeleteMapping(path = "{orderId}/items")
-    public ResponseEntity<OrderDto> deleteItem(@PathVariable("orderId") final UUID orderId,
-                                               @Valid @RequestBody final DeleteItemDto deleteItemDto) {
-        OrderDto order = orderService.deleteItem(orderId, deleteItemDto);
-        return ResponseEntity.ok(order);
     }
 }

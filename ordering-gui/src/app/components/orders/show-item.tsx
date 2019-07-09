@@ -10,12 +10,13 @@ interface ComponentProps {
     product: Product;
     onBackButtonClick: () => void;
     onDeleteButtonClick: () => void;
+    onRefreshButtonClick: () => void;
 }
 
 class ShowItemComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
-        const {item, product, onBackButtonClick, onDeleteButtonClick} = this.props;
+        const {item, product, onBackButtonClick, onDeleteButtonClick, onRefreshButtonClick} = this.props;
         const {productId, quantity, status} = item;
         const {name, description, price, currency} = product;
 
@@ -36,6 +37,11 @@ class ShowItemComponent extends Component<ComponentProps> {
                         size="tiny"
                         onClick={onDeleteButtonClick}>
                         <Icon name="delete" /><FormattedMessage id="button.delete.text" />
+                    </Button>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Button secondary size='tiny' onClick={onRefreshButtonClick}>
+                        <Icon name="redo" /><FormattedMessage id="button.refresh.text" />
                     </Button>
                 </ButtonGroup>
                 <Table celled>

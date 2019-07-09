@@ -1,15 +1,12 @@
-import {CreateItemActionType, DeleteItemActionType, Entity, Error, ItemStatus, Modified} from '../';
+import { CreateItemActionType, DeleteItemActionType, Entity, Error, GetItemActionType, ItemStatus, Modified } from '../';
 
 export interface CreateItem {
     productId: string;
     quantity: number;
 }
 
-export interface DeleteItem {
-    productId: string;
-}
-
 export interface Item extends Entity {
+    itemId: string;
     orderId: string;
     productId: string;
     quantity: number;
@@ -18,8 +15,24 @@ export interface Item extends Entity {
 
 export interface ItemState {
     loading: boolean;
+    items: Item[];
     error?: Error;
     modified?: Modified;
+}
+
+export interface GetItemLoadingAction {
+    type: GetItemActionType.LOADING,
+    loading: boolean
+}
+
+export interface GetItemSuccessAction {
+    type: GetItemActionType.SUCCESS,
+    payload: Item
+}
+
+export interface GetItemErrorAction {
+    type: GetItemActionType.ERROR,
+    error: any
 }
 
 export interface CreateItemLoadingAction {
@@ -44,7 +57,7 @@ export interface DeleteItemLoadingAction {
 
 export interface DeleteItemSuccessAction {
     type: DeleteItemActionType.SUCCESS,
-    orderId: string
+    itemId: string
 }
 
 export interface DeleteItemErrorAction {
@@ -52,7 +65,8 @@ export interface DeleteItemErrorAction {
     error: any
 }
 
+export type GetItemAction = GetItemLoadingAction | GetItemSuccessAction | GetItemErrorAction;
 export type CreateItemAction = CreateItemLoadingAction | CreateItemSuccessAction | CreateItemErrorAction;
 export type DeleteItemAction = DeleteItemLoadingAction | DeleteItemSuccessAction | DeleteItemErrorAction;
 
-export type ItemAction = CreateItemAction | DeleteItemAction;
+export type ItemAction = GetItemAction | CreateItemAction | DeleteItemAction;

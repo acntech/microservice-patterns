@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Table(name = "ITEMS")
 @Entity
 public class Item {
@@ -27,6 +25,9 @@ public class Item {
     @NotNull
     @Column(nullable = false)
     private Long orderId;
+    @NotNull
+    @Column(nullable = false)
+    private UUID itemId;
     @NotNull
     @Column(nullable = false)
     private UUID productId;
@@ -43,13 +44,16 @@ public class Item {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
-    @JsonIgnore
     public Long getId() {
         return id;
     }
 
     public Long getOrderId() {
         return orderId;
+    }
+
+    public UUID getItemId() {
+        return itemId;
     }
 
     public UUID getProductId() {
@@ -86,6 +90,7 @@ public class Item {
 
     @PrePersist
     private void prePersist() {
+        itemId = UUID.randomUUID();
         status = ItemStatus.PENDING;
         created = ZonedDateTime.now();
     }

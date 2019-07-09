@@ -75,7 +75,7 @@ export interface UpdateOrderLoadingAction {
 
 export interface UpdateOrderSuccessAction {
     type: UpdateOrderActionType.SUCCESS,
-    payload: Order
+    orderId: string
 }
 
 export interface UpdateOrderErrorAction {
@@ -90,7 +90,7 @@ export interface DeleteOrderLoadingAction {
 
 export interface DeleteOrderSuccessAction {
     type: DeleteOrderActionType.SUCCESS,
-    payload: Order
+    orderId: string
 }
 
 export interface DeleteOrderErrorAction {
