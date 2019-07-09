@@ -21,7 +21,7 @@ class RootContainer extends Component<{}> {
         return (
             <BrowserRouter>
                 <Switch>
-                    <Route path="/orders/:orderId?/items/:productId?" exact component={ItemContainer}/>
+                    <Route path="/orders/:orderId?/items/:itemId?" exact component={ItemContainer}/>
                     <Route path="/orders/:orderId?/create" exact component={CreateItemContainer}/>
                     <Route path="/orders/:orderId?" exact component={OrderContainer}/>
                     <Route path="/create" exact component={CreateOrderContainer}/>

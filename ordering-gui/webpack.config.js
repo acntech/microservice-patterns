@@ -16,6 +16,7 @@ const indexFile = path.resolve(__dirname, publicDir, 'index.html');
 const customersApiServerUrl = process.env.CUSTOMERS_API_URL || 'http://localhost:9000';
 const productsApiServerUrl = process.env.PRODUCTS_API_URL || 'http://localhost:9040';
 const ordersApiServerUrl = process.env.ORDERS_API_URL || 'http://localhost:9010';
+const itemsApiServerUrl = process.env.ITEMS_API_URL || 'http://localhost:9010';
 const reservationsApiServerUrl = process.env.RESERVATIONS_API_URL || 'http://localhost:9040';
 const devServerHost = process.env.NODE_PUBLIC_HOST || 'localhost:3000';
 
@@ -98,6 +99,7 @@ module.exports = {
             '/api/customers': customersApiServerUrl,
             '/api/products': productsApiServerUrl,
             '/api/orders': ordersApiServerUrl,
+            '/api/items': itemsApiServerUrl,
             '/api/reservations': reservationsApiServerUrl
         },
         open: false

@@ -28,7 +28,8 @@ export const initialOrderState: OrderState = {
 };
 
 export const initialItemState: ItemState = {
-    loading: false
+    loading: false,
+    items: []
 };
 
 export const initialRootState: RootState = {

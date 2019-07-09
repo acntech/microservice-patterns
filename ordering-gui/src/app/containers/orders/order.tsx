@@ -30,7 +30,7 @@ interface ComponentState {
     back: boolean;
     createItem: boolean;
     order?: Order;
-    productId?: string;
+    itemId?: string;
 }
 
 const initialState: ComponentState = {
@@ -67,14 +67,14 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
     public render(): ReactNode {
         const {orderId} = this.props.match.params;
         const {loading} = this.props.orderState;
-        const {back, createItem, order, productId} = this.state;
+        const {back, createItem, order, itemId} = this.state;
 
         if (back) {
             return <Redirect to="/" />;
         } else if (createItem) {
             return <Redirect to={`/orders/${orderId}/create`} />;
-        } else if (productId) {
-            return <Redirect to={`/orders/${orderId}/items/${productId}`} />;
+        } else if (itemId) {
+            return <Redirect to={`/orders/${orderId}/items/${itemId}`} />;
         } else if (loading) {
             return <LoadingIndicator />;
         } else if (!order) {
@@ -93,14 +93,14 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
                     <PrimaryHeader />
                     <SecondaryHeader />
                     <ShowOrder order={order}
-                               productState={this.props.productState}
-                               onBackButtonClick={this.onBackButtonClick}
-                               onCreateItemButtonClick={this.onCreateItemButtonClick}
-                               onConfirmOrderButtonClick={this.onConfirmOrderButtonClick}
-                               onCancelOrderButtonClick={this.onCancelOrderButtonClick}
-                               onRefreshOrderButtonClick={this.onRefreshOrderButtonClick}
-                               onTableRowClick={this.onTableRowClick}
-                               onFetchProducts={this.onFetchProducts} />
+                        productState={this.props.productState}
+                        onBackButtonClick={this.onBackButtonClick}
+                        onCreateItemButtonClick={this.onCreateItemButtonClick}
+                        onConfirmOrderButtonClick={this.onConfirmOrderButtonClick}
+                        onCancelOrderButtonClick={this.onCancelOrderButtonClick}
+                        onRefreshOrderButtonClick={this.onRefreshOrderButtonClick}
+                        onTableRowClick={this.onTableRowClick}
+                        onFetchProducts={this.onFetchProducts} />
                 </Container>
             );
         }
@@ -147,8 +147,8 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         this.props.getOrder(orderId);
     };
 
-    private onTableRowClick = (productId: string) => {
-        this.setState({productId: productId});
+    private onTableRowClick = (itemId: string) => {
+        this.setState({itemId: itemId});
     };
 
     private onFetchProducts = () => {

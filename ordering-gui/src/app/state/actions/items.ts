@@ -1,32 +1,46 @@
 import axios from 'axios';
 
 import {
-    CreateItem,
-    CreateItemActionType,
-    CreateItemErrorAction,
-    CreateItemLoadingAction,
-    CreateItemSuccessAction, DeleteItem,
-    DeleteItemActionType,
-    DeleteItemErrorAction,
-    DeleteItemLoadingAction,
-    DeleteItemSuccessAction
+    CreateItem, CreateItemActionType, CreateItemErrorAction, CreateItemLoadingAction, CreateItemSuccessAction, DeleteItemActionType, DeleteItemErrorAction, DeleteItemLoadingAction,
+    DeleteItemSuccessAction, GetItemActionType, GetItemErrorAction, GetItemLoadingAction, GetItemSuccessAction, Item
 } from '../../models';
 import { showError, showSuccess } from '../actions';
+
+const getItemLoading = (loading: boolean): GetItemLoadingAction => ({type: GetItemActionType.LOADING, loading});
+const getItemSuccess = (payload: Item): GetItemSuccessAction => ({type: GetItemActionType.SUCCESS, payload});
+const getItemError = (error: any): GetItemErrorAction => ({type: GetItemActionType.ERROR, error});
 
 const createItemLoading = (loading: boolean): CreateItemLoadingAction => ({type: CreateItemActionType.LOADING, loading});
 const createItemSuccess = (headers: any): CreateItemSuccessAction => ({type: CreateItemActionType.SUCCESS, headers});
 const createItemError = (error: any): CreateItemErrorAction => ({type: CreateItemActionType.ERROR, error});
 
 const deleteItemLoading = (loading: boolean): DeleteItemLoadingAction => ({type: DeleteItemActionType.LOADING, loading});
-const deleteItemSuccess = (orderId: string): DeleteItemSuccessAction => ({type: DeleteItemActionType.SUCCESS, orderId});
+const deleteItemSuccess = (itemId: string): DeleteItemSuccessAction => ({type: DeleteItemActionType.SUCCESS, itemId});
 const deleteItemError = (error: any): DeleteItemErrorAction => ({type: DeleteItemActionType.ERROR, error});
 
-const rootPath = '/api/orders';
+const rootPath = '/api';
+
+export function getItem(itemId: string) {
+    return (dispatch) => {
+        dispatch(getItemLoading(true));
+        const url = `${rootPath}/items/${itemId}`;
+        return axios.get(url)
+            .then((response) => {
+                return dispatch(getItemSuccess(response.data));
+            })
+            .catch((error) => {
+                const {data} = error.response;
+                const message = data && data.message;
+                dispatch(showError('Error getting item', message, true));
+                return dispatch(getItemError(error));
+            });
+    };
+}
 
 export function createItem(orderId: string, item: CreateItem) {
     return (dispatch) => {
         dispatch(createItemLoading(true));
-        const url = `${rootPath}/${orderId}/items`;
+        const url = `${rootPath}/orders/${orderId}/items`;
         return axios.post(url, item)
             .then((response) => {
                 dispatch(showSuccess('Item created successfully'));
@@ -41,14 +55,14 @@ export function createItem(orderId: string, item: CreateItem) {
     };
 }
 
-export function deleteItem(orderId: string, item: DeleteItem) {
+export function deleteItem(itemId: string) {
     return (dispatch) => {
         dispatch(deleteItemLoading(true));
-        const url = `${rootPath}/${orderId}/items`;
-        return axios.delete(url, {data: item})
-            .then((response) => {
+        const url = `${rootPath}/items/${itemId}`;
+        return axios.delete(url)
+            .then(() => {
                 dispatch(showSuccess('Item deleted successfully'));
-                return dispatch(deleteItemSuccess(orderId));
+                return dispatch(deleteItemSuccess(itemId));
             })
             .catch((error) => {
                 const {data} = error.response;

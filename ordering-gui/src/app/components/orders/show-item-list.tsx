@@ -14,6 +14,7 @@ interface ComponentProps {
 }
 
 interface ShowItem {
+    itemId: string;
     productId: string;
     name?: string;
     quantity: number;
@@ -49,11 +50,11 @@ class ShowItemListComponent extends Component<ComponentProps> {
                     </Table.Header>
                     <Table.Body>
                         {showItems.map((item, index) => {
-                            const {productId, name, quantity, status, statusColor} = item;
+                            const {itemId, productId, name, quantity, status, statusColor} = item;
 
                             return (
                                 <Table.Row key={index} className="clickable-table-row"
-                                           onClick={() => onTableRowClick(productId)}>
+                                    onClick={() => onTableRowClick(itemId)}>
                                     <Table.Cell>{productId}</Table.Cell>
                                     <Table.Cell>{name || 'N/A'}</Table.Cell>
                                     <Table.Cell>{quantity}</Table.Cell>
@@ -73,6 +74,7 @@ class ShowItemListComponent extends Component<ComponentProps> {
 
     private enrichItem = (item: Item): ShowItem => {
         return {
+            itemId: item.itemId,
             productId: item.productId,
             name: this.findProductName(item.productId),
             quantity: item.quantity,
