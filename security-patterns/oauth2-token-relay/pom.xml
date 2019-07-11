@@ -15,7 +15,7 @@
 
     <!-- MODULES -->
     <modules>
-        <module>microservice</module>
+        <module>ordering-service</module>
         <module>ui-api</module>
     </modules>
 </project>

@@ -16,6 +16,15 @@ spring:
   aop:
     proxy-target-class: true
 
+# Logging
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
+
 # Server
 server:
   port: 8010

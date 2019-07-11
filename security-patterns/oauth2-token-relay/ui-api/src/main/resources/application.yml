@@ -3,10 +3,18 @@
 #########################
 acntech:
   service:
-    microservice:
-      api:
-        reservations:
-          url: ${acntech.service.warehouse.api.url}/reservations
+    orders:
+      url: http://localhost:9010/api/orders
+    items:
+      url: http://localhost:9010/api/items
+    products:
+      url: http://localhost:9040/api/products
+    reservations:
+      url: http://localhost:9040/api/reservations
+  security:
+    login-page: /oauth2/authorization/ui-api
+    failure-url: http://localhost:3000?error
+    logout-success-url: http://localhost:8888/uaa/logout.do?client_id=ui-api&redirect=http://localhost:3000
 
 ########################
 # SPRING Configuration #
@@ -25,7 +33,43 @@ spring:
     enabled: false
   aop:
     proxy-target-class: true
+  security:
+    oauth2:
+      client:
+        registration:
+          ui:
+            provider: uaa
+            client-id: ui
+            client-secret: nzSX99Qg
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - openid
+              - profile
+              - email
+          ui-api:
+            provider: uaa
+            client-id: ui-api
+            client-secret: 0kX3bvZe
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          uaa:
+            issuer-uri: http://localhost:8888/uaa/oauth/token
+
+# Logging
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
 
 # Server
 server:
   port: 8000
+  servlet:
+    context-path: /api

@@ -18,20 +18,27 @@ oauth:
       - approvals.me
       - oauth.approvals
   clients:
+    ui:
+      name: UI
+      secret: nzSX99Qg
+      authorized-grant-types: authorization_code
+      scope: openid,profile,email
+      authorities: uaa.resource
+      redirect-uri: http://localhost:3000/api/login/oauth2/code/ui
     ui-api:
       name: UI API
       secret: 0kX3bvZe
       authorized-grant-types: authorization_code
       scope: openid,profile,email
       authorities: uaa.resource
-      redirect-uri: http://localhost:8000/login/oauth2/code/login-client
-    client-a:
-      name: Client A
-      secret: secret
+      redirect-uri: http://localhost:8000/api/login/oauth2/code/ui-api
+    microservice:
+      name: microservice
+      secret: 0kX3bvZe
       authorized-grant-types: authorization_code
-      scope: authority-a
+      scope: read:orders
       authorities: uaa.resource
-      redirect-uri: http://localhost:8080/flow-a
+      redirect-uri: http://localhost:3000/?microservice
     client-ab:
       name: Client AB
       secret: secret

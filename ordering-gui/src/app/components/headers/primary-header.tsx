@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Header, Icon, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
+import { globalConfig } from '../../core/config';
 import { CustomerState, RootState } from '../../models';
 import { logoutCustomer } from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
@@ -52,12 +53,12 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
         const {title, subtitle, customerState, intl} = this.props;
         const {user} = customerState;
 
-        if (!user) {
+        if (globalConfig.enableSimpleLogin && !user) {
             return <Redirect to="/login" />;
         } else {
             document.title = this.browserTitle();
             const logoutButtonText = intl.formatMessage({id: 'button.logout.text'});
-            const {firstName, lastName} = user;
+            const {firstName, lastName} = user || {firstName: 'N/A', lastName: 'N/A'};
             const name = `${firstName} ${lastName}`;
 
             return (
