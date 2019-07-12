@@ -49,6 +49,7 @@
 
     <!-- MODULES -->
     <modules>
+        <module>ui-gateway</module>
         <module>documentation</module>
         <module>communication-patterns</module>
         <module>reliability-patterns</module>

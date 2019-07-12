@@ -1,7 +1,7 @@
 {
-    "name": "ordering-gui",
+    "name": "ui-ordering",
     "version": "1.0.0",
-    "description": "Ordering GUI",
+    "description": "Ordering UI",
     "author": "Thomas Johansen <thomas.johansen@accenture.com>",
     "license": "Apache-2.0",
     "private": true,
