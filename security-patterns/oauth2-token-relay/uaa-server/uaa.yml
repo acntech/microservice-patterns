@@ -31,7 +31,7 @@ oauth:
       authorized-grant-types: authorization_code
       scope: openid,profile,email
       authorities: uaa.resource
-      redirect-uri: http://localhost:8000/api/login/oauth2/code/ui-api
+      redirect-uri: http://localhost:3000/api/login/oauth2/code/ui-api
     microservice:
       name: microservice
       secret: 0kX3bvZe
@@ -156,8 +156,8 @@ login:
 
 database:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://database:5432/iam
-  username: iam
+  url: jdbc:postgresql://database:5432/uaa
+  username: uaa
   password: hS9y05zA
 
 spring_profiles: default,postgresql

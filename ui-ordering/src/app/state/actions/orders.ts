@@ -1,4 +1,4 @@
-import axios from 'axios';
+import client from '../../core/client';
 
 import {
     CreateOrder, CreateOrderActionType, CreateOrderErrorAction, CreateOrderLoadingAction, CreateOrderSuccessAction, DeleteOrderActionType, DeleteOrderErrorAction, DeleteOrderLoadingAction,
@@ -27,13 +27,13 @@ const deleteOrderLoading = (loading: boolean): DeleteOrderLoadingAction => ({typ
 const deleteOrderSuccess = (orderId: string): DeleteOrderSuccessAction => ({type: DeleteOrderActionType.SUCCESS, orderId});
 const deleteOrderError = (error: any): DeleteOrderErrorAction => ({type: DeleteOrderActionType.ERROR, error});
 
-const rootPath = '/api/orders';
+const rootPath = 'orders';
 
 export function getOrder(orderId: string) {
     return (dispatch) => {
         dispatch(getOrderLoading(true));
         const url = `${rootPath}/${orderId}`;
-        return axios.get(url)
+        return client.get(url)
             .then((response) => {
                 return dispatch(getOrderSuccess(response.data));
             })
@@ -50,7 +50,7 @@ export function findOrders(orderName?: string) {
     return (dispatch) => {
         dispatch(findOrdersLoading(true));
         const url = name ? `${rootPath}?name=${orderName}` : rootPath;
-        return axios.get(url)
+        return client.get(url)
             .then((response) => {
                 return dispatch(findOrdersSuccess(response.data));
             })
@@ -67,7 +67,7 @@ export function createOrder(order: CreateOrder) {
     return (dispatch) => {
         dispatch(createOrderLoading(true));
         const url = `${rootPath}`;
-        return axios.post(url, order)
+        return client.post(url, order)
             .then((response) => {
                 dispatch(showSuccess('Order created successfully'));
                 return dispatch(createOrderSuccess(response.headers));
@@ -85,7 +85,7 @@ export function updateOrder(orderId: string) {
     return (dispatch) => {
         dispatch(updateOrderLoading(true));
         const url = `${rootPath}/${orderId}`;
-        return axios.put(url)
+        return client.put(url)
             .then(() => {
                 dispatch(showSuccess('Order updated successfully'));
                 return dispatch(updateOrderSuccess(orderId));
@@ -103,7 +103,7 @@ export function deleteOrder(orderId: string) {
     return (dispatch) => {
         dispatch(deleteOrderLoading(true));
         const url = `${rootPath}/${orderId}`;
-        return axios.delete(url)
+        return client.delete(url)
             .then(() => {
                 dispatch(showSuccess('Order deleted successfully'));
                 return dispatch(deleteOrderSuccess(orderId));

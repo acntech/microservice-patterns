@@ -1,19 +1,8 @@
-import axios from 'axios';
+import client from '../../core/client';
 
 import {
-    Customer,
-    CustomerQuery,
-    FindCustomersActionType,
-    FindCustomersErrorAction,
-    FindCustomersLoadingAction,
-    FindCustomersSuccessAction,
-    GetCustomerActionType,
-    GetCustomerErrorAction,
-    GetCustomerLoadingAction,
-    GetCustomerSuccessAction,
-    LoginCustomerAction,
-    LoginCustomerActionType,
-    LogoutCustomerAction
+    Customer, CustomerQuery, FindCustomersActionType, FindCustomersErrorAction, FindCustomersLoadingAction, FindCustomersSuccessAction, GetCustomerActionType, GetCustomerErrorAction,
+    GetCustomerLoadingAction, GetCustomerSuccessAction, LoginCustomerAction, LoginCustomerActionType, LogoutCustomerAction
 } from '../../models';
 import { showError } from '../actions';
 
@@ -28,7 +17,7 @@ const findCustomersLoading = (loading: boolean): FindCustomersLoadingAction => (
 const findCustomersSuccess = (payload: Customer[]): FindCustomersSuccessAction => ({type: FindCustomersActionType.SUCCESS, payload});
 const findCustomersError = (error: any): FindCustomersErrorAction => ({type: FindCustomersActionType.ERROR, error});
 
-const rootPath = '/api/customers';
+const rootPath = 'customers';
 
 export function loginCustomer(user: Customer) {
     return (dispatch) => {
@@ -46,7 +35,7 @@ export function getCustomer(customerId: string) {
     return (dispatch) => {
         dispatch(getCustomerLoading(true));
         const url = `${rootPath}/${customerId}`;
-        return axios.get(url)
+        return client.get(url)
             .then((response) => {
                 return dispatch(getCustomerSuccess(response.data));
             })
@@ -59,11 +48,11 @@ export function getCustomer(customerId: string) {
     };
 }
 
-export function findCustomers(customerQuery?: CustomerQuery) {
+export function findCustomers(query?: CustomerQuery) {
     return (dispatch) => {
         dispatch(findCustomersLoading(true));
         const url = `${rootPath}`;
-        return axios.get(url, {params: customerQuery})
+        return client.get(url, {params: {...query}})
             .then((response) => {
                 return dispatch(findCustomersSuccess(response.data));
             })

@@ -1,18 +1,10 @@
-import axios from 'axios';
+import client from '../../core/client';
 
 import {
-    FindProductsActionType,
-    FindProductsErrorAction,
-    FindProductsLoadingAction,
-    FindProductsSuccessAction,
-    GetProductActionType,
-    GetProductErrorAction,
-    GetProductLoadingAction,
-    GetProductSuccessAction,
-    Product,
-    ProductQuery
+    FindProductsActionType, FindProductsErrorAction, FindProductsLoadingAction, FindProductsSuccessAction, GetProductActionType, GetProductErrorAction, GetProductLoadingAction,
+    GetProductSuccessAction, Product, ProductQuery
 } from '../../models';
-import {showError} from '../actions';
+import { showError } from '../actions';
 
 const getProductLoading = (loading: boolean): GetProductLoadingAction => ({type: GetProductActionType.LOADING, loading});
 const getProductSuccess = (payload: Product): GetProductSuccessAction => ({type: GetProductActionType.SUCCESS, payload});
@@ -22,13 +14,13 @@ const findProductsLoading = (loading: boolean): FindProductsLoadingAction => ({t
 const findProductsSuccess = (payload: Product[]): FindProductsSuccessAction => ({type: FindProductsActionType.SUCCESS, payload});
 const findProductsError = (error: any): FindProductsErrorAction => ({type: FindProductsActionType.ERROR, error});
 
-const rootPath = '/api/products';
+const rootPath = 'products';
 
 export function getProduct(productId: string) {
     return (dispatch) => {
         dispatch(getProductLoading(true));
         const url = `${rootPath}/${productId}`;
-        return axios.get(url)
+        return client.get(url)
             .then((response) => {
                 return dispatch(getProductSuccess(response.data));
             })
@@ -41,11 +33,11 @@ export function getProduct(productId: string) {
     };
 }
 
-export function findProducts(productQuery?: ProductQuery) {
+export function findProducts(query?: ProductQuery) {
     return (dispatch) => {
         dispatch(findProductsLoading(true));
         const url = `${rootPath}`;
-        return axios.get(url, {params: productQuery})
+        return client.get(url, {params: {...query}})
             .then((response) => {
                 return dispatch(findProductsSuccess(response.data));
             })

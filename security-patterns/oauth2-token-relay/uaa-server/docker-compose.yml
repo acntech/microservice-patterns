@@ -4,8 +4,8 @@ services:
   server:
     image: uaa
     build: .
-    container_name: iam-server
-    hostname: iam
+    container_name: uaa-server
+    hostname: uaa
     domainname: acntech.local
     depends_on:
       - database
@@ -13,21 +13,23 @@ services:
       - SPRING_PROFILES_ACTIVE=postgresql,default
     ports:
       - 8888:8080
+    volumes:
+      - ./uaa.yml:/usr/local/uaa/uaa.yml
     networks:
-      - iam
+      - uaa
 
   database:
     image: postgres
-    container_name: iam-database
+    container_name: uaa-database
     hostname: database
     domainname: acntech.local
     environment:
-      - POSTGRES_DB=iam
-      - POSTGRES_USER=iam
+      - POSTGRES_DB=uaa
+      - POSTGRES_USER=uaa
       - POSTGRES_PASSWORD=hS9y05zA
     networks:
-      - iam
+      - uaa
 
 networks:
-  iam:
-    name: iam
+  uaa:
+    name: uaa

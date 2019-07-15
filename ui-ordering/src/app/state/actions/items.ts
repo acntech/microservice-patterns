@@ -1,4 +1,4 @@
-import axios from 'axios';
+import client from '../../core/client';
 
 import {
     CreateItem, CreateItemActionType, CreateItemErrorAction, CreateItemLoadingAction, CreateItemSuccessAction, DeleteItemActionType, DeleteItemErrorAction, DeleteItemLoadingAction,
@@ -18,13 +18,11 @@ const deleteItemLoading = (loading: boolean): DeleteItemLoadingAction => ({type:
 const deleteItemSuccess = (itemId: string): DeleteItemSuccessAction => ({type: DeleteItemActionType.SUCCESS, itemId});
 const deleteItemError = (error: any): DeleteItemErrorAction => ({type: DeleteItemActionType.ERROR, error});
 
-const rootPath = '/api';
-
 export function getItem(itemId: string) {
     return (dispatch) => {
         dispatch(getItemLoading(true));
-        const url = `${rootPath}/items/${itemId}`;
-        return axios.get(url)
+        const url = `items/${itemId}`;
+        return client.get(url)
             .then((response) => {
                 return dispatch(getItemSuccess(response.data));
             })
@@ -40,8 +38,8 @@ export function getItem(itemId: string) {
 export function createItem(orderId: string, item: CreateItem) {
     return (dispatch) => {
         dispatch(createItemLoading(true));
-        const url = `${rootPath}/orders/${orderId}/items`;
-        return axios.post(url, item)
+        const url = `orders/${orderId}/items`;
+        return client.post(url, item)
             .then((response) => {
                 dispatch(showSuccess('Item created successfully'));
                 return dispatch(createItemSuccess(response.headers));
@@ -58,8 +56,8 @@ export function createItem(orderId: string, item: CreateItem) {
 export function deleteItem(itemId: string) {
     return (dispatch) => {
         dispatch(deleteItemLoading(true));
-        const url = `${rootPath}/items/${itemId}`;
-        return axios.delete(url)
+        const url = `items/${itemId}`;
+        return client.delete(url)
             .then(() => {
                 dispatch(showSuccess('Item deleted successfully'));
                 return dispatch(deleteItemSuccess(itemId));
