@@ -10,12 +10,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>security-patterns-oauth2-token-relay</artifactId>
+    <artifactId>oauth2-token-relay</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->
     <modules>
         <module>ordering-service</module>
-        <module>ui-api</module>
+        <module>warehouse-service</module>
+        <module>ui-bff</module>
     </modules>
 </project>

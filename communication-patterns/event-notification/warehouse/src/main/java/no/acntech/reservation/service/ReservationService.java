@@ -139,7 +139,7 @@ public class ReservationService {
             if (quantity != null) {
                 reservation.setQuantity(quantity);
             }
-            if (canUpdateStatus(reservation.getStatus())) {
+            if (status != null && canUpdateStatus(reservation.getStatus())) {
                 reservation.setStatus(status);
             }
 

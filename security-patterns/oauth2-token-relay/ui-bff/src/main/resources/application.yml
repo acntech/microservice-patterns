@@ -12,9 +12,9 @@ acntech:
     reservations:
       url: http://localhost:9040/api/reservations
   security:
-    login-page: /oauth2/authorization/ui-api
+    login-page: /oauth2/authorization/token-relay-ui
     failure-url: http://localhost:3000?error
-    logout-success-url: http://localhost:8888/uaa/logout.do?client_id=ui-api&redirect=http://localhost:3000
+    logout-success-url: http://localhost:8888/uaa/logout.do?client_id=token-relay-ui&redirect=http://localhost:3000
 
 ########################
 # SPRING Configuration #
@@ -37,18 +37,18 @@ spring:
     oauth2:
       client:
         registration:
-          ui:
+          token-relay-ui:
             provider: uaa
-            client-id: ui
+            client-id: token-relay-ui
             client-secret: nzSX99Qg
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope:
               - openid
               - profile
               - email
-          ui-api:
+          token-relay-ui-api:
             provider: uaa
-            client-id: ui-api
+            client-id: token-relay-ui-api
             client-secret: 0kX3bvZe
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope:

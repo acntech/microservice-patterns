@@ -10,6 +10,8 @@ import java.util.UUID;
 public class ItemDto {
 
     @NotNull
+    private UUID itemId;
+    @NotNull
     private UUID orderId;
     @NotNull
     private UUID productId;
@@ -21,6 +23,10 @@ public class ItemDto {
     @NotNull
     private ZonedDateTime created;
     private ZonedDateTime modified;
+
+    public UUID getItemId() {
+        return itemId;
+    }
 
     public UUID getOrderId() {
         return orderId;
@@ -56,6 +62,7 @@ public class ItemDto {
 
     public static final class Builder {
 
+        private UUID itemId;
         private UUID orderId;
         private UUID productId;
         private UUID reservationId;
@@ -65,6 +72,11 @@ public class ItemDto {
         private ZonedDateTime modified;
 
         private Builder() {
+        }
+
+        public Builder itemId(UUID itemId) {
+            this.itemId = itemId;
+            return this;
         }
 
         public Builder orderId(UUID orderId) {
@@ -104,6 +116,7 @@ public class ItemDto {
 
         public ItemDto build() {
             ItemDto itemDto = new ItemDto();
+            itemDto.itemId = this.itemId;
             itemDto.orderId = this.orderId;
             itemDto.modified = this.modified;
             itemDto.productId = this.productId;

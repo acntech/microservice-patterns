@@ -6,14 +6,14 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class OAuth2TokenRelayOrderingMicroserviceApplication extends SpringBootServletInitializer {
+public class OAuth2TokenRelayOrderingServiceApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(OAuth2TokenRelayOrderingMicroserviceApplication.class, args);
+        SpringApplication.run(OAuth2TokenRelayOrderingServiceApplication.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(OAuth2TokenRelayOrderingMicroserviceApplication.class);
+        return application.sources(OAuth2TokenRelayOrderingServiceApplication.class);
     }
 }
