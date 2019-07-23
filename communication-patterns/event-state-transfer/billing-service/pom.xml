@@ -11,7 +11,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>event-state-transfer-shipping</artifactId>
+    <artifactId>event-state-transfer-billing-service</artifactId>
     <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->
