@@ -1,11 +1,11 @@
 version: '3.5'
 
 services:
-  customers:
+  warehouse-service:
     image: openjdk:8-jre-alpine
-      container_name: event-notification-customers
+      container_name: event-notification-warehouse-service
       ports:
-        - 9000:9000
+        - 9040:9040
       environment:
         - SPRING_PROFILES_ACTIVE=default
       networks:

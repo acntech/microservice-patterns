@@ -11,7 +11,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>event-notification-warehouse</artifactId>
+    <artifactId>event-notification-customers-service</artifactId>
     <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->

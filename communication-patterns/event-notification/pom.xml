@@ -25,11 +25,11 @@
 
     <!-- MODULES -->
     <modules>
-        <module>customers</module>
-        <module>warehouse</module>
-        <module>ordering</module>
-        <module>billing</module>
-        <module>shipping</module>
+        <module>customers-service</module>
+        <module>shipping-service</module>
+        <module>billing-service</module>
+        <module>warehouse-service</module>
+        <module>ordering-service</module>
     </modules>
 
     <!-- DEPENDENCIES -->

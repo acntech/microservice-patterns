@@ -11,7 +11,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>event-notification-billing</artifactId>
+    <artifactId>event-notification-billing-service</artifactId>
     <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->

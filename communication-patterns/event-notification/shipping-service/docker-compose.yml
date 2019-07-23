@@ -1,11 +1,11 @@
 version: '3.5'
 
 services:
-  billing:
+  shipping-service:
     image: openjdk:8-jre-alpine
-      container_name: event-notification-billing
+      container_name: event-notification-shipping-service
       ports:
-        - 9020:9020
+        - 9030:9030
       environment:
         - SPRING_PROFILES_ACTIVE=default
       networks:

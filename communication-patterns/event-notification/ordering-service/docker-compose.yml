@@ -1,9 +1,9 @@
 version: '3.5'
 
 services:
-  orders:
+  orders-service:
     image: openjdk:8-jre-alpine
-      container_name: event-notification-ordering
+      container_name: event-notification-ordering-service
       ports:
         - 9010:9010
       environment:
