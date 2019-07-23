@@ -51,8 +51,8 @@ public class OrdersResource {
         OrderDto order = orderService.createOrder(createOrder);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{orderId}")
-                .buildAndExpand(order.getOrderId())
+                .pathSegment(order.getOrderId().toString())
+                .build()
                 .toUri();
         return ResponseEntity.created(location).build();
     }
@@ -75,8 +75,8 @@ public class OrdersResource {
         OrderDto order = orderService.createItem(orderId, createItem);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{orderId}")
-                .buildAndExpand(order.getOrderId())
+                .pathSegment(order.getOrderId().toString())
+                .build()
                 .toUri();
         return ResponseEntity.created(location).build();
     }

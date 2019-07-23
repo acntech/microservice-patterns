@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'semantic-ui-react';
 import { LoadingIndicator, NotFoundError, PrimaryHeader, SecondaryHeader, ShowOrder } from '../../components';
 
@@ -161,7 +163,7 @@ const mapStateToProps = (state: RootState): ComponentStateProps => ({
     productState: state.productState
 });
 
-const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): ComponentDispatchProps => ({
     getOrder: (orderId: string) => dispatch(getOrder(orderId)),
     findProducts: () => dispatch(findProducts()),
     updateOrder: (orderId: string) => dispatch(updateOrder(orderId)),

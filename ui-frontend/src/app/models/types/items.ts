@@ -42,7 +42,7 @@ export interface CreateItemLoadingAction {
 
 export interface CreateItemSuccessAction {
     type: CreateItemActionType.SUCCESS,
-    headers: any
+    headers: Headers
 }
 
 export interface CreateItemErrorAction {

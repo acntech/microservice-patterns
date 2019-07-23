@@ -12,13 +12,13 @@ public class GatewayConfig {
     public RouteLocator defaultRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(proxy -> proxy
-                        .path("/api/customers")
+                        .path("/api/customers/**")
                         .uri("http://localhost:9000"))
                 .route(proxy -> proxy
-                        .path("/api/orders", "/api/items")
+                        .path("/api/orders/**", "/api/items/**")
                         .uri("http://localhost:9010"))
                 .route(proxy -> proxy
-                        .path("/api/products", "/api/reservations")
+                        .path("/api/products/**", "/api/reservations/**")
                         .uri("http://localhost:9040"))
                 .build();
     }

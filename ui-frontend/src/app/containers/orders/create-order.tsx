@@ -3,7 +3,10 @@ import { ChangeEventHandler, Component, ReactNode } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'semantic-ui-react';
+import uuidv4 from 'uuid/v4';
 import { CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
 
 import { ActionType, CreateOrder, CustomerState, EntityType, OrderState, RootState } from '../../models';
@@ -55,10 +58,10 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
                     <PrimaryHeader />
                     <SecondaryHeader />
                     <CreateOrderForm onCancelButtonClick={this.onCancelButtonClick}
-                                     onFormSubmit={this.onFormSubmit}
-                                     onFormInputNameChange={this.onFormInputNameChange}
-                                     onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
-                                     formData={formData} />
+                        onFormSubmit={this.onFormSubmit}
+                        onFormInputNameChange={this.onFormInputNameChange}
+                        onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
+                        formData={formData} />
                 </Container>
             );
         }
@@ -75,7 +78,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
 
     private onFormSubmit = () => {
         const {user} = this.props.customerState;
-        const {customerId} = user || {customerId: ''};
+        const {customerId} = user || {customerId: uuidv4()};
         const {formData} = this.state;
         const {formInputName, formTextAreaDescription} = formData;
         const {formElementValue: name} = formInputName;
@@ -177,7 +180,7 @@ const mapStateToProps = (state: RootState): ComponentStateProps => ({
     orderState: state.orderState
 });
 
-const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): ComponentDispatchProps => ({
     createOrder: (order: CreateOrder) => dispatch(createOrder(order))
 });
 

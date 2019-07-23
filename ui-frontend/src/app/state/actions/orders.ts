@@ -16,7 +16,7 @@ const findOrdersSuccess = (payload: Order[]): FindOrdersSuccessAction => ({type:
 const findOrdersError = (error: any): FindOrdersErrorAction => ({type: FindOrdersActionType.ERROR, error});
 
 const createOrderLoading = (loading: boolean): CreateOrderLoadingAction => ({type: CreateOrderActionType.LOADING, loading});
-const createOrderSuccess = (headers: any): CreateOrderSuccessAction => ({type: CreateOrderActionType.SUCCESS, headers});
+const createOrderSuccess = (headers: Headers): CreateOrderSuccessAction => ({type: CreateOrderActionType.SUCCESS, headers});
 const createOrderError = (error: any): CreateOrderErrorAction => ({type: CreateOrderActionType.ERROR, error});
 
 const updateOrderLoading = (loading: boolean): UpdateOrderLoadingAction => ({type: UpdateOrderActionType.LOADING, loading});
@@ -35,7 +35,7 @@ export function getOrder(orderId: string) {
         const url = `${rootPath}/${orderId}`;
         return client.get(url)
             .then((response) => {
-                return dispatch(getOrderSuccess(response.data));
+                return dispatch(getOrderSuccess(response));
             })
             .catch((error) => {
                 const {data} = error.response;
@@ -52,7 +52,7 @@ export function findOrders(orderName?: string) {
         const url = name ? `${rootPath}?name=${orderName}` : rootPath;
         return client.get(url)
             .then((response) => {
-                return dispatch(findOrdersSuccess(response.data));
+                return dispatch(findOrdersSuccess(response));
             })
             .catch((error) => {
                 const {data} = error.response;
@@ -73,8 +73,9 @@ export function createOrder(order: CreateOrder) {
                 return dispatch(createOrderSuccess(response.headers));
             })
             .catch((error) => {
-                const {data} = error.response;
-                const message = data && data.message;
+                const response = error && error.response || null;
+                const data = response && response.data || null;
+                const message = data && data.message || null;
                 dispatch(showError('Error creating order', message, true));
                 return dispatch(createOrderError(error));
             });

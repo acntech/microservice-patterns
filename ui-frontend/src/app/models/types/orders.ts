@@ -60,7 +60,7 @@ export interface CreateOrderLoadingAction {
 
 export interface CreateOrderSuccessAction {
     type: CreateOrderActionType.SUCCESS,
-    headers: any
+    headers: Headers
 }
 
 export interface CreateOrderErrorAction {

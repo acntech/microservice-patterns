@@ -22,7 +22,7 @@ export function getProduct(productId: string) {
         const url = `${rootPath}/${productId}`;
         return client.get(url)
             .then((response) => {
-                return dispatch(getProductSuccess(response.data));
+                return dispatch(getProductSuccess(response));
             })
             .catch((error) => {
                 const {data} = error.response;
@@ -39,7 +39,7 @@ export function findProducts(query?: ProductQuery) {
         const url = `${rootPath}`;
         return client.get(url, {params: {...query}})
             .then((response) => {
-                return dispatch(findProductsSuccess(response.data));
+                return dispatch(findProductsSuccess(response));
             })
             .catch((error) => {
                 const {data} = error.response;

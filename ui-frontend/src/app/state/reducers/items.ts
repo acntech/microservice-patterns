@@ -62,13 +62,10 @@ const create = (state: ItemState = initialItemState, action: CreateItemAction): 
 
         case CreateItemActionType.SUCCESS: {
             const {headers} = action;
-            let modified;
 
-            if (headers) {
-                const {location} = headers;
-                const orderId = location.split('items/')[1];
-                modified = {id: orderId, entityType: EntityType.ITEMS, actionType: ActionType.CREATE};
-            }
+            const location = headers.get('location');
+            const itemId = location && location.split('items/')[1] || 'item.id.missing';
+            const modified = {id: itemId, entityType: EntityType.ITEMS, actionType: ActionType.CREATE};
 
             return {...initialItemState, items, modified};
         }

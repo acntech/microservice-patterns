@@ -2,7 +2,8 @@
     "extends": [
         "tslint:recommended",
         "tslint-react",
-        "tslint-config-prettier"
+        "tslint-config-prettier",
+        "tslint-react-hooks"
     ],
     "rules": {
         "ordered-imports": [
@@ -17,7 +18,9 @@
             "never-prefix"
         ],
         "object-literal-sort-keys": false,
-        "object-literal-shorthand": false
+        "object-literal-shorthand": false,
+        "react-hooks-nesting": "error",
+        "react-hooks/exhaustive-deps": "warn"
     },
     "linterOptions": {
         "exclude": [

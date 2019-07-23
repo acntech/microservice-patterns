@@ -7,7 +7,6 @@ import uuidv4 from 'uuid/v4';
 polyfill();
 
 const BASE_URL = '/api';
-const DEFAULT_MODE: RequestMode = 'no-cors';
 const DEFAULT_CREDENTIALS: RequestCredentials = 'same-origin';
 const DEFAULT_REDIRECT_POLICY: RequestRedirect = 'follow';
 const DEFAULT_HEADERS = {
@@ -28,6 +27,7 @@ enum RequestMethod {
 
 enum ResponseCode {
     OK = 200,
+    CREATED = 201,
     NO_CONTENT = 204,
     FOUND = 302,
     NOT_FOUND = 404
@@ -67,7 +67,6 @@ export class RestClient implements Client {
     private static clientConfig(method: RequestMethod, body?: any, config?: RequestConfig): RequestInit {
         const defaultConfig = {
             method: method.toString(),
-            mode: DEFAULT_MODE,
             credentials: DEFAULT_CREDENTIALS,
             redirect: DEFAULT_REDIRECT_POLICY,
             headers: {...DEFAULT_HEADERS},
@@ -81,17 +80,15 @@ export class RestClient implements Client {
             switch (response.status) {
                 case ResponseCode.OK:
                     return RestClient.handleBody(requestId, response.json());
+                case ResponseCode.CREATED:
+                    return RestClient.handleCreate(requestId, response);
                 case ResponseCode.NO_CONTENT:
                     return Promise.resolve(null);
                 case ResponseCode.FOUND:
-                    const {headers} = response;
-                    console.log('302!!!');
-                    console.log(headers);
                     return Promise.resolve(null);
                 case ResponseCode.NOT_FOUND:
-                    return Promise.resolve({errorId: 'ikke.funnet', errorCode: 'ikke.funnet'});
+                    return Promise.resolve({errorId: 'not.found.id', errorCode: 'not.found.code'});
                 default:
-                    console.log(response.status);
                     return RestClient.handleUnknownBody(requestId, response);
             }
         } catch (errorResponse) {
@@ -101,9 +98,14 @@ export class RestClient implements Client {
 
     private static handleBody(requestId: string, body: Promise<any>): Promise<any> {
         return body.then((responseBody) => {
-            RestClient.after(requestId, responseBody);
+            RestClient.after(requestId, 'OK BODY', responseBody);
             return Promise.resolve(responseBody.entity ? responseBody.entity : responseBody);
         }, error => RestClient.handleError(requestId, 'OK BODY', error));
+    }
+
+    private static handleCreate(requestId: string, response: Response): Promise<any> {
+        RestClient.after(requestId, 'CREATE');
+        return Promise.resolve({headers: response.headers});
     }
 
     private static handleUnknownBody(requestId: string, response?: Response): Promise<any> {
@@ -117,20 +119,17 @@ export class RestClient implements Client {
     private static handleError(requestId: string, type: string, response?: any): Promise<any> {
         RestClient.after(requestId, type, response);
         return Promise.resolve({
-            errorId: 'ingen.id',
-            errorCode: 'ingen.kode'
+            errorId: 'unknown.error.id',
+            errorCode: 'unknown.error.code'
         });
     };
 
     private static before(endpointUrl: string, clientConfig: RequestInit): string {
-        const requestId = uuidv4();
-        console.log(`BEFORE: ${requestId} | ${clientConfig.method} ${endpointUrl}`);
-        return requestId;
+        return uuidv4();
     }
 
     private static after(requestId: string, type: string, response?: any) {
-        console.log(`AFTER: ${requestId} | ${type} | `, response);
-        console.table(response);
+        return null;
     }
 
     public get(url: string, config?: RequestConfig): Promise<any> {

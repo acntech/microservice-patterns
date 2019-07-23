@@ -2,6 +2,8 @@ import * as React from 'react';
 import { ChangeEventHandler, Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
 import { LoadingIndicator } from '../../components';
@@ -171,7 +173,7 @@ const mapStateToProps = (state: RootState): ComponentStateProps => ({
     customerState: state.customerState
 });
 
-const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): ComponentDispatchProps => ({
     loginCustomer: (user: Customer) => dispatch(loginCustomer(user)),
     getCustomer: (customerId: string) => dispatch(getCustomer(customerId))
 });

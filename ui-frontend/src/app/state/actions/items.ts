@@ -11,7 +11,7 @@ const getItemSuccess = (payload: Item): GetItemSuccessAction => ({type: GetItemA
 const getItemError = (error: any): GetItemErrorAction => ({type: GetItemActionType.ERROR, error});
 
 const createItemLoading = (loading: boolean): CreateItemLoadingAction => ({type: CreateItemActionType.LOADING, loading});
-const createItemSuccess = (headers: any): CreateItemSuccessAction => ({type: CreateItemActionType.SUCCESS, headers});
+const createItemSuccess = (headers: Headers): CreateItemSuccessAction => ({type: CreateItemActionType.SUCCESS, headers});
 const createItemError = (error: any): CreateItemErrorAction => ({type: CreateItemActionType.ERROR, error});
 
 const deleteItemLoading = (loading: boolean): DeleteItemLoadingAction => ({type: DeleteItemActionType.LOADING, loading});
@@ -24,7 +24,7 @@ export function getItem(itemId: string) {
         const url = `items/${itemId}`;
         return client.get(url)
             .then((response) => {
-                return dispatch(getItemSuccess(response.data));
+                return dispatch(getItemSuccess(response));
             })
             .catch((error) => {
                 const {data} = error.response;

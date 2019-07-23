@@ -3,6 +3,8 @@ import { ChangeEventHandler, Component, ReactNode } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'semantic-ui-react';
 import { CreateItemForm, CreateItemFormData, initialCreateItemFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
 import { ShowProductList } from '../../components/orders/show-product-list';
@@ -65,10 +67,10 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                     <PrimaryHeader />
                     <SecondaryHeader />
                     <CreateItemForm onCancelButtonClick={this.onCancelButtonClick}
-                                    onFormSubmit={this.onFormSubmit}
-                                    onFormInputQuantityChange={this.onFormInputQuantityChange}
-                                    product={product}
-                                    formData={formData} />
+                        onFormSubmit={this.onFormSubmit}
+                        onFormInputQuantityChange={this.onFormInputQuantityChange}
+                        product={product}
+                        formData={formData} />
                 </Container>
             );
         } else {
@@ -77,8 +79,8 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
                     <PrimaryHeader />
                     <SecondaryHeader />
                     <ShowProductList products={products}
-                                     onCancelButtonClick={this.onCancelButtonClick}
-                                     onTableRowClick={this.onTableRowClick} />
+                        onCancelButtonClick={this.onCancelButtonClick}
+                        onTableRowClick={this.onTableRowClick} />
                 </Container>
             );
         }
@@ -174,7 +176,7 @@ const mapStateToProps = (state: RootState): ComponentStateProps => ({
     productState: state.productState
 });
 
-const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): ComponentDispatchProps => ({
     createItem: (orderId: string, item: CreateItem) => dispatch(createItem(orderId, item)),
     findProducts: () => dispatch(findProducts())
 });

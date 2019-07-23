@@ -21,7 +21,7 @@ const rootPath = 'customers';
 
 export function loginCustomer(user: Customer) {
     return (dispatch) => {
-        dispatch(loginCustomerAction(user));
+        return dispatch(loginCustomerAction(user));
     };
 }
 
