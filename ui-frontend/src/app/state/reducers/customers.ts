@@ -1,25 +1,8 @@
-import {
-    ActionType,
-    Customer,
-    CustomerAction,
-    CustomerState,
-    EntityType,
-    FindCustomersAction,
-    FindCustomersActionType,
-    GetCustomerAction,
-    GetCustomerActionType,
-    LoginCustomerAction,
-    LoginCustomerActionType,
-    LogoutCustomerAction
-} from '../../models';
-import {initialCustomerState} from '../store/initial-state';
+import { ActionType, Customer, CustomerAction, CustomerState, EntityType, FindCustomersAction, FindCustomersActionType, GetCustomerAction, GetCustomerActionType } from '../../models';
+import { initialCustomerState } from '../store/initial-state';
 
 export const reducer = (state: CustomerState = initialCustomerState, action: CustomerAction): CustomerState => {
     switch (action.type) {
-        case LoginCustomerActionType.LOGIN:
-            return login(state, action);
-        case LoginCustomerActionType.LOGOUT:
-            return logout(state, action);
         case GetCustomerActionType.LOADING:
         case GetCustomerActionType.SUCCESS:
         case GetCustomerActionType.ERROR:
@@ -30,31 +13,6 @@ export const reducer = (state: CustomerState = initialCustomerState, action: Cus
             return find(state, action);
         default:
             return state;
-    }
-};
-
-const login = (state: CustomerState = initialCustomerState, action: LoginCustomerAction): CustomerState => {
-    switch (action.type) {
-        case LoginCustomerActionType.LOGIN: {
-            const {user} = action;
-            return {...initialCustomerState, user: user};
-        }
-
-        default: {
-            return state;
-        }
-    }
-};
-
-const logout = (state: CustomerState = initialCustomerState, action: LogoutCustomerAction): CustomerState => {
-    switch (action.type) {
-        case LoginCustomerActionType.LOGOUT: {
-            return {...initialCustomerState, user: undefined};
-        }
-
-        default: {
-            return state;
-        }
     }
 };
 

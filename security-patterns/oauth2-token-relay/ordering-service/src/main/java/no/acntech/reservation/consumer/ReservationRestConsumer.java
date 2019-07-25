@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.PendingReservationDto;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;
 
@@ -58,14 +58,18 @@ public class ReservationRestConsumer {
                 .map(ResponseEntity::getBody);
     }
 
-    public Optional<PendingReservationDto> create(@Valid final CreateReservationDto createReservation) {
+    public Optional<UUID> create(@Valid final CreateReservationDto createReservation) {
         final URI uri = UriComponentsBuilder.fromUriString(url)
                 .build()
                 .toUri();
 
-        ResponseEntity<PendingReservationDto> entity = restTemplate.postForEntity(uri, createReservation, PendingReservationDto.class);
+        ResponseEntity<Void> entity = restTemplate.postForEntity(uri, createReservation, Void.class);
         return Optional.of(entity)
-                .map(ResponseEntity::getBody);
+                .map(ResponseEntity::getHeaders)
+                .map(HttpHeaders::getLocation)
+                .map(URI::getPath)
+                .map(path -> path.split("reservations/")[1])
+                .map(UUID::fromString);
     }
 
     public void update(@NotNull final UUID reservationId,

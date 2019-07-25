@@ -1,9 +1,10 @@
 import { IntlState } from 'react-intl-redux';
-import { ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState } from '../';
+import { ActionType, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState, UserState } from '../';
 
 export interface RootState {
     intl: IntlState;
     notificationState: NotificationState;
+    userState: UserState;
     customerState: CustomerState;
     productState: ProductState;
     orderState: OrderState;

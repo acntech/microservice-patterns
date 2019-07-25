@@ -1,3 +1,3 @@
 export const globalConfig = {
-    enableSimpleLogin: false
+    enableSimpleLogin: true
 };

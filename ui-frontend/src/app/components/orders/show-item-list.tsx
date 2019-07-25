@@ -49,23 +49,24 @@ class ShowItemListComponent extends Component<ComponentProps> {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {showItems.map((item, index) => {
-                            const {itemId, productId, name, quantity, status, statusColor} = item;
+                        {
+                            showItems.map((item, index) => {
+                                const {itemId, productId, name, quantity, status, statusColor} = item;
 
-                            return (
-                                <Table.Row key={index} className="clickable-table-row"
-                                    onClick={() => onTableRowClick(itemId)}>
-                                    <Table.Cell>{productId}</Table.Cell>
-                                    <Table.Cell>{name || 'N/A'}</Table.Cell>
-                                    <Table.Cell>{quantity}</Table.Cell>
-                                    <Table.Cell>
-                                        <Label color={statusColor}>
-                                            <FormattedMessage id={`enum.item-status.${status}`} />
-                                        </Label>
-                                    </Table.Cell>
-                                </Table.Row>
-                            );
-                        })}
+                                return (
+                                    <Table.Row key={index} className="clickable-table-row" onClick={() => onTableRowClick(itemId)}>
+                                        <Table.Cell>{productId}</Table.Cell>
+                                        <Table.Cell>{name || 'N/A'}</Table.Cell>
+                                        <Table.Cell>{quantity}</Table.Cell>
+                                        <Table.Cell>
+                                            <Label color={statusColor}>
+                                                <FormattedMessage id={`enum.item-status.${status}`} />
+                                            </Label>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                );
+                            })
+                        }
                     </Table.Body>
                 </Table>
             );

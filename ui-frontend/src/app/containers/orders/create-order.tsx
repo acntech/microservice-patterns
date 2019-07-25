@@ -9,12 +9,12 @@ import { Container } from 'semantic-ui-react';
 import uuidv4 from 'uuid/v4';
 import { CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
 
-import { ActionType, CreateOrder, CustomerState, EntityType, OrderState, RootState } from '../../models';
+import { ActionType, CreateOrder, EntityType, OrderState, RootState, UserState } from '../../models';
 import { createOrder } from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentStateProps {
-    customerState: CustomerState;
+    userState: UserState;
     orderState: OrderState;
 }
 
@@ -77,8 +77,8 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
     };
 
     private onFormSubmit = () => {
-        const {user} = this.props.customerState;
-        const {customerId} = user || {customerId: uuidv4()};
+        const {user} = this.props.userState;
+        const {userId} = user || {userId: uuidv4()};
         const {formData} = this.state;
         const {formInputName, formTextAreaDescription} = formData;
         const {formElementValue: name} = formInputName;
@@ -93,7 +93,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
             });
 
             this.props.createOrder({
-                customerId: customerId,
+                customerId: userId,
                 name: name,
                 description: description
             });
@@ -176,7 +176,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
 }
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
-    customerState: state.customerState,
+    userState: state.userState,
     orderState: state.orderState
 });
 

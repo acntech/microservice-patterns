@@ -15,6 +15,7 @@
 
     <!-- MODULES -->
     <modules>
+        <module>customers-service</module>
         <module>ordering-service</module>
         <module>warehouse-service</module>
         <module>ui-bff</module>

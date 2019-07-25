@@ -1,0 +1,83 @@
+[
+    {
+        "productId": "300fcfcd-14f6-40a8-896b-d935a04a1240",
+        "name": "Product 1",
+        "description": "Description for Product 1",
+        "stock": 347,
+        "price": 14346.1044,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:49.386+02:00"
+    },
+    {
+        "productId": "68844dec-0ce1-40d2-8633-a63b91ceab88",
+        "name": "Product 2",
+        "description": "Description for Product 2",
+        "stock": 1295,
+        "price": 73483.6068,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.097+02:00"
+    },
+    {
+        "productId": "9c4fddba-7c0d-4104-ac3e-34dd4bde2e0e",
+        "name": "Product 3",
+        "description": "Description for Product 3",
+        "stock": 7313,
+        "price": 2843.6468,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.175+02:00"
+    },
+    {
+        "productId": "312541d7-ba76-4391-a039-145ed23ef80c",
+        "name": "Product 4",
+        "description": "Description for Product 4",
+        "stock": 4826,
+        "price": 52135.4986,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.242+02:00"
+    },
+    {
+        "productId": "0acc1637-699a-49c1-b85c-b65023c936e2",
+        "name": "Product 5",
+        "description": "Description for Product 5",
+        "stock": 6539,
+        "price": 17580.111,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.333+02:00"
+    },
+    {
+        "productId": "1c8e5130-d818-410e-8d40-c8272faa8cc2",
+        "name": "Product 6",
+        "description": "Description for Product 6",
+        "stock": 4378,
+        "price": 67163.0471,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.407+02:00"
+    },
+    {
+        "productId": "f1137fee-9d73-4455-a2ff-2ac092999024",
+        "name": "Product 7",
+        "description": "Description for Product 7",
+        "stock": 9109,
+        "price": 84730.5233,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.486+02:00"
+    },
+    {
+        "productId": "204f5d47-e233-46e2-b3c6-b0ff788fe914",
+        "name": "Product 8",
+        "description": "Description for Product 8",
+        "stock": 9263,
+        "price": 2522.1656,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.558+02:00"
+    },
+    {
+        "productId": "10d0ae4e-b500-4f34-a55b-b363622b64fe",
+        "name": "Product 9",
+        "description": "Description for Product 9",
+        "stock": 3557,
+        "price": 95825.0259,
+        "currency": "USD",
+        "created": "2019-05-21T17:04:50.632+02:00"
+    }
+]

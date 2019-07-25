@@ -6,16 +6,16 @@ import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Header, Icon, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
 import { globalConfig } from '../../core/config';
-import { CustomerState, RootState } from '../../models';
-import { logoutCustomer } from '../../state/actions';
+import { RootState, UserState } from '../../models';
+import { logoutUser } from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentStateProps {
-    customerState: CustomerState;
+    userState: UserState;
 }
 
 interface ComponentDispatchProps {
-    logoutCustomer: () => Promise<any>;
+    logoutUser: () => Promise<any>;
 }
 
 interface ComponentParamProps {
@@ -45,13 +45,13 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
         if (logout) {
             const cookies = new Cookies();
             cookies.remove('microservice-patterns-login');
-            this.props.logoutCustomer();
+            this.props.logoutUser();
         }
     }
 
     public render(): ReactNode {
-        const {title, subtitle, customerState, intl} = this.props;
-        const {user} = customerState;
+        const {title, subtitle, userState, intl} = this.props;
+        const {user} = userState;
 
         if (globalConfig.enableSimpleLogin && !user) {
             return <Redirect to="/login" />;
@@ -116,11 +116,11 @@ const HeaderTitle: FunctionComponent<HeaderTitleProps> = (props: HeaderTitleProp
 };
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
-    customerState: state.customerState
+    userState: state.userState
 });
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
-    logoutCustomer: () => dispatch(logoutCustomer())
+    logoutUser: () => dispatch(logoutUser())
 });
 
 const IntlPrimaryHeaderComponent = injectIntl(PrimaryHeaderComponent);

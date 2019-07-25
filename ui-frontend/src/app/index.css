@@ -14,6 +14,16 @@
     font-size: .75rem;
 }
 
+.ui.grid .column.login {
+    max-width: 500px;
+    border: 1px solid #ccc;
+    padding: 1rem;
+}
+
+.ui.list .item.login {
+    padding: 1rem;
+}
+
 .clickable-table-row {
     cursor: pointer;
 }
@@ -25,10 +35,6 @@
 .loading-indicator-body {
     padding: 2rem;
     min-height: 200px;
-}
-
-.login-grid {
-    max-width: 450px;
 }
 
 .table-header {

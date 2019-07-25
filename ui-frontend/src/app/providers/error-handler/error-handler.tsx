@@ -4,16 +4,13 @@ import { Container, Segment } from 'semantic-ui-react';
 
 import { UnknownErrorContainer } from '../../containers';
 
-interface ComponentProps {
-}
-
 interface ComponentState {
     hasError?: boolean;
 }
 
-class ErrorHandlerProvider extends Component<ComponentProps, ComponentState> {
+class ErrorHandlerProvider extends Component<{}, ComponentState> {
 
-    constructor(props: ComponentProps) {
+    constructor(props) {
         super(props);
         this.state = {hasError: false};
     }

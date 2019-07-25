@@ -34,7 +34,6 @@ import no.acntech.order.repository.ItemRepository;
 import no.acntech.order.repository.OrderRepository;
 import no.acntech.reservation.consumer.ReservationRestConsumer;
 import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.PendingReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;
 
 @SuppressWarnings("Duplicates")
@@ -152,15 +151,15 @@ public class OrderService {
                     .quantity(quantity)
                     .build();
 
-            Optional<PendingReservationDto> pendingReservationOptional = reservationRestConsumer.create(createReservation);
+            Optional<UUID> createdReservationId = reservationRestConsumer.create(createReservation);
 
-            if (pendingReservationOptional.isPresent()) {
-                PendingReservationDto pendingReservation = pendingReservationOptional.get();
+            if (createdReservationId.isPresent()) {
+                UUID reservationId = createdReservationId.get();
 
                 Item item = Item.builder()
                         .orderId(order.getId())
                         .productId(productId)
-                        .reservationId(pendingReservation.getReservationId())
+                        .reservationId(reservationId)
                         .quantity(quantity)
                         .build();
 

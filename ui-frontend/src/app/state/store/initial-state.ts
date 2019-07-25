@@ -1,7 +1,7 @@
 import { IntlState } from 'react-intl-redux';
 
 import { defaultLocale, messages } from '../../core/locales';
-import { CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState } from '../../models';
+import { CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState, UserState } from '../../models';
 
 export const initialIntlState: IntlState = {
     locale: defaultLocale,
@@ -11,6 +11,8 @@ export const initialIntlState: IntlState = {
 export const initialNotificationState: NotificationState = {
     notifications: []
 };
+
+export const initialUserState: UserState = {};
 
 export const initialCustomerState: CustomerState = {
     loading: false,
@@ -35,6 +37,7 @@ export const initialItemState: ItemState = {
 export const initialRootState: RootState = {
     intl: initialIntlState,
     notificationState: initialNotificationState,
+    userState: initialUserState,
     customerState: initialCustomerState,
     productState: initialProductState,
     orderState: initialOrderState,

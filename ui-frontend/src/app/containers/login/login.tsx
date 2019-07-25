@@ -4,19 +4,21 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Container, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Container, Form, Grid, Header, List, Message, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
 import { LoadingIndicator } from '../../components';
-import { Customer, CustomerState, RootState } from '../../models';
-import { getCustomer, loginCustomer } from '../../state/actions';
+import { CustomerQuery, CustomerState, RootState, User, UserState } from '../../models';
+import { findCustomers, getCustomer, loginUser } from '../../state/actions';
 
 interface ComponentStateProps {
+    userState: UserState;
     customerState: CustomerState;
 }
 
 interface ComponentDispatchProps {
-    loginCustomer: (user: Customer) => Promise<any>;
+    loginUser: (user: User) => Promise<any>;
     getCustomer: (customerId: string) => Promise<any>;
+    findCustomers: (query?: CustomerQuery) => Promise<any>;
 }
 
 type ComponentProps = ComponentDispatchProps & ComponentStateProps;
@@ -49,18 +51,23 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public componentDidMount(): void {
-        const cookies = new Cookies();
-        const loginCookie = cookies.get('microservice-patterns-login');
-        if (loginCookie) {
-            this.setState({
-                ...initialState,
-                customerId: loginCookie
-            });
+        const {user} = this.props.userState;
+        if (!user) {
+            this.props.findCustomers();
+            const cookies = new Cookies();
+            const loginCookie = cookies.get('microservice-patterns-login');
+            if (loginCookie) {
+                this.setState({
+                    ...initialState,
+                    customerId: loginCookie
+                });
+            }
         }
     }
 
     public componentDidUpdate(): void {
-        const {loading, error, user, customers} = this.props.customerState;
+        const {user} = this.props.userState;
+        const {loading, error, customers} = this.props.customerState;
         const {customerId, formData} = this.state;
         const {formSubmitted} = formData;
 
@@ -70,9 +77,12 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
             const customer = customers.find(c => c.customerId === customerId);
 
             if (customer) {
-                this.props.loginCustomer(customer);
-            } else {
-                this.props.getCustomer(customerId);
+                const newUser = {
+                    userId: customer.customerId,
+                    firstName: customer.firstName,
+                    lastName: customer.lastName
+                };
+                this.props.loginUser(newUser);
             }
 
             this.setState(initialState);
@@ -80,10 +90,10 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public render(): ReactNode {
-        const {customerState} = this.props;
-        const {loading, error, user} = customerState;
-        const {formData} = this.state;
-        let {formError, formErrorMessage} = formData;
+        const {user} = this.props.userState;
+        const {loading, customers, error} = this.props.customerState;
+        const {formCustomerIdValue} = this.state.formData;
+        let {formError, formErrorMessage} = this.state.formData;
         let formWarning = false;
 
         if (error) {
@@ -101,17 +111,40 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
                 <Container>
                     <Segment basic>
                         <Grid textAlign="center">
-                            <Grid.Column className="login-grid">
-                                <Header as="h1">Login</Header>
-                                <Form size="large" onSubmit={this.onFormSubmit} error={formError} warning={formWarning}>
-                                    <Segment stacked>
-                                        <Form.Input fluid icon="user" iconPosition="left" placeholder='Customer ID' onChange={this.onFormInputChange} />
-                                        <Form.Button primary fluid size="large">Login</Form.Button>
-                                        <Message error icon="ban" content={formErrorMessage} />
-                                        <Message warning icon="warning sign" content='customer-id might come from the login cookie' />
-                                    </Segment>
-                                </Form>
-                            </Grid.Column>
+                            <Grid.Row>
+                                <Grid.Column className="login" textAlign="center">
+                                    <Header as="h1">Login</Header>
+                                    <Form size="large" onSubmit={this.onFormSubmit} error={formError} warning={formWarning}>
+                                        <Segment basic>
+                                            <Form.Input fluid icon="user" iconPosition="left" placeholder='Customer ID' value={formCustomerIdValue} onChange={this.onFormInputChange} />
+                                            <Form.Button primary fluid size="large">Login</Form.Button>
+                                            <Message error icon="ban" content={formErrorMessage} />
+                                            <Message warning icon="warning sign" content='customer-id might come from the login cookie' />
+                                        </Segment>
+                                    </Form>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column className="login" textAlign="left">
+                                    <List divided selection>
+                                        {
+                                            customers.map((customer, index) => {
+                                                const {customerId, firstName, lastName} = customer;
+                                                const active = customerId === formCustomerIdValue;
+
+                                                return (
+                                                    <List.Item key={index} className="login" active={active} onClick={() => this.onListItemClick(customerId)}>
+                                                        <List.Content>
+                                                            <List.Header><h3>{firstName} {lastName}</h3></List.Header>
+                                                            <List.Description>Customer ID: {customerId}</List.Description>
+                                                        </List.Content>
+                                                    </List.Item>
+                                                );
+                                            })
+                                        }
+                                    </List>
+                                </Grid.Column>
+                            </Grid.Row>
                         </Grid>
                     </Segment>
                 </Container>
@@ -167,15 +200,29 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
             }
         });
     };
+
+    private onListItemClick = (customerId: string) => {
+        const {formData} = this.state;
+        this.setState({
+            formData: {
+                ...formData,
+                formSubmitted: false,
+                formError: false,
+                formCustomerIdValue: customerId
+            }
+        });
+    };
 }
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
+    userState: state.userState,
     customerState: state.customerState
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): ComponentDispatchProps => ({
-    loginCustomer: (user: Customer) => dispatch(loginCustomer(user)),
-    getCustomer: (customerId: string) => dispatch(getCustomer(customerId))
+    loginUser: (user: User) => dispatch(loginUser(user)),
+    getCustomer: (customerId: string) => dispatch(getCustomer(customerId)),
+    findCustomers: (query?: CustomerQuery) => dispatch(findCustomers(query))
 });
 
 const ConnectedLoginContainer = connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
