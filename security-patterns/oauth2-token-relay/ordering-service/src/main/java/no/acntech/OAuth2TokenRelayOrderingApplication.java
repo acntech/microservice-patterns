@@ -6,14 +6,14 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class EventNotificationCustomersApplication extends SpringBootServletInitializer {
+public class OAuth2TokenRelayOrderingApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(EventNotificationCustomersApplication.class, args);
+        SpringApplication.run(OAuth2TokenRelayOrderingApplication.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(EventNotificationCustomersApplication.class);
+        return application.sources(OAuth2TokenRelayOrderingApplication.class);
     }
 }

@@ -12,9 +12,9 @@ acntech:
     reservations:
       url: http://localhost:9040/api/reservations
   security:
-    login-page: /oauth2/authorization/token-relay-ui-api
-    failure-url: http://localhost:8000?error
-    logout-success-url: http://localhost:8888/uaa/logout.do?client_id=token-relay-ui&redirect=http://localhost:8000
+    login-page: /oauth2/authorization/token-relay-ui
+    failure-url: /login/opaque?error
+    logout-success-url: http://localhost:8888/uaa/logout.do?client_id=token-relay-ui&redirect=http://localhost:3000
 
 ########################
 # SPRING Configuration #
@@ -64,9 +64,9 @@ logging:
   level:
     root: INFO
     no.acntech: DEBUG
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-    org.springframework.security.oauth2: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
 
 # Server
 server:

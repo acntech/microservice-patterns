@@ -17,8 +17,7 @@ public class ApplicationConfig {
     @Bean
     public WebClient webClient(final ClientRegistrationRepository clientRegistrationRepository,
                                final OAuth2AuthorizedClientRepository authorizedClientRepository) {
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
-                new ServletOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepository, authorizedClientRepository);
+        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 = new ServletOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepository, authorizedClientRepository);
         return WebClient.builder()
                 .apply(oauth2.oauth2Configuration())
                 .build();

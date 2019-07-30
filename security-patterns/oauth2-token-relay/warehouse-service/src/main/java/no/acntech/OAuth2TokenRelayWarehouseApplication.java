@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 @EnableTransactionManagement
 @SpringBootApplication
-public class OAuth2TokenRelayWarehouseServiceApplication extends SpringBootServletInitializer {
+public class OAuth2TokenRelayWarehouseApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(OAuth2TokenRelayWarehouseServiceApplication.class, args);
+        SpringApplication.run(OAuth2TokenRelayWarehouseApplication.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(OAuth2TokenRelayWarehouseServiceApplication.class);
+        return application.sources(OAuth2TokenRelayWarehouseApplication.class);
     }
 }

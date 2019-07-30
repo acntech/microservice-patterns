@@ -12,6 +12,7 @@ const outputDir = 'dist';
 const publicDir = 'public';
 const outputPath = path.resolve(__dirname, outputDir);
 const indexFile = path.resolve(__dirname, publicDir, 'index.html');
+const faviconFile = path.resolve(__dirname, publicDir, 'favicon.ico');
 
 const apiUrl = process.env.API_URL || 'http://localhost:8000';
 const devServerHost = process.env.NODE_PUBLIC_HOST || 'localhost:3000';
@@ -98,7 +99,8 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new WebpackCleanupPlugin(),
         new HtmlWebpackPlugin({
-            template: indexFile
+            template: indexFile,
+            favicon: faviconFile
         }),
         new ManifestPlugin()
     ]

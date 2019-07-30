@@ -7,15 +7,12 @@ spring:
       - postgres
       - development
       - test-data
+  datasource:
+    url: jdbc:postgresql://localhost:5432/customers
 
 # Logging
 logging:
   level:
     org.springframework: INFO
     org.hibernate: WARN
-    org.apache.kafka: WARN
-    org.apache.kafka.clients.admin.AdminClientConfig: WARN
-    org.apache.kafka.clients.consumer.ConsumerConfig: WARN
-    org.apache.kafka.clients.producer.ProducerConfig: WARN
-    org.apache.kafka.streams.StreamsConfig: WARN
     no.acntech: DEBUG
