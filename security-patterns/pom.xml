@@ -13,9 +13,6 @@
     <artifactId>security-patterns</artifactId>
     <packaging>pom</packaging>
 
-    <name>${project.artifactId}</name>
-    <description>Microservice Patterns - Security Patterns</description>
-
     <!-- PROPERTIES -->
     <properties>
         <spring-security-oauth2.version>2.1.6.RELEASE</spring-security-oauth2.version>
