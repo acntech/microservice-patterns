@@ -12,7 +12,6 @@
 
     <artifactId>communication-patterns-rest</artifactId>
     <packaging>pom</packaging>
-    <description>Convenience pom for aggregate IDE-import, building, etc</description>
 
     <!-- MODULES -->
     <modules>

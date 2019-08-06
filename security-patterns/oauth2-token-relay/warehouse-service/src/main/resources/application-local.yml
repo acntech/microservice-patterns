@@ -1,0 +1,8 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    ordering:
+      api:
+        url: http://localhost:9010/api

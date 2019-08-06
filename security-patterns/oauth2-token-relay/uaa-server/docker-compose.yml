@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+  server:
+    image: uaa
+    build: .
+    container_name: uaa-server
+    hostname: uaa
+    domainname: acntech.local
+    depends_on:
+      - database
+    environment:
+      - SPRING_PROFILES_ACTIVE=postgresql,default
+    ports:
+      - 8888:8080
+    volumes:
+      - ./uaa.yml:/usr/local/uaa/uaa.yml
+    networks:
+      - uaa
+
+  database:
+    image: postgres
+    container_name: uaa-database
+    hostname: database
+    domainname: acntech.local
+    environment:
+      - POSTGRES_DB=uaa
+      - POSTGRES_USER=uaa
+      - POSTGRES_PASSWORD=hS9y05zA
+    networks:
+      - uaa
+
+networks:
+  uaa:
+    name: uaa
