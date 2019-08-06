@@ -15,13 +15,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.acntech.security.model.Session;
+import no.acntech.security.service.SecurityService;
+
 @RestController
-public class LoginResource {
+public class SecurityResource {
 
     private final ResourceLoader resourceLoader;
+    private final SecurityService securityService;
 
-    public LoginResource(final ResourceLoader resourceLoader) {
+    public SecurityResource(final ResourceLoader resourceLoader,
+                            final SecurityService securityService) {
         this.resourceLoader = resourceLoader;
+        this.securityService = securityService;
     }
 
     @GetMapping(path = "login/opaque", produces = MediaType.TEXT_HTML_VALUE)
@@ -35,5 +41,11 @@ public class LoginResource {
             String page = new String(Files.readAllBytes(resource.getFile().toPath()));
             return ResponseEntity.ok(page);
         }
+    }
+
+    @GetMapping(path = "session/info")
+    public ResponseEntity<Session> session() {
+        Session session = securityService.getSession();
+        return ResponseEntity.ok(session);
     }
 }

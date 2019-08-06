@@ -46,15 +46,6 @@ spring:
               - openid
               - profile
               - email
-          token-relay-ui-api:
-            provider: uaa
-            client-id: token-relay-ui-api
-            client-secret: 0kX3bvZe
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope:
-              - openid
-              - profile
-              - email
         provider:
           uaa:
             issuer-uri: http://localhost:8888/uaa/oauth/token
@@ -73,3 +64,6 @@ server:
   port: 8000
   servlet:
     context-path: /api
+    session:
+      cookie:
+        name: auth_token
