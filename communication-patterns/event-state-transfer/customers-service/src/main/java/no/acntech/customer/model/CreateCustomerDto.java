@@ -4,7 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Valid
-public class CreateCustomer {
+public class CreateCustomerDto {
 
     @NotBlank
     private String firstName;

@@ -1,37 +1,48 @@
 # Microservice Patterns
-Projects for exploring different microservice architectures and patterns. Each module/example focuses on a specific pattern for Inter-Process Communication (IPC) between microservices.
+Projects for exploring different microservice architectures and patterns. Each subfolder focuses on a specific area of patterns.
 
 [![Build Status](https://travis-ci.org/acntech/microservice-patterns.svg?branch=develop)](https://travis-ci.org/acntech/microservice-patterns)
 
-The same use case is used in all the examples in order to make it easier to compare the different patterns. This use case is that of an ordering system where customers can order products and have them shipped. The architecture of the system is typically comprised of the following microservices:
+## Business case
+The same business case is used in all the examples in order to make it easier to compare the different patterns. This business case is that of an ordering system where customers can order products and have them shipped. The architecture of the system is typically comprised of the following microservices:
 
-* Ordering
-  * Service where customers can create orders and add order items.
-* Warehouse
-  * Service that maintains products and product inventory.
-* Shipping
-  * Service that ships an order when it has been completed.
-* Billing
-  * Service that sends invoices to customers when orders have been completed and shipped.
-* Customers
+* **Customers**
   * Service that maintains customer records.
+* **Ordering**
+  * Service where customers can create orders and add order items.
+* **Warehouse**
+  * Service that maintains products and product inventory.
+* **Shipping**
+  * Service that ships an order when it has been completed.
+* **Billing**
+  * Service that sends invoices to customers when orders have been completed and shipped.
 
-## Modules
+As well there is a ReactJS based UI that can be used to interact with the business logic.
 
-##### REST
-TODO
+[/ ui-frontend](https://github.com/acntech/microservice-patterns/tree/develop/ui-frontend)
 
-##### Messaging
-TODO
+The UI uses an API Gateway to proxy all communication with the microservices, and to create a common facade for API calls.
 
-##### Event Notification
-This module explores the use of asynchronous event notification. Each service holds its own state in a local data store. When the state of a service is modified it will publish an notification event. The events are "thin" index that are distributed between the microservices using a message broker in a publish/subscribe fashion.
+[/ ui-gateway](https://github.com/acntech/microservice-patterns/tree/develop/ui-gateway)
 
-##### Event State Transfer
-This module explores the use of asynchronous event state transfer. Each service holds its own state in a local data store. When the state of a service is modified a complete record of that change is published as an event. The events are distributed between the microservices using a message broker in a publish/subscribe fashion.
+## Pattern areas
+Below are the pattern areas that are being explored. Each subfolder has its own README with further details. 
 
-##### Event Sourcing
-This module explores the use of event sourcing. System state is maintained in a centralized event store. When state is modified through a microservice a record of that change is published as an event. These events are stored in the event store which acts as an event ledger or commit log. Microservices use snapshots or aggregates of the event ledger to represent the current state of the system. These aggregates are continuously updated as new events are committed to the event ledger.
+### Communication Patterns
+
+[/ communication-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns)
+
+### Reliability Patterns
+
+[/ reliability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/reliability-patterns)
+
+### Observability Patterns
+
+[/ observability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/observability-patterns)
+
+### Security Patterns
+
+[/ security-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/security-patterns)
 
 ## Talking Points
 
