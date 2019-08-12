@@ -1,61 +1,50 @@
 package no.acntech.reservation.model;
 
+import javax.validation.constraints.NotNull;
+
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class ReservationEvent {
 
-    private ReservationEventType type;
-    private UUID orderId;
+    @NotNull
+    private UUID reservationId;
+    @NotNull
     private UUID productId;
+    @NotNull
+    private UUID orderId;
+    @NotNull
+    private Long quantity;
+    private ReservationStatus status;
+    @NotNull
+    private ZonedDateTime created;
+    private ZonedDateTime modified;
 
-    public ReservationEventType getType() {
-        return type;
-    }
-
-    public UUID getOrderId() {
-        return orderId;
+    public UUID getReservationId() {
+        return reservationId;
     }
 
     public UUID getProductId() {
         return productId;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public UUID getOrderId() {
+        return orderId;
     }
 
-    public static final class Builder {
+    public Long getQuantity() {
+        return quantity;
+    }
 
-        private ReservationEventType type;
-        private UUID orderId;
+    public ReservationStatus getStatus() {
+        return status;
+    }
 
-        private UUID productId;
+    public ZonedDateTime getCreated() {
+        return created;
+    }
 
-        private Builder() {
-        }
-
-        public Builder type(ReservationEventType type) {
-            this.type = type;
-            return this;
-        }
-
-        public Builder orderId(UUID orderId) {
-            this.orderId = orderId;
-            return this;
-        }
-
-        public Builder productId(UUID productId) {
-            this.productId = productId;
-            return this;
-        }
-
-        @SuppressWarnings("Duplicates")
-        public ReservationEvent build() {
-            ReservationEvent reservationEvent = new ReservationEvent();
-            reservationEvent.productId = this.productId;
-            reservationEvent.orderId = this.orderId;
-            reservationEvent.type = this.type;
-            return reservationEvent;
-        }
+    public ZonedDateTime getModified() {
+        return modified;
     }
 }

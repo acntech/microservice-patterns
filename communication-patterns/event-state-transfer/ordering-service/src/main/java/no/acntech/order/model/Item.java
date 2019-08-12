@@ -10,12 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "ITEMS")
 @Entity
@@ -24,16 +21,16 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
     @Column(nullable = false)
     private Long orderId;
-    @NotNull
+    @Column(nullable = false)
+    private UUID itemId;
     @Column(nullable = false)
     private UUID productId;
-    @NotNull
+    @Column
+    private UUID reservationId;
     @Column(nullable = false)
     private Long quantity;
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ItemStatus status;
@@ -41,7 +38,6 @@ public class Item {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
-    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -50,12 +46,24 @@ public class Item {
         return orderId;
     }
 
+    public UUID getItemId() {
+        return itemId;
+    }
+
     public UUID getProductId() {
         return productId;
     }
 
+    public UUID getReservationId() {
+        return reservationId;
+    }
+
     public Long getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 
     public ItemStatus getStatus() {
@@ -76,6 +84,7 @@ public class Item {
 
     @PrePersist
     private void prePersist() {
+        itemId = UUID.randomUUID();
         status = ItemStatus.PENDING;
         created = ZonedDateTime.now();
     }
@@ -93,6 +102,7 @@ public class Item {
 
         private Long orderId;
         private UUID productId;
+        private UUID reservationId;
         private Long quantity;
 
         private Builder() {
@@ -108,6 +118,11 @@ public class Item {
             return this;
         }
 
+        public Builder reservationId(UUID reservationId) {
+            this.reservationId = reservationId;
+            return this;
+        }
+
         public Builder quantity(Long quantity) {
             this.quantity = quantity;
             return this;
@@ -117,6 +132,7 @@ public class Item {
             Item item = new Item();
             item.orderId = this.orderId;
             item.productId = this.productId;
+            item.reservationId = this.reservationId;
             item.quantity = this.quantity;
             return item;
         }

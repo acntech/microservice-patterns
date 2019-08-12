@@ -1,8 +1,7 @@
-package no.acntech.order.model;
+package no.acntech.reservation.model;
 
-public enum ItemStatus {
+public enum ReservationStatus {
 
-    PENDING,
     RESERVED,
     CONFIRMED,
     CANCELED,
