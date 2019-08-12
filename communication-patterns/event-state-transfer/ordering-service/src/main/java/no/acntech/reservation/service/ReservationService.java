@@ -22,23 +22,23 @@ public class ReservationService {
     }
 
     public void receiveReservationEvent(final ReservationEvent reservationEvent) {
-        UUID reservationId = reservationEvent.getReservationId();
-
-        LOGGER.debug("Retrieving reservation for reservation-id {}", reservationId);
-
-        try {
-            processReservation(reservationEvent);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while processing reservation", e);
+        if (reservationEvent == null) {
+            LOGGER.error("Received reservation event which was null");
+        } else {
+            try {
+                processReservationEvent(reservationEvent);
+            } catch (Exception e) {
+                LOGGER.error("Error occurred while processing reservation event", e);
+            }
         }
     }
 
-    private void processReservation(final ReservationEvent reservationEvent) {
+    private void processReservationEvent(final ReservationEvent reservationEvent) {
         UUID reservationId = reservationEvent.getReservationId();
         Long quantity = reservationEvent.getQuantity();
         ReservationStatus reservationStatus = reservationEvent.getStatus();
 
-        LOGGER.debug("Processing reservation for reservation-id {}", reservationId);
+        LOGGER.debug("Processing reservation event for reservation-id {}", reservationId);
 
         ItemStatus status = ItemStatus.valueOf(reservationStatus.name());
 

@@ -130,7 +130,7 @@ public class OrderService {
         order.cancelOrder();
         Order canceledOrder = orderRepository.save(order);
 
-        LOGGER.debug("Deleted order with order-id {}", canceledOrder.getOrderId());
+        LOGGER.debug("Canceled order with order-id {}", canceledOrder.getOrderId());
         OrderEvent orderEvent = OrderEvent.builder()
                 .eventType(OrderEventType.ORDER_CANCELED)
                 .orderId(canceledOrder.getOrderId())
@@ -166,9 +166,9 @@ public class OrderService {
 
             itemRepository.save(item);
 
-            LOGGER.debug("Created order item with product-id {} for order-id {}", orderId, productId);
+            LOGGER.debug("Added order item with product-id {} for order-id {}", orderId, productId);
             OrderEvent orderEvent = OrderEvent.builder()
-                    .eventType(OrderEventType.ORDER_ITEM_CREATED)
+                    .eventType(OrderEventType.ORDER_ITEM_ADDED)
                     .orderId(order.getOrderId())
                     .orderStatus(order.getStatus())
                     .productId(item.getProductId())
@@ -218,7 +218,7 @@ public class OrderService {
         Long quantity = item.getQuantity();
         ItemStatus itemStatus = item.getStatus();
 
-        LOGGER.debug("Deleted order item with product-id {} for order-id {}", orderId, productId);
+        LOGGER.debug("Canceled order item with product-id {} for order-id {}", orderId, productId);
         OrderEvent orderEvent = OrderEvent.builder()
                 .eventType(OrderEventType.ORDER_ITEM_CANCELED)
                 .orderId(orderId)

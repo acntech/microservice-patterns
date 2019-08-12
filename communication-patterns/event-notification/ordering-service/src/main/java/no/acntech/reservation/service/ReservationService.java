@@ -30,7 +30,7 @@ public class ReservationService {
     public void receiveReservationEvent(final ReservationEvent reservationEvent) {
         UUID reservationId = reservationEvent.getReservationId();
 
-        LOGGER.debug("Retrieving reservation for reservation-id {}", reservationId);
+        LOGGER.debug("Retrieving reservation event for reservation-id {}", reservationId);
 
         try {
             Optional<ReservationDto> reservationOptional = reservationRestConsumer.get(reservationId);
@@ -43,7 +43,7 @@ public class ReservationService {
                 LOGGER.error("Reservation with reservation-id {} could not be found", reservationId);
             }
         } catch (Exception e) {
-            LOGGER.error("Error occurred while processing reservation", e);
+            LOGGER.error("Error occurred while processing reservation event", e);
         }
     }
 
@@ -52,7 +52,7 @@ public class ReservationService {
         Long quantity = reservationDto.getQuantity();
         ReservationStatus reservationStatus = reservationDto.getStatus();
 
-        LOGGER.debug("Processing reservation for reservation-id {}", reservationId);
+        LOGGER.debug("Processing reservation event for reservation-id {}", reservationId);
 
         ItemStatus status = ItemStatus.valueOf(reservationStatus.name());
 

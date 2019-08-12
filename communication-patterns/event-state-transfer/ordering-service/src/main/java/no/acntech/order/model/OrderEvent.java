@@ -13,6 +13,7 @@ public class OrderEvent implements Serializable {
     private OrderEventType eventType;
     @NotNull
     private UUID orderId;
+    @NotNull
     private OrderStatus orderStatus;
     private UUID productId;
     private Long quantity;

@@ -40,8 +40,8 @@ public class OrdersResource {
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping(path = "{orderId}")
-    public ResponseEntity<OrderDto> get(@PathVariable("orderId") final UUID orderId) {
+    @GetMapping(path = "{id}")
+    public ResponseEntity<OrderDto> get(@PathVariable("id") final UUID orderId) {
         OrderDto order = orderService.getOrder(orderId);
         return ResponseEntity.ok(order);
     }
@@ -57,20 +57,20 @@ public class OrdersResource {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(path = "{orderId}")
-    public ResponseEntity put(@PathVariable("orderId") final UUID orderId) {
+    @PutMapping(path = "{id}")
+    public ResponseEntity put(@PathVariable("id") final UUID orderId) {
         orderService.updateOrder(orderId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(path = "{orderId}")
-    public ResponseEntity delete(@PathVariable("orderId") final UUID orderId) {
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity delete(@PathVariable("id") final UUID orderId) {
         orderService.deleteOrder(orderId);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(path = "{orderId}/items")
-    public ResponseEntity postItem(@PathVariable("orderId") final UUID orderId,
+    @PostMapping(path = "{id}/items")
+    public ResponseEntity postItem(@PathVariable("id") final UUID orderId,
                                    @Valid @RequestBody final CreateItemDto createItem) {
         OrderDto order = orderService.createItem(orderId, createItem);
         URI location = ServletUriComponentsBuilder
