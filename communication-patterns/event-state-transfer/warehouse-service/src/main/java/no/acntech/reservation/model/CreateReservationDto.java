@@ -28,4 +28,41 @@ public class CreateReservationDto {
     public Long getQuantity() {
         return quantity;
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+
+        private UUID orderId;
+        private UUID productId;
+        private Long quantity;
+
+        private Builder() {
+        }
+
+        public Builder orderId(UUID orderId) {
+            this.orderId = orderId;
+            return this;
+        }
+
+        public Builder productId(UUID productId) {
+            this.productId = productId;
+            return this;
+        }
+
+        public Builder quantity(Long quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public CreateReservationDto build() {
+            CreateReservationDto createReservationDto = new CreateReservationDto();
+            createReservationDto.orderId = this.orderId;
+            createReservationDto.productId = this.productId;
+            createReservationDto.quantity = this.quantity;
+            return createReservationDto;
+        }
+    }
 }

@@ -62,17 +62,17 @@ public class OrderService {
         OrderStatus status = orderQuery.getStatus();
 
         if (customerId != null && status != null) {
-            return orderRepository.findAllByCustomerIdAndStatus(customerId, status)
+            return orderRepository.findAllByCustomerIdAndStatus(customerId, status, SORT_BY_ID)
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());
         } else if (customerId != null) {
-            return orderRepository.findAllByCustomerId(customerId)
+            return orderRepository.findAllByCustomerId(customerId, SORT_BY_ID)
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());
         } else if (status != null) {
-            return orderRepository.findAllByStatus(status)
+            return orderRepository.findAllByStatus(status, SORT_BY_ID)
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());
@@ -231,7 +231,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Optional<UUID> updateItemReservation(@NotNull UUID reservationId, @NotNull Long quantity, @NotNull ItemStatus status) {
+    public void updateItemReservation(@NotNull UUID reservationId, @NotNull Long quantity, @NotNull ItemStatus status) {
         Optional<Item> exitingItem = itemRepository.findByReservationId(reservationId);
 
         if (exitingItem.isPresent()) {
@@ -257,15 +257,11 @@ public class OrderService {
                     order.confirmOrder();
                     orderRepository.save(order);
                 }
-
-                return Optional.of(orderId);
             } else {
                 LOGGER.error("Could not find order for reservation-id {}", reservationId);
-                return Optional.empty();
             }
         } else {
             LOGGER.error("Could not find order item for reservation-id {}", reservationId);
-            return Optional.empty();
         }
     }
 

@@ -1,8 +1,6 @@
 package no.acntech.order.consumer;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import no.acntech.common.config.KafkaTopic;
 import no.acntech.order.model.OrderEvent;
 import no.acntech.order.service.OrderService;
 
@@ -20,7 +19,7 @@ import no.acntech.order.service.OrderService;
 public class OrderEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderEventConsumer.class);
-    private static final List<String> KAFKA_TOPICS = Collections.singletonList("orders");
+    private static final Duration POLL_TIMEOUT = Duration.ofMillis(200);
 
     private final KafkaConsumer<String, OrderEvent> kafkaConsumer;
     private final OrderService orderService;
@@ -35,22 +34,26 @@ public class OrderEventConsumer {
     @Async
     public void startConsumer() {
         try {
-            kafkaConsumer.subscribe(KAFKA_TOPICS);
-            LOGGER.info("Subscribe to topics {} and starting consumption of events...", KAFKA_TOPICS);
+            kafkaConsumer.subscribe(KafkaTopic.ORDERS.toList());
+            LOGGER.info("Subscribe to topics {} and starting consumption of events...", KafkaTopic.ORDERS.toList());
             while (true) {
-                ConsumerRecords<String, OrderEvent> records = kafkaConsumer.poll(Duration.ofMillis(200));
+                ConsumerRecords<String, OrderEvent> records = kafkaConsumer.poll(POLL_TIMEOUT);
                 records.forEach(this::consume);
             }
         } finally {
-            LOGGER.info("Unsubscribe from topics {} and ending consumption of events...", KAFKA_TOPICS);
+            LOGGER.info("Unsubscribe from topics {} and ending consumption of events...", KafkaTopic.ORDERS.toList());
             kafkaConsumer.unsubscribe();
             kafkaConsumer.close();
         }
     }
 
     private void consume(final ConsumerRecord<String, OrderEvent> record) {
-        LOGGER.debug("Received message {}", record);
-        OrderEvent orderEvent = record.value();
-        orderService.receiveOrderEvent(orderEvent);
+        final OrderEvent orderEvent = record.value();
+        if (orderEvent == null) {
+            LOGGER.error("Received order event which was null from topic {}", KafkaTopic.ORDERS.getName());
+        } else {
+            LOGGER.debug("Received order event with order-id {} from topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS.getName());
+            orderService.receiveOrderEvent(orderEvent);
+        }
     }
 }

@@ -30,7 +30,7 @@ public class ProductService {
     public List<Product> findProducts(@NotNull final ProductQuery productQuery) {
         String name = productQuery.getName();
         if (name != null) {
-            return productRepository.findAllByName(name);
+            return productRepository.findAllByName(name, SORT_BY_ID);
         } else {
             return productRepository.findAll(SORT_BY_ID);
         }

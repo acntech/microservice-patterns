@@ -21,6 +21,7 @@ public class ReservationEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationEventConsumer.class);
     private static final Duration POLL_TIMEOUT = Duration.ofMillis(200);
+
     private final KafkaConsumer<String, ReservationEvent> kafkaConsumer;
     private final ReservationService reservationService;
 
@@ -48,13 +49,8 @@ public class ReservationEventConsumer {
     }
 
     private void consume(final ConsumerRecord<String, ReservationEvent> record) {
-        final ReservationEvent reservationEvent = record.value();
         LOGGER.debug("Received message {}", record);
-        if (reservationEvent == null) {
-            LOGGER.error("Received reservation event which was null");
-        } else {
-            LOGGER.debug("Received reservation event with reservation-id {}", reservationEvent.getReservationId());
-            reservationService.receiveReservationEvent(reservationEvent);
-        }
+        ReservationEvent reservationEvent = record.value();
+        reservationService.receiveReservationEvent(reservationEvent);
     }
 }
