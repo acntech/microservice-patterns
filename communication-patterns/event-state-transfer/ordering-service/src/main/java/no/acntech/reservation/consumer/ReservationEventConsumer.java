@@ -49,8 +49,12 @@ public class ReservationEventConsumer {
     }
 
     private void consume(final ConsumerRecord<String, ReservationEvent> record) {
-        LOGGER.debug("Received message {}", record);
         ReservationEvent reservationEvent = record.value();
-        reservationService.receiveReservationEvent(reservationEvent);
+        if (reservationEvent == null) {
+            LOGGER.error("Received reservation event which was null from topic {}", KafkaTopic.RESERVATIONS.getName());
+        } else {
+            LOGGER.debug("Received reservation event with reservation-id {} from topic {}", reservationEvent.getReservationId(), KafkaTopic.RESERVATIONS.getName());
+            reservationService.receiveReservationEvent(reservationEvent);
+        }
     }
 }

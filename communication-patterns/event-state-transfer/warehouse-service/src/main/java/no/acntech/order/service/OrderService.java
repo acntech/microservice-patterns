@@ -27,14 +27,10 @@ public class OrderService {
     }
 
     public void receiveOrderEvent(final OrderEvent orderEvent) {
-        if (orderEvent == null) {
-            LOGGER.error("Received order event which was null");
-        } else {
-            try {
-                processReservationEvent(orderEvent);
-            } catch (Exception e) {
-                LOGGER.error("Error occurred while processing order event", e);
-            }
+        try {
+            processReservationEvent(orderEvent);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while processing order event", e);
         }
     }
 

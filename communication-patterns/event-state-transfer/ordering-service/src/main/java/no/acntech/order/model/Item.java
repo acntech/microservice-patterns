@@ -58,6 +58,10 @@ public class Item {
         return reservationId;
     }
 
+    public void setReservationId(UUID reservationId) {
+        this.reservationId = reservationId;
+    }
+
     public Long getQuantity() {
         return quantity;
     }
@@ -102,7 +106,6 @@ public class Item {
 
         private Long orderId;
         private UUID productId;
-        private UUID reservationId;
         private Long quantity;
 
         private Builder() {
@@ -118,11 +121,6 @@ public class Item {
             return this;
         }
 
-        public Builder reservationId(UUID reservationId) {
-            this.reservationId = reservationId;
-            return this;
-        }
-
         public Builder quantity(Long quantity) {
             this.quantity = quantity;
             return this;
@@ -132,7 +130,6 @@ public class Item {
             Item item = new Item();
             item.orderId = this.orderId;
             item.productId = this.productId;
-            item.reservationId = this.reservationId;
             item.quantity = this.quantity;
             return item;
         }

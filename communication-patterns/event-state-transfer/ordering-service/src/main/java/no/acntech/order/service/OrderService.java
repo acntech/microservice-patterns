@@ -230,41 +230,6 @@ public class OrderService {
         orderEventProducer.publish(orderEvent);
     }
 
-    @Transactional
-    public void updateItemReservation(@NotNull UUID reservationId, @NotNull Long quantity, @NotNull ItemStatus status) {
-        Optional<Item> exitingItem = itemRepository.findByReservationId(reservationId);
-
-        if (exitingItem.isPresent()) {
-            Item item = exitingItem.get();
-
-            Optional<Order> existingOrder = orderRepository.findById(item.getOrderId());
-
-            if (existingOrder.isPresent()) {
-                Order order = existingOrder.get();
-                UUID orderId = order.getOrderId();
-
-                item.setStatus(status);
-                item.setQuantity(quantity);
-
-                LOGGER.debug("Updating order item status to {} for order-id {} and reservation-id {}", status.name(), orderId, reservationId);
-
-                itemRepository.save(item);
-
-                OrderStatus orderStatus = nextOrderStatus(order);
-
-                if (OrderStatus.CONFIRMED.equals(orderStatus)) {
-                    LOGGER.debug("Updating order status to {} for order-id {}", orderStatus.name(), orderId);
-                    order.confirmOrder();
-                    orderRepository.save(order);
-                }
-            } else {
-                LOGGER.error("Could not find order for reservation-id {}", reservationId);
-            }
-        } else {
-            LOGGER.error("Could not find order item for reservation-id {}", reservationId);
-        }
-    }
-
     private Order getOrderById(final Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
@@ -278,24 +243,6 @@ public class OrderService {
     private Item getItemByItemId(final UUID itemId) {
         return itemRepository.findByItemId(itemId)
                 .orElseThrow(() -> new ItemNotFoundException(itemId));
-    }
-
-    private OrderStatus nextOrderStatus(final Order order) {
-        if (areAllActiveItemsConfirmed(order)) {
-            return OrderStatus.CONFIRMED;
-        } else {
-            return null;
-        }
-    }
-
-    private boolean areAllActiveItemsConfirmed(final Order order) {
-        List<Item> activeItems = order.getItems().stream()
-                .filter(activeItem -> !ItemStatus.CANCELED.equals(activeItem.getStatus()))
-                .collect(Collectors.toList());
-        boolean allActiveItemsConfirmed = activeItems.stream()
-                .map(Item::getStatus)
-                .allMatch(ItemStatus.CONFIRMED::equals);
-        return !activeItems.isEmpty() && allActiveItemsConfirmed;
     }
 
     private OrderDto convert(final Order order) {

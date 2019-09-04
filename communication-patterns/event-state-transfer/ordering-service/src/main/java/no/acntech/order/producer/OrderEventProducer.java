@@ -1,5 +1,7 @@
 package no.acntech.order.producer;
 
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,7 +23,7 @@ public class OrderEventProducer {
     }
 
     @Transactional
-    public void publish(OrderEvent orderEvent) {
+    public void publish(@NotNull final OrderEvent orderEvent) {
         LOGGER.debug("Sending event for order-id {} to topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS.getName());
         kafkaTemplate.send(KafkaTopic.ORDERS.getName(), orderEvent);
     }

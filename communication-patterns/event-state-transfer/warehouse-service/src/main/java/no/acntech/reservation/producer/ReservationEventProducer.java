@@ -2,8 +2,6 @@ package no.acntech.reservation.producer;
 
 import javax.validation.constraints.NotNull;
 
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -23,11 +21,8 @@ public class ReservationEventProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publish(@NotNull final UUID reservationId) {
-        LOGGER.debug("Sending event for reservation-id {} to topic {}", reservationId, KafkaTopic.RESERVATIONS.getName());
-        ReservationEvent reservationEvent = ReservationEvent.builder()
-                .reservationId(reservationId)
-                .build();
+    public void publish(@NotNull final ReservationEvent reservationEvent) {
+        LOGGER.debug("Sending event for reservation-id {} to topic {}", reservationEvent.getReservationId(), KafkaTopic.RESERVATIONS.getName());
         kafkaTemplate.send(KafkaTopic.RESERVATIONS.getName(), reservationEvent);
     }
 }

@@ -17,7 +17,10 @@ import no.acntech.reservation.exception.ReservationNotFoundException;
 import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.Reservation;
 import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.ReservationEvent;
+import no.acntech.reservation.model.ReservationEventType;
 import no.acntech.reservation.model.ReservationQuery;
+import no.acntech.reservation.producer.ReservationEventProducer;
 import no.acntech.reservation.repository.ReservationRepository;
 
 @SuppressWarnings({"Duplicates"})
@@ -29,13 +32,16 @@ public class ReservationService {
     private final ConversionService conversionService;
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
+    private final ReservationEventProducer reservationEventProducer;
 
     public ReservationService(final ConversionService conversionService,
                               final ReservationRepository reservationRepository,
-                              final ProductRepository productRepository) {
+                              final ProductRepository productRepository,
+                              final ReservationEventProducer reservationEventProducer) {
         this.conversionService = conversionService;
         this.reservationRepository = reservationRepository;
         this.productRepository = productRepository;
+        this.reservationEventProducer = reservationEventProducer;
     }
 
     public ReservationDto getReservation(@NotNull final UUID reservationId) {
@@ -61,8 +67,8 @@ public class ReservationService {
     }
 
     public void createReservation(@NotNull final CreateReservationDto createReservation) {
-        UUID productId = createReservation.getProductId();
         UUID orderId = createReservation.getOrderId();
+        UUID productId = createReservation.getProductId();
         Long quantity = createReservation.getQuantity();
 
         Optional<Product> productOptional = productRepository.findByProductId(productId);
@@ -78,7 +84,17 @@ public class ReservationService {
                         .product(product)
                         .quantity(quantity)
                         .build();
-                reservationRepository.save(reservation);
+                Reservation savedReservation = reservationRepository.save(reservation);
+
+                ReservationEvent event = ReservationEvent.builder()
+                        .eventType(ReservationEventType.RESERVATION_CREATED)
+                        .reservationId(savedReservation.getReservationId())
+                        .status(savedReservation.getStatus())
+                        .orderId(orderId)
+                        .productId(productId)
+                        .quantity(quantity)
+                        .build();
+                reservationEventProducer.publish(event);
             } else {
                 Reservation reservation = Reservation.builder()
                         .reservationId(UUID.randomUUID())
@@ -87,7 +103,17 @@ public class ReservationService {
                         .product(product)
                         .quantity(quantity)
                         .build();
-                reservationRepository.save(reservation);
+                Reservation savedReservation = reservationRepository.save(reservation);
+
+                ReservationEvent event = ReservationEvent.builder()
+                        .eventType(ReservationEventType.RESERVATION_REJECTED)
+                        .reservationId(savedReservation.getReservationId())
+                        .status(savedReservation.getStatus())
+                        .orderId(orderId)
+                        .productId(productId)
+                        .quantity(quantity)
+                        .build();
+                reservationEventProducer.publish(event);
             }
         } else {
             Reservation reservation = Reservation.builder()
@@ -96,7 +122,17 @@ public class ReservationService {
                     .orderId(orderId)
                     .quantity(quantity)
                     .build();
-            reservationRepository.save(reservation);
+            Reservation savedReservation = reservationRepository.save(reservation);
+
+            ReservationEvent event = ReservationEvent.builder()
+                    .eventType(ReservationEventType.RESERVATION_FAILED)
+                    .reservationId(savedReservation.getReservationId())
+                    .status(savedReservation.getStatus())
+                    .orderId(orderId)
+                    .productId(productId)
+                    .quantity(quantity)
+                    .build();
+            reservationEventProducer.publish(event);
         }
     }
 
