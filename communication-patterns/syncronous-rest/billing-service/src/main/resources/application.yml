@@ -1,0 +1,54 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    ordering:
+      api:
+        orders:
+          url: ${acntech.service.ordering.api.url}/orders
+
+########################
+# SPRING Configuration #
+########################
+spring:
+  application:
+    name: syncronous-rest-billing
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      adjust-dates-to-context-time-zone: false
+  jmx:
+    enabled: false
+  aop:
+    proxy-target-class: true
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  flyway:
+    locations:
+      - classpath:db/vendor/${spring.datasource.platform}
+      - classpath:db/migration
+  kafka:
+    producer:
+      client-id: ${spring.application.name}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      client-id: ${spring.application.name}
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+# Server
+server:
+  port: 9020
+  servlet:
+    context-path: /api
