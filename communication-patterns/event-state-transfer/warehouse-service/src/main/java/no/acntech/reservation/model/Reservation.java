@@ -16,8 +16,6 @@ import javax.persistence.Table;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import no.acntech.product.model.Product;
 
 @Table(name = "RESERVATIONS")
@@ -43,7 +41,6 @@ public class Reservation {
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
-    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -72,8 +69,12 @@ public class Reservation {
         return status;
     }
 
-    public void setStatus(ReservationStatus status) {
-        this.status = status;
+    public void confirmReservation() {
+        this.status = ReservationStatus.CONFIRMED;
+    }
+
+    public void cancelReservation() {
+        this.status = ReservationStatus.CANCELED;
     }
 
     public ZonedDateTime getCreated() {
@@ -100,18 +101,12 @@ public class Reservation {
 
     public static final class Builder {
 
-        private UUID reservationId;
         private Product product;
         private UUID orderId;
         private Long quantity;
         private ReservationStatus status;
 
         private Builder() {
-        }
-
-        public Builder reservationId(UUID reservationId) {
-            this.reservationId = reservationId;
-            return this;
         }
 
         public Builder product(Product product) {
@@ -146,7 +141,7 @@ public class Reservation {
 
         public Reservation build() {
             Reservation reservation = new Reservation();
-            reservation.reservationId = this.reservationId;
+            reservation.reservationId = UUID.randomUUID();
             reservation.product = this.product;
             reservation.orderId = this.orderId;
             reservation.quantity = this.quantity;

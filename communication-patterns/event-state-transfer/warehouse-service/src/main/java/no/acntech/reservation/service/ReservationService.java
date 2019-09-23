@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,13 @@ import org.springframework.stereotype.Service;
 import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 import no.acntech.reservation.exception.ReservationNotFoundException;
+import no.acntech.reservation.model.CancelReservationDto;
 import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.Reservation;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.ReservationEvent;
-import no.acntech.reservation.model.ReservationEventType;
 import no.acntech.reservation.model.ReservationQuery;
+import no.acntech.reservation.model.UpdateReservationDto;
 import no.acntech.reservation.producer.ReservationEventProducer;
 import no.acntech.reservation.repository.ReservationRepository;
 
@@ -27,6 +30,7 @@ import no.acntech.reservation.repository.ReservationRepository;
 @Service
 public class ReservationService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
     private static final Sort SORT_BY_ID = Sort.by("id");
 
     private final ConversionService conversionService;
@@ -46,7 +50,7 @@ public class ReservationService {
 
     public ReservationDto getReservation(@NotNull final UUID reservationId) {
         return reservationRepository.findByReservationId(reservationId)
-                .map(this::convert)
+                .map(this::convertDto)
                 .orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 
@@ -56,18 +60,17 @@ public class ReservationService {
         if (orderId == null) {
             return reservationRepository.findAll(SORT_BY_ID)
                     .stream()
-                    .map(this::convert)
+                    .map(this::convertDto)
                     .collect(Collectors.toList());
         } else {
             return reservationRepository.findAllByOrderId(orderId, SORT_BY_ID)
                     .stream()
-                    .map(this::convert)
+                    .map(this::convertDto)
                     .collect(Collectors.toList());
         }
     }
 
     public void createReservation(@NotNull final CreateReservationDto createReservation) {
-        UUID orderId = createReservation.getOrderId();
         UUID productId = createReservation.getProductId();
         Long quantity = createReservation.getQuantity();
 
@@ -77,66 +80,127 @@ public class ReservationService {
             Product product = productOptional.get();
 
             if (product.getStock() >= quantity) {
-                Reservation reservation = Reservation.builder()
-                        .reservationId(UUID.randomUUID())
-                        .statusReserved()
-                        .orderId(orderId)
-                        .product(product)
-                        .quantity(quantity)
-                        .build();
-                Reservation savedReservation = reservationRepository.save(reservation);
-
-                ReservationEvent event = ReservationEvent.builder()
-                        .eventType(ReservationEventType.RESERVATION_CREATED)
-                        .reservationId(savedReservation.getReservationId())
-                        .status(savedReservation.getStatus())
-                        .orderId(orderId)
-                        .productId(productId)
-                        .quantity(quantity)
-                        .build();
-                reservationEventProducer.publish(event);
+                createReservationReserved(createReservation, product);
             } else {
-                Reservation reservation = Reservation.builder()
-                        .reservationId(UUID.randomUUID())
-                        .statusRejected()
-                        .orderId(orderId)
-                        .product(product)
-                        .quantity(quantity)
-                        .build();
-                Reservation savedReservation = reservationRepository.save(reservation);
-
-                ReservationEvent event = ReservationEvent.builder()
-                        .eventType(ReservationEventType.RESERVATION_REJECTED)
-                        .reservationId(savedReservation.getReservationId())
-                        .status(savedReservation.getStatus())
-                        .orderId(orderId)
-                        .productId(productId)
-                        .quantity(quantity)
-                        .build();
-                reservationEventProducer.publish(event);
+                createReservationRejected(createReservation, product);
             }
         } else {
-            Reservation reservation = Reservation.builder()
-                    .reservationId(UUID.randomUUID())
-                    .statusFailed()
-                    .orderId(orderId)
-                    .quantity(quantity)
-                    .build();
-            Reservation savedReservation = reservationRepository.save(reservation);
-
-            ReservationEvent event = ReservationEvent.builder()
-                    .eventType(ReservationEventType.RESERVATION_FAILED)
-                    .reservationId(savedReservation.getReservationId())
-                    .status(savedReservation.getStatus())
-                    .orderId(orderId)
-                    .productId(productId)
-                    .quantity(quantity)
-                    .build();
-            reservationEventProducer.publish(event);
+            createReservationFailed(createReservation);
         }
     }
 
-    private ReservationDto convert(final Reservation reservation) {
+    private void createReservationReserved(@NotNull final CreateReservationDto createReservation,
+                                           @NotNull final Product product) {
+        UUID orderId = createReservation.getOrderId();
+        Long quantity = createReservation.getQuantity();
+
+        Reservation reservation = Reservation.builder()
+                .statusReserved()
+                .orderId(orderId)
+                .product(product)
+                .quantity(quantity)
+                .build();
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        ReservationEvent event = convertEvent(savedReservation);
+        reservationEventProducer.publish(event);
+    }
+
+    private void createReservationRejected(@NotNull final CreateReservationDto createReservation,
+                                           @NotNull final Product product) {
+        UUID orderId = createReservation.getOrderId();
+        Long quantity = createReservation.getQuantity();
+
+        Reservation reservation = Reservation.builder()
+                .statusRejected()
+                .orderId(orderId)
+                .product(product)
+                .quantity(quantity)
+                .build();
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        ReservationEvent event = convertEvent(savedReservation);
+        reservationEventProducer.publish(event);
+    }
+
+    private void createReservationFailed(@NotNull final CreateReservationDto createReservation) {
+        UUID orderId = createReservation.getOrderId();
+        Long quantity = createReservation.getQuantity();
+
+        Reservation reservation = Reservation.builder()
+                .statusFailed()
+                .orderId(orderId)
+                .quantity(quantity)
+                .build();
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        ReservationEvent event = convertEvent(savedReservation);
+        reservationEventProducer.publish(event);
+    }
+
+    public void updateAllReservations(@NotNull final UpdateReservationDto updateReservation) {
+        UUID orderId = updateReservation.getOrderId();
+
+        List<Reservation> reservations = reservationRepository.findAllByOrderId(orderId, SORT_BY_ID);
+
+        reservations.forEach(reservation -> {
+            reservation.confirmReservation();
+            reservationRepository.save(reservation);
+        });
+    }
+
+    public void updateReservation(@NotNull final UpdateReservationDto updateReservation) {
+        UUID orderId = updateReservation.getOrderId();
+        UUID productId = updateReservation.getProductId();
+
+        Optional<Reservation> reservationOptional = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
+
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            reservation.confirmReservation();
+            Reservation savedReservation = reservationRepository.save(reservation);
+
+            ReservationEvent event = convertEvent(savedReservation);
+            reservationEventProducer.publish(event);
+        } else {
+            LOGGER.error("No reservation found for order-id {} and product-id {}", orderId, productId);
+        }
+    }
+
+    public void cancelAllReservations(@NotNull final CancelReservationDto cancelReservation) {
+        UUID orderId = cancelReservation.getOrderId();
+
+        List<Reservation> reservations = reservationRepository.findAllByOrderId(orderId, SORT_BY_ID);
+
+        reservations.forEach(reservation -> {
+            reservation.cancelReservation();
+            reservationRepository.save(reservation);
+        });
+    }
+
+    public void cancelReservation(@NotNull final CancelReservationDto cancelReservation) {
+        UUID orderId = cancelReservation.getOrderId();
+        UUID productId = cancelReservation.getProductId();
+
+        Optional<Reservation> reservationOptional = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
+
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            reservation.cancelReservation();
+            Reservation savedReservation = reservationRepository.save(reservation);
+
+            ReservationEvent event = convertEvent(savedReservation);
+            reservationEventProducer.publish(event);
+        } else {
+            LOGGER.error("No reservation found for order-id {} and product-id {}", orderId, productId);
+        }
+    }
+
+    private ReservationDto convertDto(final Reservation reservation) {
         return conversionService.convert(reservation, ReservationDto.class);
+    }
+
+    private ReservationEvent convertEvent(final Reservation reservation) {
+        return conversionService.convert(reservation, ReservationEvent.class);
     }
 }

@@ -57,5 +57,6 @@ export default {
     'enum.item-status.CONFIRMED': 'CONFIRMED',
     'enum.item-status.CANCELED': 'CANCELED',
     'enum.item-status.REJECTED': 'REJECTED',
-    'enum.item-status.FAILED': 'FAILED'
+    'enum.item-status.FAILED': 'FAILED',
+    'enum.item-status.undefined': 'UNKNOWN'
 };
