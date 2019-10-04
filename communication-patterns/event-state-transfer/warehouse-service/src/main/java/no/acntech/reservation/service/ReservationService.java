@@ -145,7 +145,10 @@ public class ReservationService {
 
         reservations.forEach(reservation -> {
             reservation.confirmReservation();
-            reservationRepository.save(reservation);
+            Reservation savedReservation = reservationRepository.save(reservation);
+
+            ReservationEvent event = convertEvent(savedReservation);
+            reservationEventProducer.publish(event);
         });
     }
 

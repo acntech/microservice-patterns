@@ -109,21 +109,25 @@ interface HeaderLoginFragmentProps {
 
 const HeaderLoginFragment: FunctionComponent<HeaderLoginFragmentProps> = (props: HeaderLoginFragmentProps) => {
     const {user, logoutButtonText, onLogoutClick} = props;
-    const {firstName, lastName} = user || {firstName: 'N/A', lastName: 'N/A'};
-    const name = `${firstName} ${lastName}`;
+    if (user) {
+        const {firstName, lastName} = user;
+        const name = `${firstName} ${lastName}`;
 
-    return (
-        <Header as="h3" floated="right" className="primary-header-login">
-            <Icon name="user" />
-            <Header.Content>
-                <Dropdown text={name}>
-                    <Dropdown.Menu>
-                        <Dropdown.Item text={logoutButtonText} onClick={onLogoutClick} />
-                    </Dropdown.Menu>
-                </Dropdown>
-            </Header.Content>
-        </Header>
-    );
+        return (
+            <Header as="h3" floated="right" className="primary-header-login">
+                <Icon name="user" />
+                <Header.Content>
+                    <Dropdown text={name}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item text={logoutButtonText} onClick={onLogoutClick} />
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Header.Content>
+            </Header>
+        );
+    } else {
+        return null;
+    }
 };
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({

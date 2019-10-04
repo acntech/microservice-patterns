@@ -5,7 +5,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,7 +40,7 @@ public class Order {
     @Column(nullable = false)
     private OrderStatus status;
     @SortNatural
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
     @Column(nullable = false, updatable = false)
     private ZonedDateTime created;

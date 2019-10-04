@@ -64,29 +64,29 @@ public class OrderService {
         if (customerId != null && status != null) {
             return orderRepository.findAllByCustomerIdAndStatus(customerId, status, SORT_BY_ID)
                     .stream()
-                    .map(this::convert)
+                    .map(this::convertDto)
                     .collect(Collectors.toList());
         } else if (customerId != null) {
             return orderRepository.findAllByCustomerId(customerId, SORT_BY_ID)
                     .stream()
-                    .map(this::convert)
+                    .map(this::convertDto)
                     .collect(Collectors.toList());
         } else if (status != null) {
             return orderRepository.findAllByStatus(status, SORT_BY_ID)
                     .stream()
-                    .map(this::convert)
+                    .map(this::convertDto)
                     .collect(Collectors.toList());
         } else {
             return orderRepository.findAll(SORT_BY_ID)
                     .stream()
-                    .map(this::convert)
+                    .map(this::convertDto)
                     .collect(Collectors.toList());
         }
     }
 
     public OrderDto getOrder(@NotNull final UUID orderId) {
         Order order = getOrderByOrderId(orderId);
-        return convert(order);
+        return convertDto(order);
     }
 
     @Transactional
@@ -104,7 +104,7 @@ public class OrderService {
                 .build();
         orderEventProducer.publish(orderEvent);
 
-        return convert(createdOrder);
+        return convertDto(createdOrder);
     }
 
     @Transactional
@@ -142,7 +142,7 @@ public class OrderService {
     public ItemDto getItem(@NotNull final UUID itemId) {
         Item item = getItemByItemId(itemId);
         Order order = getOrderById(item.getOrderId());
-        OrderDto orderDto = convert(order);
+        OrderDto orderDto = convertDto(order);
         return orderDto.getItems().stream()
                 .filter(itemDto -> itemDto.getItemId().equals(itemId))
                 .findFirst()
@@ -178,7 +178,7 @@ public class OrderService {
             orderEventProducer.publish(orderEvent);
 
             Order updatedOrder = getOrderByOrderId(orderId);
-            return convert(updatedOrder);
+            return convertDto(updatedOrder);
         } else {
             throw new ItemAlreadyExistsException(orderId, productId);
         }
@@ -186,13 +186,14 @@ public class OrderService {
 
     @Transactional
     public void updateItem(@NotNull final UUID itemId, @Valid final UpdateItemDto updateItem) {
+        Long quantity = updateItem.getQuantity();
+
         Item item = getItemByItemId(itemId);
         Order order = getOrderById(item.getOrderId());
 
         UUID orderId = order.getOrderId();
         OrderStatus orderStatus = order.getStatus();
         UUID productId = item.getProductId();
-        Long quantity = updateItem.getQuantity();
         ItemStatus itemStatus = item.getStatus();
 
         LOGGER.debug("Updated order item for order-id {} and product-id {}", orderId, productId);
@@ -245,7 +246,7 @@ public class OrderService {
                 .orElseThrow(() -> new ItemNotFoundException(itemId));
     }
 
-    private OrderDto convert(final Order order) {
+    private OrderDto convertDto(final Order order) {
         return conversionService.convert(order, OrderDto.class);
     }
 }

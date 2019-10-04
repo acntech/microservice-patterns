@@ -35,8 +35,7 @@ Supply Spring profiles to specify configuration options either using en environm
 Available profiles:
 * `default` (used if no profiles are specified): Local environment using an embedded H2 in-memory database.
 * `development`: Local environment using a Postgres database.
-* `j2c`: AWS environment using a Postgres database.
 
 ### ReactJS UI App
-The React/Redux based front end application can be started from source code using Yarn `yarn dev-start` or NPM `npm run dev-start`.
+The React/Redux based front end application can be started from source code using Yarn `yarn dev-start` or NPM `npm run start`.
 

@@ -45,8 +45,10 @@ public class OrderService {
         switch (eventType) {
             case ORDER_UPDATED:
                 processOrderUpdated(orderEvent);
+                break;
             case ORDER_CANCELED:
                 processOrderCanceled(orderEvent);
+                break;
             case ORDER_ITEM_ADDED:
                 processOrderItemAdded(orderEvent);
                 break;

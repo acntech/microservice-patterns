@@ -17,7 +17,6 @@ spring:
     proxy-target-class: true
   jpa:
     show-sql: false
-    open-in-view: false
     hibernate:
       ddl-auto: none
     properties:
