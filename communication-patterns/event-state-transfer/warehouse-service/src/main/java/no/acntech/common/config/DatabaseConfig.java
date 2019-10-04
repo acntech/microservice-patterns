@@ -12,7 +12,6 @@ import no.acntech.common.converter.ZonedDateTimeAttributeConverter;
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {
         "no.acntech.product.repository",
-        "no.acntech.inventory.repository",
         "no.acntech.reservation.repository"
 })
 @EntityScan(
@@ -22,7 +21,6 @@ import no.acntech.common.converter.ZonedDateTimeAttributeConverter;
                 UUIDAttributeConverter.class},
         basePackages = {
                 "no.acntech.product.model",
-                "no.acntech.inventory.model",
                 "no.acntech.reservation.model"
         })
 @Configuration

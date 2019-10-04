@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import no.acntech.invoice.exception.InvoiceNotFoundException;
-import no.acntech.invoice.model.CreateInvoice;
+import no.acntech.invoice.model.CreateInvoiceDto;
 import no.acntech.invoice.model.Invoice;
 import no.acntech.invoice.model.InvoiceDto;
 import no.acntech.invoice.model.InvoiceQuery;
@@ -63,7 +63,7 @@ public class InvoiceService {
                 .orElseThrow(() -> new InvoiceNotFoundException(invoiceId));
     }
 
-    public InvoiceDto createInvoice(final CreateInvoice createInvoice) {
+    public InvoiceDto createInvoice(final CreateInvoiceDto createInvoice) {
         Invoice invoice = conversionService.convert(createInvoice, Invoice.class);
         Assert.notNull(invoice, "Failed to convert invoice");
 

@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Header, Icon, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { globalConfig } from '../../core/config';
-import { RootState, UserState } from '../../models';
+import { RootState, User, UserState } from '../../models';
 import { logoutUser } from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
@@ -53,31 +52,16 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
         const {title, subtitle, userState, intl} = this.props;
         const {user} = userState;
 
-        if (globalConfig.enableSimpleLogin && !user) {
+        if (false && !user) {
             return <Redirect to="/login" />;
         } else {
             document.title = this.browserTitle();
             const logoutButtonText = intl.formatMessage({id: 'button.logout.text'});
-            const {firstName, lastName} = user || {firstName: 'N/A', lastName: 'N/A'};
-            const name = `${firstName} ${lastName}`;
 
             return (
                 <Segment basic className="primary-header">
-                    <Header as="h1" floated="left" className="primary-header-title">
-                        <Link to="/">
-                            <Icon name="box" /> <HeaderTitle title={title} subtitle={subtitle} />
-                        </Link>
-                    </Header>
-                    <Header as="h3" floated="right" className="primary-header-login">
-                        <Icon name="user" />
-                        <Header.Content>
-                            <Dropdown text={name}>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item text={logoutButtonText} onClick={this.onLogoutClick} />
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </Header.Content>
-                    </Header>
+                    <HeaderLogoFragment title={title} subtitle={subtitle} />
+                    <HeaderLoginFragment user={user} logoutButtonText={logoutButtonText} onLogoutClick={this.onLogoutClick} />
                 </Segment>
             );
         }
@@ -99,19 +83,50 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
     };
 }
 
-interface HeaderTitleProps {
+interface HeaderLogoFragmentProps {
     title?: string;
     subtitle?: string;
 }
 
-const HeaderTitle: FunctionComponent<HeaderTitleProps> = (props: HeaderTitleProps) => {
+const HeaderLogoFragment: FunctionComponent<HeaderLogoFragmentProps> = (props: HeaderLogoFragmentProps) => {
     const {title, subtitle} = props;
-
     const formattedHeaderTitle = title ? title : 'primary.header.title';
-    if (subtitle) {
-        return <><FormattedMessage id={formattedHeaderTitle} /> - <FormattedMessage id={subtitle} /></>;
+
+    return (
+        <Header as="h1" floated="left" className="primary-header-title">
+            <Link to="/">
+                <Icon name="box" /> < FormattedMessage id={formattedHeaderTitle} />{subtitle ? <> - <FormattedMessage id={subtitle} /></> : null}
+            </Link>
+        </Header>
+    );
+};
+
+interface HeaderLoginFragmentProps {
+    user?: User;
+    logoutButtonText: string;
+    onLogoutClick: () => void;
+}
+
+const HeaderLoginFragment: FunctionComponent<HeaderLoginFragmentProps> = (props: HeaderLoginFragmentProps) => {
+    const {user, logoutButtonText, onLogoutClick} = props;
+    if (user) {
+        const {firstName, lastName} = user;
+        const name = `${firstName} ${lastName}`;
+
+        return (
+            <Header as="h3" floated="right" className="primary-header-login">
+                <Icon name="user" />
+                <Header.Content>
+                    <Dropdown text={name}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item text={logoutButtonText} onClick={onLogoutClick} />
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Header.Content>
+            </Header>
+        );
     } else {
-        return <FormattedMessage id={formattedHeaderTitle} />;
+        return null;
     }
 };
 

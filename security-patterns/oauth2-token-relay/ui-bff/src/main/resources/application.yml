@@ -13,7 +13,7 @@ acntech:
       url: http://localhost:9040/api/reservations
   security:
     login-page: /oauth2/authorization/token-relay-ui
-    failure-url: /login/opaque?error
+    failure-url: /login/redirect?error
     logout-success-url: http://localhost:8888/uaa/logout.do?client_id=token-relay-ui&redirect=http://localhost:3000
 
 ########################

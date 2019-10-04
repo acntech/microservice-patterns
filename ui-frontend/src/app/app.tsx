@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { RootContainer } from './containers';
 
-import { ErrorHandlerProvider } from './providers';
+import { AuthenticationProvider, ErrorHandlerProvider } from './providers';
 import { store } from './state/store';
 
 class App extends Component<{}> {
@@ -17,7 +17,9 @@ class App extends Component<{}> {
             <Provider store={store}>
                 <IntlProvider key={locale} locale={locale} messages={messages}>
                     <ErrorHandlerProvider>
-                        <RootContainer />
+                        <AuthenticationProvider>
+                            <RootContainer />
+                        </AuthenticationProvider>
                     </ErrorHandlerProvider>
                 </IntlProvider>
             </Provider>

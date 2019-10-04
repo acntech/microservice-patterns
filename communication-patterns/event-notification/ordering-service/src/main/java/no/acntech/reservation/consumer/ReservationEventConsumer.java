@@ -35,13 +35,13 @@ public class ReservationEventConsumer {
     public void startConsumer() {
         try {
             kafkaConsumer.subscribe(KafkaTopic.RESERVATIONS.toList());
-            LOGGER.info("Subscribe to topics {} and starting consumption of messages...", KafkaTopic.RESERVATIONS.toList());
+            LOGGER.info("Subscribe to topics {} and starting consumption of events...", KafkaTopic.RESERVATIONS.toList());
             while (true) {
                 final ConsumerRecords<String, ReservationEvent> records = kafkaConsumer.poll(POLL_TIMEOUT);
                 records.forEach(this::consume);
             }
         } finally {
-            LOGGER.info("Unsubscribe from topics {} and ending consumption of messages...", KafkaTopic.RESERVATIONS.toList());
+            LOGGER.info("Unsubscribe from topics {} and ending consumption of events...", KafkaTopic.RESERVATIONS.toList());
             kafkaConsumer.unsubscribe();
             kafkaConsumer.close();
         }

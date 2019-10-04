@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import org.springframework.data.annotation.LastModifiedDate;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "SHIPMENTS")
@@ -31,6 +29,9 @@ public class Shipment {
     private UUID shipmentId;
     @NotNull
     @Column(nullable = false)
+    private UUID customerId;
+    @NotNull
+    @Column(nullable = false)
     private UUID orderId;
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -38,7 +39,6 @@ public class Shipment {
     private ShipmentStatus status;
     @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
-    @LastModifiedDate
     private ZonedDateTime modified;
 
     @JsonIgnore
@@ -50,16 +50,16 @@ public class Shipment {
         return shipmentId;
     }
 
+    public UUID getCustomerId() {
+        return customerId;
+    }
+
     public UUID getOrderId() {
         return orderId;
     }
 
     public ShipmentStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(ShipmentStatus status) {
-        this.status = status;
     }
 
     public ZonedDateTime getCreated() {
@@ -88,9 +88,15 @@ public class Shipment {
 
     public static final class Builder {
 
+        private UUID customerId;
         private UUID orderId;
 
         private Builder() {
+        }
+
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
+            return this;
         }
 
         public Builder orderId(UUID orderId) {
@@ -100,6 +106,7 @@ public class Shipment {
 
         public Shipment build() {
             Shipment shipment = new Shipment();
+            shipment.customerId = this.customerId;
             shipment.orderId = this.orderId;
             return shipment;
         }

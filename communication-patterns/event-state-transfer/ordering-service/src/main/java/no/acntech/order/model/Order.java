@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -30,13 +29,13 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
     @Column(nullable = false)
     private UUID orderId;
-    @NotNull
     @Column(nullable = false)
     private UUID customerId;
-    @NotNull
+    @Column(nullable = false)
+    private String name;
+    private String description;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
@@ -60,12 +59,16 @@ public class Order {
         return customerId;
     }
 
-    public OrderStatus getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    public String getDescription() {
+        return description;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
     }
 
     public List<Item> getItems() {
@@ -78,6 +81,14 @@ public class Order {
 
     public ZonedDateTime getModified() {
         return modified;
+    }
+
+    public void confirmOrder() {
+        status = OrderStatus.CONFIRMED;
+    }
+
+    public void cancelOrder() {
+        status = OrderStatus.CANCELED;
     }
 
     @PrePersist
@@ -99,6 +110,8 @@ public class Order {
     public static final class Builder {
 
         private UUID customerId;
+        private String name;
+        private String description;
 
         private Builder() {
         }
@@ -108,9 +121,21 @@ public class Order {
             return this;
         }
 
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
         public Order build() {
             Order order = new Order();
             order.customerId = this.customerId;
+            order.name = this.name;
+            order.description = this.description;
             return order;
         }
     }

@@ -2,15 +2,16 @@ package no.acntech.product.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -23,13 +24,18 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
     @Column(nullable = false)
     private UUID productId;
-    @NotBlank
     @Column(nullable = false)
     private String name;
     private String description;
+    @Column(nullable = false)
+    private Long stock;
+    @Column(nullable = false)
+    private BigDecimal price;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Currency currency;
     @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
     private ZonedDateTime modified;
@@ -49,6 +55,18 @@ public class Product {
 
     public String getDescription() {
         return description;
+    }
+
+    public Long getStock() {
+        return stock;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Currency getCurrency() {
+        return currency;
     }
 
     public ZonedDateTime getCreated() {
@@ -78,6 +96,9 @@ public class Product {
 
         private String name;
         private String description;
+        private Long stock;
+        private BigDecimal price;
+        private Currency currency;
 
         private Builder() {
         }
@@ -92,9 +113,27 @@ public class Product {
             return this;
         }
 
+        public Builder stock(Long stock) {
+            this.stock = stock;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder currency(Currency currency) {
+            this.currency = currency;
+            return this;
+        }
+
         public Product build() {
             Product product = new Product();
             product.description = this.description;
+            product.stock = this.stock;
+            product.price = this.price;
+            product.currency = this.currency;
             product.name = this.name;
             return product;
         }

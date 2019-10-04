@@ -1,6 +1,6 @@
 FROM openjdk:8-jre-alpine
 
-EXPOSE 9000
+EXPOSE 9010
 
 VOLUME /tmp
 

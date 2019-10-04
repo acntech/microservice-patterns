@@ -34,13 +34,13 @@ public class OrderEventConsumer {
     public void startConsumer() {
         try {
             kafkaConsumer.subscribe(KafkaTopic.ORDERS.toList());
-            LOGGER.info("Subscribe to topics {} and starting consumption of messages...", KafkaTopic.ORDERS.toList());
+            LOGGER.info("Subscribe to topics {} and starting consumption of events...", KafkaTopic.ORDERS.toList());
             while (true) {
                 final ConsumerRecords<String, OrderEvent> records = kafkaConsumer.poll(Duration.ofMillis(200));
                 records.forEach(this::consume);
             }
         } finally {
-            LOGGER.info("Unsubscribe from topics {} and ending consumption of messages...", KafkaTopic.ORDERS.toList());
+            LOGGER.info("Unsubscribe from topics {} and ending consumption of events...", KafkaTopic.ORDERS.toList());
             kafkaConsumer.unsubscribe();
             kafkaConsumer.close();
         }

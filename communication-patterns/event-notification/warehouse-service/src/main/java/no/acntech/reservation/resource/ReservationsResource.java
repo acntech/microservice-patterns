@@ -32,8 +32,8 @@ public class ReservationsResource {
         this.reservationFacadeService = reservationFacadeService;
     }
 
-    @GetMapping(path = "{reservationId}")
-    public ResponseEntity<ReservationDto> get(@PathVariable("reservationId") UUID reservationId) {
+    @GetMapping(path = "{id}")
+    public ResponseEntity<ReservationDto> get(@PathVariable("id") UUID reservationId) {
         final ReservationDto reservation = reservationFacadeService.getReservation(reservationId);
         return ResponseEntity.ok(reservation);
     }
@@ -52,15 +52,15 @@ public class ReservationsResource {
                 .body(pendingReservation);
     }
 
-    @PutMapping(path = "{reservationId}")
-    public ResponseEntity update(@PathVariable("reservationId") UUID reservationId,
+    @PutMapping(path = "{id}")
+    public ResponseEntity update(@PathVariable("id") UUID reservationId,
                                  @Valid @RequestBody final UpdateReservationDto updateReservation) {
         reservationFacadeService.updateReservation(reservationId, updateReservation);
         return ResponseEntity.accepted().build();
     }
 
-    @DeleteMapping(path = "{reservationId}")
-    public ResponseEntity delete(@PathVariable("reservationId") UUID reservationId) {
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity delete(@PathVariable("id") UUID reservationId) {
         reservationFacadeService.deleteReservation(reservationId);
         return ResponseEntity.accepted().build();
     }

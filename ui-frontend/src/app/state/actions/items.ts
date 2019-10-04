@@ -4,7 +4,7 @@ import {
     CreateItem, CreateItemActionType, CreateItemErrorAction, CreateItemLoadingAction, CreateItemSuccessAction, DeleteItemActionType, DeleteItemErrorAction, DeleteItemLoadingAction,
     DeleteItemSuccessAction, GetItemActionType, GetItemErrorAction, GetItemLoadingAction, GetItemSuccessAction, Item
 } from '../../models';
-import { showError, showSuccess } from '../actions';
+import { showErrorNotification, showSuccessNotification } from '../actions';
 
 const getItemLoading = (loading: boolean): GetItemLoadingAction => ({type: GetItemActionType.LOADING, loading});
 const getItemSuccess = (payload: Item): GetItemSuccessAction => ({type: GetItemActionType.SUCCESS, payload});
@@ -27,9 +27,8 @@ export function getItem(itemId: string) {
                 return dispatch(getItemSuccess(response));
             })
             .catch((error) => {
-                const {data} = error.response;
-                const message = data && data.message;
-                dispatch(showError('Error getting item', message, true));
+                const {message} = error.response && error.response.data;
+                dispatch(showErrorNotification('Error getting item', message, true));
                 return dispatch(getItemError(error));
             });
     };
@@ -41,13 +40,12 @@ export function createItem(orderId: string, item: CreateItem) {
         const url = `orders/${orderId}/items`;
         return client.post(url, item)
             .then((response) => {
-                dispatch(showSuccess('Item created successfully'));
+                dispatch(showSuccessNotification('Item created successfully'));
                 return dispatch(createItemSuccess(response.headers));
             })
             .catch((error) => {
-                const {data} = error.response;
-                const message = data && data.message;
-                dispatch(showError('Error creating item', message, true));
+                const {message} = error.response && error.response.data;
+                dispatch(showErrorNotification('Error creating item', message, true));
                 return dispatch(createItemError(error));
             });
     };
@@ -59,13 +57,12 @@ export function deleteItem(itemId: string) {
         const url = `items/${itemId}`;
         return client.delete(url)
             .then(() => {
-                dispatch(showSuccess('Item deleted successfully'));
+                dispatch(showSuccessNotification('Item deleted successfully'));
                 return dispatch(deleteItemSuccess(itemId));
             })
             .catch((error) => {
-                const {data} = error.response;
-                const message = data && data.message;
-                dispatch(showError('Error deleting item', message, true));
+                const {message} = error.response && error.response.data;
+                dispatch(showErrorNotification('Error deleting item', message, true));
                 return dispatch(deleteItemError(error));
             });
     };

@@ -2,6 +2,8 @@ package no.acntech.reservation.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,12 +12,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import no.acntech.product.model.Product;
 
@@ -26,22 +25,28 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
+    private UUID reservationId;
     @OneToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
-    @NotNull
     @Column(nullable = false)
     private UUID orderId;
-    @NotNull
     @Column(nullable = false)
     private Long quantity;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ReservationStatus status;
     @Column(nullable = false, updatable = false)
     private ZonedDateTime created;
     private ZonedDateTime modified;
 
-    @JsonIgnore
     public Long getId() {
         return id;
+    }
+
+    public UUID getReservationId() {
+        return reservationId;
     }
 
     public Product getProduct() {
@@ -58,6 +63,18 @@ public class Reservation {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    public ReservationStatus getStatus() {
+        return status;
+    }
+
+    public void confirmReservation() {
+        this.status = ReservationStatus.CONFIRMED;
+    }
+
+    public void cancelReservation() {
+        this.status = ReservationStatus.CANCELED;
     }
 
     public ZonedDateTime getCreated() {
@@ -87,6 +104,7 @@ public class Reservation {
         private Product product;
         private UUID orderId;
         private Long quantity;
+        private ReservationStatus status;
 
         private Builder() {
         }
@@ -106,11 +124,28 @@ public class Reservation {
             return this;
         }
 
+        public Builder statusReserved() {
+            this.status = ReservationStatus.RESERVED;
+            return this;
+        }
+
+        public Builder statusRejected() {
+            this.status = ReservationStatus.REJECTED;
+            return this;
+        }
+
+        public Builder statusFailed() {
+            this.status = ReservationStatus.FAILED;
+            return this;
+        }
+
         public Reservation build() {
             Reservation reservation = new Reservation();
+            reservation.reservationId = UUID.randomUUID();
             reservation.product = this.product;
             reservation.orderId = this.orderId;
             reservation.quantity = this.quantity;
+            reservation.status = this.status;
             return reservation;
         }
     }

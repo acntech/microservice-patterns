@@ -4,7 +4,7 @@ import {
     Customer, CustomerQuery, FindCustomersActionType, FindCustomersErrorAction, FindCustomersLoadingAction, FindCustomersSuccessAction, GetCustomerActionType, GetCustomerErrorAction,
     GetCustomerLoadingAction, GetCustomerSuccessAction
 } from '../../models';
-import { showError } from '../actions';
+import { showErrorNotification } from '../actions';
 
 const getCustomerLoading = (loading: boolean): GetCustomerLoadingAction => ({type: GetCustomerActionType.LOADING, loading});
 const getCustomerSuccess = (payload: Customer): GetCustomerSuccessAction => ({type: GetCustomerActionType.SUCCESS, payload});
@@ -25,9 +25,8 @@ export function getCustomer(customerId: string) {
                 return dispatch(getCustomerSuccess(response));
             })
             .catch((error) => {
-                const {data} = error.response;
-                const message = data && data.message;
-                dispatch(showError('Error finding customers', message, true));
+                const {message} = error.response && error.response.data;
+                dispatch(showErrorNotification('Error finding customers', message, true));
                 return dispatch(getCustomerError(error));
             });
     };
@@ -42,9 +41,8 @@ export function findCustomers(query?: CustomerQuery) {
                 return dispatch(findCustomersSuccess(response));
             })
             .catch((error) => {
-                const {data} = error.response;
-                const message = data && data.message;
-                dispatch(showError('Error finding customers', message, true));
+                const {message} = error.response && error.response.data;
+                dispatch(showErrorNotification('Error finding customers', message, true));
                 return dispatch(findCustomersError(error));
             });
     };
