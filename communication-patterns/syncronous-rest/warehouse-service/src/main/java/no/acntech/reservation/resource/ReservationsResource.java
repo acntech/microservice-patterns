@@ -20,48 +20,48 @@ import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.PendingReservationDto;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;
-import no.acntech.reservation.service.ReservationFacadeService;
+import no.acntech.reservation.service.ReservationService;
 
 @RequestMapping(path = "reservations")
 @RestController
 public class ReservationsResource {
 
-    private final ReservationFacadeService reservationFacadeService;
+    private final ReservationService reservationService;
 
-    public ReservationsResource(final ReservationFacadeService reservationFacadeService) {
-        this.reservationFacadeService = reservationFacadeService;
+    public ReservationsResource(final ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     @GetMapping(path = "{reservationId}")
-    public ResponseEntity<ReservationDto> get(@PathVariable("reservationId") UUID reservationId) {
-        final ReservationDto reservation = reservationFacadeService.getReservation(reservationId);
+    public ResponseEntity<ReservationDto> get(@PathVariable("reservationId") final UUID reservationId) {
+        final ReservationDto reservation = reservationService.getReservation(reservationId);
         return ResponseEntity.ok(reservation);
     }
 
     @GetMapping
     public ResponseEntity<List<ReservationDto>> find(@RequestParam(name = "orderId", required = false) final UUID orderId) {
-        final List<ReservationDto> reservations = reservationFacadeService.findReservations(orderId);
+        final List<ReservationDto> reservations = reservationService.findReservations(orderId);
         return ResponseEntity.ok(reservations);
     }
 
     @PostMapping
     public ResponseEntity<PendingReservationDto> create(@Valid @RequestBody final CreateReservationDto createReservation) {
         final PendingReservationDto pendingReservation = PendingReservationDto.builder().build();
-        reservationFacadeService.createReservation(pendingReservation, createReservation);
-        return ResponseEntity.accepted()
+        reservationService.createReservation(createReservation);
+        return ResponseEntity.accepted() //TODO må antagelig skrive om bruker av dette endepunktet elns. blir ikke riktig dette
                 .body(pendingReservation);
     }
 
     @PutMapping(path = "{reservationId}")
-    public ResponseEntity update(@PathVariable("reservationId") UUID reservationId,
+    public ResponseEntity update(@PathVariable("reservationId") final UUID reservationId,
                                  @Valid @RequestBody final UpdateReservationDto updateReservation) {
-        reservationFacadeService.updateReservation(reservationId, updateReservation);
+        reservationService.updateReservation(reservationId, updateReservation);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping(path = "{reservationId}")
-    public ResponseEntity delete(@PathVariable("reservationId") UUID reservationId) {
-        reservationFacadeService.deleteReservation(reservationId);
+    public ResponseEntity delete(@PathVariable("reservationId") final UUID reservationId) {
+        reservationService.deleteReservation(reservationId);
         return ResponseEntity.accepted().build();
     }
 }

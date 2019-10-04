@@ -86,6 +86,7 @@ public class Reservation {
 
     @PrePersist
     private void prePersist() {
+        reservationId = UUID.randomUUID();
         created = ZonedDateTime.now();
     }
 

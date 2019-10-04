@@ -18,7 +18,6 @@ import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 import no.acntech.reservation.exception.ReservationNotFoundException;
 import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.PendingReservationDto;
 import no.acntech.reservation.model.Reservation;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.ReservationStatus;
@@ -63,18 +62,17 @@ public class ReservationService {
     }
 
     @Transactional
-    public void createReservation(@Valid final PendingReservationDto pendingReservation,
-                                  @Valid final CreateReservationDto createReservation) {
-        UUID reservationId = pendingReservation.getReservationId();
-        UUID orderId = createReservation.getOrderId();
-        UUID productId = createReservation.getProductId();
-        Long quantity = createReservation.getQuantity();
+    public void createReservation(@Valid final CreateReservationDto createReservation) {
+        final UUID orderId = createReservation.getOrderId();
+        final UUID productId = createReservation.getProductId();
+        final Long quantity = createReservation.getQuantity();
 
-        Optional<Reservation> existingReservation = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
+        final Optional<Reservation> existingReservation = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
 
         if (existingReservation.isPresent()) {
-            Reservation reservation = Reservation.builder()
-                    .reservationId(reservationId)
+            final Reservation existing = existingReservation.get();
+            final Reservation reservation = Reservation.builder()
+                    .reservationId(existing.getReservationId())
                     .orderId(orderId)
                     .quantity(quantity)
                     .statusFailed()
@@ -86,11 +84,10 @@ public class ReservationService {
             final Optional<Product> existingProduct = productRepository.findByProductId(productId);
 
             if (existingProduct.isPresent()) {
-                Product product = existingProduct.get();
+                final Product product = existingProduct.get();
 
                 if (product.getStock() < quantity) {
-                    Reservation reservation = Reservation.builder()
-                            .reservationId(reservationId)
+                    final Reservation reservation = Reservation.builder()
                             .orderId(orderId)
                             .product(product)
                             .quantity(quantity)
@@ -98,10 +95,9 @@ public class ReservationService {
                             .build();
                     reservationRepository.save(reservation);
 
-                    LOGGER.error("Product stock insufficient for reservation-id {}", reservationId);
+                    LOGGER.error("Product stock insufficient for product-id {}", productId);
                 } else {
-                    Reservation reservation = Reservation.builder()
-                            .reservationId(reservationId)
+                    final Reservation reservation = Reservation.builder()
                             .orderId(orderId)
                             .product(product)
                             .quantity(quantity)
@@ -109,18 +105,17 @@ public class ReservationService {
                             .build();
                     reservationRepository.save(reservation);
 
-                    LOGGER.info("Created reservation for reservation-id {}", reservationId);
+                    LOGGER.info("Created reservation for order-id {} and product-id {}", orderId, productId);
                 }
             } else {
-                Reservation reservation = Reservation.builder()
-                        .reservationId(reservationId)
+                final Reservation reservation = Reservation.builder()
                         .orderId(orderId)
                         .quantity(quantity)
                         .statusFailed()
                         .build();
                 reservationRepository.save(reservation);
 
-                LOGGER.error("No product found for reservation-id {}", reservationId);
+                LOGGER.error("No product found for product-id {}", productId);
             }
         }
     }
@@ -128,13 +123,13 @@ public class ReservationService {
     @Transactional
     public void updateReservation(@NotNull final UUID reservationId,
                                   @Valid final UpdateReservationDto updateReservation) {
-        Long quantity = updateReservation.getQuantity();
-        ReservationStatus status = updateReservation.getStatus();
+        final Long quantity = updateReservation.getQuantity();
+        final ReservationStatus status = updateReservation.getStatus();
 
-        Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
+        final Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
 
         if (existingReservation.isPresent()) {
-            Reservation reservation = existingReservation.get();
+            final Reservation reservation = existingReservation.get();
 
             if (quantity != null) {
                 reservation.setQuantity(quantity);
@@ -154,10 +149,10 @@ public class ReservationService {
 
     @Transactional
     public void deleteReservation(@NotNull final UUID reservationId) {
-        Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
+        final Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
 
         if (existingReservation.isPresent()) {
-            Reservation reservation = existingReservation.get();
+            final Reservation reservation = existingReservation.get();
             reservation.setStatus(ReservationStatus.CANCELED);
             reservationRepository.save(reservation);
 
@@ -167,7 +162,7 @@ public class ReservationService {
         }
     }
 
-    private boolean canUpdateStatus(ReservationStatus status) {
+    private boolean canUpdateStatus(final ReservationStatus status) {
         return status != null && status != ReservationStatus.CANCELED && status != ReservationStatus.CONFIRMED;
     }
 

@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {
         "no.acntech.product.repository",
-        "no.acntech.inventory.repository",
         "no.acntech.reservation.repository"
 })
 @EntityScan(
