@@ -14,6 +14,7 @@ public class CreateShipmentConverter implements Converter<CreateShipment, Shipme
     public Shipment convert(@NonNull final CreateShipment createShipment) {
         return Shipment.builder()
                 .orderId(createShipment.getOrderId())
+                .customerId(createShipment.getCustomerId())
                 .build();
     }
 }

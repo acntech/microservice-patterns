@@ -10,8 +10,15 @@ public class CreateShipment {
     @NotNull
     private UUID orderId;
 
+    @NotNull
+    private UUID customerId;
+
     public UUID getOrderId() {
         return orderId;
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
     }
 
     public static Builder builder() {
@@ -20,8 +27,8 @@ public class CreateShipment {
 
     public static final class Builder {
 
-
         private UUID orderId;
+        private UUID customerId;
 
         private Builder() {
         }
@@ -31,9 +38,15 @@ public class CreateShipment {
             return this;
         }
 
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
+            return this;
+        }
+
         public CreateShipment build() {
             CreateShipment createShipment = new CreateShipment();
             createShipment.orderId = this.orderId;
+            createShipment.customerId = this.customerId;
             return createShipment;
         }
     }
