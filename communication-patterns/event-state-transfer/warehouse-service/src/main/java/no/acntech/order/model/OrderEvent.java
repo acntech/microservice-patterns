@@ -12,6 +12,8 @@ public class OrderEvent implements Serializable {
     @NotNull
     private OrderEventType eventType;
     @NotNull
+    private UUID customerId;
+    @NotNull
     private UUID orderId;
     @NotNull
     private OrderStatus orderStatus;
@@ -21,6 +23,10 @@ public class OrderEvent implements Serializable {
 
     public OrderEventType getEventType() {
         return eventType;
+    }
+
+    public UUID getCustomerId() {
+        return customerId;
     }
 
     public UUID getOrderId() {
@@ -50,6 +56,7 @@ public class OrderEvent implements Serializable {
     public static final class Builder {
 
         private OrderEventType eventType;
+        private UUID customerId;
         private UUID orderId;
         private OrderStatus orderStatus;
         private UUID productId;
@@ -62,6 +69,11 @@ public class OrderEvent implements Serializable {
 
         public Builder eventType(OrderEventType eventType) {
             this.eventType = eventType;
+            return this;
+        }
+
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
             return this;
         }
 
@@ -93,6 +105,7 @@ public class OrderEvent implements Serializable {
         public OrderEvent build() {
             OrderEvent orderEvent = new OrderEvent();
             orderEvent.eventType = this.eventType;
+            orderEvent.customerId = this.customerId;
             orderEvent.orderId = this.orderId;
             orderEvent.orderStatus = this.orderStatus;
             orderEvent.productId = this.productId;

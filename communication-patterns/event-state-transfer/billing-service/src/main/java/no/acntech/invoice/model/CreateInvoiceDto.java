@@ -2,13 +2,20 @@ package no.acntech.invoice.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 @Valid
-public class CreateInvoice {
+public class CreateInvoiceDto {
 
     @NotNull
+    private UUID customerId;
+    @NotNull
     private UUID orderId;
+
+    public UUID getCustomerId() {
+        return customerId;
+    }
 
     public UUID getOrderId() {
         return orderId;
@@ -20,9 +27,15 @@ public class CreateInvoice {
 
     public static final class Builder {
 
+        private UUID customerId;
         private UUID orderId;
 
         private Builder() {
+        }
+
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
+            return this;
         }
 
         public Builder orderId(UUID orderId) {
@@ -30,8 +43,9 @@ public class CreateInvoice {
             return this;
         }
 
-        public CreateInvoice build() {
-            CreateInvoice createInvoice = new CreateInvoice();
+        public CreateInvoiceDto build() {
+            CreateInvoiceDto createInvoice = new CreateInvoiceDto();
+            createInvoice.customerId = this.customerId;
             createInvoice.orderId = this.orderId;
             return createInvoice;
         }
