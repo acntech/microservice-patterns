@@ -14,6 +14,7 @@ public class CreateInvoiceConverter implements Converter<CreateInvoice, Invoice>
     public Invoice convert(@NonNull final CreateInvoice createInvoice) {
         return Invoice.builder()
                 .orderId(createInvoice.getOrderId())
+                .customerId(createInvoice.getCustomerId())
                 .build();
     }
 }

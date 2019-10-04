@@ -11,14 +11,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 @EnableTransactionManagement
 @SpringBootApplication
-public class EventNotificationBillingApplication extends SpringBootServletInitializer {
+public class SyncronousRestBillingApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(EventNotificationBillingApplication.class, args);
+        SpringApplication.run(SyncronousRestBillingApplication.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(EventNotificationBillingApplication.class);
+        return application.sources(SyncronousRestBillingApplication.class);
     }
 }
