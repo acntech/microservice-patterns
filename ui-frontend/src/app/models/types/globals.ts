@@ -12,14 +12,9 @@ export interface RootState {
     itemState: ItemState;
 }
 
-export interface Error {
+export interface StateError extends ErrorEntity {
     entityType: EntityType;
     actionType: ActionType;
-    timestamp: string;
-    status: number;
-    error: string;
-    message: string;
-    path: string;
 }
 
 export interface Modified {
@@ -32,6 +27,15 @@ export interface Entity {
     created: string;
     modified: string;
     loaded?: number;
+}
+
+export interface ErrorEntity {
+    errorId: string;
+    timestamp: string;
+    status: number;
+    error: string;
+    message: string;
+    path: string;
 }
 
 export interface FormElementData {

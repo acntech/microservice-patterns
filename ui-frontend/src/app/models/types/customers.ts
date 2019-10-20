@@ -1,4 +1,4 @@
-import { Entity, Error, FindCustomersActionType, GetCustomerActionType, Modified } from '../';
+import { Entity, StateError, FindCustomersActionType, GetCustomerActionType, Modified } from '../';
 
 export interface Customer extends Entity {
     customerId: string;
@@ -15,7 +15,7 @@ export interface CustomerQuery {
 export interface CustomerState {
     loading: boolean;
     customers: Customer[];
-    error?: Error;
+    error?: StateError;
     modified?: Modified;
 }
 

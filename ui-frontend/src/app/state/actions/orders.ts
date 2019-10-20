@@ -1,4 +1,5 @@
 import client from '../../core/client';
+import { RestClient } from '../../core/client/client';
 
 import {
     CreateOrder, CreateOrderActionType, CreateOrderErrorAction, CreateOrderLoadingAction, CreateOrderSuccessAction, DeleteOrderActionType, DeleteOrderErrorAction, DeleteOrderLoadingAction,
@@ -16,7 +17,7 @@ const findOrdersSuccess = (payload: Order[]): FindOrdersSuccessAction => ({type:
 const findOrdersError = (error: any): FindOrdersErrorAction => ({type: FindOrdersActionType.ERROR, error});
 
 const createOrderLoading = (loading: boolean): CreateOrderLoadingAction => ({type: CreateOrderActionType.LOADING, loading});
-const createOrderSuccess = (headers: Headers): CreateOrderSuccessAction => ({type: CreateOrderActionType.SUCCESS, headers});
+const createOrderSuccess = (orderId?: string): CreateOrderSuccessAction => ({type: CreateOrderActionType.SUCCESS, orderId});
 const createOrderError = (error: any): CreateOrderErrorAction => ({type: CreateOrderActionType.ERROR, error});
 
 const updateOrderLoading = (loading: boolean): UpdateOrderLoadingAction => ({type: UpdateOrderActionType.LOADING, loading});
@@ -67,8 +68,9 @@ export function createOrder(order: CreateOrder) {
         const url = `${rootPath}`;
         return client.post(url, order)
             .then((response) => {
+                const orderId = RestClient.extractLocationHeader(response, `${rootPath}/`);
                 dispatch(showSuccessNotification('Order created successfully'));
-                return dispatch(createOrderSuccess(response.headers));
+                return dispatch(createOrderSuccess(orderId));
             })
             .catch((error) => {
                 const {message} = error.response && error.response.data;

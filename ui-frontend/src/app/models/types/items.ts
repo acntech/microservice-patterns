@@ -1,4 +1,4 @@
-import { CreateItemActionType, DeleteItemActionType, Entity, Error, GetItemActionType, ItemStatus, Modified } from '../';
+import { CreateItemActionType, DeleteItemActionType, Entity, StateError, GetItemActionType, ItemStatus, Modified } from '../';
 
 export interface CreateItem {
     productId: string;
@@ -16,7 +16,7 @@ export interface Item extends Entity {
 export interface ItemState {
     loading: boolean;
     items: Item[];
-    error?: Error;
+    error?: StateError;
     modified?: Modified;
 }
 

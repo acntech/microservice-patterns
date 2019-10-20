@@ -1,5 +1,5 @@
 import {Currency, Entity, FindProductsActionType, GetProductActionType} from '../';
-import {Error, Modified} from './';
+import {StateError, Modified} from './';
 
 export interface Product extends Entity {
     productId: string;
@@ -17,7 +17,7 @@ export interface ProductQuery {
 export interface ProductState {
     loading: boolean;
     products: Product[];
-    error?: Error;
+    error?: StateError;
     modified?: Modified;
 }
 

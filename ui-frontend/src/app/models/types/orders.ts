@@ -1,4 +1,4 @@
-import { CreateOrderActionType, DeleteOrderActionType, Entity, Error, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
+import { CreateOrderActionType, DeleteOrderActionType, Entity, StateError, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
 import { Item } from './';
 
 export interface CreateOrder {
@@ -19,7 +19,7 @@ export interface Order extends Entity {
 export interface OrderState {
     loading: boolean;
     orders: Order[];
-    error?: Error;
+    error?: StateError;
     modified?: Modified;
 }
 
@@ -60,7 +60,7 @@ export interface CreateOrderLoadingAction {
 
 export interface CreateOrderSuccessAction {
     type: CreateOrderActionType.SUCCESS,
-    headers: Headers
+    orderId?: string
 }
 
 export interface CreateOrderErrorAction {

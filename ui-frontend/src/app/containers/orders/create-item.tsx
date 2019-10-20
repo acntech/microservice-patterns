@@ -123,12 +123,29 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
     };
 
     private formInputQuantityIsValid = (formData: CreateItemFormData): boolean => {
+        const {stock} = this.state.product || {stock: undefined};
         const {formInputQuantity} = formData;
         const {formElementValue: quantity} = formInputQuantity;
 
         const quantityNumber = parseInt(quantity, 10);
         if (isNaN(quantityNumber) || quantityNumber < 1) {
-            const errorMessage = this.props.intl.formatMessage({id: 'form.validation.item-quantity.text'});
+            const errorMessage = this.props.intl.formatMessage({id: 'form.validation.item-quantity.bad-format.text'});
+
+            this.setState({
+                formData: {
+                    ...formData,
+                    formError: true,
+                    formErrorMessage: errorMessage,
+                    formInputQuantity: {
+                        ...formInputQuantity,
+                        formElementError: true
+                    }
+                }
+            });
+
+            return false;
+        } else if (stock && quantityNumber > stock) {
+            const errorMessage = this.props.intl.formatMessage({id: 'form.validation.item-quantity.insufficient-stock.text'});
 
             this.setState({
                 formData: {

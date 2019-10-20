@@ -107,11 +107,9 @@ const create = (state: OrderState = initialOrderState, action: CreateOrderAction
 
         case CreateOrderActionType.SUCCESS: {
             const {orders} = state;
-            const {headers} = action;
+            const {orderId} = action;
 
-            const location = headers.get('location');
-            const orderId = location && location.split('orders/')[1] || 'order.id.missing';
-            const modified = {id: orderId, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
+            const modified = {id: orderId || 'order.id.missing', entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
 
             return {...initialOrderState, orders, modified};
         }

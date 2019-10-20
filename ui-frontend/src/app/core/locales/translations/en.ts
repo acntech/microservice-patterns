@@ -27,7 +27,8 @@ export default {
 
     'form.validation.order-name.min-length.text': 'Order name must be at least {length} characters long',
     'form.validation.order-name.max-length.text': 'Order name cannot be over {length} characters long',
-    'form.validation.item-quantity.text': 'Quantity must be a positive number',
+    'form.validation.item-quantity.bad-format.text': 'Quantity must be a positive number',
+    'form.validation.item-quantity.insufficient-stock.text': 'Quantity is more than available stock',
     'form.placeholder.order-name.text': 'Enter order name...',
     'form.placeholder.order-description.text': 'Enter order description...',
     'form.placeholder.item-quantity.text': 'Enter quantity...',

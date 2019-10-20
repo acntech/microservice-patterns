@@ -13,6 +13,7 @@ services:
       - database:/var/lib/postgresql/data
     networks:
       - database
+
   kafka_1:
     image: acntechie/kafka
     container_name: kafka_1

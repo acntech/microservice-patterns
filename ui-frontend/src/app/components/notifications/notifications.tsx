@@ -55,7 +55,7 @@ type ComponentProps = ComponentDispatchProps & ComponentStateProps;
 class NotificationsComponent extends Component<ComponentProps> {
 
     public componentWillUnmount(): void {
-        this.props.clearNotifications();
+        //this.props.clearNotifications();
     }
 
     public render(): ReactNode {

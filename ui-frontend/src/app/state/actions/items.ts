@@ -44,6 +44,7 @@ export function createItem(orderId: string, item: CreateItem) {
                 return dispatch(createItemSuccess(response.headers));
             })
             .catch((error) => {
+                console.log('CATCH', error);
                 const {message} = error.response && error.response.data;
                 dispatch(showErrorNotification('Error creating item', message, true));
                 return dispatch(createItemError(error));
