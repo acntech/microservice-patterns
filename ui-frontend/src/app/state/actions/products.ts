@@ -22,10 +22,11 @@ export function getProduct(productId: string) {
         const url = `${rootPath}/${productId}`;
         return client.get(url)
             .then((response) => {
-                return dispatch(getProductSuccess(response));
+                const {body} = response;
+                return dispatch(getProductSuccess(body));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error getting product', message, true));
                 return dispatch(getProductError(error));
             });
@@ -38,10 +39,11 @@ export function findProducts(query?: ProductQuery) {
         const url = `${rootPath}`;
         return client.get(url, {params: {...query}})
             .then((response) => {
-                return dispatch(findProductsSuccess(response));
+                const {body} = response;
+                return dispatch(findProductsSuccess(body));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error finding products', message, true));
                 return dispatch(findProductsError(error));
             });

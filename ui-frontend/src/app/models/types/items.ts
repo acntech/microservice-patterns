@@ -1,4 +1,4 @@
-import { CreateItemActionType, DeleteItemActionType, Entity, StateError, GetItemActionType, ItemStatus, Modified } from '../';
+import { CreateItemActionType, DeleteItemActionType, Entity, GetItemActionType, ItemStatus, Modified, StateError } from '../';
 
 export interface CreateItem {
     productId: string;
@@ -42,7 +42,7 @@ export interface CreateItemLoadingAction {
 
 export interface CreateItemSuccessAction {
     type: CreateItemActionType.SUCCESS,
-    headers: Headers
+    itemId: string
 }
 
 export interface CreateItemErrorAction {

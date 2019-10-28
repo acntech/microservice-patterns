@@ -22,10 +22,11 @@ export function getCustomer(customerId: string) {
         const url = `${rootPath}/${customerId}`;
         return client.get(url)
             .then((response) => {
-                return dispatch(getCustomerSuccess(response));
+                const {body} = response;
+                return dispatch(getCustomerSuccess(body));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error finding customers', message, true));
                 return dispatch(getCustomerError(error));
             });
@@ -38,10 +39,11 @@ export function findCustomers(query?: CustomerQuery) {
         const url = `${rootPath}`;
         return client.get(url, {params: {...query}})
             .then((response) => {
-                return dispatch(findCustomersSuccess(response));
+                const {body} = response;
+                return dispatch(findCustomersSuccess(body));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error finding customers', message, true));
                 return dispatch(findCustomersError(error));
             });

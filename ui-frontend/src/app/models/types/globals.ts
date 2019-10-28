@@ -38,6 +38,28 @@ export interface ErrorEntity {
     path: string;
 }
 
+export interface ClientFields {
+    conversationId: string;
+    requestId: string;
+}
+
+export interface ClientResponse extends ClientFields {
+    entityId?: string;
+    headers: Headers;
+    body?: any;
+}
+
+export interface ClientErrorResponse extends ClientResponse {
+    errorId: string;
+    errorCode: string;
+    body?: any;
+}
+
+export interface ClientError {
+    response: ClientErrorResponse;
+    error: Error;
+}
+
 export interface FormElementData {
     formElementError: boolean;
     formElementValue: string;

@@ -2,6 +2,7 @@ import { polyfill } from 'es6-promise';
 import 'isomorphic-fetch';
 import * as _ from 'lodash';
 import uuidv4 from 'uuid/v4';
+import { ClientError, ClientResponse } from '../../models/types';
 
 // IE Promise polyfill
 polyfill();
@@ -57,7 +58,7 @@ export interface Client {
 
 export class RestClient implements Client {
 
-    private conversationId: string;
+    private readonly conversationId: string;
 
     constructor() {
         this.conversationId = uuidv4();
@@ -91,11 +92,6 @@ export class RestClient implements Client {
             .then(response => RestClient.handleResponse(this.conversationId, requestId, response));
     }
 
-    public static extractLocationHeader(response: any, separator: string): string | undefined {
-        const location = response && response.headers && response.headers.get('location');
-        return location && location.split(separator)[1];
-    }
-
     private static formatQueryParams(obj: {[index: string]: any}): string {
         return _.keys(obj).map((key: string) => obj[key] ? `${key}=${obj[key]}` : '').join('&');
     }
@@ -108,6 +104,12 @@ export class RestClient implements Client {
             const endpointUrl = `${BASE_URL}/${url}`;
             return encodeURI(endpointUrl);
         }
+    }
+
+    private static extractLocationHeader(response: Response): string | undefined {
+        const location = response.headers && response.headers.get('location');
+        const segments = location && location.split('/');
+        return segments ? segments.pop() : undefined;
     }
 
     private static createRequest(conversationId: string, requestId: string, method: RequestMethod, config?: RequestConfig, body?: any): RequestInit {
@@ -125,32 +127,50 @@ export class RestClient implements Client {
         return {...defaultConfig, ...config};
     }
 
-    private static handleResponse(conversationId: string, requestId: string, response: Response): Promise<any> {
-        console.log('RESPONSE', response);
+    private static handleResponse(conversationId: string, requestId: string, response: Response): Promise<ClientResponse> {
+        if (response.status === ResponseCode.CREATED) {
+            return RestClient.handleBody(conversationId, requestId, response, undefined);
+        }
 
-        return response.json().then((body) => {
-            if (response.ok) {
-                return RestClient.handleBody(conversationId, requestId, response, body);
-            } else {
-                throw RestClient.handleError(conversationId, requestId, response, body);
-            }
+        if (response.status === ResponseCode.NO_CONTENT) {
+            return RestClient.handleBody(conversationId, requestId, response, undefined);
+        }
+
+        return response.json()
+            .then((body) => {
+                if (response.ok) {
+                    return RestClient.handleBody(conversationId, requestId, response, body);
+                } else {
+                    throw RestClient.handleError(conversationId, requestId, response, body);
+                }
+            });
+    }
+
+    private static handleBody(conversationId: string, requestId: string, response: Response, body?: any): Promise<ClientResponse> {
+        const {headers} = response;
+        const resolvedBody = body && body.entity ? body.entity : body;
+        const entityId = RestClient.extractLocationHeader(response);
+        return Promise.resolve({
+            conversationId: conversationId,
+            requestId: requestId,
+            entityId: entityId,
+            headers: headers,
+            body: resolvedBody
         });
     }
 
-    private static handleBody(conversationId: string, requestId: string, response: Response, body?: any): Promise<any> {
-        return Promise.resolve(body.entity ? body.entity : body);
-    }
-
-    private static handleError(conversationId: string, requestId: string, response: Response, body?: any): any {
+    private static handleError(conversationId: string, requestId: string, response: Response, body?: any): ClientError {
+        const {headers} = response;
         const {errorId} = body ? body : {errorId: 'unknown.error.id'};
         const {errorCode} = body ? body : {errorCode: 'unknown.error.code'};
         return {
-            conversationId: conversationId,
-            requestId: requestId,
-            errorId: errorId,
-            errorCode: errorCode,
             response: {
-                data: body
+                conversationId: conversationId,
+                requestId: requestId,
+                errorId: errorId,
+                errorCode: errorCode,
+                headers: headers,
+                body: body
             },
             error: new Error()
         };

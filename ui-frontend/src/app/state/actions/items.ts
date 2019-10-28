@@ -11,7 +11,7 @@ const getItemSuccess = (payload: Item): GetItemSuccessAction => ({type: GetItemA
 const getItemError = (error: any): GetItemErrorAction => ({type: GetItemActionType.ERROR, error});
 
 const createItemLoading = (loading: boolean): CreateItemLoadingAction => ({type: CreateItemActionType.LOADING, loading});
-const createItemSuccess = (headers: Headers): CreateItemSuccessAction => ({type: CreateItemActionType.SUCCESS, headers});
+const createItemSuccess = (itemId: string): CreateItemSuccessAction => ({type: CreateItemActionType.SUCCESS, itemId});
 const createItemError = (error: any): CreateItemErrorAction => ({type: CreateItemActionType.ERROR, error});
 
 const deleteItemLoading = (loading: boolean): DeleteItemLoadingAction => ({type: DeleteItemActionType.LOADING, loading});
@@ -24,10 +24,11 @@ export function getItem(itemId: string) {
         const url = `items/${itemId}`;
         return client.get(url)
             .then((response) => {
-                return dispatch(getItemSuccess(response));
+                const {body} = response;
+                return dispatch(getItemSuccess(body));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error getting item', message, true));
                 return dispatch(getItemError(error));
             });
@@ -40,12 +41,12 @@ export function createItem(orderId: string, item: CreateItem) {
         const url = `orders/${orderId}/items`;
         return client.post(url, item)
             .then((response) => {
+                const {entityId} = response;
                 dispatch(showSuccessNotification('Item created successfully'));
-                return dispatch(createItemSuccess(response.headers));
+                return dispatch(createItemSuccess(entityId));
             })
             .catch((error) => {
-                console.log('CATCH', error);
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error creating item', message, true));
                 return dispatch(createItemError(error));
             });
@@ -62,7 +63,7 @@ export function deleteItem(itemId: string) {
                 return dispatch(deleteItemSuccess(itemId));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error deleting item', message, true));
                 return dispatch(deleteItemError(error));
             });

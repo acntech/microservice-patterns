@@ -98,15 +98,15 @@ const find = (state: OrderState = initialOrderState, action: FindOrdersAction): 
 };
 
 const create = (state: OrderState = initialOrderState, action: CreateOrderAction): OrderState => {
+    const {orders} = state;
+
     switch (action.type) {
         case CreateOrderActionType.LOADING: {
-            const {orders} = state;
             const {loading} = action;
             return {...initialOrderState, orders, loading};
         }
 
         case CreateOrderActionType.SUCCESS: {
-            const {orders} = state;
             const {orderId} = action;
 
             const modified = {id: orderId || 'order.id.missing', entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
@@ -115,7 +115,6 @@ const create = (state: OrderState = initialOrderState, action: CreateOrderAction
         }
 
         case CreateOrderActionType.ERROR: {
-            const {orders} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
             return {...initialOrderState, orders, error};

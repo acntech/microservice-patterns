@@ -1,5 +1,4 @@
 import client from '../../core/client';
-import { RestClient } from '../../core/client/client';
 
 import {
     CreateOrder, CreateOrderActionType, CreateOrderErrorAction, CreateOrderLoadingAction, CreateOrderSuccessAction, DeleteOrderActionType, DeleteOrderErrorAction, DeleteOrderLoadingAction,
@@ -36,10 +35,11 @@ export function getOrder(orderId: string) {
         const url = `${rootPath}/${orderId}`;
         return client.get(url)
             .then((response) => {
-                return dispatch(getOrderSuccess(response));
+                const {body} = response;
+                return dispatch(getOrderSuccess(body));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error getting order', message, true));
                 return dispatch(getOrderError(error));
             });
@@ -49,13 +49,14 @@ export function getOrder(orderId: string) {
 export function findOrders(orderName?: string) {
     return (dispatch) => {
         dispatch(findOrdersLoading(true));
-        const url = name ? `${rootPath}?name=${orderName}` : rootPath;
+        const url = orderName ? `${rootPath}?name=${orderName}` : rootPath;
         return client.get(url)
             .then((response) => {
-                return dispatch(findOrdersSuccess(response));
+                const {body} = response;
+                return dispatch(findOrdersSuccess(body));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error finding orders', message, true));
                 return dispatch(findOrdersError(error));
             });
@@ -68,12 +69,12 @@ export function createOrder(order: CreateOrder) {
         const url = `${rootPath}`;
         return client.post(url, order)
             .then((response) => {
-                const orderId = RestClient.extractLocationHeader(response, `${rootPath}/`);
+                const {entityId} = response;
                 dispatch(showSuccessNotification('Order created successfully'));
-                return dispatch(createOrderSuccess(orderId));
+                return dispatch(createOrderSuccess(entityId));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error creating order', message, true));
                 return dispatch(createOrderError(error));
             });
@@ -90,7 +91,7 @@ export function updateOrder(orderId: string) {
                 return dispatch(updateOrderSuccess(orderId));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error updating order', message, true));
                 return dispatch(updateOrderError(error));
             });
@@ -107,7 +108,7 @@ export function deleteOrder(orderId: string) {
                 return dispatch(deleteOrderSuccess(orderId));
             })
             .catch((error) => {
-                const {message} = error.response && error.response.data;
+                const {message} = error.response && error.response.body;
                 dispatch(showErrorNotification('Error deleting order', message, true));
                 return dispatch(deleteOrderError(error));
             });
