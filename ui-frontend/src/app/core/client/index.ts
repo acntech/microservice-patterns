@@ -1,3 +1,3 @@
 import { RestClient } from './client';
 
-export default new RestClient();
+export default RestClient.getInstance();

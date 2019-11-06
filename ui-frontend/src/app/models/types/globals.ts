@@ -45,7 +45,8 @@ export interface ClientFields {
 
 export interface ClientResponse extends ClientFields {
     entityId?: string;
-    headers: Headers;
+    headers: Map<string, string>;
+    cookies: Map<string, string>;
     body?: any;
 }
 
@@ -58,6 +59,15 @@ export interface ClientErrorResponse extends ClientResponse {
 export interface ClientError {
     response: ClientErrorResponse;
     error: Error;
+}
+
+export interface DataMap {
+    [index: string]: string | number | boolean | any[];
+}
+
+export interface RequestConfig {
+    headers?: Map<string, string>;
+    params?: DataMap;
 }
 
 export interface FormElementData {
