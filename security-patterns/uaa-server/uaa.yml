@@ -18,13 +18,6 @@ oauth:
       - approvals.me
       - oauth.approvals
   clients:
-    token-relay-ui:
-      name: Token Relay UI
-      secret: nzSX99Qg
-      authorized-grant-types: authorization_code
-      scope: openid,profile,email
-      authorities: uaa.resource
-      redirect-uri: http://localhost:3000/api/login/oauth2/code/token-relay-ui
     token-relay-ui-api:
       name: Token Relay UI API
       secret: 0kX3bvZe
@@ -32,6 +25,13 @@ oauth:
       scope: openid,profile,email
       authorities: uaa.resource
       redirect-uri: http://localhost:3000/api/login/oauth2/code/token-relay-ui-api
+    generic-client-api:
+      name: Generic Client API
+      secret: o463qXwa
+      authorized-grant-types: authorization_code
+      scope: openid,profile,email
+      authorities: uaa.resource
+      redirect-uri: http://localhost:8080/api/login/oauth2/code/generic-client-api
     microservice:
       name: microservice
       secret: 0kX3bvZe

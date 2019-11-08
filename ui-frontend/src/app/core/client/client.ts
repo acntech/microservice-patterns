@@ -38,22 +38,22 @@ export class RestClient implements Client {
     }
 
     public post(url: string, request?: any, config?: RequestConfig): Promise<any> {
-        return this.call(RequestMethod.POST, url, request, config);
+        return this.call(RequestMethod.POST, url, config, request);
     }
 
     public put(url: string, request?: any, config?: RequestConfig): Promise<any> {
-        return this.call(RequestMethod.PUT, url, request, config);
+        return this.call(RequestMethod.PUT, url, config, request);
     }
 
     public patch(url: string, request?: any, config?: RequestConfig): Promise<any> {
-        return this.call(RequestMethod.PATCH, url, request, config);
+        return this.call(RequestMethod.PATCH, url, config, request);
     }
 
     public delete(url: string, config?: RequestConfig): Promise<any> {
         return this.call(RequestMethod.DELETE, url, config);
     }
 
-    private call(method: RequestMethod, url: string, request?: any, config?: RequestConfig): Promise<any> {
+    private call(method: RequestMethod, url: string, config?: RequestConfig, request?: any): Promise<any> {
         const requestId = uuidv4();
         const endpointUrl = RestClient.buildUrl(url, config);
         const processedRequest = this.createRequest(this.conversationId, requestId, method, this.xsrfToken, config, request);
