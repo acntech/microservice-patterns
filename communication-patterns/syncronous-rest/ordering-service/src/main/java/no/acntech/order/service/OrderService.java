@@ -30,12 +30,11 @@ import no.acntech.order.model.OrderDto;
 import no.acntech.order.model.OrderQuery;
 import no.acntech.order.model.OrderStatus;
 import no.acntech.order.model.UpdateItemDto;
-import no.acntech.order.producer.OrderEventProducer;
 import no.acntech.order.repository.ItemRepository;
 import no.acntech.order.repository.OrderRepository;
 import no.acntech.reservation.consumer.ReservationRestConsumer;
 import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.PendingReservationDto;
+import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;
 
 @SuppressWarnings("Duplicates")
@@ -48,18 +47,15 @@ public class OrderService {
     private final ConversionService conversionService;
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
-    private final OrderEventProducer orderEventProducer;
     private final ReservationRestConsumer reservationRestConsumer;
 
     public OrderService(final ConversionService conversionService,
                         final OrderRepository orderRepository,
                         final ItemRepository itemRepository,
-                        final OrderEventProducer orderEventProducer,
                         final ReservationRestConsumer reservationRestConsumer) {
         this.conversionService = conversionService;
         this.orderRepository = orderRepository;
         this.itemRepository = itemRepository;
-        this.orderEventProducer = orderEventProducer;
         this.reservationRestConsumer = reservationRestConsumer;
     }
 
@@ -103,8 +99,6 @@ public class OrderService {
         Order createdOrder = orderRepository.save(order);
 
         LOGGER.debug("Created order with order-id {}", createdOrder.getOrderId());
-        orderEventProducer.publish(createdOrder.getOrderId());
-
         return convert(createdOrder);
     }
 
@@ -117,7 +111,6 @@ public class OrderService {
                 .forEach(this::confirmReservation);
 
         LOGGER.debug("Updated order with order-id {}", orderId);
-        orderEventProducer.publish(orderId);
     }
 
     @Transactional
@@ -128,10 +121,13 @@ public class OrderService {
 
         order.getItems().stream()
                 .map(Item::getReservationId)
-                .forEach(reservationRestConsumer::delete);
+                .forEach(reservationId -> {
+                    final Optional<ReservationDto> delete = reservationRestConsumer.delete(reservationId);
+                    delete.ifPresent(e -> updateItemReservation(reservationId, e.getQuantity(), ItemStatus.valueOf(e.getStatus().name())));
+
+                });
 
         LOGGER.debug("Deleting order with order-id {}", orderId);
-        orderEventProducer.publish(orderId);
     }
 
     public ItemDto getItem(@NotNull final UUID itemId) {
@@ -159,22 +155,22 @@ public class OrderService {
                     .quantity(quantity)
                     .build();
 
-            Optional<PendingReservationDto> pendingReservationOptional = reservationRestConsumer.create(createReservation);
+            Optional<ReservationDto> pendingReservationOptional = reservationRestConsumer.create(createReservation);
 
             if (pendingReservationOptional.isPresent()) {
-                PendingReservationDto pendingReservation = pendingReservationOptional.get();
+                ReservationDto pendingReservation = pendingReservationOptional.get();
 
                 Item item = Item.builder()
                         .orderId(order.getId())
                         .productId(productId)
                         .reservationId(pendingReservation.getReservationId())
                         .quantity(quantity)
+                        .status(ItemStatus.valueOf(pendingReservation.getStatus().name()))
                         .build();
 
                 itemRepository.save(item);
 
                 LOGGER.debug("Created order item with product-id {} for order-id {}", orderId, productId);
-                orderEventProducer.publish(orderId);
 
                 Order updatedOrder = getOrderByOrderId(orderId);
                 return convert(updatedOrder);
@@ -202,7 +198,6 @@ public class OrderService {
         reservationRestConsumer.update(reservationId, updateReservation);
 
         LOGGER.debug("Updated order item for order-id {} and product-id {}", orderId, productId);
-        orderEventProducer.publish(orderId);
     }
 
     @Transactional
@@ -214,10 +209,13 @@ public class OrderService {
         UUID productId = item.getProductId();
         UUID reservationId = item.getReservationId();
 
-        reservationRestConsumer.delete(reservationId);
+        final Optional<ReservationDto> delete = reservationRestConsumer.delete(reservationId);
+        if (delete.isPresent()) {
+            final ReservationDto reservation = delete.get();
+            updateItemReservation(reservationId, reservation.getQuantity(), ItemStatus.valueOf(reservation.getStatus().name()));
+        }
 
         LOGGER.debug("Deleted order item with product-id {} for order-id {}", orderId, productId);
-        orderEventProducer.publish(orderId);
     }
 
     @Transactional
@@ -288,7 +286,13 @@ public class OrderService {
                 .build();
 
         LOGGER.debug("Updating reservation status to {} for reservation-id {}", updateReservation.getStatus().name(), reservationId);
-        reservationRestConsumer.update(reservationId, updateReservation);
+        final Optional<ReservationDto> update = reservationRestConsumer.update(reservationId, updateReservation);
+
+        if (update.isPresent()) {
+            final ReservationDto reservation = update.get();
+            updateItemReservation(reservationId, reservation.getQuantity(), ItemStatus.valueOf(reservation.getStatus().name()));
+
+        }
     }
 
     private boolean areAllActiveItemsConfirmed(final Order order) {

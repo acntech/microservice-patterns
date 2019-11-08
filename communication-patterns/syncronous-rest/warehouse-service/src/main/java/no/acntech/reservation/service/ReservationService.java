@@ -62,7 +62,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void createReservation(@Valid final CreateReservationDto createReservation) {
+    public ReservationDto createReservation(@Valid final CreateReservationDto createReservation) {
         final UUID orderId = createReservation.getOrderId();
         final UUID productId = createReservation.getProductId();
         final Long quantity = createReservation.getQuantity();
@@ -80,6 +80,7 @@ public class ReservationService {
             reservationRepository.save(reservation);
 
             LOGGER.error("Reservation already exists for order-id {} and product-id {}", orderId, productId);
+            return convert(reservation);
         } else {
             final Optional<Product> existingProduct = productRepository.findByProductId(productId);
 
@@ -96,6 +97,7 @@ public class ReservationService {
                     reservationRepository.save(reservation);
 
                     LOGGER.error("Product stock insufficient for product-id {}", productId);
+                    return convert(reservation);
                 } else {
                     final Reservation reservation = Reservation.builder()
                             .orderId(orderId)
@@ -106,6 +108,8 @@ public class ReservationService {
                     reservationRepository.save(reservation);
 
                     LOGGER.info("Created reservation for order-id {} and product-id {}", orderId, productId);
+                    return convert(reservation);
+
                 }
             } else {
                 final Reservation reservation = Reservation.builder()
@@ -116,13 +120,15 @@ public class ReservationService {
                 reservationRepository.save(reservation);
 
                 LOGGER.error("No product found for product-id {}", productId);
+                return convert(reservation);
+
             }
         }
     }
 
     @Transactional
-    public void updateReservation(@NotNull final UUID reservationId,
-                                  @Valid final UpdateReservationDto updateReservation) {
+    public ReservationDto updateReservation(@NotNull final UUID reservationId,
+                                            @Valid final UpdateReservationDto updateReservation) {
         final Long quantity = updateReservation.getQuantity();
         final ReservationStatus status = updateReservation.getStatus();
 
@@ -141,6 +147,7 @@ public class ReservationService {
             reservationRepository.save(reservation);
 
             LOGGER.info("Updated reservation for reservation-id {}", reservationId);
+            return convert(reservation);
         } else {
             throw new ReservationNotFoundException(reservationId);
         }
@@ -148,7 +155,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void deleteReservation(@NotNull final UUID reservationId) {
+    public ReservationDto deleteReservation(@NotNull final UUID reservationId) {
         final Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
 
         if (existingReservation.isPresent()) {
@@ -157,6 +164,7 @@ public class ReservationService {
             reservationRepository.save(reservation);
 
             LOGGER.info("Updated reservation for reservation-id {}", reservationId);
+            return convert(reservation);
         } else {
             throw new ReservationNotFoundException(reservationId);
         }

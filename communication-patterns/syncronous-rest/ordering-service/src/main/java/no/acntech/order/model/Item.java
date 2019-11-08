@@ -14,6 +14,9 @@ import javax.persistence.Table;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.ReservationStatus;
+
 @Table(name = "ITEMS")
 @Entity
 public class Item {
@@ -85,7 +88,6 @@ public class Item {
     @PrePersist
     private void prePersist() {
         itemId = UUID.randomUUID();
-        status = ItemStatus.PENDING;
         created = ZonedDateTime.now();
     }
 
@@ -104,6 +106,7 @@ public class Item {
         private UUID productId;
         private UUID reservationId;
         private Long quantity;
+        private ItemStatus status;
 
         private Builder() {
         }
@@ -128,13 +131,20 @@ public class Item {
             return this;
         }
 
+        public Builder status(ItemStatus status) {
+            this.status = status;
+            return this;
+        }
+
         public Item build() {
             Item item = new Item();
             item.orderId = this.orderId;
             item.productId = this.productId;
             item.reservationId = this.reservationId;
             item.quantity = this.quantity;
+            item.status = this.status;
             return item;
         }
+
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.PendingReservationDto;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;
 import no.acntech.reservation.service.ReservationService;
@@ -45,23 +44,21 @@ public class ReservationsResource {
     }
 
     @PostMapping
-    public ResponseEntity<PendingReservationDto> create(@Valid @RequestBody final CreateReservationDto createReservation) {
-        final PendingReservationDto pendingReservation = PendingReservationDto.builder().build();
-        reservationService.createReservation(createReservation);
-        return ResponseEntity.accepted() //TODO må antagelig skrive om bruker av dette endepunktet elns. blir ikke riktig dette
-                .body(pendingReservation);
+    public ResponseEntity<ReservationDto> create(@Valid @RequestBody final CreateReservationDto createReservation) {
+        final ReservationDto reservation = reservationService.createReservation(createReservation);
+        return ResponseEntity.accepted().body(reservation);
     }
 
     @PutMapping(path = "{reservationId}")
-    public ResponseEntity update(@PathVariable("reservationId") final UUID reservationId,
-                                 @Valid @RequestBody final UpdateReservationDto updateReservation) {
-        reservationService.updateReservation(reservationId, updateReservation);
-        return ResponseEntity.accepted().build();
+    public ResponseEntity<ReservationDto> update(@PathVariable("reservationId") final UUID reservationId,
+                                                 @Valid @RequestBody final UpdateReservationDto updateReservation) {
+        final ReservationDto reservationDto = reservationService.updateReservation(reservationId, updateReservation);
+        return ResponseEntity.accepted().body(reservationDto);
     }
 
     @DeleteMapping(path = "{reservationId}")
-    public ResponseEntity delete(@PathVariable("reservationId") final UUID reservationId) {
-        reservationService.deleteReservation(reservationId);
-        return ResponseEntity.accepted().build();
+    public ResponseEntity<ReservationDto> delete(@PathVariable("reservationId") final UUID reservationId) {
+        final ReservationDto reservationDto = reservationService.deleteReservation(reservationId);
+        return ResponseEntity.accepted().body(reservationDto);
     }
 }

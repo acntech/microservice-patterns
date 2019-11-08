@@ -1,24 +1,27 @@
 package no.acntech.reservation.consumer;
 
-import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.PendingReservationDto;
-import no.acntech.reservation.model.ReservationDto;
-import no.acntech.reservation.model.UpdateReservationDto;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.UpdateReservationDto;
 
 @SuppressWarnings("Duplicates")
 @Component
@@ -56,32 +59,37 @@ public class ReservationRestConsumer {
                 .map(ResponseEntity::getBody);
     }
 
-    public Optional<PendingReservationDto> create(@Valid final CreateReservationDto createReservation) {
+    public Optional<ReservationDto> create(@Valid final CreateReservationDto createReservation) {
         final URI uri = UriComponentsBuilder.fromUriString(url)
                 .build()
                 .toUri();
 
-        ResponseEntity<PendingReservationDto> entity = restTemplate.postForEntity(uri, createReservation, PendingReservationDto.class);
+        ResponseEntity<ReservationDto> entity = restTemplate.postForEntity(uri, createReservation, ReservationDto.class);
         return Optional.of(entity)
                 .map(ResponseEntity::getBody);
     }
 
-    public void update(@NotNull final UUID reservationId,
-                       @Valid final UpdateReservationDto updateReservation) {
+    public Optional<ReservationDto> update(@NotNull final UUID reservationId,
+                                           @Valid final UpdateReservationDto updateReservation) {
         final URI uri = UriComponentsBuilder.fromUriString(url)
                 .pathSegment(reservationId.toString())
                 .build()
                 .toUri();
 
-        restTemplate.put(uri, updateReservation);
+        final HttpEntity<UpdateReservationDto> httpEntity = new HttpEntity<>(updateReservation);
+        final ResponseEntity<ReservationDto> entity = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, ReservationDto.class);
+        return Optional.of(entity)
+                .map(ResponseEntity::getBody);
     }
 
-    public void delete(@NotNull final UUID reservationId) {
+    public Optional<ReservationDto> delete(@NotNull final UUID reservationId) {
         final URI uri = UriComponentsBuilder.fromUriString(url)
                 .pathSegment(reservationId.toString())
                 .build()
                 .toUri();
 
-        restTemplate.delete(uri);
+        final ResponseEntity<ReservationDto> entity = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(new HttpHeaders()), ReservationDto.class);
+        return Optional.of(entity)
+                .map(ResponseEntity::getBody);
     }
 }

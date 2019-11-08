@@ -145,6 +145,11 @@ public class Reservation {
             return this;
         }
 
+        public Builder statusConfirmed() {
+            this.status = ReservationStatus.CONFIRMED;
+            return this;
+        }
+
         public Reservation build() {
             Reservation reservation = new Reservation();
             reservation.reservationId = this.reservationId;
@@ -154,5 +159,6 @@ public class Reservation {
             reservation.status = this.status;
             return reservation;
         }
+
     }
 }
