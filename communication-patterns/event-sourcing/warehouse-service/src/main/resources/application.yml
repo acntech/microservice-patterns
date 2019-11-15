@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: event-sourcing-warehouse
+
+# Server
+server:
+  port: 9040
+  servlet:
+    context-path: /api
