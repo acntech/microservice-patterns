@@ -19,5 +19,6 @@
         <module>messaging</module>
         <module>event-notification</module>
         <module>event-state-transfer</module>
+        <module>event-sourcing</module>
     </modules>
 </project>
