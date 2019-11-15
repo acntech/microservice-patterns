@@ -1,0 +1,44 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    ordering:
+      api:
+        orders:
+          url: ${acntech.service.ordering.api.url}/orders
+          id:
+            url: ${acntech.service.ordering.api.orders.url}/{uuid}
+
+########################
+# SPRING Configuration #
+########################
+spring:
+  application:
+    name: syncronous-rest-warehouse
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      adjust-dates-to-context-time-zone: false
+  jmx:
+    enabled: false
+  aop:
+    proxy-target-class: true
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  flyway:
+    locations:
+      - classpath:db/vendor/${spring.datasource.platform}
+      - classpath:db/migration
+
+# Server
+server:
+  port: 9040
+  servlet:
+    context-path: /api
