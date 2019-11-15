@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   server:
-    image: uaa
+    image: acntechie/uaa
     container_name: uaa-server
     hostname: uaa
     domainname: acntech.local
@@ -13,7 +13,7 @@ services:
     ports:
       - 8888:8080
     volumes:
-      - ./uaa-server/uaa.yml:/usr/local/uaa/uaa.yml
+      - ./etc/uaa/uaa.yml:/usr/local/uaa/uaa.yml
     networks:
       - uaa
 

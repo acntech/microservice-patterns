@@ -15,10 +15,9 @@
 
     <!-- MODULES -->
     <modules>
-        <module>rest</module>
+        <module>synchronous-rest</module>
         <module>messaging</module>
         <module>event-notification</module>
         <module>event-state-transfer</module>
-        <module>syncronous-rest</module>
     </modules>
 </project>
