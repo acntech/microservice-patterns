@@ -14,11 +14,9 @@
     <artifactId>reliability-patterns-retry</artifactId>
     <packaging>pom</packaging>
 
-    <description>Convenience pom for aggregate IDE-import, building, etc</description>
-
     <!-- MODULES -->
     <modules>
-        <module>retry-order</module>
-        <module>retry-shipping</module>
+        <module>ordering-service</module>
+        <module>warehouse-service</module>
     </modules>
 </project>

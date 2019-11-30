@@ -15,7 +15,7 @@ acntech:
 ########################
 spring:
   application:
-    name: synchronous-rest-warehouse
+    name: synchronous-rest-warehouse-service
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL

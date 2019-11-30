@@ -13,7 +13,7 @@ acntech:
 ########################
 spring:
   application:
-    name: event-notification-ordering
+    name: event-notification-ordering-service
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL

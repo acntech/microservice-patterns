@@ -10,9 +10,11 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>communication-patterns-messaging</artifactId>
+    <artifactId>messaging</artifactId>
     <packaging>pom</packaging>
-    <description>Convenience pom for aggregate IDE-import, building, etc</description>
+
+    <name>${project.artifactId}</name>
+    <description>Patterns for Messaging</description>
 
     <!-- MODULES -->
     <modules>

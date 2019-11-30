@@ -13,7 +13,7 @@ acntech:
 ########################
 spring:
   application:
-    name: synchronous-rest-shipping
+    name: synchronous-rest-shipping-service
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL

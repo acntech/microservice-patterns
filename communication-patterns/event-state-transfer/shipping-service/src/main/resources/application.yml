@@ -3,7 +3,7 @@
 ########################
 spring:
   application:
-    name: event-state-transfer-shipping
+    name: event-state-transfer-shipping-service
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL

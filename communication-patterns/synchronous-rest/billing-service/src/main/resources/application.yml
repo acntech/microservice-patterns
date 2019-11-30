@@ -13,7 +13,7 @@ acntech:
 ########################
 spring:
   application:
-    name: synchronous-rest-billing
+    name: synchronous-rest-billing-service
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL

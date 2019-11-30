@@ -1,8 +1,8 @@
 # Synchronous HTTP between services
 
 Consists of two services:
-- order (utilising retries)
-- shipping
+- ordering (utilising retries)
+- warehouse
 
 The services exposes REST endpoints.
 An order is placed in order the order service. Order calls shipping to ship the order.

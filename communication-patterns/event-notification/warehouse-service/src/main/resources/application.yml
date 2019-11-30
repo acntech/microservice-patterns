@@ -15,7 +15,7 @@ acntech:
 ########################
 spring:
   application:
-    name: event-notification-warehouse
+    name: event-notification-warehouse-service
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL
