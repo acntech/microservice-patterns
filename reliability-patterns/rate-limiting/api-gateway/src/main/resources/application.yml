@@ -1,0 +1,44 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  application:
+    name: ui-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ordering
+          uri: http://localhost:9010
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@rateLimiter}"
+                key-resolver: "#{@keyResolver}"
+                rate-limiter.limit: 3
+                rate-limiter.duration: 1s
+        - id: warehouse
+          uri: http://localhost:9040
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@rateLimiter}"
+                key-resolver: "#{@keyResolver}"
+                rate-limiter.limit: 3
+                rate-limiter.duration: 1s
+
+# Logging
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
+
+# Server
+server:
+  port: 8000

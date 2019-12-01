@@ -13,9 +13,6 @@
     <artifactId>messaging</artifactId>
     <packaging>pom</packaging>
 
-    <name>${project.artifactId}</name>
-    <description>Patterns for Messaging</description>
-
     <!-- MODULES -->
     <modules>
         <module>messaging-order</module>

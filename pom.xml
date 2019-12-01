@@ -58,6 +58,8 @@
         <module>observability-patterns</module>
         <module>security-patterns</module>
         <module>documentation</module>
+        <module>rate-limiting</module>
+        <module>warehouse-service</module>
     </modules>
 
     <!-- DEPENDENCIES -->

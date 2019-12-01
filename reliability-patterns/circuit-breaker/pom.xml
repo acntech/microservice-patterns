@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>reliability-patterns-circuit-breaker</artifactId>
+    <artifactId>circuit-breaker</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->
