@@ -1,4 +1,4 @@
-# Synchronous HTTP between services
+# Reliability Patterns - Retry
 
 Consists of two services:
 - ordering (utilising retries)

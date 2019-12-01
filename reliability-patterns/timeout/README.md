@@ -1,4 +1,4 @@
-# Synchronous HTTP between services
+# Reliability Patterns - Timeout
 
 Consists of two services:
 - order (utilising timeout)

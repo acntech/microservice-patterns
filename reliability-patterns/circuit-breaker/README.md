@@ -1,4 +1,4 @@
-# Circuit Breaker Pattern
+# Reliability Patterns - Circuit Breaker
 
 Consists of two services:
 - ordering-service (utilising circuit-breaker)

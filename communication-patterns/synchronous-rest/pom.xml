@@ -24,8 +24,4 @@
         <module>warehouse-service</module>
         <module>ordering-service</module>
     </modules>
-
-    <!-- DEPENDENCIES -->
-    <dependencies>
-    </dependencies>
 </project>
