@@ -1,9 +1,18 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  hazelcast:
+    name: ${spring.application.name}
+    hosts:
+      - localhost
+
 ########################
 # SPRING Configuration #
 ########################
 spring:
   application:
-    name: ui-gateway
+    name: api-gateway
   cloud:
     gateway:
       routes:
@@ -12,6 +21,9 @@ spring:
           predicates:
             - Path=/api/orders/**, /api/items/**
           filters:
+            - name: StripPrefix
+              args:
+                parts: 1
             - name: RequestRateLimiter
               args:
                 rate-limiter: "#{@rateLimiter}"
@@ -23,6 +35,9 @@ spring:
           predicates:
             - Path=/api/products/**, /api/reservations/**
           filters:
+            - name: StripPrefix
+              args:
+                parts: 1
             - name: RequestRateLimiter
               args:
                 rate-limiter: "#{@rateLimiter}"
@@ -30,7 +45,7 @@ spring:
                 rate-limiter.limit: 3
                 rate-limiter.duration: 1s
 
-# Logging
+### Logging ###
 logging:
   level:
     root: INFO
@@ -39,6 +54,6 @@ logging:
     org.springframework.security: INFO
     org.springframework.security.oauth2: INFO
 
-# Server
+### Server ###
 server:
   port: 8000

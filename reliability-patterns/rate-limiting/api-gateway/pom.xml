@@ -29,6 +29,10 @@
             <artifactId>bucket4j-hazelcast</artifactId>
             <version>${bucket4j-hazelcast.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- BUILD -->
