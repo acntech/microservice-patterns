@@ -29,18 +29,22 @@ The UI uses an API Gateway to proxy all communication with the microservices, an
 Below are the pattern areas that are being explored. Each subfolder has its own README with further details. 
 
 ### Communication Patterns
+Examples that explore different patterns related to communication between microservices.
 
 [/ communication-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns)
 
 ### Reliability Patterns
+Examples that explore different patterns related to microservice reliability and resilience.
 
 [/ reliability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/reliability-patterns)
 
 ### Observability Patterns
+Examples that explore different patterns related to microservice observability and monitoring.
 
 [/ observability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/observability-patterns)
 
 ### Security Patterns
+Examples that explore different patterns related to microservice security and privacy.
 
 [/ security-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/security-patterns)
 
