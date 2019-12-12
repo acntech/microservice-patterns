@@ -11,11 +11,11 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
-public class DefaultRequestCounterFactory implements RequestCounterFactory {
+public class ThrottlingRequestCounterFactory implements RequestCounterFactory {
 
     private final HazelcastClusterInitializer hazelcastClusterInitializer;
 
-    public DefaultRequestCounterFactory(final HazelcastClusterInitializer hazelcastClusterInitializer) {
+    public ThrottlingRequestCounterFactory(final HazelcastClusterInitializer hazelcastClusterInitializer) {
         this.hazelcastClusterInitializer = hazelcastClusterInitializer;
     }
 
@@ -23,7 +23,7 @@ public class DefaultRequestCounterFactory implements RequestCounterFactory {
     public Mono<RequestCounter> create(String routeId, String apiKey, int limit, Duration duration) {
         Bandwidth bandwidth = Bandwidth.simple(limit, duration);
         return Mono.defer(() -> this.createBucket(routeId, apiKey, bandwidth))
-                .map(DefaultRequestCounter::new);
+                .map(ThrottlingRequestCounter::new);
     }
 
     private Mono<Bucket> createBucket(String routeId, String apiKey, Bandwidth bandwidth) {

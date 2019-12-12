@@ -1,6 +1,6 @@
 package no.acntech.domain;
 
-public class ConsumeResponse {
+public class RateLimitingResponse {
 
     private boolean allowed;
     private long remainingRequests;

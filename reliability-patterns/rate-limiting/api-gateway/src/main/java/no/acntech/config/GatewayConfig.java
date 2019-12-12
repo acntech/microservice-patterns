@@ -1,21 +1,21 @@
 package no.acntech.config;
 
-import no.acntech.factory.DefaultRequestCounterFactory;
-import no.acntech.factory.RequestCounterFactory;
-import no.acntech.limiter.DefaultRateLimiter;
-import no.acntech.limiter.RateLimiterConfig;
-import no.acntech.resolver.HeaderKeyResolver;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
-import org.springframework.cloud.gateway.filter.ratelimit.RateLimiter;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.gateway.support.ConfigurationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.validation.Validator;
 
-@ConfigurationPropertiesScan
+import no.acntech.factory.ThrottlingRequestCounterFactory;
+import no.acntech.limiter.ThrottlingRateLimiter;
+import no.acntech.resolver.HeaderKeyResolver;
+
+@EnableConfigurationProperties({
+        GatewayProperties.class,
+        HazelcastProperties.class
+})
 @Configuration
 public class GatewayConfig {
 
@@ -25,19 +25,20 @@ public class GatewayConfig {
     }
 
     @Bean
-    public RequestCounterFactory requestCounterFactory(final HazelcastClusterInitializer hazelcastClusterInitializer) {
-        return new DefaultRequestCounterFactory(hazelcastClusterInitializer);
+    public ThrottlingRequestCounterFactory throttlingRequestCounterFactory(final HazelcastClusterInitializer hazelcastClusterInitializer) {
+        return new ThrottlingRequestCounterFactory(hazelcastClusterInitializer);
     }
 
     @Bean
-    public RateLimiter<RateLimiterConfig> rateLimiter(final ConfigurationService configurationService,
-                                                      final RequestCounterFactory requestCounterFactory) {
-        return new DefaultRateLimiter(configurationService, requestCounterFactory);
+    public ThrottlingRateLimiter throttlingRateLimiter(final ConfigurationService configurationService,
+                                                       final GatewayProperties gatewayProperties,
+                                                       final ThrottlingRequestCounterFactory throttlingRequestCounterFactory) {
+        return new ThrottlingRateLimiter(configurationService, gatewayProperties, throttlingRequestCounterFactory);
     }
 
     @Bean
-    public KeyResolver keyResolver() {
-        return new HeaderKeyResolver("X-API-Key");
+    public HeaderKeyResolver headerKeyResolver(final GatewayProperties gatewayProperties) {
+        return new HeaderKeyResolver(gatewayProperties.getApiKeyHeader());
     }
 
     @Bean

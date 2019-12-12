@@ -2,6 +2,12 @@
 # ACNTECH Configuration #
 #########################
 acntech:
+  gateway:
+    api-key-header: X-API-Key
+    rate-limiter:
+      throttling:
+        remaining-requests-header: X-Throttling-Remaining-Requests
+        remaining-retry-delay-millis-header: X-Throttling-Remaining-Retry-Delay-Millis
   hazelcast:
     name: ${spring.application.name}
     hosts:
@@ -21,13 +27,10 @@ spring:
           predicates:
             - Path=/api/orders/**, /api/items/**
           filters:
-            - name: StripPrefix
-              args:
-                parts: 1
             - name: RequestRateLimiter
               args:
-                rate-limiter: "#{@rateLimiter}"
-                key-resolver: "#{@keyResolver}"
+                rate-limiter: "#{@throttlingRateLimiter}"
+                key-resolver: "#{@headerKeyResolver}"
                 rate-limiter.limit: 3
                 rate-limiter.duration: 1s
         - id: warehouse
@@ -35,13 +38,10 @@ spring:
           predicates:
             - Path=/api/products/**, /api/reservations/**
           filters:
-            - name: StripPrefix
-              args:
-                parts: 1
             - name: RequestRateLimiter
               args:
-                rate-limiter: "#{@rateLimiter}"
-                key-resolver: "#{@keyResolver}"
+                rate-limiter: "#{@throttlingRateLimiter}"
+                key-resolver: "#{@headerKeyResolver}"
                 rate-limiter.limit: 3
                 rate-limiter.duration: 1s
 

@@ -1,9 +1,9 @@
 package no.acntech.factory;
 
-import no.acntech.domain.ConsumeResponse;
+import no.acntech.domain.RateLimitingResponse;
 import reactor.core.publisher.Mono;
 
 public interface RequestCounter {
 
-    Mono<ConsumeResponse> consume(String apiKey);
+    Mono<RateLimitingResponse> consume(String apiKey);
 }
