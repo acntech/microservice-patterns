@@ -19,28 +19,32 @@ The same business case is used in all the examples in order to make it easier to
 
 As well there is a ReactJS based UI that can be used to interact with the business logic.
 
-[/ ui-frontend](https://github.com/acntech/microservice-patterns/tree/develop/ui-frontend)
+[/ ui-frontend / README](https://github.com/acntech/microservice-patterns/tree/develop/ui-frontend)
 
 The UI uses an API Gateway to proxy all communication with the microservices, and to create a common facade for API calls.
 
-[/ ui-gateway](https://github.com/acntech/microservice-patterns/tree/develop/ui-gateway)
+[/ ui-gateway / README](https://github.com/acntech/microservice-patterns/tree/develop/ui-gateway)
 
 ## Pattern areas
 Below are the pattern areas that are being explored. Each subfolder has its own README with further details. 
 
 ### Communication Patterns
+Examples that explore different patterns related to communication between microservices.
 
 [/ communication-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns)
 
 ### Reliability Patterns
+Examples that explore different patterns related to microservice reliability and resilience.
 
 [/ reliability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/reliability-patterns)
 
 ### Observability Patterns
+Examples that explore different patterns related to microservice observability and monitoring.
 
 [/ observability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/observability-patterns)
 
 ### Security Patterns
+Examples that explore different patterns related to microservice security and privacy.
 
 [/ security-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/security-patterns)
 

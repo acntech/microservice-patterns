@@ -1,21 +1,32 @@
 # Communication Patterns
-Projects for exploring different patterns related to communication. Each module/example focuses on a specific pattern for communication between microservices.
+Examples that explore different patterns related to communication between microservices. Each module/example focuses on a specific pattern for communication between microservices.
 
 ## Modules
 
-##### REST
-TODO
+##### Synchronous REST
+This example explores the use of synchronous REST over HTTP.
+
+[/ synchronous-rest / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns/synchronous-rest)
 
 ##### Messaging
-TODO
+This example explores the use of asynchronous messaging over JMS.
+
+[/ messaging / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns/messaging)
 
 ##### Event Notification
-This module explores the use of asynchronous event notification. Each service holds its own state in a local data store. When the state of a service is modified it will publish an notification event. The events are "thin" index that are distributed between the microservices using a message broker in a publish/subscribe fashion.
+This example explores the use of asynchronous event notification.
+
+[/ event-notification / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns/event-notification)
 
 ##### Event State Transfer
-This module explores the use of asynchronous event state transfer. Each service holds its own state in a local data store. When the state of a service is modified a complete record of that change is published as an event. The events are distributed between the microservices using a message broker in a publish/subscribe fashion.
+This example explores the use of asynchronous event driven state transfer.
+
+[/ event-state-transfer / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns/event-state-transfer)
 
 ##### Event Sourcing
-This module explores the use of event sourcing. System state is maintained in a centralized event store. When state is modified through a microservice a record of that change is published as an event. These events are stored in the event store which acts as an event ledger or commit log. Microservices use snapshots or aggregates of the event ledger to represent the current state of the system. These aggregates are continuously updated as new events are committed to the event ledger.
+This example explores the use of event sourcing.
+
+[/ event-sourcing / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns/event-sourcing)
 
 ##### Event Streaming
+This example explores the use of event streaming.

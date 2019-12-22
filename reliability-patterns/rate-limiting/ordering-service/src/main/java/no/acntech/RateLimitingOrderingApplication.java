@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 @EnableTransactionManagement
 @SpringBootApplication
-public class SyncronousRestWarehouseApplication extends SpringBootServletInitializer {
+public class RateLimitingOrderingApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(SyncronousRestWarehouseApplication.class, args);
+        SpringApplication.run(RateLimitingOrderingApplication.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(SyncronousRestWarehouseApplication.class);
+        return application.sources(RateLimitingOrderingApplication.class);
     }
 }

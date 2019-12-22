@@ -13,6 +13,10 @@
     <artifactId>reliability-patterns-circuit-breaker</artifactId>
     <packaging>pom</packaging>
 
+    <!-- PROPERTIES -->
+    <properties>
+    </properties>
+
     <!-- MODULES -->
     <modules>
         <module>ordering-service</module>

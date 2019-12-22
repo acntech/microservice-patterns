@@ -13,11 +13,6 @@
     <artifactId>circuit-breaker-ordering-service</artifactId>
     <packaging>war</packaging>
 
-    <!-- PROPERTIES -->
-    <properties>
-        <spring-cloud-starter-hystrix-dashboard.version>1.4.7.RELEASE</spring-cloud-starter-hystrix-dashboard.version>
-    </properties>
-
     <!-- DEPENDENCIES -->
     <dependencies>
         <dependency>
@@ -44,8 +39,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
-            <version>${spring-cloud-starter-hystrix-dashboard.version}</version>
+            <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

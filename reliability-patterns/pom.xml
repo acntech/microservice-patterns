@@ -18,5 +18,6 @@
         <module>timeout</module>
         <module>retry</module>
         <module>circuit-breaker</module>
+        <module>rate-limiting</module>
     </modules>
 </project>
