@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>messaging</artifactId>
+    <artifactId>communication-patterns-messaging</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->

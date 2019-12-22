@@ -1,7 +1,6 @@
 version: "2.1"
 
 services:
-
   zipkin:
     image: openzipkin/zipkin
     ports:

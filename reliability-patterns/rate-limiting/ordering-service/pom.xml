@@ -5,8 +5,8 @@
 
     <!-- PROJECT -->
     <parent>
-        <artifactId>rate-limiting</artifactId>
         <groupId>no.acntech</groupId>
+        <artifactId>reliability-patterns-rate-limiting</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 

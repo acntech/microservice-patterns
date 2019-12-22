@@ -1,8 +1,8 @@
 # Reliability Patterns - Rate Limiting
 
 Consists of two services:
-- ordering
-- warehouse
+- ordering-service
+- warehouse-service
 
 ##### Run example
 Build and start each application (spring-boot). 

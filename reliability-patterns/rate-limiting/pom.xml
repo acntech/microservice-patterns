@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rate-limiting</artifactId>
+    <artifactId>reliability-patterns-rate-limiting</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->

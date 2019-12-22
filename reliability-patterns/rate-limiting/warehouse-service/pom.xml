@@ -5,8 +5,8 @@
 
     <!-- PROJECT -->
     <parent>
-        <artifactId>rate-limiting</artifactId>
         <groupId>no.acntech</groupId>
+        <artifactId>reliability-patterns-rate-limiting</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -34,16 +34,20 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
         </dependency>
     </dependencies>
 

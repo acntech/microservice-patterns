@@ -5,17 +5,15 @@
 
     <!-- PROJECT -->
     <parent>
+        <artifactId>microservice-patterns</artifactId>
         <groupId>no.acntech</groupId>
-        <artifactId>reliability-patterns</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>reliability-patterns-retry</artifactId>
+    <artifactId>operational-patterns</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->
     <modules>
-        <module>ordering-service</module>
-        <module>warehouse-service</module>
     </modules>
 </project>

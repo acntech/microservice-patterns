@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>tracing</artifactId>
+    <artifactId>observability-patterns-tracing</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->
