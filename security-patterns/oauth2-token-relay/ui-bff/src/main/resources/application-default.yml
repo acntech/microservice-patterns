@@ -1,0 +1,17 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  profiles:
+    include:
+      - local
+      - default
+
+# Logging
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG

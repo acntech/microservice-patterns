@@ -1,0 +1,14 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    ordering:
+      api:
+        url: http://localhost:9010/api
+    warehouse:
+      api:
+        url: http://localhost:9040/api
+  security:
+    oauth2-provider:
+      url: http://localhost:8888/uaa

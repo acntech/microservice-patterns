@@ -2,7 +2,7 @@ export * from './globals';
 export * from './errors';
 export * from './config';
 export * from './notifications';
-export * from './users';
+export * from './authentication';
 export * from './customers';
 export * from './products';
 export * from './orders';

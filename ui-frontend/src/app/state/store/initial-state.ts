@@ -1,7 +1,7 @@
 import { IntlState } from 'react-intl-redux';
 
 import { DEFAULT_LOCALE, messages } from '../../core/locales';
-import { ConfigState, CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState, SecurityType, UserState } from '../../models';
+import { AuthenticationState, ConfigState, CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState, SecurityType } from '../../models';
 
 export const INITIAL_CONFIG_STATE: ConfigState = {
     loading: false,
@@ -24,7 +24,9 @@ export const INITIAL_NOTIFICATION_STATE: NotificationState = {
     notifications: []
 };
 
-export const INITIAL_USER_STATE: UserState = {};
+export const INITIAL_AUTHENTICATION_STATE: AuthenticationState = {
+    authentication: {}
+};
 
 export const INITIAL_CUSTOMER_STATE: CustomerState = {
     loading: false,
@@ -50,7 +52,7 @@ export const INITIAL_ROOT_STATE: RootState = {
     configState: INITIAL_CONFIG_STATE,
     intl: INITIAL_INTL_STATE,
     notificationState: INITIAL_NOTIFICATION_STATE,
-    userState: INITIAL_USER_STATE,
+    authenticationState: INITIAL_AUTHENTICATION_STATE,
     customerState: INITIAL_CUSTOMER_STATE,
     productState: INITIAL_PRODUCT_STATE,
     orderState: INITIAL_ORDER_STATE,

@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 import { IntlState } from 'react-intl-redux';
-import { ActionType, ConfigState, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState, SeverityType, UserState } from '../';
+import { ActionType, AuthenticationState, ConfigState, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState, SeverityType } from '../';
 
 export interface RootState {
     configState: ConfigState,
     intl: IntlState;
     notificationState: NotificationState;
-    userState: UserState;
+    authenticationState: AuthenticationState;
     customerState: CustomerState;
     productState: ProductState;
     orderState: OrderState;

@@ -64,7 +64,6 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         } else if (product) {
             return (
                 <Container>
-                    <PrimaryHeader />
                     <SecondaryHeader />
                     <CreateItemForm onCancelButtonClick={this.onCancelButtonClick}
                         onFormSubmit={this.onFormSubmit}

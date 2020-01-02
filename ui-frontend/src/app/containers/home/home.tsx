@@ -5,7 +5,7 @@ import { Redirect } from 'react-router';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'semantic-ui-react';
-import { LoadingIndicator, PrimaryHeader, SecondaryHeader, ShowOrderList } from '../../components';
+import { LoadingIndicator, SecondaryHeader, ShowOrderList } from '../../components';
 
 import { OrderState, RootState } from '../../models';
 import { findOrders } from '../../state/actions';
@@ -54,7 +54,6 @@ class HomeContainer extends Component<ComponentProps, ComponentState> {
         } else {
             return (
                 <Container>
-                    <PrimaryHeader />
                     <SecondaryHeader />
                     <ShowOrderList
                         orders={orders}

@@ -4,17 +4,17 @@
 acntech:
   service:
     orders:
-      url: http://localhost:9010/api/orders
+      url: ${acntech.service.ordering.api.url}/orders
     items:
-      url: http://localhost:9010/api/items
+      url: ${acntech.service.ordering.api.url}/items
     products:
-      url: http://localhost:9040/api/products
+      url: ${acntech.service.warehouse.api.url}/products
     reservations:
-      url: http://localhost:9040/api/reservations
+      url: ${acntech.service.warehouse.api.url}/reservations
   security:
     login-page: /oauth2/authorization/token-relay-ui
     failure-url: /login/redirect?error
-    logout-success-url: http://localhost:8888/uaa/logout.do?client_id=token-relay-ui&redirect=http://localhost:3000
+    logout-success-url: ${acntech.security.oauth2-provider.url}/logout.do?client_id=token-relay-ui&redirect=http://localhost:3000
     whitelisted-paths:
       - /**/security/**
       - /**/client/**
@@ -55,16 +55,7 @@ spring:
               - email
         provider:
           uaa:
-            issuer-uri: http://localhost:8888/uaa/oauth/token
-
-# Logging
-logging:
-  level:
-    root: INFO
-    no.acntech: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.security.oauth2: DEBUG
+            issuer-uri: ${acntech.security.oauth2-provider.url}/oauth/token
 
 # Server
 server:

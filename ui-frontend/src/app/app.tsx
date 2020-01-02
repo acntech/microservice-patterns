@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Component, ReactNode } from 'react';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
+import { HashRouter as Router } from 'react-router-dom';
 import { RootContainer } from './containers';
 
-import { AuthenticationProvider, ErrorHandlerProvider } from './providers';
+import { ErrorHandlerProvider } from './providers';
 import { store } from './state/store';
 
 class App extends Component<{}> {
@@ -14,15 +15,15 @@ class App extends Component<{}> {
         const {locale, messages} = intl;
 
         return (
-            <IntlProvider key={locale} locale={locale} messages={messages}>
-                <ErrorHandlerProvider>
-                    <Provider store={store}>
-                        <AuthenticationProvider>
+            <Provider store={store}>
+                <IntlProvider key={locale} locale={locale} messages={messages}>
+                    <ErrorHandlerProvider>
+                        <Router>
                             <RootContainer />
-                        </AuthenticationProvider>
-                    </Provider>
-                </ErrorHandlerProvider>
-            </IntlProvider>
+                        </Router>
+                    </ErrorHandlerProvider>
+                </IntlProvider>
+            </Provider>
         );
     }
 }

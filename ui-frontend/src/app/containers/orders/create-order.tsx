@@ -7,14 +7,14 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'semantic-ui-react';
 import uuidv4 from 'uuid/v4';
-import { CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
+import { CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator, SecondaryHeader } from '../../components';
 
-import { ActionType, CreateOrder, EntityType, OrderState, RootState, UserState } from '../../models';
+import { ActionType, AuthenticationState, CreateOrder, EntityType, OrderState, RootState } from '../../models';
 import { createOrder } from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentStateProps {
-    userState: UserState;
+    authenticationState: AuthenticationState;
     orderState: OrderState;
 }
 
@@ -55,7 +55,6 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
         } else {
             return (
                 <Container>
-                    <PrimaryHeader />
                     <SecondaryHeader />
                     <CreateOrderForm onCancelButtonClick={this.onCancelButtonClick}
                         onFormSubmit={this.onFormSubmit}
@@ -77,8 +76,8 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
     };
 
     private onFormSubmit = () => {
-        const {user} = this.props.userState;
-        const {userId} = user || {userId: uuidv4()};
+        const {authentication} = this.props.authenticationState;
+        const {userId} = authentication.user || {userId: uuidv4()};
         const {formData} = this.state;
         const {formInputName, formTextAreaDescription} = formData;
         const {formElementValue: name} = formInputName;
@@ -176,7 +175,7 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
 }
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
-    userState: state.userState,
+    authenticationState: state.authenticationState,
     orderState: state.orderState
 });
 

@@ -102,7 +102,7 @@ export class RestClient implements Client {
         console.log('RESPONSE', response);
         switch (response.type) {
             case ResponseType.ERROR:
-            case ResponseType.DEFAULT:
+            case ResponseType.BASIC:
                 return this.handleNormalResponse(conversationId, requestId, response);
             case ResponseType.OPAQUE_REDIRECT:
                 throw this.handleResponseError(conversationId, requestId, response, REDIRECT_RESPONSE_ERROR);

@@ -7,11 +7,11 @@ import { ThunkDispatch } from 'redux-thunk';
 import { Container, Form, Grid, Header, List, Message, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
 import { LoadingIndicator } from '../../components';
-import { CustomerQuery, CustomerState, RootState, User, UserState } from '../../models';
+import { AuthenticationState, CustomerQuery, CustomerState, RootState, User } from '../../models';
 import { findCustomers, getCustomer, loginUser } from '../../state/actions';
 
 interface ComponentStateProps {
-    userState: UserState;
+    authenticationState: AuthenticationState;
     customerState: CustomerState;
 }
 
@@ -51,7 +51,9 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public componentDidMount(): void {
-        const {user} = this.props.userState;
+        const {authentication} = this.props.authenticationState;
+        const {user} = authentication;
+
         if (!user) {
             this.props.findCustomers();
             const cookies = new Cookies();
@@ -66,9 +68,10 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public componentDidUpdate(): void {
-        const {user} = this.props.userState;
+        const {authentication} = this.props.authenticationState;
         const {loading, error, customers} = this.props.customerState;
         const {customerId, formData} = this.state;
+        const {user} = authentication;
         const {formSubmitted} = formData;
 
         if (user) {
@@ -90,11 +93,12 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
     }
 
     public render(): ReactNode {
-        const {user} = this.props.userState;
+        const {authentication} = this.props.authenticationState;
         const {loading, customers, error} = this.props.customerState;
         const {formCustomerIdValue} = this.state.formData;
         let {formError, formErrorMessage} = this.state.formData;
         let formWarning = false;
+        const {user} = authentication;
 
         if (error) {
             formError = true;
@@ -215,7 +219,7 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
 }
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
-    userState: state.userState,
+    authenticationState: state.authenticationState,
     customerState: state.customerState
 });
 

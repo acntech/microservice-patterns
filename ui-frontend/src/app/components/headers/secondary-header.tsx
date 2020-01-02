@@ -17,10 +17,12 @@ class SecondaryHeaderComponent extends Component<ComponentProps> {
         const {title, subtitle, children} = this.props;
 
         return (
-            <Segment basic className="secondary-header">
-                <HeaderFragment title={title} subtitle={subtitle} children={children} />
-                <Notifications />
-            </Segment>
+            <Header className="secondary-header">
+                <Segment basic>
+                    <HeaderFragment title={title} subtitle={subtitle} children={children} />
+                    <Notifications />
+                </Segment>
+            </Header>
         );
     }
 }

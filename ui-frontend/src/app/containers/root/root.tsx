@@ -1,14 +1,33 @@
 import * as React from 'react';
 import { Component, ReactNode } from 'react';
+import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { CreateItemContainer, CreateOrderContainer, HomeContainer, ItemContainer, LoginContainer, OrderContainer, PageNotFoundErrorContainer } from '../';
+import { PrimaryHeader } from '../../components/headers';
+import { RootState } from '../../models/types';
+import { getConfig } from '../../state/actions';
 
-class RootContainer extends Component {
+interface ComponentStateProps {
+}
+
+interface ComponentDispatchProps {
+    getConfig: () => Promise<any>;
+}
+
+type ComponentProps = ComponentDispatchProps & ComponentStateProps;
+
+class RootContainer extends Component<ComponentProps> {
+
+    public componentDidMount(): void {
+        this.props.getConfig();
+    }
 
     public render(): ReactNode {
         return (
-            <BrowserRouter>
+            <main>
+                <PrimaryHeader />
                 <Switch>
                     <Route path="/orders/:orderId?/items/:itemId?" exact component={ItemContainer} />
                     <Route path="/orders/:orderId?/create" exact component={CreateItemContainer} />
@@ -18,9 +37,17 @@ class RootContainer extends Component {
                     <Route path="/" exact component={HomeContainer} />
                     <Route component={PageNotFoundErrorContainer} />
                 </Switch>
-            </BrowserRouter>
+            </main>
         );
     }
 }
 
-export { RootContainer };
+const mapStateToProps = (state: RootState): Partial<ComponentStateProps> => ({});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): Partial<ComponentDispatchProps> => ({
+    getConfig: () => dispatch(getConfig())
+});
+
+const ConnectedRootContainer = connect(mapStateToProps, mapDispatchToProps)(RootContainer);
+
+export { ConnectedRootContainer as RootContainer };

@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Header, Icon, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { RootState, User, UserState } from '../../models';
+import { AuthenticationState, ConfigState, RootState, SecurityType, User } from '../../models';
 import { logoutUser } from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentStateProps {
-    userState: UserState;
+    configState: ConfigState;
+    authenticationState: AuthenticationState;
 }
 
 interface ComponentDispatchProps {
@@ -20,6 +21,8 @@ interface ComponentDispatchProps {
 interface ComponentParamProps {
     title?: string;
     subtitle?: string;
+    location?: any;
+    history?: any;
 }
 
 type ComponentProps = ComponentParamProps & ComponentDispatchProps & ComponentStateProps & InjectedIntlProps;
@@ -49,20 +52,28 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
     }
 
     public render(): ReactNode {
-        const {title, subtitle, userState, intl} = this.props;
-        const {user} = userState;
+        const {title, subtitle, location, configState, authenticationState, intl} = this.props;
+        const {type: securityType} = configState.config.security;
+        const {user} = authenticationState.authentication;
 
-        if (false && !user) {
+        console.log('HREF', window.location.href);
+        console.log('LOC', location);
+
+        if (securityType === SecurityType.FORM_LOGIN && !user) {
+            return <Redirect to="/login" />;
+        } else if (securityType === SecurityType.OAUTH2_CLIENT && !user) {
             return <Redirect to="/login" />;
         } else {
             document.title = this.browserTitle();
             const logoutButtonText = intl.formatMessage({id: 'button.logout.text'});
 
             return (
-                <Segment basic className="primary-header">
-                    <HeaderLogoFragment title={title} subtitle={subtitle} />
-                    <HeaderLoginFragment user={user} logoutButtonText={logoutButtonText} onLogoutClick={this.onLogoutClick} />
-                </Segment>
+                <Header className="container primary-header">
+                    <Segment basic>
+                        <HeaderLogoFragment title={title} subtitle={subtitle} />
+                        <HeaderLoginFragment user={user} logoutButtonText={logoutButtonText} onLogoutClick={this.onLogoutClick} />
+                    </Segment>
+                </Header>
             );
         }
     }
@@ -131,7 +142,8 @@ const HeaderLoginFragment: FunctionComponent<HeaderLoginFragmentProps> = (props:
 };
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
-    userState: state.userState
+    configState: state.configState,
+    authenticationState: state.authenticationState
 });
 
 const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
