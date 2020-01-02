@@ -15,6 +15,13 @@ acntech:
     login-page: /oauth2/authorization/token-relay-ui
     failure-url: /login/redirect?error
     logout-success-url: http://localhost:8888/uaa/logout.do?client_id=token-relay-ui&redirect=http://localhost:3000
+    whitelisted-paths:
+      - /**/security/**
+      - /**/client/**
+  client:
+    config:
+      security:
+        type: OAUTH2_CLIENT
 
 ########################
 # SPRING Configuration #

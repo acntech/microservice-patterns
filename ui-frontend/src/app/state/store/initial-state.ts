@@ -1,50 +1,58 @@
 import { IntlState } from 'react-intl-redux';
 
-import { defaultLocale, messages } from '../../core/locales';
+import { DEFAULT_LOCALE, messages } from '../../core/locales';
 import { ConfigState, CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState, SecurityType, UserState } from '../../models';
 
-export const initialConfigState: ConfigState = {
-    securityType: SecurityType.NONE
+export const INITIAL_CONFIG_STATE: ConfigState = {
+    loading: false,
+    config: {
+        security: {
+            type: SecurityType.NONE
+        }
+    },
+    values: {
+        loginLink: '/login'
+    }
 };
 
-export const initialIntlState: IntlState = {
-    locale: defaultLocale,
-    messages: messages[defaultLocale]
+export const INITIAL_INTL_STATE: IntlState = {
+    locale: DEFAULT_LOCALE,
+    messages: messages[DEFAULT_LOCALE]
 };
 
-export const initialNotificationState: NotificationState = {
+export const INITIAL_NOTIFICATION_STATE: NotificationState = {
     notifications: []
 };
 
-export const initialUserState: UserState = {};
+export const INITIAL_USER_STATE: UserState = {};
 
-export const initialCustomerState: CustomerState = {
+export const INITIAL_CUSTOMER_STATE: CustomerState = {
     loading: false,
     customers: []
 };
 
-export const initialProductState: ProductState = {
+export const INITIAL_PRODUCT_STATE: ProductState = {
     loading: false,
     products: []
 };
 
-export const initialOrderState: OrderState = {
+export const INITIAL_ORDER_STATE: OrderState = {
     loading: false,
     orders: []
 };
 
-export const initialItemState: ItemState = {
+export const INITIAL_ITEM_STATE: ItemState = {
     loading: false,
     items: []
 };
 
-export const initialRootState: RootState = {
-    configState: initialConfigState,
-    intl: initialIntlState,
-    notificationState: initialNotificationState,
-    userState: initialUserState,
-    customerState: initialCustomerState,
-    productState: initialProductState,
-    orderState: initialOrderState,
-    itemState: initialItemState
+export const INITIAL_ROOT_STATE: RootState = {
+    configState: INITIAL_CONFIG_STATE,
+    intl: INITIAL_INTL_STATE,
+    notificationState: INITIAL_NOTIFICATION_STATE,
+    userState: INITIAL_USER_STATE,
+    customerState: INITIAL_CUSTOMER_STATE,
+    productState: INITIAL_PRODUCT_STATE,
+    orderState: INITIAL_ORDER_STATE,
+    itemState: INITIAL_ITEM_STATE
 };

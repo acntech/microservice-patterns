@@ -2,14 +2,18 @@ import { polyfill } from 'es6-promise';
 import 'isomorphic-fetch';
 import * as _ from 'lodash';
 import uuidv4 from 'uuid/v4';
-import { ClientError, ClientResponse, CookieName, HeaderName, HeaderValue, RequestConfig, RequestMethod, ResponseCode } from '../../models';
+import { ClientError, ClientResponse, CookieName, ErrorCode, HeaderName, HeaderValue, RequestConfig, RequestMethod, ResponseCode, ResponseType } from '../../models';
 
 // IE Promise polyfill
 polyfill();
 
 const BASE_URL = '/api';
-const DEFAULT_CREDENTIALS: RequestCredentials = 'same-origin';
-const DEFAULT_REDIRECT_POLICY: RequestRedirect = 'follow';
+const DEFAULT_CREDENTIALS_POLICY: RequestCredentials = 'same-origin';
+const DEFAULT_REDIRECT_POLICY: RequestRedirect = 'manual';
+const UNKNOWN_ERROR_ID = 'unknown_error_id';
+const UNKNOWN_ERROR = {errorId: UNKNOWN_ERROR_ID, errorCode: ErrorCode.CLIENT_UNKNOWN_ERROR};
+const UNHANDLED_RESPONSE_TYPE_ERROR = {errorId: UNKNOWN_ERROR_ID, errorCode: ErrorCode.CLIENT_UNHANDLED_RESPONSE_TYPE};
+const REDIRECT_RESPONSE_ERROR = {errorId: UNKNOWN_ERROR_ID, errorCode: ErrorCode.SERVER_REDIRECT_RESPONSE};
 
 interface Client {
     get(url: string, config?: RequestConfig): Promise<any>;
@@ -62,11 +66,13 @@ export class RestClient implements Client {
     }
 
     private createRequest(conversationId: string, requestId: string, method: RequestMethod, xsrfToken?: string, config?: RequestConfig, body?: any): RequestInit {
+        const credentials = config && config.credentialsPolicy || DEFAULT_CREDENTIALS_POLICY;
+        const redirect = config && config.redirectPolicy || DEFAULT_REDIRECT_POLICY;
         const headers = this.createRequestHeaders(conversationId, requestId, xsrfToken, config);
         const defaultConfig = {
             method: method.toString(),
-            credentials: DEFAULT_CREDENTIALS,
-            redirect: DEFAULT_REDIRECT_POLICY,
+            credentials: credentials,
+            redirect: redirect,
             headers: headers,
             body: body ? JSON.stringify(body) : null
         };
@@ -93,51 +99,69 @@ export class RestClient implements Client {
     }
 
     private handleResponse(conversationId: string, requestId: string, response: Response): Promise<ClientResponse> {
-        if (response.status === ResponseCode.CREATED) {
-            return this.handleResponseBody(conversationId, requestId, response, undefined);
+        console.log('RESPONSE', response);
+        switch (response.type) {
+            case ResponseType.ERROR:
+            case ResponseType.DEFAULT:
+                return this.handleNormalResponse(conversationId, requestId, response);
+            case ResponseType.OPAQUE_REDIRECT:
+                throw this.handleResponseError(conversationId, requestId, response, REDIRECT_RESPONSE_ERROR);
+            default:
+                throw this.handleResponseError(conversationId, requestId, response, UNHANDLED_RESPONSE_TYPE_ERROR);
         }
-
-        if (response.status === ResponseCode.NO_CONTENT) {
-            return this.handleResponseBody(conversationId, requestId, response, undefined);
-        }
-
-        return response.json()
-            .then((body) => {
-                if (response.ok) {
-                    return this.handleResponseBody(conversationId, requestId, response, body);
-                } else {
-                    throw this.handleResponseError(conversationId, requestId, response, body);
-                }
-            });
     }
 
-    private handleResponseBody(conversationId: string, requestId: string, response: Response, body?: any): Promise<ClientResponse> {
+    private handleNormalResponse(conversationId: string, requestId: string, response: Response): Promise<ClientResponse> {
+        switch (response.status) {
+            case ResponseCode.CREATED:
+            case ResponseCode.NO_CONTENT: {
+                const clientResponse = this.handleResponseBody(conversationId, requestId, response, undefined);
+                return Promise.resolve(clientResponse);
+            }
+            default: {
+                return response.json()
+                    .then((body) => {
+                        if (response.ok) {
+                            const clientResponse = this.handleResponseBody(conversationId, requestId, response, body);
+                            return Promise.resolve(clientResponse);
+                        } else {
+                            throw this.handleResponseError(conversationId, requestId, response, body);
+                        }
+                    });
+            }
+        }
+    }
+
+    private handleResponseBody(conversationId: string, requestId: string, response: Response, body?: any): ClientResponse {
         const headers = this.handleResponseHeaders(response);
         const cookies = this.handleResponseCookies();
         const resolvedBody = body && body.entity ? body.entity : body;
         const entityId = RestClient.extractLocationHeader(response);
-        return Promise.resolve({
+        return {
             conversationId: conversationId,
             requestId: requestId,
             entityId: entityId,
+            statusCode: response.status,
+            statusText: response.statusText,
             headers: headers,
             cookies: cookies,
             body: resolvedBody
-        });
+        };
     }
 
     private handleResponseError(conversationId: string, requestId: string, response: Response, body?: any): ClientError {
         const headers = this.handleResponseHeaders(response);
         const cookies = this.handleResponseCookies();
         const resolvedBody = body && body.entity ? body.entity : body;
-        const {errorId} = resolvedBody ? resolvedBody : {errorId: 'unknown.error.id'};
-        const {errorCode} = resolvedBody ? resolvedBody : {errorCode: 'unknown.error.code'};
+        const {errorId, errorCode} = resolvedBody ? resolvedBody : UNKNOWN_ERROR;
         return {
             response: {
                 conversationId: conversationId,
                 requestId: requestId,
                 errorId: errorId,
                 errorCode: errorCode,
+                statusCode: response.status,
+                statusText: response.statusText,
                 headers: headers,
                 cookies: cookies,
                 body: resolvedBody

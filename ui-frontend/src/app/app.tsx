@@ -14,15 +14,15 @@ class App extends Component<{}> {
         const {locale, messages} = intl;
 
         return (
-            <Provider store={store}>
-                <IntlProvider key={locale} locale={locale} messages={messages}>
-                    <ErrorHandlerProvider>
+            <IntlProvider key={locale} locale={locale} messages={messages}>
+                <ErrorHandlerProvider>
+                    <Provider store={store}>
                         <AuthenticationProvider>
                             <RootContainer />
                         </AuthenticationProvider>
-                    </ErrorHandlerProvider>
-                </IntlProvider>
-            </Provider>
+                    </Provider>
+                </ErrorHandlerProvider>
+            </IntlProvider>
         );
     }
 }

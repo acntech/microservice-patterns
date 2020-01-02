@@ -1,5 +1,11 @@
 export enum SecurityType {
     NONE = 'NONE',
-    SIMPLE = 'SIMPLE',
-    OAUTH2 = 'OAUTH2'
+    FORM_LOGIN = 'FORM_LOGIN',
+    OAUTH2_CLIENT = 'OAUTH2_CLIENT'
+}
+
+export enum GetConfigActionType {
+    LOADING = '[config] GET LOADING',
+    SUCCESS = '[config] GET SUCCESS',
+    ERROR = '[config] GET ERROR'
 }

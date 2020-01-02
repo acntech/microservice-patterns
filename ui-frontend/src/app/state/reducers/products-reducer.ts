@@ -9,9 +9,9 @@ import {
     ProductAction,
     ProductState
 } from '../../models';
-import {initialProductState} from '../store/initial-state';
+import {INITIAL_PRODUCT_STATE} from '../store/initial-state';
 
-export const reducer = (state: ProductState = initialProductState, action: ProductAction): ProductState => {
+export const reducer = (state: ProductState = INITIAL_PRODUCT_STATE, action: ProductAction): ProductState => {
     switch (action.type) {
         case GetProductActionType.LOADING:
         case GetProductActionType.SUCCESS:
@@ -26,12 +26,12 @@ export const reducer = (state: ProductState = initialProductState, action: Produ
     }
 };
 
-const get = (state: ProductState = initialProductState, action: GetProductAction): ProductState => {
+const get = (state: ProductState = INITIAL_PRODUCT_STATE, action: GetProductAction): ProductState => {
     switch (action.type) {
         case GetProductActionType.LOADING: {
             const {products} = state;
             const {loading} = action;
-            return {...initialProductState, products: products, loading: loading};
+            return {...INITIAL_PRODUCT_STATE, products: products, loading: loading};
         }
 
         case GetProductActionType.SUCCESS: {
@@ -42,14 +42,14 @@ const get = (state: ProductState = initialProductState, action: GetProductAction
                 products = replaceOrAppend(products, payload);
             }
 
-            return {...initialProductState, products: products};
+            return {...INITIAL_PRODUCT_STATE, products: products};
         }
 
         case GetProductActionType.ERROR: {
             const {products} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.PRODUCTS, actionType: ActionType.FIND};
-            return {...initialProductState, products: products, error: error};
+            return {...INITIAL_PRODUCT_STATE, products: products, error: error};
         }
 
         default: {
@@ -58,12 +58,12 @@ const get = (state: ProductState = initialProductState, action: GetProductAction
     }
 };
 
-const find = (state: ProductState = initialProductState, action: FindProductsAction): ProductState => {
+const find = (state: ProductState = INITIAL_PRODUCT_STATE, action: FindProductsAction): ProductState => {
     switch (action.type) {
         case FindProductsActionType.LOADING: {
             const {products} = state;
             const {loading} = action;
-            return {...initialProductState, products: products, loading: loading};
+            return {...INITIAL_PRODUCT_STATE, products: products, loading: loading};
         }
 
         case FindProductsActionType.SUCCESS: {
@@ -76,14 +76,14 @@ const find = (state: ProductState = initialProductState, action: FindProductsAct
                 });
             }
 
-            return {...initialProductState, products: products};
+            return {...INITIAL_PRODUCT_STATE, products: products};
         }
 
         case FindProductsActionType.ERROR: {
             const {products} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.PRODUCTS, actionType: ActionType.FIND};
-            return {...initialProductState, products: products, error: error};
+            return {...INITIAL_PRODUCT_STATE, products: products, error: error};
         }
 
         default: {

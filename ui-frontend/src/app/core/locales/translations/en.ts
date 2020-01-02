@@ -25,6 +25,11 @@ export default {
     'error.product-not-found.header.text': 'No product found',
     'error.product-not-found.content.text': 'Could not find product for item-id {itemId}',
 
+    'error-code.client.unknown_error.title.text': 'Unknown error',
+    'error-code.client.unhandled_response_type.title.text': 'Unhandled response type',
+    'error-code.server.redirect_response.title.text': 'You are not logged in',
+    'error-code.server.redirect_response.content.text': 'Click here to login: {loginLink}',
+
     'form.validation.order-name.min-length.text': 'Order name must be at least {length} characters long',
     'form.validation.order-name.max-length.text': 'Order name cannot be over {length} characters long',
     'form.validation.item-quantity.bad-format.text': 'Quantity must be a positive number',
@@ -59,5 +64,26 @@ export default {
     'enum.item-status.CANCELED': 'CANCELED',
     'enum.item-status.REJECTED': 'REJECTED',
     'enum.item-status.FAILED': 'FAILED',
-    'enum.item-status.undefined': 'UNKNOWN'
+    'enum.item-status.undefined': 'UNKNOWN',
+
+    'action.get-customer-error.title.text': 'Error getting customer',
+    'action.find-customers-error.title.text': 'Error finding customers',
+    'action.get-product-error.title.text': 'Error getting product',
+    'action.find-products-error.title.text': 'Error finding products',
+    'action.get-order-error.title.text': 'Error getting order',
+    'action.find-orders-error.title.text': 'Error finding orders',
+    'action.create-order-success.title.text': 'Order created successfully',
+    'action.create-order-error.title.text': 'Error creating order',
+    'action.update-order-success.title.text': 'Order updated successfully',
+    'action.update-order-error.title.text': 'Error updating order',
+    'action.delete-order-success.title.text': 'Order deleted successfully',
+    'action.delete-order-error.title.text': 'Error deleting order',
+    'action.get-item-error.title.text': 'Error getting item',
+    'action.find-items-error.title.text': 'Error finding items',
+    'action.create-items-success.title.text': 'Item created successfully',
+    'action.create-items-error.title.text': 'Error creating order',
+    'action.update-items-success.title.text': 'Item updated successfully',
+    'action.update-items-error.title.text': 'Error updating order',
+    'action.delete-items-success.title.text': 'Item deleted successfully',
+    'action.delete-items-error.title.text': 'Error deleting order'
 };

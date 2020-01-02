@@ -9,7 +9,8 @@ import org.springframework.security.oauth2.client.web.reactive.function.client.S
 import org.springframework.web.reactive.function.client.WebClient;
 
 @EnableConfigurationProperties({
-        ServiceProperties.class
+        ServiceProperties.class,
+        ClientProperties.class
 })
 @Configuration
 public class ApplicationConfig {

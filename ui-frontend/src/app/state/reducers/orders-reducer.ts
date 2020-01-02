@@ -2,9 +2,9 @@ import {
     ActionType, CreateOrderAction, CreateOrderActionType, DeleteOrderAction, DeleteOrderActionType, EntityType, FindOrdersAction, FindOrdersActionType, GetOrderAction, GetOrderActionType, Order,
     OrderAction, OrderState, UpdateOrderAction, UpdateOrderActionType
 } from '../../models';
-import { initialOrderState } from '../store/initial-state';
+import { INITIAL_ORDER_STATE } from '../store/initial-state';
 
-export const reducer = (state: OrderState = initialOrderState, action: OrderAction): OrderState => {
+export const reducer = (state: OrderState = INITIAL_ORDER_STATE, action: OrderAction): OrderState => {
     switch (action.type) {
         case GetOrderActionType.LOADING:
         case GetOrderActionType.SUCCESS:
@@ -31,12 +31,12 @@ export const reducer = (state: OrderState = initialOrderState, action: OrderActi
     }
 };
 
-const get = (state: OrderState = initialOrderState, action: GetOrderAction): OrderState => {
+const get = (state: OrderState = INITIAL_ORDER_STATE, action: GetOrderAction): OrderState => {
     switch (action.type) {
         case GetOrderActionType.LOADING: {
             const {orders} = state;
             const {loading} = action;
-            return {...initialOrderState, orders, loading};
+            return {...INITIAL_ORDER_STATE, orders, loading};
         }
 
         case GetOrderActionType.SUCCESS: {
@@ -47,14 +47,14 @@ const get = (state: OrderState = initialOrderState, action: GetOrderAction): Ord
                 orders = replaceOrAppend(orders, payload);
             }
 
-            return {...initialOrderState, orders};
+            return {...INITIAL_ORDER_STATE, orders};
         }
 
         case GetOrderActionType.ERROR: {
             const {orders} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.GET};
-            return {...initialOrderState, orders, error};
+            return {...INITIAL_ORDER_STATE, orders, error};
         }
 
         default: {
@@ -63,12 +63,12 @@ const get = (state: OrderState = initialOrderState, action: GetOrderAction): Ord
     }
 };
 
-const find = (state: OrderState = initialOrderState, action: FindOrdersAction): OrderState => {
+const find = (state: OrderState = INITIAL_ORDER_STATE, action: FindOrdersAction): OrderState => {
     switch (action.type) {
         case FindOrdersActionType.LOADING: {
             const {orders} = state;
             const {loading} = action;
-            return {...initialOrderState, orders, loading};
+            return {...INITIAL_ORDER_STATE, orders, loading};
         }
 
         case FindOrdersActionType.SUCCESS: {
@@ -81,14 +81,14 @@ const find = (state: OrderState = initialOrderState, action: FindOrdersAction): 
                 });
             }
 
-            return {...initialOrderState, orders};
+            return {...INITIAL_ORDER_STATE, orders};
         }
 
         case FindOrdersActionType.ERROR: {
             const {orders} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.FIND};
-            return {...initialOrderState, orders, error};
+            return {...INITIAL_ORDER_STATE, orders, error};
         }
 
         default: {
@@ -97,13 +97,13 @@ const find = (state: OrderState = initialOrderState, action: FindOrdersAction): 
     }
 };
 
-const create = (state: OrderState = initialOrderState, action: CreateOrderAction): OrderState => {
+const create = (state: OrderState = INITIAL_ORDER_STATE, action: CreateOrderAction): OrderState => {
     const {orders} = state;
 
     switch (action.type) {
         case CreateOrderActionType.LOADING: {
             const {loading} = action;
-            return {...initialOrderState, orders, loading};
+            return {...INITIAL_ORDER_STATE, orders, loading};
         }
 
         case CreateOrderActionType.SUCCESS: {
@@ -111,13 +111,13 @@ const create = (state: OrderState = initialOrderState, action: CreateOrderAction
 
             const modified = {id: orderId || 'order.id.missing', entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
 
-            return {...initialOrderState, orders, modified};
+            return {...INITIAL_ORDER_STATE, orders, modified};
         }
 
         case CreateOrderActionType.ERROR: {
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
-            return {...initialOrderState, orders, error};
+            return {...INITIAL_ORDER_STATE, orders, error};
         }
 
         default: {
@@ -126,26 +126,26 @@ const create = (state: OrderState = initialOrderState, action: CreateOrderAction
     }
 };
 
-const update = (state: OrderState = initialOrderState, action: UpdateOrderAction): OrderState => {
+const update = (state: OrderState = INITIAL_ORDER_STATE, action: UpdateOrderAction): OrderState => {
     switch (action.type) {
         case UpdateOrderActionType.LOADING: {
             const {orders} = state;
             const {loading} = action;
-            return {...initialOrderState, orders, loading};
+            return {...INITIAL_ORDER_STATE, orders, loading};
         }
 
         case UpdateOrderActionType.SUCCESS: {
             const {orders} = state;
             const {orderId} = action;
             const modified = {id: orderId, entityType: EntityType.ORDERS, actionType: ActionType.UPDATE};
-            return {...initialOrderState, orders, modified};
+            return {...INITIAL_ORDER_STATE, orders, modified};
         }
 
         case UpdateOrderActionType.ERROR: {
             const {orders} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.UPDATE};
-            return {...initialOrderState, orders, error};
+            return {...INITIAL_ORDER_STATE, orders, error};
         }
 
         default: {
@@ -154,26 +154,26 @@ const update = (state: OrderState = initialOrderState, action: UpdateOrderAction
     }
 };
 
-const remove = (state: OrderState = initialOrderState, action: DeleteOrderAction): OrderState => {
+const remove = (state: OrderState = INITIAL_ORDER_STATE, action: DeleteOrderAction): OrderState => {
     switch (action.type) {
         case DeleteOrderActionType.LOADING: {
             const {orders} = state;
             const {loading} = action;
-            return {...initialOrderState, orders, loading};
+            return {...INITIAL_ORDER_STATE, orders, loading};
         }
 
         case DeleteOrderActionType.SUCCESS: {
             const {orders} = state;
             const {orderId} = action;
             const modified = {id: orderId, entityType: EntityType.ORDERS, actionType: ActionType.DELETE};
-            return {...initialOrderState, orders, modified};
+            return {...INITIAL_ORDER_STATE, orders, modified};
         }
 
         case DeleteOrderActionType.ERROR: {
             const {orders} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.DELETE};
-            return {...initialOrderState, orders, error};
+            return {...INITIAL_ORDER_STATE, orders, error};
         }
 
         default: {

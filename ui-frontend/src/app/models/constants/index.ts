@@ -1,4 +1,5 @@
 export * from './globals';
+export * from './errors';
 export * from './config';
 export * from './notifications';
 export * from './users';

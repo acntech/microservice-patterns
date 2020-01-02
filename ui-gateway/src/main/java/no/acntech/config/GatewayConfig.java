@@ -1,5 +1,6 @@
 package no.acntech.config;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,9 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.path;
 
+@EnableConfigurationProperties(
+        ClientProperties.class
+)
 @Configuration
 public class GatewayConfig {
 

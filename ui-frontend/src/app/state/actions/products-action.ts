@@ -6,11 +6,11 @@ import {
 } from '../../models';
 import { showErrorNotification } from '../actions';
 
-const getProductLoading = (loading: boolean): GetProductLoadingAction => ({type: GetProductActionType.LOADING, loading});
+const getProductLoading = (): GetProductLoadingAction => ({type: GetProductActionType.LOADING, loading: true});
 const getProductSuccess = (payload: Product): GetProductSuccessAction => ({type: GetProductActionType.SUCCESS, payload});
 const getProductError = (error: any): GetProductErrorAction => ({type: GetProductActionType.ERROR, error});
 
-const findProductsLoading = (loading: boolean): FindProductsLoadingAction => ({type: FindProductsActionType.LOADING, loading});
+const findProductsLoading = (): FindProductsLoadingAction => ({type: FindProductsActionType.LOADING, loading: true});
 const findProductsSuccess = (payload: Product[]): FindProductsSuccessAction => ({type: FindProductsActionType.SUCCESS, payload});
 const findProductsError = (error: any): FindProductsErrorAction => ({type: FindProductsActionType.ERROR, error});
 
@@ -18,7 +18,7 @@ const rootPath = 'products';
 
 export function getProduct(productId: string) {
     return (dispatch) => {
-        dispatch(getProductLoading(true));
+        dispatch(getProductLoading());
         const url = `${rootPath}/${productId}`;
         return client.get(url)
             .then((response) => {
@@ -27,7 +27,7 @@ export function getProduct(productId: string) {
             })
             .catch((error) => {
                 const {message} = error.response && error.response.body;
-                dispatch(showErrorNotification('Error getting product', message, true));
+                dispatch(showErrorNotification({id: 'action.get-product-error.title.text'}, message, true));
                 return dispatch(getProductError(error));
             });
     };
@@ -35,7 +35,7 @@ export function getProduct(productId: string) {
 
 export function findProducts(query?: ProductQuery) {
     return (dispatch) => {
-        dispatch(findProductsLoading(true));
+        dispatch(findProductsLoading());
         const url = `${rootPath}`;
         return client.get(url, {params: {...query}})
             .then((response) => {
@@ -44,7 +44,7 @@ export function findProducts(query?: ProductQuery) {
             })
             .catch((error) => {
                 const {message} = error.response && error.response.body;
-                dispatch(showErrorNotification('Error finding products', message, true));
+                dispatch(showErrorNotification({id: 'action.find-products-error.title.text'}, message, true));
                 return dispatch(findProductsError(error));
             });
     };

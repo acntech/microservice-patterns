@@ -1,4 +1,5 @@
 export enum EntityType {
+    CONFIG = 'config',
     CUSTOMERS = 'customers',
     PRODUCTS = 'products',
     ORDERS = 'orders',
@@ -22,6 +23,7 @@ export enum RequestMethod {
 }
 
 export enum ResponseCode {
+    UNKNOWN = 0,
     OK = 200,
     CREATED = 201,
     ACCEPTED = 202,
@@ -31,6 +33,15 @@ export enum ResponseCode {
     UNAUTHORIZED = 401,
     FORBIDDEN = 403,
     NOT_FOUND = 404
+}
+
+export enum ResponseType {
+    BASIC = 'basic',
+    CORS = 'cors',
+    DEFAULT = 'default',
+    ERROR = 'error',
+    OPAQUE = 'opaque',
+    OPAQUE_REDIRECT = 'opaqueredirect'
 }
 
 export enum HeaderName {
@@ -47,4 +58,12 @@ export enum CookieName {
 
 export enum HeaderValue {
     APPLICATION_JSON = 'application/json'
+}
+
+export enum SeverityType {
+    INFO = 'info',
+    WARNING = 'warning',
+    ERROR = 'error',
+    SUCCESS = 'success',
+    FAILED = 'failed'
 }

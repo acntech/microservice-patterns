@@ -1,5 +1,6 @@
+import { ReactNode } from 'react';
 import { IntlState } from 'react-intl-redux';
-import { ActionType, ConfigState, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState, UserState } from '../';
+import { ActionType, ConfigState, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState, SeverityType, UserState } from '../';
 
 export interface RootState {
     configState: ConfigState,
@@ -45,6 +46,8 @@ export interface ClientFields {
 
 export interface ClientResponse extends ClientFields {
     entityId?: string;
+    statusCode: number;
+    statusText: string;
     headers: Map<string, string>;
     cookies: Map<string, string>;
     body?: any;
@@ -68,6 +71,8 @@ export interface DataMap {
 export interface RequestConfig {
     headers?: Map<string, string>;
     params?: DataMap;
+    credentialsPolicy?: RequestCredentials;
+    redirectPolicy?: RequestRedirect;
 }
 
 export interface FormElementData {
@@ -85,4 +90,14 @@ export interface Translation {
     id: string;
     defaultMessage?: string;
     values?: {[key: string]: string}
+}
+
+export type Severity = SeverityType.INFO | SeverityType.WARNING | SeverityType.ERROR | SeverityType.SUCCESS | SeverityType.FAILED;
+
+export type MessageContent = string | ReactNode | Translation;
+
+export interface Message {
+    severity: Severity;
+    title: Translation;
+    content?: MessageContent;
 }

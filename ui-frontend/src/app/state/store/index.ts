@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 
 import { RootState } from '../../models';
 import { rootReducer } from '../reducers';
-import { initialRootState } from './initial-state';
+import { INITIAL_ROOT_STATE } from './initial-state';
 
 addLocaleData([
     ...enLocaleData
@@ -19,4 +19,4 @@ middleware.push(logger);
 
 const storeEnhancer = composeWithDevTools(applyMiddleware(...middleware));
 
-export const store = createStore<RootState, any, any, any>(rootReducer, initialRootState, storeEnhancer);
+export const store = createStore<RootState, any, any, any>(rootReducer, INITIAL_ROOT_STATE, storeEnhancer);

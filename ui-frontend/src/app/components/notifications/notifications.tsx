@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Component, ReactNode } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Message, Segment } from 'semantic-ui-react';
 
-import { NotificationState, RootState } from '../../models';
+import { ConfigState, NotificationState, RootState, Translation } from '../../models';
 import { clearNotifications, dismissNotification } from '../../state/actions';
+import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 const notificationDetails = {
     info: {
@@ -42,6 +44,7 @@ const notificationDetails = {
 };
 
 interface ComponentStateProps {
+    configState: ConfigState;
     notificationState: NotificationState;
 }
 
@@ -50,7 +53,7 @@ interface ComponentDispatchProps {
     dismissNotification: (uuid: string) => Promise<any>;
 }
 
-type ComponentProps = ComponentDispatchProps & ComponentStateProps;
+type ComponentProps = ComponentDispatchProps & ComponentStateProps & InjectedIntlProps;
 
 class NotificationsComponent extends Component<ComponentProps> {
 
@@ -67,6 +70,8 @@ class NotificationsComponent extends Component<ComponentProps> {
                     {notifications.map((notification, index) => {
                         const {uuid, severity, title, content, permanent} = notification;
                         const {icon, info, warning, error, success, timeout} = notificationDetails[severity];
+                        const header = this.unwrapHeader(title);
+                        const unwrappedContent = this.unwrapContent(content);
 
                         if (!permanent) {
                             window.setTimeout(() => this.props.dismissNotification(uuid), timeout);
@@ -79,8 +84,8 @@ class NotificationsComponent extends Component<ComponentProps> {
                             error={error}
                             success={success}
                             icon={icon}
-                            header={title}
-                            content={content}
+                            header={header}
+                            content={unwrappedContent}
                             onDismiss={() => this.props.dismissNotification(uuid)} />;
                     })}
                 </Segment>
@@ -89,9 +94,26 @@ class NotificationsComponent extends Component<ComponentProps> {
             return null;
         }
     }
+
+    private unwrapHeader(header: Translation) {
+        const {values} = this.props.configState;
+        const combinedValues = {...values, ...header.values};
+        return this.props.intl.formatMessage({id: header.id, defaultMessage: header.defaultMessage}, combinedValues);
+    }
+
+    private unwrapContent(content?: any) {
+        if (content && 'id' in content) {
+            const {values} = this.props.configState;
+            const combinedValues = {...values, ...content.values};
+            return this.props.intl.formatMessage({id: content.id, defaultMessage: content.defaultMessage}, combinedValues);
+        } else {
+            return content;
+        }
+    }
 }
 
 const mapStateToProps = (state: RootState): ComponentStateProps => ({
+    configState: state.configState,
     notificationState: state.notificationState
 });
 
@@ -100,6 +122,7 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
     dismissNotification: (uuid: string) => dispatch(dismissNotification(uuid))
 });
 
-const ConnectedNotificationsComponent = connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);
+const IntlNotificationsComponent = injectIntl(NotificationsComponent);
+const ConnectedNotificationsComponent = connect(mapStateToProps, mapDispatchToProps)(IntlNotificationsComponent);
 
 export { ConnectedNotificationsComponent as Notifications };

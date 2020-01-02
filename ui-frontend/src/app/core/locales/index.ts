@@ -1,6 +1,6 @@
 import en from './translations/en';
 
-export const defaultLocale = 'en';
+export const DEFAULT_LOCALE = 'en';
 
 export const messages = {
     en: en

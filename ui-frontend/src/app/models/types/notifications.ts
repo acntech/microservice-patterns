@@ -1,18 +1,18 @@
 import { ReactNode } from 'react';
-import { NotificationActionType } from '../';
+import { NotificationActionType, Severity, Translation } from '../';
 
 export interface ShowNotification {
-    severity: 'info' | 'warning' | 'error' | 'success';
-    title: string;
-    content?: string | ReactNode;
+    severity: Severity;
+    title: Translation;
+    content?: string | ReactNode | Translation;
     permanent?: boolean;
 }
 
 export interface Notification {
-    severity: 'info' | 'warning' | 'error' | 'success';
+    severity: Severity;
     uuid: string;
-    title: string;
-    content?: string | ReactNode;
+    title: Translation;
+    content?: string | ReactNode | Translation;
     permanent?: boolean;
 }
 

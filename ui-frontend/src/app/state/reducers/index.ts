@@ -2,13 +2,13 @@ import { intlReducer } from 'react-intl-redux';
 import { combineReducers } from 'redux';
 
 import { RootState } from '../../models';
-import * as config from './config';
-import * as customers from './customers';
-import * as items from './items';
-import * as notifications from './notifications';
-import * as orders from './orders';
-import * as products from './products';
-import * as users from './users';
+import * as config from './config-reducer';
+import * as customers from './customers-reducer';
+import * as items from './items-reducer';
+import * as notifications from './notifications-reducer';
+import * as orders from './orders-reducer';
+import * as products from './products-reducer';
+import * as users from './users-reducer';
 
 const {reducer: configReducer} = config;
 const {reducer: notificationsReducer} = notifications;

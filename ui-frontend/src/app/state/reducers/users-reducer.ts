@@ -1,7 +1,7 @@
 import { HandleUserActionType, LoginUserAction, LogoutUserAction, UserAction, UserState } from '../../models';
-import { initialCustomerState, initialUserState } from '../store/initial-state';
+import { INITIAL_CUSTOMER_STATE, INITIAL_USER_STATE } from '../store/initial-state';
 
-export const reducer = (state: UserState = initialUserState, action: UserAction): UserState => {
+export const reducer = (state: UserState = INITIAL_USER_STATE, action: UserAction): UserState => {
     switch (action.type) {
         case HandleUserActionType.LOGIN:
             return login(state, action);
@@ -12,11 +12,11 @@ export const reducer = (state: UserState = initialUserState, action: UserAction)
     }
 };
 
-const login = (state: UserState = initialUserState, action: LoginUserAction): UserState => {
+const login = (state: UserState = INITIAL_USER_STATE, action: LoginUserAction): UserState => {
     switch (action.type) {
         case HandleUserActionType.LOGIN: {
             const {user} = action;
-            return {...initialCustomerState, user: user};
+            return {...INITIAL_CUSTOMER_STATE, user: user};
         }
 
         default: {
@@ -25,10 +25,10 @@ const login = (state: UserState = initialUserState, action: LoginUserAction): Us
     }
 };
 
-const logout = (state: UserState = initialUserState, action: LogoutUserAction): UserState => {
+const logout = (state: UserState = INITIAL_USER_STATE, action: LogoutUserAction): UserState => {
     switch (action.type) {
         case HandleUserActionType.LOGOUT: {
-            return {...initialCustomerState, user: undefined};
+            return {...INITIAL_CUSTOMER_STATE, user: undefined};
         }
 
         default: {

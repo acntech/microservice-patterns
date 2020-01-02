@@ -1,7 +1,7 @@
 import { ActionType, CreateItemAction, CreateItemActionType, DeleteItemAction, DeleteItemActionType, EntityType, GetItemAction, GetItemActionType, Item, ItemAction, ItemState } from '../../models';
-import { initialItemState } from '../store/initial-state';
+import { INITIAL_ITEM_STATE } from '../store/initial-state';
 
-export const reducer = (state: ItemState = initialItemState, action: ItemAction): ItemState => {
+export const reducer = (state: ItemState = INITIAL_ITEM_STATE, action: ItemAction): ItemState => {
     switch (action.type) {
         case GetItemActionType.LOADING:
         case GetItemActionType.SUCCESS:
@@ -20,13 +20,13 @@ export const reducer = (state: ItemState = initialItemState, action: ItemAction)
     }
 };
 
-const get = (state: ItemState = initialItemState, action: GetItemAction): ItemState => {
+const get = (state: ItemState = INITIAL_ITEM_STATE, action: GetItemAction): ItemState => {
     let {items} = state;
 
     switch (action.type) {
         case GetItemActionType.LOADING: {
             const {loading} = action;
-            return {...initialItemState, items, loading};
+            return {...INITIAL_ITEM_STATE, items, loading};
         }
 
         case GetItemActionType.SUCCESS: {
@@ -36,13 +36,13 @@ const get = (state: ItemState = initialItemState, action: GetItemAction): ItemSt
                 items = replaceOrAppend(items, payload);
             }
 
-            return {...initialItemState, items};
+            return {...INITIAL_ITEM_STATE, items};
         }
 
         case GetItemActionType.ERROR: {
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ORDERS, actionType: ActionType.GET};
-            return {...initialItemState, items, error};
+            return {...INITIAL_ITEM_STATE, items, error};
         }
 
         default: {
@@ -51,13 +51,13 @@ const get = (state: ItemState = initialItemState, action: GetItemAction): ItemSt
     }
 };
 
-const create = (state: ItemState = initialItemState, action: CreateItemAction): ItemState => {
+const create = (state: ItemState = INITIAL_ITEM_STATE, action: CreateItemAction): ItemState => {
     const {items} = state;
 
     switch (action.type) {
         case CreateItemActionType.LOADING: {
             const {loading} = action;
-            return {...initialItemState, items, loading};
+            return {...INITIAL_ITEM_STATE, items, loading};
         }
 
         case CreateItemActionType.SUCCESS: {
@@ -65,13 +65,13 @@ const create = (state: ItemState = initialItemState, action: CreateItemAction): 
 
             const modified = {id: itemId, entityType: EntityType.ITEMS, actionType: ActionType.CREATE};
 
-            return {...initialItemState, items, modified};
+            return {...INITIAL_ITEM_STATE, items, modified};
         }
 
         case CreateItemActionType.ERROR: {
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ITEMS, actionType: ActionType.CREATE};
-            return {...initialItemState, items, error};
+            return {...INITIAL_ITEM_STATE, items, error};
         }
 
         default: {
@@ -80,25 +80,25 @@ const create = (state: ItemState = initialItemState, action: CreateItemAction): 
     }
 };
 
-const remove = (state: ItemState = initialItemState, action: DeleteItemAction): ItemState => {
+const remove = (state: ItemState = INITIAL_ITEM_STATE, action: DeleteItemAction): ItemState => {
     const {items} = state;
 
     switch (action.type) {
         case DeleteItemActionType.LOADING: {
             const {loading} = action;
-            return {...initialItemState, items, loading};
+            return {...INITIAL_ITEM_STATE, items, loading};
         }
 
         case DeleteItemActionType.SUCCESS: {
             const {itemId} = action;
             const modified = {id: itemId, entityType: EntityType.ITEMS, actionType: ActionType.DELETE};
-            return {...initialItemState, items, modified};
+            return {...INITIAL_ITEM_STATE, items, modified};
         }
 
         case DeleteItemActionType.ERROR: {
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.ITEMS, actionType: ActionType.DELETE};
-            return {...initialItemState, items, error};
+            return {...INITIAL_ITEM_STATE, items, error};
         }
 
         default: {

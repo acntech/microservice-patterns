@@ -2,11 +2,13 @@ package no.acntech.security.resource;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.acntech.security.model.Session;
 import no.acntech.security.service.SecurityService;
 
+@RequestMapping(path = "security")
 @RestController
 public class SecurityResource {
 
@@ -16,7 +18,7 @@ public class SecurityResource {
         this.securityService = securityService;
     }
 
-    @GetMapping(path = "session/info")
+    @GetMapping(path = "session")
     public ResponseEntity<Session> session() {
         Session session = securityService.getSession();
         return ResponseEntity.ok(session);

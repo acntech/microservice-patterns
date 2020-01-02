@@ -1,4 +1,4 @@
-package no.acntech.resource;
+package no.acntech.client.resource;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.acntech.config.ClientProperties;
 
-@RequestMapping(path = "/api/client")
+@RequestMapping(path = "client")
 @RestController
 public class ClientResource {
 

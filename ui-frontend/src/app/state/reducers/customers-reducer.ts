@@ -1,7 +1,7 @@
 import { ActionType, Customer, CustomerAction, CustomerState, EntityType, FindCustomersAction, FindCustomersActionType, GetCustomerAction, GetCustomerActionType } from '../../models';
-import { initialCustomerState } from '../store/initial-state';
+import { INITIAL_CUSTOMER_STATE } from '../store/initial-state';
 
-export const reducer = (state: CustomerState = initialCustomerState, action: CustomerAction): CustomerState => {
+export const reducer = (state: CustomerState = INITIAL_CUSTOMER_STATE, action: CustomerAction): CustomerState => {
     switch (action.type) {
         case GetCustomerActionType.LOADING:
         case GetCustomerActionType.SUCCESS:
@@ -16,12 +16,12 @@ export const reducer = (state: CustomerState = initialCustomerState, action: Cus
     }
 };
 
-const get = (state: CustomerState = initialCustomerState, action: GetCustomerAction): CustomerState => {
+const get = (state: CustomerState = INITIAL_CUSTOMER_STATE, action: GetCustomerAction): CustomerState => {
     switch (action.type) {
         case GetCustomerActionType.LOADING: {
             const {customers} = state;
             const {loading} = action;
-            return {...initialCustomerState, customers: customers, loading: loading};
+            return {...INITIAL_CUSTOMER_STATE, customers: customers, loading: loading};
         }
 
         case GetCustomerActionType.SUCCESS: {
@@ -32,14 +32,14 @@ const get = (state: CustomerState = initialCustomerState, action: GetCustomerAct
                 customers = replaceOrAppend(customers, payload);
             }
 
-            return {...initialCustomerState, customers: customers};
+            return {...INITIAL_CUSTOMER_STATE, customers: customers};
         }
 
         case GetCustomerActionType.ERROR: {
             const {customers} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.CUSTOMERS, actionType: ActionType.GET};
-            return {...initialCustomerState, customers: customers, error: error};
+            return {...INITIAL_CUSTOMER_STATE, customers: customers, error: error};
         }
 
         default: {
@@ -48,12 +48,12 @@ const get = (state: CustomerState = initialCustomerState, action: GetCustomerAct
     }
 };
 
-const find = (state: CustomerState = initialCustomerState, action: FindCustomersAction): CustomerState => {
+const find = (state: CustomerState = INITIAL_CUSTOMER_STATE, action: FindCustomersAction): CustomerState => {
     switch (action.type) {
         case FindCustomersActionType.LOADING: {
             const {customers} = state;
             const {loading} = action;
-            return {...initialCustomerState, customers: customers, loading: loading};
+            return {...INITIAL_CUSTOMER_STATE, customers: customers, loading: loading};
         }
 
         case FindCustomersActionType.SUCCESS: {
@@ -66,14 +66,14 @@ const find = (state: CustomerState = initialCustomerState, action: FindCustomers
                 });
             }
 
-            return {...initialCustomerState, customers: customers};
+            return {...INITIAL_CUSTOMER_STATE, customers: customers};
         }
 
         case FindCustomersActionType.ERROR: {
             const {customers} = state;
             const {data} = action.error.response;
             const error = {...data, entityType: EntityType.CUSTOMERS, actionType: ActionType.FIND};
-            return {...initialCustomerState, customers: customers, error: error};
+            return {...INITIAL_CUSTOMER_STATE, customers: customers, error: error};
         }
 
         default: {
