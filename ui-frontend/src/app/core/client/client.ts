@@ -2,7 +2,7 @@ import { polyfill } from 'es6-promise';
 import 'isomorphic-fetch';
 import * as _ from 'lodash';
 import uuidv4 from 'uuid/v4';
-import { ClientError, ClientResponse, CookieName, ErrorCode, HeaderName, HeaderValue, RequestConfig, RequestMethod, ResponseCode, ResponseType } from '../../models';
+import { ClientError, ClientResponse, CookieName, ErrorCode, HeaderName, HeaderValue, RequestConfig, RequestMethod, ResponseType } from '../../models';
 
 // IE Promise polyfill
 polyfill();
@@ -101,7 +101,6 @@ export class RestClient implements Client {
     private handleResponse(conversationId: string, requestId: string, response: Response): Promise<ClientResponse> {
         console.log('RESPONSE', response);
         switch (response.type) {
-            case ResponseType.ERROR:
             case ResponseType.BASIC:
                 return this.handleNormalResponse(conversationId, requestId, response);
             case ResponseType.OPAQUE_REDIRECT:
@@ -112,22 +111,26 @@ export class RestClient implements Client {
     }
 
     private handleNormalResponse(conversationId: string, requestId: string, response: Response): Promise<ClientResponse> {
-        switch (response.status) {
-            case ResponseCode.CREATED:
-            case ResponseCode.NO_CONTENT: {
+
+        const headers = this.handleResponseHeaders(response);
+        headers.forEach((k, v) => console.log('HEADER', `${k}: ${v}`));
+
+        if (response.bodyUsed) {
+            return response.json()
+                .then((body) => {
+                    if (response.ok) {
+                        const clientResponse = this.handleResponseBody(conversationId, requestId, response, body);
+                        return Promise.resolve(clientResponse);
+                    } else {
+                        throw this.handleResponseError(conversationId, requestId, response, body);
+                    }
+                });
+        } else {
+            if (response.ok) {
                 const clientResponse = this.handleResponseBody(conversationId, requestId, response, undefined);
                 return Promise.resolve(clientResponse);
-            }
-            default: {
-                return response.json()
-                    .then((body) => {
-                        if (response.ok) {
-                            const clientResponse = this.handleResponseBody(conversationId, requestId, response, body);
-                            return Promise.resolve(clientResponse);
-                        } else {
-                            throw this.handleResponseError(conversationId, requestId, response, body);
-                        }
-                    });
+            } else {
+                throw this.handleResponseError(conversationId, requestId, response, UNKNOWN_ERROR);
             }
         }
     }

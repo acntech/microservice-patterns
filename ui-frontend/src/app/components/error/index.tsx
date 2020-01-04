@@ -1,1 +1,1 @@
-export * from './not-found-error';
+export * from './generic-error';

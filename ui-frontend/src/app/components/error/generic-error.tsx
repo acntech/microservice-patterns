@@ -14,7 +14,7 @@ interface ComponentParamProps {
 
 type ComponentProps = ComponentParamProps & InjectedIntlProps;
 
-class NotFoundErrorComponent extends Component<ComponentProps> {
+class GenericErrorComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
         const {icon, header, content, children} = this.props;
@@ -22,7 +22,7 @@ class NotFoundErrorComponent extends Component<ComponentProps> {
         const contentText = this.props.intl.formatMessage({id: content.id, defaultMessage: content.defaultMessage}, content.values);
 
         return (
-            <Segment basic className="error error-not-found">
+            <Segment basic className="error generic-error">
                 <Message negative icon={icon} header={headerText} content={contentText} />
                 {children}
             </Segment>
@@ -30,6 +30,6 @@ class NotFoundErrorComponent extends Component<ComponentProps> {
     }
 }
 
-const IntlNotFoundErrorComponent = injectIntl(NotFoundErrorComponent);
+const IntlGenericErrorComponent = injectIntl(GenericErrorComponent);
 
-export { IntlNotFoundErrorComponent as NotFoundError };
+export { IntlGenericErrorComponent as GenericError };

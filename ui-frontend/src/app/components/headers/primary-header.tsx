@@ -106,7 +106,7 @@ const HeaderLogoFragment: FunctionComponent<HeaderLogoFragmentProps> = (props: H
     return (
         <Header as="h1" floated="left" className="primary-header-title">
             <Link to="/">
-                <Icon name="box" /> < FormattedMessage id={formattedHeaderTitle} />{subtitle ? <> - <FormattedMessage id={subtitle} /></> : null}
+                <Icon name="shipping fast" /> < FormattedMessage id={formattedHeaderTitle} />{subtitle ? <> - <FormattedMessage id={subtitle} /></> : null}
             </Link>
         </Header>
     );

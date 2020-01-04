@@ -5,7 +5,7 @@ import { Redirect } from 'react-router';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'semantic-ui-react';
-import { LoadingIndicator, NotFoundError, SecondaryHeader, ShowOrder } from '../../components';
+import { GenericError, LoadingIndicator, SecondaryHeader, ShowOrder } from '../../components';
 
 import { Order, OrderState, ProductState, RootState } from '../../models';
 import { deleteOrder, findProducts, getOrder, updateOrder } from '../../state/actions';
@@ -82,7 +82,7 @@ class OrderContainer extends Component<ComponentProps, ComponentState> {
         } else if (!order) {
             return (
                 <Container className="error error-not-found">
-                    <NotFoundError
+                    <GenericError
                         icon="warning sign"
                         header={{id: 'error.order-not-found.header.text'}}
                         content={{id: 'error.order-not-found.content.text', values: {orderId: orderId}}} />

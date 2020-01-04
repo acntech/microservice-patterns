@@ -5,7 +5,7 @@ import { Redirect } from 'react-router';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from 'semantic-ui-react';
-import { LoadingIndicator, NotFoundError, SecondaryHeader } from '../../components';
+import { GenericError, LoadingIndicator, SecondaryHeader } from '../../components';
 import { ShowItem } from '../../components/orders/show-item';
 
 import { Item, ItemState, Product, ProductState, RootState } from '../../models';
@@ -87,7 +87,7 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
         } else if (!item) {
             return (
                 <Container className="error error-not-found">
-                    <NotFoundError
+                    <GenericError
                         icon="warning sign"
                         header={{id: 'error.item-not-found.header.text'}}
                         content={{id: 'error.item-not-found.content.text', values: {itemId}}} />
@@ -96,7 +96,7 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
         } else if (!product) {
             return (
                 <Container className="error error-not-found">
-                    <NotFoundError
+                    <GenericError
                         icon="warning sign"
                         header={{id: 'error.product-not-found.header.text'}}
                         content={{id: 'error.product-not-found.content.text', values: {itemId}}} />

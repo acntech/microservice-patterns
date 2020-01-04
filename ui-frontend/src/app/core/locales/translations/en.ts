@@ -16,6 +16,8 @@ export default {
 
     'error.unknown.header.title': 'Unknown error',
     'error.unknown.content.text': 'An unknown error occurred',
+    'error.client-config.header.title': 'Client config error',
+    'error.client-config.content.text': 'An error occurred while configuring client',
     'error.page-not-found.header.title': 'Page not found',
     'error.page-not-found.content.text': 'An unknown error occurred',
     'error.order-not-found.header.text': 'No order found',
@@ -66,6 +68,7 @@ export default {
     'enum.item-status.FAILED': 'FAILED',
     'enum.item-status.undefined': 'UNKNOWN',
 
+    'action.get-config-error.title.text': 'Error getting client config',
     'action.get-customer-error.title.text': 'Error getting customer',
     'action.find-customers-error.title.text': 'Error finding customers',
     'action.get-product-error.title.text': 'Error getting product',
