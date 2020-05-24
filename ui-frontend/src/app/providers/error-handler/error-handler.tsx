@@ -9,6 +9,9 @@ interface ComponentState {
     hasError?: boolean;
 }
 
+interface ComponentProps {
+}
+
 class ErrorHandler {
 
     public static handleError(defaultTitle: Translation, defaultContent?: Translation, error?: any): Message {
@@ -48,7 +51,7 @@ class ErrorHandler {
     }
 }
 
-class ErrorHandlerProvider extends Component<{}, ComponentState> {
+class ErrorHandlerProvider extends Component<ComponentProps, ComponentState> {
 
     constructor(props) {
         super(props);

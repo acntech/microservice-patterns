@@ -1,13 +1,15 @@
 import { IntlState } from 'react-intl-redux';
 
 import { DEFAULT_LOCALE, messages } from '../../core/locales';
-import { AuthenticationState, ConfigState, CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState, SecurityType } from '../../models';
+import { AuthenticationState, AuthenticationType, ConfigState, CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState } from '../../models';
 
 export const INITIAL_CONFIG_STATE: ConfigState = {
     loading: false,
     config: {
         security: {
-            type: SecurityType.NONE
+            authentication: {
+                type: AuthenticationType.NONE
+            }
         }
     },
     values: {

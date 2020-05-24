@@ -48,11 +48,9 @@ spring:
             provider: uaa
             client-id: token-relay-ui
             client-secret: nzSX99Qg
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope:
               - openid
               - profile
-              - email
         provider:
           uaa:
             issuer-uri: ${acntech.security.oauth2-provider.url}/oauth/token
@@ -62,6 +60,6 @@ server:
   port: 8000
   servlet:
     context-path: /api
-    session:
-      cookie:
-        name: auth_token
+#    session:
+#      cookie:
+#        name: auth_token

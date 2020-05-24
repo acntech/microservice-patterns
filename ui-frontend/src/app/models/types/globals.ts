@@ -39,40 +39,8 @@ export interface ErrorEntity {
     path: string;
 }
 
-export interface ClientFields {
-    conversationId: string;
-    requestId: string;
-}
-
-export interface ClientResponse extends ClientFields {
-    entityId?: string;
-    statusCode: number;
-    statusText: string;
-    headers: Map<string, string>;
-    cookies: Map<string, string>;
-    body?: any;
-}
-
-export interface ClientErrorResponse extends ClientResponse {
-    errorId: string;
-    errorCode: string;
-    body?: any;
-}
-
-export interface ClientError {
-    response: ClientErrorResponse;
-    error: Error;
-}
-
 export interface DataMap {
     [index: string]: string | number | boolean | any[];
-}
-
-export interface RequestConfig {
-    headers?: Map<string, string>;
-    params?: DataMap;
-    credentialsPolicy?: RequestCredentials;
-    redirectPolicy?: RequestRedirect;
 }
 
 export interface FormElementData {

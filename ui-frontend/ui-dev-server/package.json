@@ -9,7 +9,7 @@
         "express"
     ],
     "scripts": {
-        "start": "node ./bin/start"
+        "start": "node ./bin/start.sh"
     },
     "dependencies": {
         "express": "~4.17.1",

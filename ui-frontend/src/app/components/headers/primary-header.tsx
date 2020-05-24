@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Dropdown, Header, Icon, Segment } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { AuthenticationState, ConfigState, RootState, SecurityType, User } from '../../models';
+import { AuthenticationState, AuthenticationType, ConfigState, RootState, User } from '../../models';
 import { logoutUser } from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
@@ -21,8 +21,6 @@ interface ComponentDispatchProps {
 interface ComponentParamProps {
     title?: string;
     subtitle?: string;
-    location?: any;
-    history?: any;
 }
 
 type ComponentProps = ComponentParamProps & ComponentDispatchProps & ComponentStateProps & InjectedIntlProps;
@@ -52,16 +50,16 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
     }
 
     public render(): ReactNode {
-        const {title, subtitle, location, configState, authenticationState, intl} = this.props;
-        const {type: securityType} = configState.config.security;
+        const {title, subtitle, configState, authenticationState, intl} = this.props;
+        console.log(configState);
+        const {type: securityType} = configState.config.security.authentication;
         const {user} = authenticationState.authentication;
 
         console.log('HREF', window.location.href);
-        console.log('LOC', location);
 
-        if (securityType === SecurityType.FORM_LOGIN && !user) {
+        if (securityType === AuthenticationType.FORM_LOGIN && !user) {
             return <Redirect to="/login" />;
-        } else if (securityType === SecurityType.OAUTH2_CLIENT && !user) {
+        } else if (securityType === AuthenticationType.OAUTH2_CLIENT && !user) {
             return <Redirect to="/login" />;
         } else {
             document.title = this.browserTitle();

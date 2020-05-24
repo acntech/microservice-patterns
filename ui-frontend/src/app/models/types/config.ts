@@ -1,12 +1,17 @@
 import { ReactNode } from 'react';
-import { GetConfigActionType, Modified, SecurityType, StateError } from '../';
+import { AuthenticationType, GetConfigActionType, Modified, StateError } from '../';
 
 export interface Config {
-    security: Security;
+    security: SecurityConfig;
 }
 
-export interface Security {
-    type: SecurityType;
+export interface SecurityConfig {
+    apiKey?: string;
+    authentication: AuthenticationConfig;
+}
+
+export interface AuthenticationConfig {
+    type: AuthenticationType;
 }
 
 export interface ConfigState {

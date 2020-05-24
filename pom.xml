@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.2.RELEASE</version>
+        <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,36 +28,17 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
-        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
     </properties>
-
-    <!-- DEVELOPERS -->
-    <developers>
-        <developer>
-            <id>jorgen.ringen</id>
-            <name>Jørgen Ringen</name>
-            <email>jorgen.ringen@accenture.com</email>
-        </developer>
-        <developer>
-            <id>orjan.johansen</id>
-            <name>Ørjan Johansen</name>
-            <email>orjan.johansen@accenture.com</email>
-        </developer>
-        <developer>
-            <id>thomas.johansen</id>
-            <name>Thomas Johansen</name>
-            <email>thomas.johansen@accenture.com</email>
-        </developer>
-    </developers>
 
     <!-- MODULES -->
     <modules>
+        <module>docs</module>
         <module>ui-gateway</module>
         <module>communication-patterns</module>
         <module>reliability-patterns</module>
         <module>observability-patterns</module>
         <module>security-patterns</module>
-        <module>documentation</module>
         <module>operational-patterns</module>
     </modules>
 

@@ -10,7 +10,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>messaging-warehouse</artifactId>
+    <artifactId>messaging-ordering-service</artifactId>
+    <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->
     <dependencies>
@@ -41,7 +42,6 @@
         </dependency>
     </dependencies>
 
-    <!-- DEPENDENCIES -->
     <build>
         <plugins>
             <plugin>

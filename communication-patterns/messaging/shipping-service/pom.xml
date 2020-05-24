@@ -10,7 +10,8 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>messaging-shipping</artifactId>
+    <artifactId>messaging-shipping-service</artifactId>
+    <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->
     <dependencies>

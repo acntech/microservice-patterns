@@ -5,7 +5,8 @@ acntech:
   client:
     config:
       security:
-        type: NONE
+        authentication:
+          type: NONE
 
 ########################
 # SPRING Configuration #
