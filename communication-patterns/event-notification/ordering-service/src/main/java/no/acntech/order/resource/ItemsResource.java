@@ -42,7 +42,7 @@ public class ItemsResource {
     }
 
     @DeleteMapping(path = "{id}")
-    public ResponseEntity delete(@PathVariable("id") final UUID itemId) {
+    public ResponseEntity<Void> delete(@PathVariable("id") final UUID itemId) {
         orderService.deleteItem(itemId);
         return ResponseEntity.ok().build();
     }

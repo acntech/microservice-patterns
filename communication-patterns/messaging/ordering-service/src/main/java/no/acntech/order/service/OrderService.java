@@ -6,15 +6,14 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import no.acntech.messaging.types.warehouse.InventoryReservationConfirmationMessage;
-import no.acntech.order.entity.Order;
-import no.acntech.order.entity.Orderstatus;
-import no.acntech.order.messaging.producers.ShippingMessageProducer;
-import no.acntech.order.messaging.producers.WarehouseMessageProducer;
+import no.acntech.shipping.producer.ShippingMessageProducer;
+import no.acntech.reservation.producer.ReservationMessageProducer;
+import no.acntech.order.model.Order;
+import no.acntech.order.model.Orderstatus;
 import no.acntech.order.repository.OrderRepository;
+import no.acntech.reservation.model.InventoryReservationConfirmationMessage;
 
 @Service
 @Transactional
@@ -23,13 +22,12 @@ public class OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
-    private final WarehouseMessageProducer warehouseMessageProducer;
+    private final ReservationMessageProducer warehouseMessageProducer;
     private final ShippingMessageProducer shippingMessageProducer;
 
-    @Autowired
-    public OrderService(OrderRepository orderRepository,
-                        WarehouseMessageProducer warehouseMessageProducer,
-                        ShippingMessageProducer shippingMessageProducer) {
+    public OrderService(final OrderRepository orderRepository,
+                        final ReservationMessageProducer warehouseMessageProducer,
+                        final ShippingMessageProducer shippingMessageProducer) {
         this.orderRepository = orderRepository;
         this.warehouseMessageProducer = warehouseMessageProducer;
         this.shippingMessageProducer = shippingMessageProducer;
@@ -49,16 +47,16 @@ public class OrderService {
         return order;
     }
 
-    public void warehouseReservationConfirmed(InventoryReservationConfirmationMessage reservationConfirmation) {
-        Order order = orderRepository.findById(reservationConfirmation.getOrderId())
-                .orElseThrow(() -> new IllegalStateException("Received reservation confirmation for orderId=" + reservationConfirmation.getOrderId() + " which doesn't exist"));
+    public void warehouseReservationConfirmed(InventoryReservationConfirmationMessage message) {
+        Order order = orderRepository.findById(message.getOrderId())
+                .orElseThrow(() -> new IllegalStateException("Received reservation confirmation for orderId=" + message.getOrderId() + " which doesn't exist"));
 
-        if (reservationConfirmation.isReserved()) {
+        if (message.isReserved()) {
             LOGGER.info("Warehouse reservation confirmed for orderId={}, shipping!", order.getId());
             order.setOrderstatus(Orderstatus.SHIPPED);
-            shippingMessageProducer.ship(order.getId(), reservationConfirmation.getReservationId());
+            shippingMessageProducer.ship(order.getId(), message.getReservationId());
         } else {
-            LOGGER.info("Warehouse reservation failed for orderId={}, errorMessage={}", order.getId(), reservationConfirmation.getErrorMessage());
+            LOGGER.info("Warehouse reservation failed for orderId={}, errorMessage={}", order.getId(), message.getErrorMessage());
             order.setOrderstatus(Orderstatus.WAREHOUSE_RESERVATION_FAILED);
         }
     }
