@@ -9,7 +9,7 @@ interface ComponentParamProps {
     onCancelButtonClick: () => void;
     onFormSubmit: () => void;
     onFormInputQuantityChange: (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
-    product: Product;
+    productEntity: Product;
     formData: CreateItemFormData;
 }
 
@@ -37,11 +37,11 @@ class CreateItemFormComponent extends Component<ComponentProps> {
             onCancelButtonClick,
             onFormSubmit,
             onFormInputQuantityChange,
-            product,
+            productEntity,
             formData,
             intl
         } = this.props;
-        const {productId, name, description, stock, price, currency} = product;
+        const {productId, name, description, stock, price, currency} = productEntity;
         const {
             formError,
             formErrorMessage,
@@ -60,31 +60,31 @@ class CreateItemFormComponent extends Component<ComponentProps> {
                     <Table.Body>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-id.text" />
+                                <FormattedMessage id="label.productEntity-id.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{productId}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-name.text" />
+                                <FormattedMessage id="label.productEntity-name.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{name}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-description.text" />
+                                <FormattedMessage id="label.productEntity-description.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{description}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-stock.text" />
+                                <FormattedMessage id="label.productEntity-stock.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{stock}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-price.text" />
+                                <FormattedMessage id="label.productEntity-price.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{Currency[currency]} {price.toFixed(2)}</Table.Cell>
                         </Table.Row>

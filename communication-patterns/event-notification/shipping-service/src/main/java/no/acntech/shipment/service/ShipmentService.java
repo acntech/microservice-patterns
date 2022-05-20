@@ -1,22 +1,25 @@
 package no.acntech.shipment.service;
 
+import no.acntech.shipment.exception.ShipmentNotFoundException;
+import no.acntech.shipment.model.CreateShipmentDto;
+import no.acntech.shipment.model.ShipmentDto;
+import no.acntech.shipment.model.ShipmentEntity;
+import no.acntech.shipment.model.ShipmentQuery;
+import no.acntech.shipment.repository.ShipmentRepository;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.core.convert.ConversionService;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import no.acntech.shipment.exception.ShipmentNotFoundException;
-import no.acntech.shipment.model.CreateShipment;
-import no.acntech.shipment.model.Shipment;
-import no.acntech.shipment.model.ShipmentDto;
-import no.acntech.shipment.model.ShipmentQuery;
-import no.acntech.shipment.model.ShipmentStatus;
-import no.acntech.shipment.repository.ShipmentRepository;
-
+@Validated
 @Service
 public class ShipmentService {
 
@@ -31,10 +34,10 @@ public class ShipmentService {
     }
 
     @SuppressWarnings("Duplicates")
-    public List<ShipmentDto> findShipments(final ShipmentQuery shipmentQuery) {
-        UUID customerId = shipmentQuery.getCustomerId();
-        UUID orderId = shipmentQuery.getOrderId();
-        ShipmentStatus status = shipmentQuery.getStatus();
+    public List<ShipmentDto> findShipments(@NotNull @Valid final ShipmentQuery shipmentQuery) {
+        final var customerId = shipmentQuery.getCustomerId();
+        final var orderId = shipmentQuery.getOrderId();
+        final var status = shipmentQuery.getStatus();
         if (customerId != null && orderId != null && status != null) {
             return shipmentRepository.findAllByCustomerIdAndOrderIdAndStatus(customerId, orderId, status)
                     .stream()
@@ -73,21 +76,24 @@ public class ShipmentService {
         }
     }
 
-    public ShipmentDto getShipment(final UUID shipmentId) {
+    public ShipmentDto getShipment(@NotNull final UUID shipmentId) {
         return shipmentRepository.findByShipmentId(shipmentId)
                 .map(this::convert)
                 .orElseThrow(() -> new ShipmentNotFoundException(shipmentId));
     }
 
-    public ShipmentDto createShipment(final CreateShipment createShipment) {
-        Shipment shipment = conversionService.convert(createShipment, Shipment.class);
-        Assert.notNull(shipment, "Failed to convert shipment");
-
-        Shipment savedShipment = shipmentRepository.save(shipment);
-        return convert(savedShipment);
+    @SuppressWarnings("UnusedReturnValue")
+    @Transactional
+    public ShipmentDto createShipment(@NotNull @Valid final CreateShipmentDto createShipment) {
+        ShipmentEntity shipment = conversionService.convert(createShipment, ShipmentEntity.class);
+        Assert.notNull(shipment, "Failed to convert CreateShipmentDto to ShipmentEntity");
+        ShipmentEntity savedShipmentEntity = shipmentRepository.save(shipment);
+        return convert(savedShipmentEntity);
     }
 
-    private ShipmentDto convert(Shipment shipment) {
-        return conversionService.convert(shipment, ShipmentDto.class);
+    private ShipmentDto convert(ShipmentEntity source) {
+        final var shipmentDto = conversionService.convert(source, ShipmentDto.class);
+        Assert.notNull(source, "Failed to convert ShipmentEntity to ShipmentDto");
+        return shipmentDto;
     }
 }

@@ -7,11 +7,11 @@ Projects for exploring different microservice architectures and patterns. Each s
 The same business case is used in all the examples in order to make it easier to compare the different patterns. This business case is that of an ordering system where customers can order products and have them shipped. The architecture of the system is typically comprised of the following microservices:
 
 * **Customers**
-  * Service that maintains customer records.
+  * Service that maintains customerEntity records.
 * **Ordering**
   * Service where customers can create orders and add order items.
 * **Warehouse**
-  * Service that maintains products and product inventory.
+  * Service that maintains products and productEntity inventory.
 * **Shipping**
   * Service that ships an order when it has been completed.
 * **Billing**

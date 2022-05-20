@@ -1,6 +1,6 @@
 package no.acntech.order.repository;
 
-import no.acntech.order.model.Order;
+import no.acntech.order.model.OrderEntity;
 import no.acntech.order.model.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,13 +10,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
-    Optional<Order> findByOrderId(UUID orderId);
+    Optional<OrderEntity> findByOrderId(UUID orderId);
 
-    List<Order> findAllByCustomerId(UUID customerId);
+    List<OrderEntity> findAllByCustomerId(UUID customerId);
 
-    List<Order> findAllByCustomerIdAndStatus(UUID customerId, OrderStatus status);
+    List<OrderEntity> findAllByCustomerIdAndStatus(UUID customerId, OrderStatus status);
 
-    List<Order> findAllByStatus(OrderStatus status);
+    List<OrderEntity> findAllByStatus(OrderStatus status);
 }

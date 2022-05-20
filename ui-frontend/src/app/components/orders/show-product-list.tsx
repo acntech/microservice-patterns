@@ -8,7 +8,7 @@ import { Currency, Product } from '../../models';
 interface ComponentProps {
     products: Product[];
     onCancelButtonClick: () => void;
-    onTableRowClick: (product: Product) => void;
+    onTableRowClick: (productEntity: Product) => void;
 }
 
 class ShowProductListComponent extends Component<ComponentProps> {
@@ -26,19 +26,19 @@ class ShowProductListComponent extends Component<ComponentProps> {
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell><FormattedMessage id="label.product-id.text" /></Table.HeaderCell>
-                            <Table.HeaderCell><FormattedMessage id="label.product-name.text" /></Table.HeaderCell>
-                            <Table.HeaderCell><FormattedMessage id="label.product-stock.text" /></Table.HeaderCell>
-                            <Table.HeaderCell><FormattedMessage id="label.product-price.text" /></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-id.text" /></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-name.text" /></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-stock.text" /></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-price.text" /></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {products.map((product, index) => {
-                            const {productId, name, stock, price, currency} = product;
+                        {products.map((productEntity, index) => {
+                            const {productId, name, stock, price, currency} = productEntity;
 
                             return (
                                 <Table.Row key={index} className="clickable-table-row"
-                                           onClick={() => onTableRowClick(product)}>
+                                           onClick={() => onTableRowClick(productEntity)}>
                                     <Table.Cell singleLine>{productId}</Table.Cell>
                                     <Table.Cell singleLine>{name}</Table.Cell>
                                     <Table.Cell>{stock}</Table.Cell>

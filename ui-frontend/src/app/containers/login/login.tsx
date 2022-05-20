@@ -74,13 +74,13 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
         if (user) {
             this.setState(initialState);
         } else if (customerId && !loading && (!error || formSubmitted)) {
-            const customer = customers.find(c => c.customerId === customerId);
+            const customerEntity = customers.find(c => c.customerId === customerId);
 
-            if (customer) {
+            if (customerEntity) {
                 const newUser = {
-                    userId: customer.customerId,
-                    firstName: customer.firstName,
-                    lastName: customer.lastName
+                    userId: customerEntity.customerId,
+                    firstName: customerEntity.firstName,
+                    lastName: customerEntity.lastName
                 };
                 this.props.loginUser(newUser);
             }
@@ -119,7 +119,7 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
                                             <Form.Input fluid icon="user" iconPosition="left" placeholder='Customer ID' value={formCustomerIdValue} onChange={this.onFormInputChange} />
                                             <Form.Button primary fluid size="large">Login</Form.Button>
                                             <Message error icon="ban" content={formErrorMessage} />
-                                            <Message warning icon="warning sign" content='customer-id might come from the login cookie' />
+                                            <Message warning icon="warning sign" content='customerEntity-id might come from the login cookie' />
                                         </Segment>
                                     </Form>
                                 </Grid.Column>
@@ -128,8 +128,8 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
                                 <Grid.Column className="login" textAlign="left">
                                     <List divided selection>
                                         {
-                                            customers.map((customer, index) => {
-                                                const {customerId, firstName, lastName} = customer;
+                                            customers.map((customerEntity, index) => {
+                                                const {customerId, firstName, lastName} = customerEntity;
                                                 const active = customerId === formCustomerIdValue;
 
                                                 return (

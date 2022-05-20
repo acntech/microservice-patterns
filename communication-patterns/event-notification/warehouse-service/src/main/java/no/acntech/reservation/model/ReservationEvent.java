@@ -27,9 +27,9 @@ public class ReservationEvent {
         }
 
         public ReservationEvent build() {
-            ReservationEvent reservationEvent = new ReservationEvent();
-            reservationEvent.reservationId = this.reservationId;
-            return reservationEvent;
+            final var target = new ReservationEvent();
+            target.reservationId = this.reservationId;
+            return target;
         }
     }
 }

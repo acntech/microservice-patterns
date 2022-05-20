@@ -1,9 +1,7 @@
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:17-jre
 
-EXPOSE 9010
+COPY ./target/*.jar /app.jar
 
-VOLUME /tmp
+EXPOSE 8080
 
-COPY ./target/*.war /app.war
-
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.war"]
+CMD [ "java", "-jar", "/app.jar" ]

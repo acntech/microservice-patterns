@@ -29,4 +29,4 @@ Then, with the order-id that is returned in the location header, make another `P
 ```
 
 The ordering service timeout configuration can be found in the 
-`no.acntech.reservation.consumer.ReservationRestConsumer` class.
+`no.acntech.reservationEntity.consumer.ReservationRestConsumer` class.

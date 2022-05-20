@@ -52,7 +52,7 @@ image::ipc-patterns-asynchronous-messaging.png["",75%,pdfwidth=75%]
 
 ==== Cons
 * More complicated flow between the services
-* Rollback can be hard and compensating transactions might be needed. What happens if shipment failed after warehouse reservation has been confirmed?
+* Rollback can be hard and compensating transactions might be needed. What happens if shipment failed after warehouse reservationEntity has been confirmed?
 * State becomes more complicated due to eventual consistency - you need to keep track of more things (order-status, etc)
 * Message oriented infrastructure can become a single point of failure (depends on messaging topology)
 * Testing and debugging can be challenging and technology specific

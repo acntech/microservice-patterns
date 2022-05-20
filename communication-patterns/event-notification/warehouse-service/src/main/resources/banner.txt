@@ -1,10 +1,8 @@
 
-${AnsiColor.RED} ___  ___ _                                             _                 ______         _    _
-${AnsiColor.RED} |  \/  |(_)                                           (_)                | ___ \       | |  | |
-${AnsiColor.RED} | .  . | _   ___  _ __   ___   ___   ___  _ __ __   __ _   ___   ___     | |_/ /  __ _ | |_ | |_   ___  _ __  _ __   ___
-${AnsiColor.RED} | |\/| || | / __|| '__| / _ \ / __| / _ \| '__|\ \ / /| | / __| / _ \    |  __/  / _` || __|| __| / _ \| '__|| '_ \ / __|
-${AnsiColor.RED} | |  | || || (__ | |   | (_) |\__ \|  __/| |    \ V / | || (__ |  __/    | |    | (_| || |_ | |_ |  __/| |   | | | |\__ \
-${AnsiColor.RED} \_|  |_/|_| \___||_|    \___/ |___/ \___||_|     \_/  |_| \___| \___|    \_|     \__,_| \__| \__| \___||_|   |_| |_||___/
-${AnsiColor.RED}
+${AnsiColor.GREEN}     _            _____         _
+${AnsiColor.GREEN}    / \   ___ _ _|_   _|__  ___| |__
+${AnsiColor.GREEN}   / _ \ / __| '_ \| |/ _ \/ __| '_ \
+${AnsiColor.GREEN}  / ___ \ (__| | | | |  __/ (__| | | |
+${AnsiColor.GREEN} /_/   \_\___|_| |_|_|\___|\___|_| |_|
 ${AnsiStyle.NORMAL}
-:: Spring Boot ::        ${spring-boot.formatted-version}
+  Spring Boot: ${spring-boot.formatted-version}

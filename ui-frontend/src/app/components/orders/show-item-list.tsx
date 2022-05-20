@@ -42,8 +42,8 @@ class ShowItemListComponent extends Component<ComponentProps> {
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell width={6}><FormattedMessage id="label.product-id.text" /></Table.HeaderCell>
-                            <Table.HeaderCell width={6}><FormattedMessage id="label.product-name.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={6}><FormattedMessage id="label.productEntity-id.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={6}><FormattedMessage id="label.productEntity-name.text" /></Table.HeaderCell>
                             <Table.HeaderCell width={2}><FormattedMessage id="label.item-quantity.text" /></Table.HeaderCell>
                             <Table.HeaderCell width={8}><FormattedMessage id="label.item-status.text" /></Table.HeaderCell>
                         </Table.Row>
@@ -86,7 +86,7 @@ class ShowItemListComponent extends Component<ComponentProps> {
 
     private findProductName = (productId: string): string | undefined => {
         const {products} = this.props.productState;
-        return products.filter(product => product.productId === productId).map(product => product.name).pop();
+        return products.filter(productEntity => productEntity.productId === productId).map(productEntity => productEntity.name).pop();
     };
 }
 

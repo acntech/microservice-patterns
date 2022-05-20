@@ -7,17 +7,17 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import no.acntech.invoice.model.Invoice;
+import no.acntech.invoice.model.InvoiceEntity;
 import no.acntech.invoice.model.InvoiceStatus;
 
 @Repository
-public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
+public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
 
-    Optional<Invoice> findByInvoiceId(UUID invoiceId);
+    Optional<InvoiceEntity> findByInvoiceId(UUID invoiceId);
 
-    List<Invoice> findAllByOrderId(UUID orderId);
+    List<InvoiceEntity> findAllByOrderId(UUID orderId);
 
-    List<Invoice> findAllByStatus(InvoiceStatus status);
+    List<InvoiceEntity> findAllByStatus(InvoiceStatus status);
 
-    List<Invoice> findAllByOrderIdAndStatus(UUID orderId, InvoiceStatus status);
+    List<InvoiceEntity> findAllByOrderIdAndStatus(UUID orderId, InvoiceStatus status);
 }

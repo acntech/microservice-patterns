@@ -7,7 +7,7 @@ import { Currency, getItemStatusLabelColor, Item, ItemStatus, Product } from '..
 
 interface ComponentProps {
     item: Item;
-    product: Product;
+    productEntity: Product;
     onBackButtonClick: () => void;
     onDeleteButtonClick: () => void;
     onRefreshButtonClick: () => void;
@@ -16,9 +16,9 @@ interface ComponentProps {
 class ShowItemComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
-        const {item, product, onBackButtonClick, onDeleteButtonClick, onRefreshButtonClick} = this.props;
+        const {item, productEntity, onBackButtonClick, onDeleteButtonClick, onRefreshButtonClick} = this.props;
         const {productId, quantity, status} = item;
-        const {name, description, price, currency} = product;
+        const {name, description, price, currency} = productEntity;
 
         const statusColor = getItemStatusLabelColor(status);
         const totalPrice = price * quantity;
@@ -48,19 +48,19 @@ class ShowItemComponent extends Component<ComponentProps> {
                     <Table.Body>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-id.text" />
+                                <FormattedMessage id="label.productEntity-id.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{productId}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-name.text" />
+                                <FormattedMessage id="label.productEntity-name.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{name}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-description.text" />
+                                <FormattedMessage id="label.productEntity-description.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{description}</Table.Cell>
                         </Table.Row>

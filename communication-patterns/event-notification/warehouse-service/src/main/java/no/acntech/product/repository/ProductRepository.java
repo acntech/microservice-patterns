@@ -4,15 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import no.acntech.product.model.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import no.acntech.product.model.Product;
-
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
-    Optional<Product> findByProductId(UUID productId);
+    Optional<ProductEntity> findByProductId(UUID productId);
 
-    List<Product> findAllByName(String name);
+    List<ProductEntity> findAllByName(String name);
 }

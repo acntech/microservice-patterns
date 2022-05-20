@@ -36,4 +36,4 @@ Go to `http://localhost:9010/api/hystrix` (ordering service) and paste
 `http://localhost:9010/api/actuator/hystrix.stream` in the input-field.
 
 The ordering service circuit-breaker configuration can be found in the 
-`no.acntech.reservation.consumer.ReservationRestConsumer` class.
+`no.acntech.reservationEntity.consumer.ReservationRestConsumer` class.

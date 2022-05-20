@@ -1,11 +1,9 @@
 package no.acntech.reservation.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@Valid
 public class ReservationDto {
 
     @NotNull
@@ -107,15 +105,15 @@ public class ReservationDto {
         }
 
         public ReservationDto build() {
-            ReservationDto reservationDto = new ReservationDto();
-            reservationDto.reservationId = this.reservationId;
-            reservationDto.productId = this.productId;
-            reservationDto.orderId = this.orderId;
-            reservationDto.quantity = quantity;
-            reservationDto.status = this.status;
-            reservationDto.modified = this.modified;
-            reservationDto.created = this.created;
-            return reservationDto;
+            final var target = new ReservationDto();
+            target.reservationId = this.reservationId;
+            target.productId = this.productId;
+            target.orderId = this.orderId;
+            target.quantity = quantity;
+            target.status = this.status;
+            target.modified = this.modified;
+            target.created = this.created;
+            return target;
         }
     }
 }

@@ -18,13 +18,13 @@ The same use case is used in all the examples in order to make it easier to comp
 * Ordering
 ** Service where customers can create orders and add order items.
 * Warehouse
-** Service that maintains products and product inventory.
+** Service that maintains products and productEntity inventory.
 * Shipping
 ** Service that ships an order when it has been completed.
 * Billing
 ** Service that sends invoices to customers when orders have been completed and shipped.
 * Customers
-** Service that maintains customer records.
+** Service that maintains customerEntity records.
 
 <<<
 
