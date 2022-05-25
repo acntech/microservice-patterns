@@ -12,8 +12,6 @@ public class OrderItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private Long orderId;
-    @Column(nullable = false)
     private UUID itemId;
     @Column(nullable = false)
     private UUID productId;
@@ -34,10 +32,6 @@ public class OrderItemEntity {
 
     public Long getId() {
         return id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
     }
 
     public UUID getItemId() {

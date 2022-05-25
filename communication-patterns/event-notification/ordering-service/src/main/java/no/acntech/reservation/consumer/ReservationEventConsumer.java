@@ -22,8 +22,8 @@ public class ReservationEventConsumer {
 
     @KafkaListener(topics = KafkaTopic.RESERVATIONS)
     public void consume(final ConsumerRecord<String, ReservationEvent> record) {
-        final ReservationEvent reservationEvent = record.value();
+        final var reservationEvent = record.value();
         LOGGER.debug("Received reservation event with reservation-id {}", reservationEvent.getReservationId());
-        reservationService.receiveReservationEvent(reservationEvent);
+        reservationService.processReservationEvent(reservationEvent);
     }
 }

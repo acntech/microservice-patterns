@@ -25,14 +25,14 @@ public class ReservationService {
         this.orderOrchestrationService = orderOrchestrationService;
     }
 
-    public void receiveReservationEvent(final ReservationEvent reservationEvent) {
-        LOGGER.debug("Retrieving reservation event for reservation-id {}", reservationEvent.getReservationId());
+    public void processReservationEvent(final ReservationEvent reservationEvent) {
+        LOGGER.debug("Processing ReservationEvent for reservation-id {}", reservationEvent.getReservationId());
 
         try {
+            LOGGER.debug("Retrieving ReservationDto for reservation-id {}", reservationEvent.getReservationId());
             final var optionalReservationDto = reservationRestConsumer.get(reservationEvent.getReservationId());
             if (optionalReservationDto.isPresent()) {
                 final var reservationDto = optionalReservationDto.get();
-                LOGGER.debug("Processing reservation event for reservation-id {}", reservationDto.getReservationId());
                 final var updateOrderItemDto = conversionService.convert(reservationDto, UpdateOrderItemDto.class);
                 orderOrchestrationService.updateOrderItemReservation(updateOrderItemDto);
             } else {

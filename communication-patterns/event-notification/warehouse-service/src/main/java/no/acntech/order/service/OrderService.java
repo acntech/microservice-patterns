@@ -18,24 +18,25 @@ public class OrderService {
     }
 
     @SuppressWarnings("Duplicates")
-    public void receiveOrderEvent(final OrderEvent orderEvent) {
-        LOGGER.debug("Fetching order for order-id {}", orderEvent.getOrderId());
+    public void processOrderEvent(final OrderEvent orderEvent) {
+        LOGGER.debug("Processing OrderEvent with order-id {}", orderEvent.getOrderId());
 
         try {
+            LOGGER.debug("Fetching OrderDto with order-id {}", orderEvent.getOrderId());
             final var optionalOrderDto = orderRestConsumer.get(orderEvent.getOrderId());
             if (optionalOrderDto.isPresent()) {
                 final var orderDto = optionalOrderDto.get();
                 processOrder(orderDto);
             } else {
-                LOGGER.error("Order with order-id {} could not be found", orderEvent.getOrderId());
+                LOGGER.error("OrderDto with order-id {} could not be found", orderEvent.getOrderId());
             }
         } catch (Exception e) {
-            LOGGER.error("Error occurred while processing order", e);
+            LOGGER.error("Error occurred while processing OrderDto with order-id " + orderEvent.getOrderId(), e);
         }
     }
 
     private void processOrder(final OrderDto orderDto) {
-        LOGGER.debug("Processing orderDto for orderDto-id {}", orderDto.getOrderId());
-        LOGGER.debug("Ignoring orderDto for orderDto-id {} and status {}", orderDto.getOrderId(), orderDto.getStatus());
+        LOGGER.debug("Processing OrderDto for order-id {}", orderDto.getOrderId());
+        LOGGER.debug("Ignoring OrderDto for order-id {} and status {}", orderDto.getOrderId(), orderDto.getStatus());
     }
 }

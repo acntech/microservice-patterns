@@ -27,7 +27,7 @@ public class OrderEventProducer {
         OrderEvent orderEvent = OrderEvent.builder()
                 .orderId(orderId)
                 .build();
-        kafkaTemplate.send(KafkaTopic.ORDERS, orderEvent);
+        kafkaTemplate.send(KafkaTopic.ORDERS, orderId.toString(), orderEvent);
     }
 }
 

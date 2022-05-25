@@ -105,7 +105,7 @@ public class OrderService {
                 .reservationId(createOrderItemDto.getReservationId())
                 .quantity(createOrderItemDto.getQuantity())
                 .build();
-        orderEntity.getItems().add(orderItemEntity);
+        orderEntity.addItem(orderItemEntity);
         final var updatedOrderEntity = orderRepository.save(orderEntity);
 
         LOGGER.debug("Created order item with product-id {} for order-id {}", orderId, createOrderItemDto.getProductId());

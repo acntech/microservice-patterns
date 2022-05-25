@@ -23,7 +23,7 @@ public class OrderEventConsumer {
     @KafkaListener(topics = KafkaTopic.ORDERS)
     public void consume(final ConsumerRecord<String, OrderEvent> record) {
         final var orderEvent = record.value();
-        LOGGER.debug("Received order event with order-id {} from topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS);
-        orderService.receiveOrderEvent(orderEvent);
+        LOGGER.debug("Received OrderEvent with order-id {} from topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS);
+        orderService.processOrderEvent(orderEvent);
     }
 }

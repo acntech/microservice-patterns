@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +38,7 @@ public class OrdersResource {
     @PostMapping
     public ResponseEntity<OrderDto> post(@RequestBody final CreateOrderDto createOrder) {
         final var orderDto = orderOrchestrationService.createOrder(createOrder);
-        URI location = ServletUriComponentsBuilder
+        final var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .pathSegment(orderDto.getOrderId().toString())
                 .build()
@@ -67,7 +66,7 @@ public class OrdersResource {
     public ResponseEntity<OrderDto> postItem(@PathVariable("id") final UUID orderId,
                                              @RequestBody final CreateOrderItemDto createItem) {
         final var orderDto = orderOrchestrationService.createOrderItem(orderId, createItem);
-        URI location = ServletUriComponentsBuilder
+        final var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .pathSegment(orderDto.getOrderId().toString())
                 .build()

@@ -70,6 +70,11 @@ public class OrderEntity {
         return modified;
     }
 
+    public void addItem(OrderItemEntity orderItemEntity) {
+        orderItemEntity.setParent(this);
+        items.add(orderItemEntity);
+    }
+
     public void confirmOrder() {
         status = OrderStatus.CONFIRMED;
     }
@@ -93,17 +98,11 @@ public class OrderEntity {
         orderId = UUID.randomUUID();
         status = OrderStatus.PENDING;
         created = ZonedDateTime.now();
-        if (items != null) {
-            items.forEach(item -> item.setParent(this));
-        }
     }
 
     @PreUpdate
     private void preUpdate() {
         modified = ZonedDateTime.now();
-        if (items != null) {
-            items.forEach(item -> item.setParent(this));
-        }
     }
 
     public static Builder builder() {

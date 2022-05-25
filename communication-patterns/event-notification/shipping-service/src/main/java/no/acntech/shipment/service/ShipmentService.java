@@ -6,6 +6,8 @@ import no.acntech.shipment.model.ShipmentDto;
 import no.acntech.shipment.model.ShipmentEntity;
 import no.acntech.shipment.model.ShipmentQuery;
 import no.acntech.shipment.repository.ShipmentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class ShipmentService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShipmentService.class);
     private static final Sort SORT_BY_ID = Sort.by("id");
     private final ConversionService conversionService;
     private final ShipmentRepository shipmentRepository;
@@ -85,6 +88,7 @@ public class ShipmentService {
     @SuppressWarnings("UnusedReturnValue")
     @Transactional
     public ShipmentDto createShipment(@NotNull @Valid final CreateShipmentDto createShipment) {
+        LOGGER.debug("Creating shipment for CreateShipmentDto with order-id {}", createShipment.getOrderId());
         ShipmentEntity shipment = conversionService.convert(createShipment, ShipmentEntity.class);
         Assert.notNull(shipment, "Failed to convert CreateShipmentDto to ShipmentEntity");
         ShipmentEntity savedShipmentEntity = shipmentRepository.save(shipment);

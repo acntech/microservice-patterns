@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class OrderService {
@@ -28,31 +29,32 @@ public class OrderService {
     }
 
     @SuppressWarnings("Duplicates")
-    public void receiveOrderEvent(final OrderEvent orderEvent) {
-        LOGGER.debug("Fetching order for order-id {}", orderEvent.getOrderId());
+    public void processOrderEvent(final OrderEvent orderEvent) {
+        LOGGER.debug("Processing OrderEvent with order-id {}", orderEvent.getOrderId());
 
         try {
+            LOGGER.debug("Fetching OrderDto for order-id {}", orderEvent.getOrderId());
             final var orderOptional = orderRestConsumer.get(orderEvent.getOrderId());
             if (orderOptional.isPresent()) {
                 final var order = orderOptional.get();
-                processOrder(order);
+                processOrderDto(order);
             } else {
-                LOGGER.error("Order with order-id {} could not be found", orderEvent.getOrderId());
+                LOGGER.error("OrderDto with order-id {} could not be found", orderEvent.getOrderId());
             }
         } catch (Exception e) {
-            LOGGER.error("Error occurred while processing order", e);
+            LOGGER.error("Error occurred while processing OrderEvent with order-id " + orderEvent.getOrderId(), e);
         }
     }
 
-    private void processOrder(final OrderDto orderDto) {
-        LOGGER.debug("Processing orderDto for order-id {}", orderDto.getOrderId());
+    private void processOrderDto(final OrderDto orderDto) {
+        LOGGER.debug("Processing OrderDto for order-id {}", orderDto.getOrderId());
 
         if (orderDto.getStatus() == OrderStatus.CONFIRMED) {
-            LOGGER.debug("Creating invoice for order with order-id {}", orderDto.getOrderId());
             final var createInvoiceDto = conversionService.convert(orderDto, CreateInvoiceDto.class);
+            Assert.notNull(createInvoiceDto, "Failed to convert OrderDto to CreateInvoiceDto");
             invoiceService.createInvoice(createInvoiceDto);
         } else {
-            LOGGER.debug("Ignoring order for order-id {} and status {}", orderDto.getOrderId(), orderDto.getStatus());
+            LOGGER.debug("Ignoring OrderDto for order-id {} and status {}", orderDto.getOrderId(), orderDto.getStatus());
         }
     }
 }

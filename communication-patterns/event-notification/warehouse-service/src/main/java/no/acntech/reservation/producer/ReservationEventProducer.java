@@ -26,6 +26,6 @@ public class ReservationEventProducer {
         final var reservationEvent = ReservationEvent.builder()
                 .reservationId(reservationId)
                 .build();
-        kafkaTemplate.send(KafkaTopic.RESERVATIONS, reservationEvent);
+        kafkaTemplate.send(KafkaTopic.RESERVATIONS, reservationId.toString(), reservationEvent);
     }
 }

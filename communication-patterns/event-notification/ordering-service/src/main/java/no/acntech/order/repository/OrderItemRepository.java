@@ -12,7 +12,5 @@ public interface OrderItemRepository extends JpaRepository<OrderItemEntity, Long
 
     Optional<OrderItemEntity> findByItemId(UUID itemId);
 
-    Optional<OrderItemEntity> findByOrderIdAndProductId(Long orderId, UUID productId);
-
     Optional<OrderItemEntity> findByReservationId(UUID reservationId);
 }

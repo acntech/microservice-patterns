@@ -6,6 +6,8 @@ import no.acntech.invoice.model.InvoiceDto;
 import no.acntech.invoice.model.InvoiceEntity;
 import no.acntech.invoice.model.InvoiceQuery;
 import no.acntech.invoice.repository.InvoiceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class InvoiceService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceService.class);
     private static final Sort SORT_BY_ID = Sort.by("id");
     private final ConversionService conversionService;
     private final InvoiceRepository invoiceRepository;
@@ -67,6 +70,7 @@ public class InvoiceService {
     @SuppressWarnings("UnusedReturnValue")
     @Transactional
     public InvoiceDto createInvoice(@NotNull @Valid final CreateInvoiceDto createInvoiceDto) {
+        LOGGER.debug("Creating invoice for CreateInvoiceDto with order-id {}", createInvoiceDto.getOrderId());
         final var invoiceEntity = conversionService.convert(createInvoiceDto, InvoiceEntity.class);
         Assert.notNull(invoiceEntity, "Failed to convert CreateInvoiceDto to InvoiceEntity");
         final var savedInvoice = invoiceRepository.save(invoiceEntity);
