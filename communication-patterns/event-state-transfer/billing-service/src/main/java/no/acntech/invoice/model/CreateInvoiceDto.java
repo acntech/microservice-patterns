@@ -1,11 +1,8 @@
 package no.acntech.invoice.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.UUID;
 
-@Valid
 public class CreateInvoiceDto {
 
     @NotNull
@@ -44,10 +41,10 @@ public class CreateInvoiceDto {
         }
 
         public CreateInvoiceDto build() {
-            CreateInvoiceDto createInvoice = new CreateInvoiceDto();
-            createInvoice.customerId = this.customerId;
-            createInvoice.orderId = this.orderId;
-            return createInvoice;
+            final var target = new CreateInvoiceDto();
+            target.customerId = this.customerId;
+            target.orderId = this.orderId;
+            return target;
         }
     }
 }

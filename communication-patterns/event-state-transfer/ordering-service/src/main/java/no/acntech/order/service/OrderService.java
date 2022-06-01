@@ -1,13 +1,10 @@
 package no.acntech.order.service;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import no.acntech.order.exception.OrderItemNotFoundException;
+import no.acntech.order.exception.OrderNotFoundException;
+import no.acntech.order.model.*;
+import no.acntech.order.repository.OrderItemRepository;
+import no.acntech.order.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
@@ -15,238 +12,189 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 
-import no.acntech.order.exception.ItemAlreadyExistsException;
-import no.acntech.order.exception.ItemNotFoundException;
-import no.acntech.order.exception.OrderNotFoundException;
-import no.acntech.order.model.CreateItemDto;
-import no.acntech.order.model.CreateOrderDto;
-import no.acntech.order.model.Item;
-import no.acntech.order.model.ItemDto;
-import no.acntech.order.model.ItemStatus;
-import no.acntech.order.model.Order;
-import no.acntech.order.model.OrderDto;
-import no.acntech.order.model.OrderEvent;
-import no.acntech.order.model.OrderEventType;
-import no.acntech.order.model.OrderQuery;
-import no.acntech.order.model.OrderStatus;
-import no.acntech.order.model.UpdateItemDto;
-import no.acntech.order.producer.OrderEventProducer;
-import no.acntech.order.repository.ItemRepository;
-import no.acntech.order.repository.OrderRepository;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("Duplicates")
+@Validated
 @Service
 public class OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
     private static final Sort SORT_BY_ID = Sort.by("id");
-
     private final ConversionService conversionService;
     private final OrderRepository orderRepository;
-    private final ItemRepository itemRepository;
-    private final OrderEventProducer orderEventProducer;
+    private final OrderItemRepository orderItemRepository;
 
     public OrderService(final ConversionService conversionService,
                         final OrderRepository orderRepository,
-                        final ItemRepository itemRepository,
-                        final OrderEventProducer orderEventProducer) {
+                        final OrderItemRepository orderItemRepository) {
         this.conversionService = conversionService;
         this.orderRepository = orderRepository;
-        this.itemRepository = itemRepository;
-        this.orderEventProducer = orderEventProducer;
+        this.orderItemRepository = orderItemRepository;
     }
 
-    public List<OrderDto> findOrders(@NotNull final OrderQuery orderQuery) {
-        UUID customerId = orderQuery.getCustomerId();
-        OrderStatus status = orderQuery.getStatus();
-
-        if (customerId != null && status != null) {
-            return orderRepository.findAllByCustomerIdAndStatus(customerId, status, SORT_BY_ID)
+    public List<OrderDto> findOrders(@NotNull @Valid final OrderQuery orderQuery) {
+        if (orderQuery.getCustomerId() != null && orderQuery.getStatus() != null) {
+            return orderRepository.findAllByCustomerIdAndStatus(orderQuery.getCustomerId(), orderQuery.getStatus(), SORT_BY_ID)
                     .stream()
-                    .map(this::convertDto)
+                    .map(this::convert)
                     .collect(Collectors.toList());
-        } else if (customerId != null) {
-            return orderRepository.findAllByCustomerId(customerId, SORT_BY_ID)
+        } else if (orderQuery.getCustomerId() != null) {
+            return orderRepository.findAllByCustomerId(orderQuery.getCustomerId(), SORT_BY_ID)
                     .stream()
-                    .map(this::convertDto)
+                    .map(this::convert)
                     .collect(Collectors.toList());
-        } else if (status != null) {
-            return orderRepository.findAllByStatus(status, SORT_BY_ID)
+        } else if (orderQuery.getStatus() != null) {
+            return orderRepository.findAllByStatus(orderQuery.getStatus(), SORT_BY_ID)
                     .stream()
-                    .map(this::convertDto)
+                    .map(this::convert)
                     .collect(Collectors.toList());
         } else {
             return orderRepository.findAll(SORT_BY_ID)
                     .stream()
-                    .map(this::convertDto)
+                    .map(this::convert)
                     .collect(Collectors.toList());
         }
     }
 
     public OrderDto getOrder(@NotNull final UUID orderId) {
-        Order order = getOrderByOrderId(orderId);
-        return convertDto(order);
+        return orderRepository.findByOrderId(orderId)
+                .map(this::convert)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
     @Transactional
     public OrderDto createOrder(@Valid final CreateOrderDto createOrder) {
-        Order order = conversionService.convert(createOrder, Order.class);
-        Assert.notNull(order, "Failed to convert order");
-
-        Order createdOrder = orderRepository.save(order);
-
-        LOGGER.debug("Created order with order-id {}", createdOrder.getOrderId());
-        OrderEvent orderEvent = OrderEvent.builder()
-                .eventType(OrderEventType.ORDER_CREATED)
-                .orderId(createdOrder.getOrderId())
-                .orderStatus(createdOrder.getStatus())
-                .build();
-        orderEventProducer.publish(orderEvent);
-
-        return convertDto(createdOrder);
+        final var orderEntity = conversionService.convert(createOrder, OrderEntity.class);
+        Assert.notNull(orderEntity, "Failed to convert CreateOrderDto to OrderEntity");
+        final var createdOrderEntity = orderRepository.save(orderEntity);
+        LOGGER.debug("Created order with order-id {}", createdOrderEntity.getOrderId());
+        return convert(createdOrderEntity);
     }
 
     @Transactional
-    public void updateOrder(@NotNull final UUID orderId) {
-        Order order = getOrderByOrderId(orderId);
-
-        order.confirmOrder();
-        Order updatedOrder = orderRepository.save(order);
-
-        LOGGER.debug("Updated order with order-id {}", updatedOrder.getOrderId());
-        OrderEvent orderEvent = OrderEvent.builder()
-                .eventType(OrderEventType.ORDER_UPDATED)
-                .orderId(updatedOrder.getOrderId())
-                .orderStatus(updatedOrder.getStatus())
-                .build();
-        orderEventProducer.publish(orderEvent);
+    public OrderDto updateOrder(@Valid final UUID orderId) {
+        var orderEntity = orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+        orderEntity.confirmOrder();
+        final var updatedOrderEntity = orderRepository.save(orderEntity);
+        LOGGER.debug("Updated order with order-id {}", updatedOrderEntity.getOrderId());
+        return convert(updatedOrderEntity);
     }
 
     @Transactional
-    public void deleteOrder(@NotNull final UUID orderId) {
-        Order order = getOrderByOrderId(orderId);
-
-        order.cancelOrder();
-        Order canceledOrder = orderRepository.save(order);
-
-        LOGGER.debug("Canceled order with order-id {}", canceledOrder.getOrderId());
-        OrderEvent orderEvent = OrderEvent.builder()
-                .eventType(OrderEventType.ORDER_CANCELED)
-                .orderId(canceledOrder.getOrderId())
-                .orderStatus(canceledOrder.getStatus())
-                .build();
-        orderEventProducer.publish(orderEvent);
+    public OrderDto deleteOrder(@NotNull final UUID orderId) {
+        final var orderEntity = orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+        orderEntity.cancelOrder();
+        final var deletedOrderEntity = orderRepository.save(orderEntity);
+        LOGGER.debug("Deleted order with order-id {}", orderId);
+        return convert(deletedOrderEntity);
     }
 
-    public ItemDto getItem(@NotNull final UUID itemId) {
-        Item item = getItemByItemId(itemId);
-        Order order = getOrderById(item.getOrderId());
-        OrderDto orderDto = convertDto(order);
-        return orderDto.getItems().stream()
-                .filter(itemDto -> itemDto.getItemId().equals(itemId))
-                .findFirst()
-                .orElseThrow(() -> new ItemNotFoundException(itemId));
+    public OrderItemDto getOrderItem(@NotNull final UUID itemId) {
+        return orderItemRepository.findByItemId(itemId)
+                .map(this::convert)
+                .orElseThrow(() -> new OrderItemNotFoundException("No order item found for item-id " + itemId));
     }
 
     @Transactional
-    public OrderDto createItem(@NotNull final UUID orderId, @Valid final CreateItemDto createItem) {
-        UUID productId = createItem.getProductId();
-        Long quantity = createItem.getQuantity();
+    public OrderDto createOrderItem(@NotNull final UUID orderId,
+                                    @NotNull @Valid final CreateOrderItemDto createOrderItemDto) {
+        final var orderEntity = orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
-        Order order = getOrderByOrderId(orderId);
-        Optional<Item> exitingItem = itemRepository.findByOrderIdAndProductId(order.getId(), productId);
+        final var orderItemEntity = OrderItemEntity.builder()
+                .productId(createOrderItemDto.getProductId())
+                .reservationId(createOrderItemDto.getReservationId())
+                .quantity(createOrderItemDto.getQuantity())
+                .build();
+        orderEntity.addItem(orderItemEntity);
+        final var updatedOrderEntity = orderRepository.save(orderEntity);
 
-        if (!exitingItem.isPresent()) {
-            Item item = Item.builder()
-                    .orderId(order.getId())
-                    .productId(productId)
-                    .quantity(quantity)
-                    .build();
+        LOGGER.debug("Created order item with product-id {} for order-id {}", orderId, createOrderItemDto.getProductId());
+        return convert(updatedOrderEntity);
+    }
 
-            itemRepository.save(item);
+    @Transactional
+    public OrderDto updateOrderItem(@NotNull final UUID itemId,
+                                    @NotNull @Valid final UpdateOrderItemDto updateOrderItemDto) {
+        final var orderItemEntity = orderItemRepository.findByItemId(itemId)
+                .orElseThrow(() -> new OrderItemNotFoundException("No order item found for order-item-id " + itemId));
 
-            LOGGER.debug("Added order item with product-id {} for order-id {}", orderId, productId);
-            OrderEvent orderEvent = OrderEvent.builder()
-                    .eventType(OrderEventType.ORDER_ITEM_ADDED)
-                    .orderId(order.getOrderId())
-                    .orderStatus(order.getStatus())
-                    .productId(item.getProductId())
-                    .quantity(item.getQuantity())
-                    .itemStatus(item.getStatus())
-                    .build();
-            orderEventProducer.publish(orderEvent);
+        return updateOrderItem(orderItemEntity, updateOrderItemDto);
+    }
 
-            Order updatedOrder = getOrderByOrderId(orderId);
-            return convertDto(updatedOrder);
+    @Transactional
+    public OrderDto updateOrderItem(@NotNull @Valid final UpdateOrderItemDto updateOrderItemDto) {
+        final var orderItemEntity = orderItemRepository.findByReservationId(updateOrderItemDto.getReservationId())
+                .orElseThrow(() -> new OrderItemNotFoundException("No order item found for reservation-id " + updateOrderItemDto.getReservationId()));
+
+        return updateOrderItem(orderItemEntity, updateOrderItemDto);
+    }
+
+    private OrderDto updateOrderItem(@NotNull final OrderItemEntity orderItemEntity,
+                                     @NotNull @Valid final UpdateOrderItemDto updateOrderItemDto) {
+        orderItemEntity.setQuantity(updateOrderItemDto.getQuantity());
+        if (updateOrderItemDto.getStatus() != null) {
+            orderItemEntity.setStatus(updateOrderItemDto.getStatus());
+        }
+
+        LOGGER.debug("Updating order item for order-id {} and order-item-id {}", orderItemEntity.getParent().getOrderId(), orderItemEntity.getItemId());
+
+        orderItemRepository.save(orderItemEntity);
+
+        var orderEntity = orderRepository.findByOrderId(orderItemEntity.getParent().getOrderId())
+                .orElseThrow(() -> new OrderNotFoundException(orderItemEntity.getParent().getOrderId()));
+
+        if (orderEntity.areAllActiveItemsConfirmed()) {
+            orderEntity.confirmOrder();
+            final var savedOrderEntity = orderRepository.save(orderEntity);
+            LOGGER.debug("Updated order status to {} for order-id {}", savedOrderEntity.getStatus().name(), orderEntity.getOrderId());
+            return convert(savedOrderEntity);
         } else {
-            throw new ItemAlreadyExistsException(orderId, productId);
+            return convert(orderEntity);
         }
     }
 
     @Transactional
-    public void updateItem(@NotNull final UUID itemId, @Valid final UpdateItemDto updateItem) {
-        Long quantity = updateItem.getQuantity();
+    public OrderDto deleteOrderItem(@NotNull final UUID itemId) {
+        final var orderItemEntity = orderItemRepository.findByItemId(itemId)
+                .orElseThrow(() -> new OrderItemNotFoundException("No order item found for order-item-id " + itemId));
+        orderItemEntity.cancelOrderItem();
 
-        Item item = getItemByItemId(itemId);
-        Order order = getOrderById(item.getOrderId());
+        LOGGER.debug("Deleting order item for order-id {} and order-item-id {}", orderItemEntity.getParent().getOrderId(), orderItemEntity.getItemId());
 
-        UUID orderId = order.getOrderId();
-        OrderStatus orderStatus = order.getStatus();
-        UUID productId = item.getProductId();
-        ItemStatus itemStatus = item.getStatus();
+        orderItemRepository.save(orderItemEntity);
 
-        LOGGER.debug("Updated order item for order-id {} and product-id {}", orderId, productId);
-        OrderEvent orderEvent = OrderEvent.builder()
-                .eventType(OrderEventType.ORDER_ITEM_UPDATED)
-                .orderId(orderId)
-                .orderStatus(orderStatus)
-                .productId(productId)
-                .quantity(quantity)
-                .itemStatus(itemStatus)
-                .build();
-        orderEventProducer.publish(orderEvent);
+        var orderEntity = orderRepository.findByOrderId(orderItemEntity.getParent().getOrderId())
+                .orElseThrow(() -> new OrderNotFoundException(orderItemEntity.getParent().getOrderId()));
+
+        if (orderEntity.areAllActiveItemsConfirmed()) {
+            orderEntity.confirmOrder();
+            final var savedOrderEntity = orderRepository.save(orderEntity);
+            LOGGER.debug("Updated order status to {} for order-id {}", savedOrderEntity.getStatus().name(), orderEntity.getOrderId());
+            return convert(savedOrderEntity);
+        } else {
+            return convert(orderEntity);
+        }
     }
 
-    @Transactional
-    public void deleteItem(@NotNull final UUID itemId) {
-        Item item = getItemByItemId(itemId);
-        Order order = getOrderById(item.getOrderId());
-
-        UUID orderId = order.getOrderId();
-        OrderStatus orderStatus = order.getStatus();
-        UUID productId = item.getProductId();
-        Long quantity = item.getQuantity();
-        ItemStatus itemStatus = item.getStatus();
-
-        LOGGER.debug("Canceled order item with product-id {} for order-id {}", orderId, productId);
-        OrderEvent orderEvent = OrderEvent.builder()
-                .eventType(OrderEventType.ORDER_ITEM_CANCELED)
-                .orderId(orderId)
-                .orderStatus(orderStatus)
-                .productId(productId)
-                .quantity(quantity)
-                .itemStatus(itemStatus)
-                .build();
-        orderEventProducer.publish(orderEvent);
+    private OrderDto convert(final OrderEntity order) {
+        final var orderDto = conversionService.convert(order, OrderDto.class);
+        Assert.notNull(order, "Failed to convert OrderEntity to OrderDto");
+        return orderDto;
     }
 
-    private Order getOrderById(final Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException(id));
-    }
-
-    private Order getOrderByOrderId(final UUID orderId) {
-        return orderRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new OrderNotFoundException(orderId));
-    }
-
-    private Item getItemByItemId(final UUID itemId) {
-        return itemRepository.findByItemId(itemId)
-                .orElseThrow(() -> new ItemNotFoundException(itemId));
-    }
-
-    private OrderDto convertDto(final Order order) {
-        return conversionService.convert(order, OrderDto.class);
+    private OrderItemDto convert(final OrderItemEntity order) {
+        final var orderDto = conversionService.convert(order, OrderItemDto.class);
+        Assert.notNull(order, "Failed to convert OrderItemEntity to OrderItemDto");
+        return orderDto;
     }
 }

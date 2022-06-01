@@ -41,17 +41,17 @@ public class OrderService {
 
     public List<OrderDto> findOrders(@NotNull @Valid final OrderQuery orderQuery) {
         if (orderQuery.getCustomerId() != null && orderQuery.getStatus() != null) {
-            return orderRepository.findAllByCustomerIdAndStatus(orderQuery.getCustomerId(), orderQuery.getStatus())
+            return orderRepository.findAllByCustomerIdAndStatus(orderQuery.getCustomerId(), orderQuery.getStatus(), SORT_BY_ID)
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());
         } else if (orderQuery.getCustomerId() != null) {
-            return orderRepository.findAllByCustomerId(orderQuery.getCustomerId())
+            return orderRepository.findAllByCustomerId(orderQuery.getCustomerId(), SORT_BY_ID)
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());
         } else if (orderQuery.getStatus() != null) {
-            return orderRepository.findAllByStatus(orderQuery.getStatus())
+            return orderRepository.findAllByStatus(orderQuery.getStatus(), SORT_BY_ID)
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());
@@ -113,7 +113,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto updateItemReservation(@NotNull @Valid final UpdateOrderItemDto updateOrderItemDto) {
+    public OrderDto updateOrderItem(@NotNull @Valid final UpdateOrderItemDto updateOrderItemDto) {
         final var orderItemEntity = itemRepository.findByReservationId(updateOrderItemDto.getReservationId())
                 .orElseThrow(() -> new OrderItemNotFoundException("No order item found for reservation-id " + updateOrderItemDto.getReservationId()));
 

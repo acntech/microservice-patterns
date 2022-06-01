@@ -7,16 +7,16 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import no.acntech.customer.model.Customer;
+import no.acntech.customer.model.CustomerEntity;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
 
-    Optional<Customer> findByCustomerId(UUID customerId);
+    Optional<CustomerEntity> findByCustomerId(UUID customerId);
 
-    List<Customer> findAllByFirstName(String firstName);
+    List<CustomerEntity> findAllByFirstName(String firstName);
 
-    List<Customer> findAllByLastName(String lastName);
+    List<CustomerEntity> findAllByLastName(String lastName);
 
-    List<Customer> findAllByFirstNameAndLastName(String firstName, String lastName);
+    List<CustomerEntity> findAllByFirstNameAndLastName(String firstName, String lastName);
 }

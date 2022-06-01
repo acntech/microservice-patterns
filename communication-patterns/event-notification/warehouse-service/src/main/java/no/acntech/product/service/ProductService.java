@@ -9,6 +9,7 @@ import no.acntech.product.repository.ProductRepository;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.validation.Valid;
@@ -50,6 +51,7 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
+    @Transactional
     public ProductDto createProduct(@NotNull @Valid final CreateProductDto createProductDto) {
         final var productEntity = conversionService.convert(createProductDto, ProductEntity.class);
         Assert.notNull(productEntity, "Failed to convert CreateProductDto to ProductEntity");

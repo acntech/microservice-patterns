@@ -1,15 +1,14 @@
 package no.acntech.order.producer;
 
-import javax.validation.constraints.NotNull;
-
+import no.acntech.common.config.KafkaTopic;
+import no.acntech.order.model.OrderEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import no.acntech.common.config.KafkaTopic;
-import no.acntech.order.model.OrderEvent;
+import javax.validation.constraints.NotNull;
 
 @Component
 public class OrderEventProducer {
@@ -24,7 +23,7 @@ public class OrderEventProducer {
 
     @Transactional
     public void publish(@NotNull final OrderEvent orderEvent) {
-        LOGGER.debug("Sending event for order-id {} to topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS.getName());
-        kafkaTemplate.send(KafkaTopic.ORDERS.getName(), orderEvent);
+        LOGGER.debug("Sending OrderEvent for order-id {} to topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS);
+        kafkaTemplate.send(KafkaTopic.ORDERS, orderEvent.getEventId().toString(), orderEvent);
     }
 }

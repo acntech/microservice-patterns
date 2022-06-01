@@ -2,7 +2,6 @@ package no.acntech.order.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -19,7 +18,7 @@ public class OrderEvent implements Serializable {
     private OrderStatus orderStatus;
     private UUID productId;
     private Long quantity;
-    private ItemStatus itemStatus;
+    private OrderItemStatus itemStatus;
 
     public OrderEventType getEventType() {
         return eventType;
@@ -45,7 +44,7 @@ public class OrderEvent implements Serializable {
         return quantity;
     }
 
-    public ItemStatus getItemStatus() {
+    public OrderItemStatus getItemStatus() {
         return itemStatus;
     }
 
@@ -62,7 +61,7 @@ public class OrderEvent implements Serializable {
         private UUID productId;
         private Long quantity;
 
-        private ItemStatus itemStatus;
+        private OrderItemStatus itemStatus;
 
         private Builder() {
         }
@@ -97,7 +96,7 @@ public class OrderEvent implements Serializable {
             return this;
         }
 
-        public Builder itemStatus(ItemStatus itemStatus) {
+        public Builder itemStatus(OrderItemStatus itemStatus) {
             this.itemStatus = itemStatus;
             return this;
         }

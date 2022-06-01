@@ -39,13 +39,13 @@ Each service can also create internal spans. A span is basically a unit of work.
 Example log from a call to order:
 ```
 2018-12-17 11:22:10.119 DEBUG [order-service,4a9dcdd5d89e94fb,53bd2c98e1610ea8,true] 16844 --- [nio-8080-exec-2] no.acntech.order.resource.OrderResource  : OrderResource#submit for order: Order(id=null, orderstatus=null, orderlines=[Orderline(id=null, productId=42, quantity=2)], shippingId=null)
-2018-12-17 11:22:10.134 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderService    : Calling OrderRepository#save for order: Order(id=null, orderstatus=null, orderlines=[Orderline(id=null, productId=42, quantity=2)], shippingId=null)
-2018-12-17 11:22:10.174 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderService    : Calling ShippingRestClient#ship for order: Order(id=1, orderstatus=null, orderlines=[Orderline(id=2, productId=42, quantity=2)], shippingId=null)
+2018-12-17 11:22:10.134 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderOrchestrationService    : Calling OrderRepository#save for order: Order(id=null, orderstatus=null, orderlines=[Orderline(id=null, productId=42, quantity=2)], shippingId=null)
+2018-12-17 11:22:10.174 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderOrchestrationService    : Calling ShippingRestClient#ship for order: Order(id=1, orderstatus=null, orderlines=[Orderline(id=2, productId=42, quantity=2)], shippingId=null)
 2018-12-17 11:22:10.175 DEBUG [order-service,4a9dcdd5d89e94fb,947516a78a9738a9,true] 16844 --- [nio-8080-exec-2] n.a.o.i.shipping.ShippingRestClient      : Posting to /shipments endpoint for orderId=1
 2018-12-17 11:22:10.251 DEBUG [order-service,4a9dcdd5d89e94fb,947516a78a9738a9,true] 16844 --- [nio-8080-exec-2] n.a.o.i.shipping.ShippingRestClient      : Received response for orderId=eef5b0a4-7df4-4d31-a962-57fd32c213d8, shipmentId={}1
-2018-12-17 11:22:10.251  INFO [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderService    : Order with orderId=1 shipped! shippingId=eef5b0a4-7df4-4d31-a962-57fd32c213d8
-2018-12-17 11:22:10.251 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderService    : Updating Order#orderStatus to COMPLETED
-2018-12-17 11:22:10.251 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderService    : Returning from OrderService#submit
+2018-12-17 11:22:10.251  INFO [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderOrchestrationService    : Order with orderId=1 shipped! shippingId=eef5b0a4-7df4-4d31-a962-57fd32c213d8
+2018-12-17 11:22:10.251 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderOrchestrationService    : Updating Order#orderStatus to COMPLETED
+2018-12-17 11:22:10.251 DEBUG [order-service,4a9dcdd5d89e94fb,1c1cb4be684c9803,true] 16844 --- [nio-8080-exec-2] no.acntech.order.service.OrderOrchestrationService    : Returning from OrderService#submit
 2018-12-17 11:22:10.281 DEBUG [order-service,4a9dcdd5d89e94fb,53bd2c98e1610ea8,true] 16844 --- [nio-8080-exec-2] no.acntech.order.resource.OrderResource  : Order successfully created, responding with HttpStatus=200 OK
 ```
 

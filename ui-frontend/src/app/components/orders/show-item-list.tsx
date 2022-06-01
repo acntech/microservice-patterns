@@ -44,14 +44,14 @@ class ShowItemListComponent extends Component<ComponentProps> {
                         <Table.Row>
                             <Table.HeaderCell width={6}><FormattedMessage id="label.productEntity-id.text" /></Table.HeaderCell>
                             <Table.HeaderCell width={6}><FormattedMessage id="label.productEntity-name.text" /></Table.HeaderCell>
-                            <Table.HeaderCell width={2}><FormattedMessage id="label.item-quantity.text" /></Table.HeaderCell>
-                            <Table.HeaderCell width={8}><FormattedMessage id="label.item-status.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={2}><FormattedMessage id="label.orderItemEntity-quantity.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={8}><FormattedMessage id="label.orderItemEntity-status.text" /></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {
-                            showItems.map((item, index) => {
-                                const {itemId, productId, name, quantity, status, statusColor} = item;
+                            showItems.map((orderItemEntity, index) => {
+                                const {itemId, productId, name, quantity, status, statusColor} = orderItemEntity;
 
                                 return (
                                     <Table.Row key={index} className="clickable-table-row" onClick={() => onTableRowClick(itemId)}>
@@ -60,7 +60,7 @@ class ShowItemListComponent extends Component<ComponentProps> {
                                         <Table.Cell>{quantity}</Table.Cell>
                                         <Table.Cell>
                                             <Label color={statusColor}>
-                                                <FormattedMessage id={`enum.item-status.${status}`} />
+                                                <FormattedMessage id={`enum.orderItemEntity-status.${status}`} />
                                             </Label>
                                         </Table.Cell>
                                     </Table.Row>
@@ -73,14 +73,14 @@ class ShowItemListComponent extends Component<ComponentProps> {
         }
     }
 
-    private enrichItem = (item: Item): ShowItem => {
+    private enrichItem = (orderItemEntity: Item): ShowItem => {
         return {
-            itemId: item.itemId,
-            productId: item.productId,
-            name: this.findProductName(item.productId),
-            quantity: item.quantity,
-            status: item.status,
-            statusColor: getItemStatusLabelColor(item.status)
+            itemId: orderItemEntity.itemId,
+            productId: orderItemEntity.productId,
+            name: this.findProductName(orderItemEntity.productId),
+            quantity: orderItemEntity.quantity,
+            status: orderItemEntity.status,
+            statusColor: getItemStatusLabelColor(orderItemEntity.status)
         };
     };
 

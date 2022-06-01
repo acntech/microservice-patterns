@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class ReservationService {
@@ -34,6 +35,7 @@ public class ReservationService {
             if (optionalReservationDto.isPresent()) {
                 final var reservationDto = optionalReservationDto.get();
                 final var updateOrderItemDto = conversionService.convert(reservationDto, UpdateOrderItemDto.class);
+                Assert.notNull(updateOrderItemDto, "Failed to ReservationDto to UpdateOrderItemDto");
                 orderOrchestrationService.updateOrderItemReservation(updateOrderItemDto);
             } else {
                 LOGGER.error("Reservation with reservation-id {} could not be found", reservationEvent.getReservationId());

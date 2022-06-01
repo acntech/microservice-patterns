@@ -7,7 +7,13 @@ import java.util.UUID;
 public class OrderEvent implements Serializable {
 
     @NotNull
+    private UUID eventId;
+    @NotNull
     private UUID orderId;
+
+    public UUID getEventId() {
+        return eventId;
+    }
 
     public UUID getOrderId() {
         return orderId;
@@ -31,6 +37,7 @@ public class OrderEvent implements Serializable {
 
         public OrderEvent build() {
             final var target = new OrderEvent();
+            target.eventId = UUID.randomUUID();
             target.orderId = this.orderId;
             return target;
         }

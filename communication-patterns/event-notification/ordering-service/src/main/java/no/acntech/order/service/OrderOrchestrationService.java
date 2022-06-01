@@ -118,7 +118,7 @@ public class OrderOrchestrationService {
 
     @Transactional
     public void updateOrderItemReservation(@NotNull @Valid final UpdateOrderItemDto updateOrderItemDto) {
-        final var orderDto = orderService.updateItemReservation(updateOrderItemDto);
+        final var orderDto = orderService.updateOrderItem(updateOrderItemDto);
         orderEventProducer.publish(orderDto.getOrderId());
     }
 }

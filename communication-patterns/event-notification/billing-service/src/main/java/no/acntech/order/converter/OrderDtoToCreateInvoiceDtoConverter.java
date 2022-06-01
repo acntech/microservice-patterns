@@ -13,8 +13,8 @@ public class OrderDtoToCreateInvoiceDtoConverter implements Converter<OrderDto, 
     @Override
     public CreateInvoiceDto convert(@NonNull final OrderDto source) {
         return CreateInvoiceDto.builder()
-                .orderId(source.getOrderId())
                 .customerId(source.getCustomerId())
+                .orderId(source.getOrderId())
                 .build();
     }
 }

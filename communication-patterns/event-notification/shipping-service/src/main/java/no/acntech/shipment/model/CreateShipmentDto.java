@@ -8,7 +8,13 @@ import java.util.UUID;
 public class CreateShipmentDto {
 
     @NotNull
+    private UUID customerId;
+    @NotNull
     private UUID orderId;
+
+    public UUID getCustomerId() {
+        return customerId;
+    }
 
     public UUID getOrderId() {
         return orderId;
@@ -20,10 +26,15 @@ public class CreateShipmentDto {
 
     public static final class Builder {
 
-
+        private UUID customerId;
         private UUID orderId;
 
         private Builder() {
+        }
+
+        public Builder customerId(UUID customerId) {
+            this.customerId = customerId;
+            return this;
         }
 
         public Builder orderId(UUID orderId) {
@@ -32,9 +43,10 @@ public class CreateShipmentDto {
         }
 
         public CreateShipmentDto build() {
-            CreateShipmentDto createShipment = new CreateShipmentDto();
-            createShipment.orderId = this.orderId;
-            return createShipment;
+            var target = new CreateShipmentDto();
+            target.customerId = this.customerId;
+            target.orderId = this.orderId;
+            return target;
         }
     }
 }

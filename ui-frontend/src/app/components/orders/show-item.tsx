@@ -6,7 +6,7 @@ import { Button, ButtonGroup, Icon, Label, Segment, Table } from 'semantic-ui-re
 import { Currency, getItemStatusLabelColor, Item, ItemStatus, Product } from '../../models';
 
 interface ComponentProps {
-    item: Item;
+    orderItemEntity: Item;
     productEntity: Product;
     onBackButtonClick: () => void;
     onDeleteButtonClick: () => void;
@@ -16,8 +16,8 @@ interface ComponentProps {
 class ShowItemComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
-        const {item, productEntity, onBackButtonClick, onDeleteButtonClick, onRefreshButtonClick} = this.props;
-        const {productId, quantity, status} = item;
+        const {orderItemEntity, productEntity, onBackButtonClick, onDeleteButtonClick, onRefreshButtonClick} = this.props;
+        const {productId, quantity, status} = orderItemEntity;
         const {name, description, price, currency} = productEntity;
 
         const statusColor = getItemStatusLabelColor(status);
@@ -66,23 +66,23 @@ class ShowItemComponent extends Component<ComponentProps> {
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-status.text" />
+                                <FormattedMessage id="label.orderItemEntity-status.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>
                                 <Label color={statusColor}>
-                                    <FormattedMessage id={`enum.item-status.${status}`} />
+                                    <FormattedMessage id={`enum.orderItemEntity-status.${status}`} />
                                 </Label>
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-quantity.text" />
+                                <FormattedMessage id="label.orderItemEntity-quantity.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>{quantity}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-unit-price.text" />
+                                <FormattedMessage id="label.orderItemEntity-unit-price.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>
                                 {Currency[currency]} {price.toFixed(2)}
@@ -90,7 +90,7 @@ class ShowItemComponent extends Component<ComponentProps> {
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-total-price.text" />
+                                <FormattedMessage id="label.orderItemEntity-total-price.text" />
                             </Table.Cell>
                             <Table.Cell width={10}>
                                 {Currency[currency]} {totalPrice.toFixed(2)}
@@ -103,8 +103,8 @@ class ShowItemComponent extends Component<ComponentProps> {
     }
 
     private deleteButtonActive = (): boolean => {
-        const {item} = this.props;
-        return item.status === ItemStatus.RESERVED || item.status === ItemStatus.REJECTED;
+        const {orderItemEntity} = this.props;
+        return orderItemEntity.status === ItemStatus.RESERVED || orderItemEntity.status === ItemStatus.REJECTED;
     };
 }
 

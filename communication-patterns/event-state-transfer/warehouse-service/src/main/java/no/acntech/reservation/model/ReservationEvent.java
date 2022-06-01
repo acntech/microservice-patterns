@@ -2,12 +2,13 @@ package no.acntech.reservation.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.UUID;
 
 @Valid
 public class ReservationEvent {
 
+    @NotNull
+    private UUID eventId;
     @NotNull
     private ReservationEventType eventType;
     @NotNull
@@ -20,6 +21,10 @@ public class ReservationEvent {
     private UUID productId;
     @NotNull
     private Long quantity;
+
+    public UUID getEventId() {
+        return eventId;
+    }
 
     public ReservationEventType getEventType() {
         return eventType;
@@ -92,14 +97,15 @@ public class ReservationEvent {
         }
 
         public ReservationEvent build() {
-            ReservationEvent reservationEvent = new ReservationEvent();
-            reservationEvent.eventType = this.eventType;
-            reservationEvent.reservationId = this.reservationId;
-            reservationEvent.status = this.status;
-            reservationEvent.orderId = this.orderId;
-            reservationEvent.productId = this.productId;
-            reservationEvent.quantity = this.quantity;
-            return reservationEvent;
+            final var target = new ReservationEvent();
+            target.eventId = UUID.randomUUID();
+            target.eventType = this.eventType;
+            target.reservationId = this.reservationId;
+            target.status = this.status;
+            target.orderId = this.orderId;
+            target.productId = this.productId;
+            target.quantity = this.quantity;
+            return target;
         }
     }
 }

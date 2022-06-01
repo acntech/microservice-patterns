@@ -1,18 +1,15 @@
 package no.acntech.order.service;
 
-import java.util.UUID;
-
+import no.acntech.order.model.OrderEvent;
+import no.acntech.reservation.model.CancelReservationDto;
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.UpdateReservationDto;
+import no.acntech.reservation.service.ReservationOrchestrationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
-
-import no.acntech.order.model.OrderEvent;
-import no.acntech.order.model.OrderEventType;
-import no.acntech.reservation.model.CancelReservationDto;
-import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.UpdateReservationDto;
-import no.acntech.reservation.service.ReservationService;
+import org.springframework.util.Assert;
 
 @Service
 public class OrderService {
@@ -20,91 +17,59 @@ public class OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     private final ConversionService conversionService;
-    private final ReservationService reservationService;
+    private final ReservationOrchestrationService reservationOrchestrationService;
 
     public OrderService(final ConversionService conversionService,
-                        final ReservationService reservationService) {
+                        final ReservationOrchestrationService reservationOrchestrationService) {
         this.conversionService = conversionService;
-        this.reservationService = reservationService;
+        this.reservationOrchestrationService = reservationOrchestrationService;
     }
 
-    public void receiveOrderEvent(final OrderEvent orderEvent) {
+    public void processOrderEvent(final OrderEvent orderEvent) {
+        LOGGER.debug("Processing order event for order-id {}", orderEvent.getOrderId());
+
         try {
-            processReservationEvent(orderEvent);
+            switch (orderEvent.getEventType()) {
+                case ORDER_UPDATED -> processOrderUpdated(orderEvent);
+                case ORDER_CANCELED -> processOrderCanceled(orderEvent);
+                case ORDER_ITEM_ADDED -> processOrderItemAdded(orderEvent);
+                case ORDER_ITEM_UPDATED -> processOrderItemUpdated(orderEvent);
+                case ORDER_ITEM_CANCELED -> processOrderItemCanceled(orderEvent);
+                default ->
+                        LOGGER.debug("Ignoring order event with type {} for order-id {}", orderEvent.getEventType(), orderEvent.getOrderId());
+            }
         } catch (Exception e) {
             LOGGER.error("Error occurred while processing order event", e);
         }
     }
 
-    private void processReservationEvent(final OrderEvent orderEvent) {
-        OrderEventType eventType = orderEvent.getEventType();
-        UUID orderId = orderEvent.getOrderId();
-
-        LOGGER.debug("Processing order event for order-id {}", orderId);
-
-        switch (eventType) {
-            case ORDER_UPDATED:
-                processOrderUpdated(orderEvent);
-                break;
-            case ORDER_CANCELED:
-                processOrderCanceled(orderEvent);
-                break;
-            case ORDER_ITEM_ADDED:
-                processOrderItemAdded(orderEvent);
-                break;
-            case ORDER_ITEM_UPDATED:
-                processOrderItemUpdated(orderEvent);
-                break;
-            case ORDER_ITEM_CANCELED:
-                processOrderItemCanceled(orderEvent);
-                break;
-            default:
-                LOGGER.debug("Ignoring order event with type {} for order-id {}", eventType, orderId);
-        }
-    }
-
     private void processOrderUpdated(final OrderEvent orderEvent) {
-        UpdateReservationDto updateReservation = conversionService.convert(orderEvent, UpdateReservationDto.class);
-        if (updateReservation != null) {
-            reservationService.updateAllReservations(updateReservation);
-        } else {
-            LOGGER.error("Could not convert order event to update reservation DTO");
-        }
+        final var updateReservationDto = conversionService.convert(orderEvent, UpdateReservationDto.class);
+        Assert.notNull(updateReservationDto, "Failed to convert OrderEvent to UpdateReservationDto");
+        reservationOrchestrationService.updateAllReservations(updateReservationDto);
     }
 
     private void processOrderCanceled(final OrderEvent orderEvent) {
-        CancelReservationDto cancelReservation = conversionService.convert(orderEvent, CancelReservationDto.class);
-        if (cancelReservation != null) {
-            reservationService.cancelAllReservations(cancelReservation);
-        } else {
-            LOGGER.error("Could not convert order event to cancel reservation DTO");
-        }
+        final var cancelReservationDto = conversionService.convert(orderEvent, CancelReservationDto.class);
+        Assert.notNull(cancelReservationDto, "Failed to convert OrderEvent to CancelReservationDto");
+        reservationOrchestrationService.cancelAllReservations(cancelReservationDto);
     }
 
     private void processOrderItemAdded(final OrderEvent orderEvent) {
-        CreateReservationDto createReservation = conversionService.convert(orderEvent, CreateReservationDto.class);
-        if (createReservation != null) {
-            reservationService.createReservation(createReservation);
-        } else {
-            LOGGER.error("Could not convert order event to create reservation DTO");
-        }
+        final var createReservationDto = conversionService.convert(orderEvent, CreateReservationDto.class);
+        Assert.notNull(createReservationDto, "Failed to convert OrderEvent to CreateReservationDto");
+        reservationOrchestrationService.createReservation(createReservationDto);
     }
 
     private void processOrderItemUpdated(final OrderEvent orderEvent) {
-        UpdateReservationDto updateReservation = conversionService.convert(orderEvent, UpdateReservationDto.class);
-        if (updateReservation != null) {
-            reservationService.updateReservation(updateReservation);
-        } else {
-            LOGGER.error("Could not convert order event to update reservation DTO");
-        }
+        final var updateReservationDto = conversionService.convert(orderEvent, UpdateReservationDto.class);
+        Assert.notNull(updateReservationDto, "Failed to convert OrderEvent to UpdateReservationDto");
+        reservationOrchestrationService.updateReservation(updateReservationDto);
     }
 
     private void processOrderItemCanceled(final OrderEvent orderEvent) {
-        CancelReservationDto cancelReservation = conversionService.convert(orderEvent, CancelReservationDto.class);
-        if (cancelReservation != null) {
-            reservationService.cancelReservation(cancelReservation);
-        } else {
-            LOGGER.error("Could not convert order event to cancel reservation DTO");
-        }
+        final var cancelReservationDto = conversionService.convert(orderEvent, CancelReservationDto.class);
+        Assert.notNull(cancelReservationDto, "Failed to convert OrderEvent to CancelReservationDto");
+        reservationOrchestrationService.cancelReservation(cancelReservationDto);
     }
 }

@@ -51,8 +51,8 @@ class CreateItemFormComponent extends Component<ComponentProps> {
             formElementError: formQuantityError,
             formElementValue: formQuantityValue
         } = formInputQuantity;
-        const itemQuantityText = intl.formatMessage({id: 'label.item-quantity.text'});
-        const itemQuantityPlaceholderText = intl.formatMessage({id: 'form.placeholder.item-quantity.text'});
+        const itemQuantityText = intl.formatMessage({id: 'label.orderItemEntity-quantity.text'});
+        const itemQuantityPlaceholderText = intl.formatMessage({id: 'form.placeholder.orderItemEntity-quantity.text'});
 
         return (
             <Segment basic>
@@ -102,7 +102,7 @@ class CreateItemFormComponent extends Component<ComponentProps> {
                     </Form.Group>
                     <Form.Group>
                         <Form.Button primary size="tiny">
-                            <Icon name="dolly" /><FormattedMessage id="button.add-item.text" />
+                            <Icon name="dolly" /><FormattedMessage id="button.add-orderItemEntity.text" />
                         </Form.Button>
                         <Button secondary size="tiny" onClick={onCancelButtonClick}>
                             <Icon name="cancel" /><FormattedMessage id="button.cancel.text" />

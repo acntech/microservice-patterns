@@ -2,7 +2,6 @@ package no.acntech.shipment.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.UUID;
 
 @Valid
@@ -44,10 +43,10 @@ public class CreateShipmentDto {
         }
 
         public CreateShipmentDto build() {
-            CreateShipmentDto createShipment = new CreateShipmentDto();
-            createShipment.customerId = this.customerId;
-            createShipment.orderId = this.orderId;
-            return createShipment;
+            var target = new CreateShipmentDto();
+            target.customerId = this.customerId;
+            target.orderId = this.orderId;
+            return target;
         }
     }
 }

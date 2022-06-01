@@ -5,6 +5,7 @@ spring:
   # Application
   application:
     name: event-notification-ordering-service
+  # Profiles
   profiles:
     active: development
   # Jackson

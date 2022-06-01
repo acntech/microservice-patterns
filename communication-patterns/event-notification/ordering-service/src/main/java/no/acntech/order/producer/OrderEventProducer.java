@@ -23,11 +23,11 @@ public class OrderEventProducer {
 
     @Transactional
     public void publish(@NotNull final UUID orderId) {
-        LOGGER.debug("Sending order event for order-id {} to topic {}", orderId, KafkaTopic.ORDERS);
-        OrderEvent orderEvent = OrderEvent.builder()
+        LOGGER.debug("Sending OrderEvent for order-id {} to topic {}", orderId, KafkaTopic.ORDERS);
+        var orderEvent = OrderEvent.builder()
                 .orderId(orderId)
                 .build();
-        kafkaTemplate.send(KafkaTopic.ORDERS, orderId.toString(), orderEvent);
+        kafkaTemplate.send(KafkaTopic.ORDERS, orderEvent.getEventId().toString(), orderEvent);
     }
 }
 

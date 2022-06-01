@@ -58,33 +58,29 @@ public class ReservationService {
     @Transactional
     public void createReservation(@NotNull final UUID reservationId,
                                   @Valid final CreateReservationDto createReservation) {
-        final var orderId = createReservation.getOrderId();
-        final var productId = createReservation.getProductId();
-        final var quantity = createReservation.getQuantity();
-
         final var optionalReservationEntity = reservationRepository
-                .findByOrderIdAndProduct_ProductId(orderId, productId);
+                .findByOrderIdAndProduct_ProductId(createReservation.getOrderId(), createReservation.getProductId());
 
         if (optionalReservationEntity.isPresent()) {
             ReservationEntity reservation = ReservationEntity.builder()
                     .reservationId(reservationId)
-                    .orderId(orderId)
-                    .quantity(quantity)
+                    .orderId(createReservation.getOrderId())
+                    .quantity(createReservation.getQuantity())
                     .statusFailed()
                     .build();
             reservationRepository.save(reservation);
-            LOGGER.error("Reservation already exists for order-id {} and product-id {}", orderId, productId);
+            LOGGER.error("Reservation already exists for order-id {} and product-id {}", createReservation.getOrderId(), createReservation.getProductId());
         } else {
-            final var optionalProductEntity = productRepository.findByProductId(productId);
+            final var optionalProductEntity = productRepository.findByProductId(createReservation.getProductId());
 
             if (optionalProductEntity.isPresent()) {
                 final var productEntity = optionalProductEntity.get();
 
-                if (productEntity.getStock() < quantity) {
+                if (productEntity.getStock() < createReservation.getQuantity()) {
                     final var reservationEntity = ReservationEntity.builder()
                             .reservationId(reservationId)
-                            .orderId(orderId)
-                            .quantity(quantity)
+                            .orderId(createReservation.getOrderId())
+                            .quantity(createReservation.getQuantity())
                             .product(productEntity)
                             .statusRejected()
                             .build();
@@ -94,8 +90,8 @@ public class ReservationService {
                 } else {
                     final var reservationEntity = ReservationEntity.builder()
                             .reservationId(reservationId)
-                            .orderId(orderId)
-                            .quantity(quantity)
+                            .orderId(createReservation.getOrderId())
+                            .quantity(createReservation.getQuantity())
                             .product(productEntity)
                             .statusReserved()
                             .build();
@@ -106,8 +102,8 @@ public class ReservationService {
             } else {
                 final var reservationEntity = ReservationEntity.builder()
                         .reservationId(reservationId)
-                        .orderId(orderId)
-                        .quantity(quantity)
+                        .orderId(createReservation.getOrderId())
+                        .quantity(createReservation.getQuantity())
                         .statusFailed()
                         .build();
                 reservationRepository.save(reservationEntity);

@@ -2,7 +2,6 @@ package no.acntech.reservation.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.UUID;
 
 @Valid
@@ -11,6 +10,9 @@ public class CancelReservationDto {
     @NotNull
     private UUID orderId;
     private UUID productId;
+
+    private CancelReservationDto() {
+    }
 
     public UUID getOrderId() {
         return orderId;
@@ -43,10 +45,10 @@ public class CancelReservationDto {
         }
 
         public CancelReservationDto build() {
-            CancelReservationDto updateReservationDto = new CancelReservationDto();
-            updateReservationDto.orderId = this.orderId;
-            updateReservationDto.productId = this.productId;
-            return updateReservationDto;
+            final var target = new CancelReservationDto();
+            target.orderId = this.orderId;
+            target.productId = this.productId;
+            return target;
         }
     }
 }

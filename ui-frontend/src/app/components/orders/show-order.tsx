@@ -5,7 +5,7 @@ import Moment from 'react-moment';
 import { Button, ButtonGroup, Icon, Label, Segment, Table } from 'semantic-ui-react';
 
 import { getOrderStatusLabelColor, ItemStatus, Order, OrderStatus, ProductState } from '../../models';
-import { ShowItemList } from './show-item-list';
+import { ShowItemList } from './show-orderItemEntity-list';
 
 interface ComponentProps {
     order: Order;
@@ -49,7 +49,7 @@ class ShowOrderComponent extends Component<ComponentProps> {
                     <Button primary={createItemButtonActive}
                         disabled={!createItemButtonActive}
                         size="tiny" onClick={onCreateItemButtonClick}>
-                        <Icon name="dolly" /><FormattedMessage id="button.new-item.text" />
+                        <Icon name="dolly" /><FormattedMessage id="button.new-orderItemEntity.text" />
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>

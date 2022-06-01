@@ -1,22 +1,18 @@
 package no.acntech.invoice.resource;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.invoice.model.InvoiceDto;
+import no.acntech.invoice.model.InvoiceQuery;
+import no.acntech.invoice.service.InvoiceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.acntech.invoice.model.InvoiceDto;
-import no.acntech.invoice.model.InvoiceQuery;
-import no.acntech.invoice.service.InvoiceService;
+import java.util.List;
+import java.util.UUID;
 
-@RequestMapping(path = "invoices")
+@RequestMapping(path = "/api/invoices")
 @RestController
 public class InvoiceResource {
 
@@ -32,7 +28,8 @@ public class InvoiceResource {
     }
 
     @GetMapping(path = "{invoiceId}")
-    public ResponseEntity<InvoiceDto> get(@Valid @NotNull @PathVariable("invoiceId") final UUID invoiceId) {
-        return ResponseEntity.ok(invoiceService.getInvoice(invoiceId));
+    public ResponseEntity<InvoiceDto> get(@PathVariable("invoiceId") final UUID invoiceId) {
+        final var invoiceDto = invoiceService.getInvoice(invoiceId);
+        return ResponseEntity.ok(invoiceDto);
     }
 }
