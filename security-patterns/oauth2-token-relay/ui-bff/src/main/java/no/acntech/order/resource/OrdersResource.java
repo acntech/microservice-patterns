@@ -52,7 +52,7 @@ public class OrdersResource {
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody CreateOrderDto createOrder,
+    public ResponseEntity create(@Valid @RequestBody CreateOrderDto createOrder,
                                @RegisteredOAuth2AuthorizedClient("microservice") OAuth2AuthorizedClient authorizedClient) {
         URI orderLocation = orderService.createOrder(createOrder, authorizedClient);
         String[] parts = orderLocation.getPath().split("/");

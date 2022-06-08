@@ -35,7 +35,7 @@ public class CustomersResource {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> post(@RequestBody final CreateCustomerDto createCustomerDto) {
+    public ResponseEntity<CustomerDto> create(@RequestBody final CreateCustomerDto createCustomerDto) {
         final var customerDto = customerService.createCustomer(createCustomerDto);
         final var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

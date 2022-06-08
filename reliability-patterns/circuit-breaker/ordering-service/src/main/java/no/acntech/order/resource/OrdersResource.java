@@ -47,7 +47,7 @@ public class OrdersResource {
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody final CreateOrderDto createOrder) {
+    public ResponseEntity create(@Valid @RequestBody final CreateOrderDto createOrder) {
         OrderDto order = orderService.createOrder(createOrder);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

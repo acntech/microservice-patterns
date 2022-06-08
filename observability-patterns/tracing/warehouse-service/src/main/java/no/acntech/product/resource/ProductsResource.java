@@ -68,7 +68,7 @@ public class ProductsResource {
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody final CreateProductDto createProduct) {
+    public ResponseEntity create(@Valid @RequestBody final CreateProductDto createProduct) {
         ScopedSpan span = tracer.startScopedSpan("ProductsResource#post");
         try {
             final Product product = productService.createProduct(createProduct);

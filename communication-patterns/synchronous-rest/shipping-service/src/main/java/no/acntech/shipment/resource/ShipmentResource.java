@@ -1,23 +1,18 @@
 package no.acntech.shipment.resource;
 
+import no.acntech.shipment.model.CreateShipmentDto;
+import no.acntech.shipment.model.ShipmentDto;
+import no.acntech.shipment.model.ShipmentQuery;
+import no.acntech.shipment.service.ShipmentService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import no.acntech.shipment.model.CreateShipment;
-import no.acntech.shipment.model.ShipmentDto;
-import no.acntech.shipment.model.ShipmentQuery;
-import no.acntech.shipment.service.ShipmentService;
-
-@RequestMapping(path = "shipments")
+@RequestMapping(path = "/api/shipments")
 @RestController
 public class ShipmentResource {
 
@@ -29,24 +24,26 @@ public class ShipmentResource {
 
     @GetMapping
     public ResponseEntity<List<ShipmentDto>> get(final ShipmentQuery shipmentQuery) {
-        List<ShipmentDto> shipments = shipmentService.findShipments(shipmentQuery);
-        return ResponseEntity.ok(shipments);
+        final var shipmentDtos = shipmentService.findShipments(shipmentQuery);
+        return ResponseEntity.ok(shipmentDtos);
     }
 
     @GetMapping(path = "{shipmentId}")
     public ResponseEntity<ShipmentDto> get(@PathVariable("shipmentId") final UUID shipmentId) {
-        ShipmentDto shipment = shipmentService.getShipment(shipmentId);
-        return ResponseEntity.ok(shipment);
+        final var shipmentDto = shipmentService.getShipment(shipmentId);
+        return ResponseEntity.ok(shipmentDto);
     }
 
     @PostMapping
-    public ResponseEntity createShipment(final CreateShipment createShipment) {
-        final ShipmentDto shipment = shipmentService.createShipment(createShipment);
+    public ResponseEntity<ShipmentDto> create(final CreateShipmentDto createShipmentDto) {
+        final var shipmentDto = shipmentService.createShipment(createShipmentDto);
         final URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{shipmentId}")
-                .buildAndExpand(shipment.getCustomerId())
+                .buildAndExpand(shipmentDto.getCustomerId())
                 .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity
+                .created(location)
+                .build();
     }
 }

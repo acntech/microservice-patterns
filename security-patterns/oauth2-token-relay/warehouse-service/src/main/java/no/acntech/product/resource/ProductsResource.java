@@ -48,7 +48,7 @@ public class ProductsResource {
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody final CreateProductDto createProduct) {
+    public ResponseEntity create(@Valid @RequestBody final CreateProductDto createProduct) {
         ProductDto product = productService.createProduct(createProduct);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

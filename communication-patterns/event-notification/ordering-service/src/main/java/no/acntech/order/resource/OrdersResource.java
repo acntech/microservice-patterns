@@ -36,7 +36,7 @@ public class OrdersResource {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDto> post(@RequestBody final CreateOrderDto createOrder) {
+    public ResponseEntity<OrderDto> create(@RequestBody final CreateOrderDto createOrder) {
         final var orderDto = orderOrchestrationService.createOrder(createOrder);
         final var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

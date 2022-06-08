@@ -54,7 +54,7 @@ public class CustomersResource {
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody final CreateCustomerDto createCustomer) {
+    public ResponseEntity create(@Valid @RequestBody final CreateCustomerDto createCustomer) {
         final Customer customer = customerService.createCustomer(createCustomer);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

@@ -59,7 +59,7 @@ public class OrdersResource {
     }
 
     @PostMapping
-    public ResponseEntity post(@Valid @RequestBody final CreateOrderDto createOrder) {
+    public ResponseEntity create(@Valid @RequestBody final CreateOrderDto createOrder) {
         ScopedSpan span = tracer.startScopedSpan("OrdersResource#post");
         try {
             OrderDto order = orderService.createOrder(createOrder);
