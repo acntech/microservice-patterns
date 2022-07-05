@@ -45,6 +45,6 @@ public class GatewayConfig {
     public ConfigurationService configurationService(final BeanFactory beanFactory,
                                                      final ConversionService conversionService,
                                                      final Validator defaultValidator) {
-        return new ConfigurationService(beanFactory, conversionService, defaultValidator);
+        return new ConfigurationService(beanFactory, () -> conversionService, () -> defaultValidator);
     }
 }

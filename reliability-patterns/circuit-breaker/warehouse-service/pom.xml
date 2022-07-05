@@ -7,11 +7,10 @@
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>reliability-patterns-circuit-breaker</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>circuit-breaker-warehouse-service</artifactId>
-    <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->
     <dependencies>

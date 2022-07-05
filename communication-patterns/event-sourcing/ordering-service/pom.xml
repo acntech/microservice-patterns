@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>event-sourcing</artifactId>
         <groupId>no.acntech</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>event-sourcing</artifactId>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>ordering-service</artifactId>

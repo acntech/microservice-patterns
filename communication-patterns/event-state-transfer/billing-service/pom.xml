@@ -7,7 +7,7 @@
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>event-state-transfer</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>event-state-transfer-billing-service</artifactId>

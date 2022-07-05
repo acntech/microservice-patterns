@@ -34,7 +34,7 @@ public class HazelcastClusterInitializer {
     private HazelcastInstance initCluster(String name, List<String> members) {
         LOGGER.info("Starting new cluster for group {}", name);
         Config config = new Config();
-        config.getGroupConfig().setName(name);
+        config.setClusterName(name);
         JoinConfig joinConfig = config.getNetworkConfig().getJoin();
         joinConfig.getMulticastConfig().setEnabled(false);
         TcpIpConfig tcpIpConfig = joinConfig.getTcpIpConfig().setEnabled(true);

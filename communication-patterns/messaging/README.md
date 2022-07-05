@@ -1,2 +1,2 @@
 # Messaging
-This example explores the use of asynchronous messaging over JMS.
+This example explores the use of asynchronous messaging over AMQP.

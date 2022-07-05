@@ -7,11 +7,10 @@
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>oauth2-token-relay</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>oauth2-token-relay-customers-service</artifactId>
-    <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->
     <dependencies>

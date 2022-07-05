@@ -36,6 +36,14 @@ services:
     networks:
       - acntech.kafka
 
+  acntech.rabbitmq:
+    image: rabbitmq
+    container_name: acntech.rabbitmq
+    ports:
+      - "5672:5672"
+    networks:
+      - acntech.rabbitmq
+
 volumes:
   acntech.postgres:
     name: acntech.postgres
@@ -45,3 +53,5 @@ networks:
     name: acntech.postgres
   acntech.kafka:
     name: acntech.kafka
+  acntech.rabbitmq:
+    name: acntech.rabbitmq

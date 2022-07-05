@@ -73,8 +73,8 @@ public class InvoiceService {
         LOGGER.debug("Creating invoice for CreateInvoiceDto with order-id {}", createInvoiceDto.getOrderId());
         final var invoiceEntity = conversionService.convert(createInvoiceDto, InvoiceEntity.class);
         Assert.notNull(invoiceEntity, "Failed to convert CreateInvoiceDto to InvoiceEntity");
-        final var savedInvoice = invoiceRepository.save(invoiceEntity);
-        return convert(savedInvoice);
+        final var savedInvoiceEntity = invoiceRepository.save(invoiceEntity);
+        return convert(savedInvoiceEntity);
     }
 
     private InvoiceDto convert(final InvoiceEntity invoiceEntity) {

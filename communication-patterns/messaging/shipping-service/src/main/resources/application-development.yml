@@ -1,0 +1,32 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  # Datasource
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:shipping;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  # H2
+  h2:
+    console:
+      enabled: true
+  # RabbitMQ
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+### Logging ###
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: WARN
+    no.acntech: DEBUG
+
+### Server ###
+server:
+  port: 9003

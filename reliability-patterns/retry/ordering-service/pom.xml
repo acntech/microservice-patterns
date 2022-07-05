@@ -7,11 +7,10 @@
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>reliability-patterns-retry</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>retry-ordering-service</artifactId>
-    <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->
     <dependencies>

@@ -1,7 +1,7 @@
 package no.acntech.invoice.consumer;
 
 import no.acntech.invoice.model.CreateInvoiceDto;
-import no.acntech.reservation.model.ReservationDto;
+import no.acntech.invoice.model.InvoiceDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,7 +22,7 @@ public class InvoiceRestConsumer {
         this.url = url;
     }
 
-    public ReservationDto create(@NotNull @Valid final CreateInvoiceDto createInvoiceDto) {
+    public InvoiceDto create(@NotNull @Valid final CreateInvoiceDto createInvoiceDto) {
         final var uri = UriComponentsBuilder.fromUriString(url)
                 .build()
                 .toUri();
@@ -31,7 +31,7 @@ public class InvoiceRestConsumer {
                 .uri(uri)
                 .bodyValue(createInvoiceDto)
                 .retrieve()
-                .bodyToMono(ReservationDto.class)
+                .bodyToMono(InvoiceDto.class)
                 .block();
     }
 }

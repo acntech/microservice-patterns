@@ -1,0 +1,23 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  # Datasource
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://acntech.postgres:5432/warehouse
+    username: warehouse
+    password: abcd1234
+  # RabbitMQ
+  rabbitmq:
+    host: acntech.rabbitmq
+    port: 5672
+
+### Logging ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

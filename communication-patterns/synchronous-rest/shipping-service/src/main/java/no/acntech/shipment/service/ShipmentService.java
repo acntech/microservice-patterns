@@ -89,9 +89,9 @@ public class ShipmentService {
     @Transactional
     public ShipmentDto createShipment(@NotNull @Valid final CreateShipmentDto createShipment) {
         LOGGER.debug("Creating shipment for CreateShipmentDto with order-id {}", createShipment.getOrderId());
-        ShipmentEntity shipment = conversionService.convert(createShipment, ShipmentEntity.class);
-        Assert.notNull(shipment, "Failed to convert CreateShipmentDto to ShipmentEntity");
-        ShipmentEntity savedShipmentEntity = shipmentRepository.save(shipment);
+        final var shipmentEntity = conversionService.convert(createShipment, ShipmentEntity.class);
+        Assert.notNull(shipmentEntity, "Failed to convert CreateShipmentDto to ShipmentEntity");
+        final var savedShipmentEntity = shipmentRepository.save(shipmentEntity);
         return convert(savedShipmentEntity);
     }
 

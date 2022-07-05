@@ -3,6 +3,7 @@ package no.acntech.factory;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Bucket4j;
+import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.grid.GridBucketState;
 import io.github.bucket4j.grid.RecoveryStrategy;
 import io.github.bucket4j.grid.hazelcast.Hazelcast;
@@ -30,8 +31,7 @@ public class ThrottlingRequestCounterFactory implements RequestCounterFactory {
         return this.hazelcastClusterInitializer
                 .getHazelcastCluster()
                 .map(hazelcastInstance -> hazelcastInstance.<String, GridBucketState>getMap(routeId))
-                .map(map -> Bucket4j.extension(Hazelcast.class)
-                        .builder()
+                .map(map -> BucketConfiguration.builder()
                         .addLimit(bandwidth)
                         .build(map, apiKey, RecoveryStrategy.RECONSTRUCT));
     }
