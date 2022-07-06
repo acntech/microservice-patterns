@@ -44,6 +44,14 @@ services:
     networks:
       - acntech.rabbitmq
 
+  acntech.zipkin:
+    image: openzipkin/zipkin
+    container_name: acntech.zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - acntech.zipkin
+
 volumes:
   acntech.postgres:
     name: acntech.postgres
@@ -55,3 +63,5 @@ networks:
     name: acntech.kafka
   acntech.rabbitmq:
     name: acntech.rabbitmq
+  acntech.zipkin:
+    name: acntech.zipkin

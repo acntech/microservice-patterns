@@ -1,6 +1,6 @@
 package no.acntech.reservation.repository;
 
-import no.acntech.reservation.model.Reservation;
+import no.acntech.reservation.model.ReservationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,11 +9,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
 
-    Optional<Reservation> findByReservationId(UUID reservationId);
+    Optional<ReservationEntity> findByReservationId(UUID reservationId);
 
-    List<Reservation> findAllByOrderId(UUID orderId);
+    List<ReservationEntity> findAllByOrderId(UUID orderId);
 
-    Optional<Reservation> findByOrderIdAndProduct_ProductId(UUID orderId, UUID productId);
+    Optional<ReservationEntity> findByOrderIdAndProduct_ProductId(UUID orderId, UUID productId);
 }
