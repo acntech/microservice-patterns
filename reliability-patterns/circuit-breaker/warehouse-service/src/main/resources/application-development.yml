@@ -21,6 +21,14 @@ spring:
       - classpath:db/migration
       - classpath:db/testdata
 
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
 ### Logging ###
 logging:
   level:

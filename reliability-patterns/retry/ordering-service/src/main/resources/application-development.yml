@@ -1,16 +1,58 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    warehouse:
+      url: http://localhost:9004
+
 ########################
 # SPRING Configuration #
 ########################
 spring:
-  profiles:
-    include:
-      - postgres
-      - local
-      - test-data
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  # Datasource
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:ordering;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  # H2
+  h2:
+    console:
+      enabled: true
 
-# Logging
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
+### Resilience4J ###
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      default:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 5
+        minimum-number-of-calls: 2
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+
+### Logging ###
 logging:
   level:
-    org.springframework: INFO
-    org.hibernate: WARN
+    root: INFO
+    org.apache.kafka: WARN
     no.acntech: DEBUG
+
+### Server ###
+server:
+  port: 9001

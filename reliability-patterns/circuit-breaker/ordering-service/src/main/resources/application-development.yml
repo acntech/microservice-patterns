@@ -24,6 +24,14 @@ spring:
     console:
       enabled: true
 
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
 ### Resilience4J ###
 resilience4j:
   circuitbreaker:
@@ -33,8 +41,8 @@ resilience4j:
     instances:
       default:
         sliding-window-type: COUNT_BASED
-        sliding-window-size: 10
-        minimum-number-of-calls: 5
+        sliding-window-size: 5
+        minimum-number-of-calls: 2
         failure-rate-threshold: 50
         wait-duration-in-open-state: 5s
 

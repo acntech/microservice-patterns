@@ -16,6 +16,16 @@ spring:
     host: acntech.rabbitmq
     port: 5672
 
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - health
+          - info
+
 ### Logging ###
 logging:
   level:

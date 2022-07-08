@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.UUID;
 
-@ResponseStatus(code = HttpStatus.NO_CONTENT)
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
 public class OrderNotFoundException extends RuntimeException {
 
     public OrderNotFoundException(Long id) {

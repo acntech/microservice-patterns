@@ -25,6 +25,14 @@ spring:
     host: localhost
     port: 5672
 
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
 ### Logging ###
 logging:
   level:

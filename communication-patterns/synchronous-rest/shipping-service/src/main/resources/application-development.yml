@@ -16,6 +16,14 @@ spring:
     console:
       enabled: true
 
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
 ### Logging ###
 logging:
   level:

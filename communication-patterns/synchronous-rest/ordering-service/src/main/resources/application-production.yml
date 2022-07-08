@@ -24,6 +24,16 @@ spring:
     username: ordering
     password: abcd1234
 
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - health
+          - info
+
 ### Logging ###
 logging:
   level:

@@ -24,6 +24,16 @@ spring:
     bootstrap-servers:
       - acntech.kafka:9092
 
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - health
+          - info
+
 ### Logging ###
 logging:
   level:
