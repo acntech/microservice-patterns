@@ -1,21 +1,5 @@
 package no.acntech.order.service;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import no.acntech.order.exception.ItemAlreadyExistsException;
 import no.acntech.order.exception.ItemNotFoundException;
 import no.acntech.order.exception.OrderNotFoundException;
@@ -36,6 +20,20 @@ import no.acntech.reservation.consumer.ReservationRestConsumer;
 import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("Duplicates")
 @Service

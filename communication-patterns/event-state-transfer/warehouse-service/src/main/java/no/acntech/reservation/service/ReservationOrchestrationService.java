@@ -1,6 +1,5 @@
 package no.acntech.reservation.service;
 
-import no.acntech.reservation.model.*;
 import no.acntech.reservation.producer.ReservationEventProducer;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;

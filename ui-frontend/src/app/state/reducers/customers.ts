@@ -1,5 +1,15 @@
-import { ActionType, Customer, CustomerAction, CustomerState, EntityType, FindCustomersAction, FindCustomersActionType, GetCustomerAction, GetCustomerActionType } from '../../models';
-import { initialCustomerState } from '../store/initial-state';
+import {
+    ActionType,
+    Customer,
+    CustomerAction,
+    CustomerState,
+    EntityType,
+    FindCustomersAction,
+    FindCustomersActionType,
+    GetCustomerAction,
+    GetCustomerActionType
+} from '../../models';
+import {initialCustomerState} from '../store/initial-state';
 
 export const reducer = (state: CustomerState = initialCustomerState, action: CustomerAction): CustomerState => {
     switch (action.type) {

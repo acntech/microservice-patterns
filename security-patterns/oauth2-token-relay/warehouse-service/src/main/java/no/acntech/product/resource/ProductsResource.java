@@ -1,12 +1,9 @@
 package no.acntech.product.resource;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.product.model.CreateProductDto;
+import no.acntech.product.model.ProductDto;
+import no.acntech.product.model.ProductQuery;
+import no.acntech.product.service.ProductService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import no.acntech.product.model.CreateProductDto;
-import no.acntech.product.model.ProductDto;
-import no.acntech.product.model.ProductQuery;
-import no.acntech.product.service.ProductService;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @RequestMapping(path = "products")
 @RestController

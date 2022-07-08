@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { Container, Segment } from 'semantic-ui-react';
+import {Component, ErrorInfo, ReactNode} from 'react';
+import {Container, Segment} from 'semantic-ui-react';
 
-import { UnknownErrorContainer } from '../../containers';
+import {UnknownErrorContainer} from '../../containers';
 
 interface ComponentState {
     hasError?: boolean;
@@ -26,7 +26,7 @@ class ErrorHandlerProvider extends Component<{}, ComponentState> {
             return (
                 <Container>
                     <Segment vertical>
-                        <UnknownErrorContainer />
+                        <UnknownErrorContainer/>
                     </Segment>
                 </Container>
             );
@@ -36,4 +36,4 @@ class ErrorHandlerProvider extends Component<{}, ComponentState> {
     }
 }
 
-export { ErrorHandlerProvider };
+export {ErrorHandlerProvider};

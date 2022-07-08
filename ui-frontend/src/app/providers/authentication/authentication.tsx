@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { User } from '../../models/types';
+import {Component, ReactNode} from 'react';
+import {User} from '../../models/types';
 
 interface ComponentState {
     user?: User;
@@ -19,4 +19,4 @@ const AuthenticationConsumer = AuthenticationContext.Consumer;
 
 const useAuth = () => React.useContext(AuthenticationContext);
 
-export { AuthenticationProvider, AuthenticationConsumer, useAuth };
+export {AuthenticationProvider, AuthenticationConsumer, useAuth};

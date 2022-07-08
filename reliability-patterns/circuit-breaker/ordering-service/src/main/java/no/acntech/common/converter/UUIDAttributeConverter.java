@@ -2,7 +2,6 @@ package no.acntech.common.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
 import java.util.Optional;
 import java.util.UUID;
 

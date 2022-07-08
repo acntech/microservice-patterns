@@ -1,18 +1,17 @@
 package no.acntech.customer.service;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import no.acntech.customer.exception.CustomerNotFoundException;
 import no.acntech.customer.model.CreateCustomerDto;
 import no.acntech.customer.model.Customer;
 import no.acntech.customer.model.CustomerQuery;
 import no.acntech.customer.repository.CustomerRepository;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomerService {

@@ -9,7 +9,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 

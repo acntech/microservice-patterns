@@ -1,9 +1,9 @@
 package no.acntech.reservation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Valid
 public class UpdateReservationDto {

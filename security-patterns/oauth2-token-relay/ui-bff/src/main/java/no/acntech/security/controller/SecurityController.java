@@ -1,12 +1,11 @@
 package no.acntech.security.controller;
 
+import no.acntech.security.service.SecurityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import no.acntech.security.service.SecurityService;
 
 @Controller
 public class SecurityController {

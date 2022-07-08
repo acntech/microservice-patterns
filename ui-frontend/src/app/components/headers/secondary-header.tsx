@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Component, FunctionComponent, ReactNode } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Header, Segment } from 'semantic-ui-react';
+import {Component, FunctionComponent, ReactNode} from 'react';
+import {FormattedMessage} from 'react-intl';
+import {Header, Segment} from 'semantic-ui-react';
 
-import { Notifications } from '../';
+import {Notifications} from '../';
 
 interface ComponentProps {
     title?: string;
@@ -18,8 +18,8 @@ class SecondaryHeaderComponent extends Component<ComponentProps> {
 
         return (
             <Segment basic className="secondary-header">
-                <HeaderFragment title={title} subtitle={subtitle} children={children} />
-                <Notifications />
+                <HeaderFragment title={title} subtitle={subtitle} children={children}/>
+                <Notifications/>
             </Segment>
         );
     }
@@ -36,8 +36,8 @@ const HeaderFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
 
     return (
         <Segment basic>
-            <TitleFragment title={title} children={children} />
-            <SubtitleFragment subtitle={subtitle} />
+            <TitleFragment title={title} children={children}/>
+            <SubtitleFragment subtitle={subtitle}/>
         </Segment>
     );
 };
@@ -47,7 +47,7 @@ const TitleFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
     if (children) {
         return <Header as="h2" floated="left">{children}</Header>;
     } else if (title) {
-        return <Header as="h2" floated="left"><FormattedMessage id={title} /></Header>;
+        return <Header as="h2" floated="left"><FormattedMessage id={title}/></Header>;
     } else {
         return null;
     }
@@ -55,7 +55,7 @@ const TitleFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
 
 const SubtitleFragment: FunctionComponent<HeaderFragmentProps> = (props) => {
     const {subtitle} = props;
-    return (subtitle ? <Header.Subheader><FormattedMessage id={subtitle} /></Header.Subheader> : null);
+    return (subtitle ? <Header.Subheader><FormattedMessage id={subtitle}/></Header.Subheader> : null);
 };
 
-export { SecondaryHeaderComponent as SecondaryHeader };
+export {SecondaryHeaderComponent as SecondaryHeader};

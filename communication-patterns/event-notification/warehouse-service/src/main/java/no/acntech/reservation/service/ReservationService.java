@@ -2,7 +2,7 @@ package no.acntech.reservation.service;
 
 import no.acntech.product.repository.ProductRepository;
 import no.acntech.reservation.exception.ReservationNotFoundException;
-import no.acntech.reservation.model.*;
+import no.acntech.reservation.model.ReservationEntity;
 import no.acntech.reservation.repository.ReservationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { IntlProvider } from 'react-intl';
-import { Provider } from 'react-redux';
-import { RootContainer } from './containers';
+import {Component, ReactNode} from 'react';
+import {IntlProvider} from 'react-intl';
+import {Provider} from 'react-redux';
+import {RootContainer} from './containers';
 
-import { AuthenticationProvider, ErrorHandlerProvider } from './providers';
-import { store } from './state/store';
+import {AuthenticationProvider, ErrorHandlerProvider} from './providers';
+import {store} from './state/store';
 
 class App extends Component<{}> {
 
@@ -18,7 +18,7 @@ class App extends Component<{}> {
                 <IntlProvider key={locale} locale={locale} messages={messages}>
                     <ErrorHandlerProvider>
                         <AuthenticationProvider>
-                            <RootContainer />
+                            <RootContainer/>
                         </AuthenticationProvider>
                     </ErrorHandlerProvider>
                 </IntlProvider>
@@ -27,4 +27,4 @@ class App extends Component<{}> {
     }
 }
 
-export { App };
+export {App};

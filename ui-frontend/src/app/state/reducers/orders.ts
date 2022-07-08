@@ -1,8 +1,21 @@
 import {
-    ActionType, CreateOrderAction, CreateOrderActionType, DeleteOrderAction, DeleteOrderActionType, EntityType, FindOrdersAction, FindOrdersActionType, GetOrderAction, GetOrderActionType, Order,
-    OrderAction, OrderState, UpdateOrderAction, UpdateOrderActionType
+    ActionType,
+    CreateOrderAction,
+    CreateOrderActionType,
+    DeleteOrderAction,
+    DeleteOrderActionType,
+    EntityType,
+    FindOrdersAction,
+    FindOrdersActionType,
+    GetOrderAction,
+    GetOrderActionType,
+    Order,
+    OrderAction,
+    OrderState,
+    UpdateOrderAction,
+    UpdateOrderActionType
 } from '../../models';
-import { initialOrderState } from '../store/initial-state';
+import {initialOrderState} from '../store/initial-state';
 
 export const reducer = (state: OrderState = initialOrderState, action: OrderAction): OrderState => {
     switch (action.type) {
@@ -109,7 +122,11 @@ const create = (state: OrderState = initialOrderState, action: CreateOrderAction
         case CreateOrderActionType.SUCCESS: {
             const {orderId} = action;
 
-            const modified = {id: orderId || 'order.id.missing', entityType: EntityType.ORDERS, actionType: ActionType.CREATE};
+            const modified = {
+                id: orderId || 'order.id.missing',
+                entityType: EntityType.ORDERS,
+                actionType: ActionType.CREATE
+            };
 
             return {...initialOrderState, orders, modified};
         }

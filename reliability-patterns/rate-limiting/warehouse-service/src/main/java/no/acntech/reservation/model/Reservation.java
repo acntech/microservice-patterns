@@ -1,5 +1,8 @@
 package no.acntech.reservation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import no.acntech.product.model.Product;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,13 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import no.acntech.product.model.Product;
 
 @Table(name = "RESERVATIONS")
 @Entity

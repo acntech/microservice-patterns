@@ -1,9 +1,9 @@
 package no.acntech.config;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "acntech.service")
 @Valid

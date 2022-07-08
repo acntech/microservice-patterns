@@ -1,11 +1,13 @@
 #Token Exchange
 
-Token exchange er en oauth2 flyt som gjør det mulig å veksle inn et token utstedt av en autorisasjonsserver, inn i et token fra en annen autorisasjonsserver
+Token exchange er en oauth2 flyt som gjør det mulig å veksle inn et token utstedt av en autorisasjonsserver, inn i et
+token fra en annen autorisasjonsserver
 Her går vi gjennom hvordan man kan sette opp denne flyten i Keycloak.
 
 ##Hvordan konfigurere opp Keycloak for Token Exchange
 
-Keycloak bruker Quarkus for bygg og kjøring, og det ligger mer info inne i keycloak mappen, men under følger noen hovedpunkter.
+Keycloak bruker Quarkus for bygg og kjøring, og det ligger mer info inne i keycloak mappen, men under følger noen
+hovedpunkter.
 
 ###For å bygge keycloak for kjøring samt starte opp:
 
@@ -13,7 +15,7 @@ Keycloak bruker Quarkus for bygg og kjøring, og det ligger mer info inne i keyc
 2. Pakk ut zip eller tar.gz pakke
 3. Åpne en terminal i keycloak mappen
 4. Rediger kc.sh filen inne i /bin mappen. Fjern "--auto-build" fra følgende kode i script:
-   * ``` 
+    * ``` 
       if [[ "$1" = "start-dev" ]]; then
       CONFIG_ARGS="$CONFIG_ARGS --profile=dev $1 --auto-dev" 
      ```
@@ -30,7 +32,8 @@ Keycloak bruker Quarkus for bygg og kjøring, og det ligger mer info inne i keyc
 6. Lag en ny policy ved å klikke på dropdown listen hvor det står "Create policy" og velg typen Client
 7. Kall denne target-client-exchange og velg klienten du opprettet i steg 3 som klient.
 8. Gå så inn på Identity Providers og legg til ny provider, dette er autorisasjonsserveren du skal konvertere tokens fra
-9. Etter opprettelsen av Identity Provider så kan du igjen klikke deg inn i Permission tabben her, og videre inn i token-exchange.
+9. Etter opprettelsen av Identity Provider så kan du igjen klikke deg inn i Permission tabben her, og videre inn i
+   token-exchange.
 10. Her velger du da Policyen du laget i steg 6, altså target-client-exchange
 11. Nå skal du kunne gjøre en token exchange, gjør følgende kall mot Keycloak:
     - ![img.png](img.png)

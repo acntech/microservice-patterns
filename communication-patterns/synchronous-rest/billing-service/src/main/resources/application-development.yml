@@ -1,11 +1,3 @@
-#########################
-# ACNTECH Configuration #
-#########################
-acntech:
-  service:
-    ordering:
-      url: http://localhost:9001
-
 ########################
 # SPRING Configuration #
 ########################

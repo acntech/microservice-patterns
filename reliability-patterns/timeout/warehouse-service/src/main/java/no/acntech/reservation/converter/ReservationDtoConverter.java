@@ -1,11 +1,10 @@
 package no.acntech.reservation.converter;
 
+import no.acntech.reservation.model.Reservation;
+import no.acntech.reservation.model.ReservationDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-
-import no.acntech.reservation.model.Reservation;
-import no.acntech.reservation.model.ReservationDto;
 
 @Component
 public class ReservationDtoConverter implements Converter<Reservation, ReservationDto> {

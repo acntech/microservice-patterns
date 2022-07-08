@@ -1,20 +1,18 @@
 package no.acntech.testdata;
 
-import javax.annotation.PostConstruct;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
+import no.acntech.product.model.Currency;
+import no.acntech.product.model.Product;
+import no.acntech.product.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import no.acntech.product.model.Currency;
-import no.acntech.product.model.Product;
-import no.acntech.product.repository.ProductRepository;
+import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @SuppressWarnings("Duplicates")
 @Profile("test-data")

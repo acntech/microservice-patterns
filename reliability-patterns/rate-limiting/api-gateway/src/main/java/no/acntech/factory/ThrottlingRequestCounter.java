@@ -3,9 +3,8 @@ package no.acntech.factory;
 import io.github.bucket4j.AsyncBucket;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
-import reactor.core.publisher.Mono;
-
 import no.acntech.domain.RateLimitingResponse;
+import reactor.core.publisher.Mono;
 
 public class ThrottlingRequestCounter implements RequestCounter {
 

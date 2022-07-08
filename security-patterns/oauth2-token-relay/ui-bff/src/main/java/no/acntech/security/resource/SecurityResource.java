@@ -1,11 +1,10 @@
 package no.acntech.security.resource;
 
+import no.acntech.security.model.Session;
+import no.acntech.security.service.SecurityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import no.acntech.security.model.Session;
-import no.acntech.security.service.SecurityService;
 
 @RestController
 public class SecurityResource {

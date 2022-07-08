@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Message, Segment } from 'semantic-ui-react';
+import {Component, ReactNode} from 'react';
+import {connect} from 'react-redux';
+import {Message, Segment} from 'semantic-ui-react';
 
-import { NotificationState, RootState } from '../../models';
-import { clearNotifications, dismissNotification } from '../../state/actions';
+import {NotificationState, RootState} from '../../models';
+import {clearNotifications, dismissNotification} from '../../state/actions';
 
 const notificationDetails = {
     info: {
@@ -81,7 +81,7 @@ class NotificationsComponent extends Component<ComponentProps> {
                             icon={icon}
                             header={title}
                             content={content}
-                            onDismiss={() => this.props.dismissNotification(uuid)} />;
+                            onDismiss={() => this.props.dismissNotification(uuid)}/>;
                     })}
                 </Segment>
             );
@@ -102,4 +102,4 @@ const mapDispatchToProps = (dispatch): ComponentDispatchProps => ({
 
 const ConnectedNotificationsComponent = connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);
 
-export { ConnectedNotificationsComponent as Notifications };
+export {ConnectedNotificationsComponent as Notifications};

@@ -1,14 +1,8 @@
 package no.acntech.reservation.consumer;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.net.URI;
-import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.UpdateReservationDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,9 +14,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.ReservationDto;
-import no.acntech.reservation.model.UpdateReservationDto;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @SuppressWarnings("Duplicates")
 @Component

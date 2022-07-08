@@ -1,11 +1,10 @@
 package no.acntech.order.resource;
 
-import javax.validation.Valid;
-
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.order.model.CreateItemDto;
+import no.acntech.order.model.CreateOrderDto;
+import no.acntech.order.model.OrderDto;
+import no.acntech.order.model.OrderQuery;
+import no.acntech.order.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import no.acntech.order.model.CreateItemDto;
-import no.acntech.order.model.CreateOrderDto;
-import no.acntech.order.model.OrderDto;
-import no.acntech.order.model.OrderQuery;
-import no.acntech.order.service.OrderService;
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("Duplicates")
 @RequestMapping(path = "orders")

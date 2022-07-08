@@ -1,5 +1,17 @@
-import { ActionType, CreateItemAction, CreateItemActionType, DeleteItemAction, DeleteItemActionType, EntityType, GetItemAction, GetItemActionType, Item, ItemAction, ItemState } from '../../models';
-import { initialItemState } from '../store/initial-state';
+import {
+    ActionType,
+    CreateItemAction,
+    CreateItemActionType,
+    DeleteItemAction,
+    DeleteItemActionType,
+    EntityType,
+    GetItemAction,
+    GetItemActionType,
+    Item,
+    ItemAction,
+    ItemState
+} from '../../models';
+import {initialItemState} from '../store/initial-state';
 
 export const reducer = (state: ItemState = initialItemState, action: ItemAction): ItemState => {
     switch (action.type) {

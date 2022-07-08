@@ -1,20 +1,38 @@
 import client from '../../core/client';
 
 import {
-    CreateItem, CreateItemActionType, CreateItemErrorAction, CreateItemLoadingAction, CreateItemSuccessAction, DeleteItemActionType, DeleteItemErrorAction, DeleteItemLoadingAction,
-    DeleteItemSuccessAction, GetItemActionType, GetItemErrorAction, GetItemLoadingAction, GetItemSuccessAction, Item
+    CreateItem,
+    CreateItemActionType,
+    CreateItemErrorAction,
+    CreateItemLoadingAction,
+    CreateItemSuccessAction,
+    DeleteItemActionType,
+    DeleteItemErrorAction,
+    DeleteItemLoadingAction,
+    DeleteItemSuccessAction,
+    GetItemActionType,
+    GetItemErrorAction,
+    GetItemLoadingAction,
+    GetItemSuccessAction,
+    Item
 } from '../../models';
-import { showErrorNotification, showSuccessNotification } from '../actions';
+import {showErrorNotification, showSuccessNotification} from '../actions';
 
 const getItemLoading = (loading: boolean): GetItemLoadingAction => ({type: GetItemActionType.LOADING, loading});
 const getItemSuccess = (payload: Item): GetItemSuccessAction => ({type: GetItemActionType.SUCCESS, payload});
 const getItemError = (error: any): GetItemErrorAction => ({type: GetItemActionType.ERROR, error});
 
-const createItemLoading = (loading: boolean): CreateItemLoadingAction => ({type: CreateItemActionType.LOADING, loading});
+const createItemLoading = (loading: boolean): CreateItemLoadingAction => ({
+    type: CreateItemActionType.LOADING,
+    loading
+});
 const createItemSuccess = (itemId: string): CreateItemSuccessAction => ({type: CreateItemActionType.SUCCESS, itemId});
 const createItemError = (error: any): CreateItemErrorAction => ({type: CreateItemActionType.ERROR, error});
 
-const deleteItemLoading = (loading: boolean): DeleteItemLoadingAction => ({type: DeleteItemActionType.LOADING, loading});
+const deleteItemLoading = (loading: boolean): DeleteItemLoadingAction => ({
+    type: DeleteItemActionType.LOADING,
+    loading
+});
 const deleteItemSuccess = (itemId: string): DeleteItemSuccessAction => ({type: DeleteItemActionType.SUCCESS, itemId});
 const deleteItemError = (error: any): DeleteItemErrorAction => ({type: DeleteItemActionType.ERROR, error});
 

@@ -1,10 +1,8 @@
 package no.acntech.product.resource;
 
-import javax.validation.constraints.NotNull;
-
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.product.model.ProductDto;
+import no.acntech.product.model.ProductQuery;
+import no.acntech.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -13,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.acntech.product.model.ProductDto;
-import no.acntech.product.model.ProductQuery;
-import no.acntech.product.service.ProductService;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 @RequestMapping(path = "products")
 @RestController

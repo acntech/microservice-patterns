@@ -1,11 +1,10 @@
 package no.acntech.customer.converter;
 
+import no.acntech.customer.model.Customer;
+import no.acntech.customer.model.CustomerDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-
-import no.acntech.customer.model.Customer;
-import no.acntech.customer.model.CustomerDto;
 
 @Component
 public class CustomerDtoConverter implements Converter<Customer, CustomerDto> {

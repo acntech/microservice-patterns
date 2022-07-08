@@ -2,7 +2,6 @@ package no.acntech.order.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;

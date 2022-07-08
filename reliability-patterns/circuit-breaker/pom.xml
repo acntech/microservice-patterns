@@ -13,8 +13,8 @@
     <artifactId>reliability-patterns-circuit-breaker</artifactId>
     <packaging>pom</packaging>
 
-    <!-- PROPERTIES -->
     <properties>
+        <spring-cloud-resilience4j.version>2.1.3</spring-cloud-resilience4j.version>
     </properties>
 
     <!-- MODULES -->
@@ -22,4 +22,14 @@
         <module>ordering-service</module>
         <module>warehouse-service</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+                <version>${spring-cloud-resilience4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

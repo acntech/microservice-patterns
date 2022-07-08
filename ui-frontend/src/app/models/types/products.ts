@@ -1,5 +1,5 @@
 import {Currency, Entity, FindProductsActionType, GetProductActionType} from '../';
-import {StateError, Modified} from './';
+import {Modified, StateError} from './';
 
 export interface Product extends Entity {
     productId: string;

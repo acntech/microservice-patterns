@@ -1,16 +1,14 @@
 package no.acntech.testdata;
 
-import javax.annotation.PostConstruct;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
+import no.acntech.customer.model.Customer;
+import no.acntech.customer.repository.CustomerRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import no.acntech.customer.model.Customer;
-import no.acntech.customer.repository.CustomerRepository;
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @Profile("test-data")
 @Component

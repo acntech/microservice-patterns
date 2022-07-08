@@ -1,4 +1,12 @@
-import { CreateItemActionType, DeleteItemActionType, Entity, GetItemActionType, ItemStatus, Modified, StateError } from '../';
+import {
+    CreateItemActionType,
+    DeleteItemActionType,
+    Entity,
+    GetItemActionType,
+    ItemStatus,
+    Modified,
+    StateError
+} from '../';
 
 export interface CreateItem {
     productId: string;

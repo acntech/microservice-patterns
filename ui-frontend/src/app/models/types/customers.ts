@@ -1,4 +1,4 @@
-import { Entity, StateError, FindCustomersActionType, GetCustomerActionType, Modified } from '../';
+import {Entity, FindCustomersActionType, GetCustomerActionType, Modified, StateError} from '../';
 
 export interface Customer extends Entity {
     customerId: string;

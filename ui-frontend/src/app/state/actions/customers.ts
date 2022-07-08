@@ -1,17 +1,37 @@
 import client from '../../core/client';
 
 import {
-    Customer, CustomerQuery, FindCustomersActionType, FindCustomersErrorAction, FindCustomersLoadingAction, FindCustomersSuccessAction, GetCustomerActionType, GetCustomerErrorAction,
-    GetCustomerLoadingAction, GetCustomerSuccessAction
+    Customer,
+    CustomerQuery,
+    FindCustomersActionType,
+    FindCustomersErrorAction,
+    FindCustomersLoadingAction,
+    FindCustomersSuccessAction,
+    GetCustomerActionType,
+    GetCustomerErrorAction,
+    GetCustomerLoadingAction,
+    GetCustomerSuccessAction
 } from '../../models';
-import { showErrorNotification } from '../actions';
+import {showErrorNotification} from '../actions';
 
-const getCustomerLoading = (loading: boolean): GetCustomerLoadingAction => ({type: GetCustomerActionType.LOADING, loading});
-const getCustomerSuccess = (payload: Customer): GetCustomerSuccessAction => ({type: GetCustomerActionType.SUCCESS, payload});
+const getCustomerLoading = (loading: boolean): GetCustomerLoadingAction => ({
+    type: GetCustomerActionType.LOADING,
+    loading
+});
+const getCustomerSuccess = (payload: Customer): GetCustomerSuccessAction => ({
+    type: GetCustomerActionType.SUCCESS,
+    payload
+});
 const getCustomerError = (error: any): GetCustomerErrorAction => ({type: GetCustomerActionType.ERROR, error});
 
-const findCustomersLoading = (loading: boolean): FindCustomersLoadingAction => ({type: FindCustomersActionType.LOADING, loading});
-const findCustomersSuccess = (payload: Customer[]): FindCustomersSuccessAction => ({type: FindCustomersActionType.SUCCESS, payload});
+const findCustomersLoading = (loading: boolean): FindCustomersLoadingAction => ({
+    type: FindCustomersActionType.LOADING,
+    loading
+});
+const findCustomersSuccess = (payload: Customer[]): FindCustomersSuccessAction => ({
+    type: FindCustomersActionType.SUCCESS,
+    payload
+});
 const findCustomersError = (error: any): FindCustomersErrorAction => ({type: FindCustomersActionType.ERROR, error});
 
 const rootPath = 'customers';

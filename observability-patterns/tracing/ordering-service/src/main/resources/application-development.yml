@@ -3,10 +3,6 @@
 #########################
 acntech:
   service:
-    billing:
-      url: http://localhost:9002
-    shipping:
-      url: http://localhost:9003
     warehouse:
       url: http://localhost:9004
 

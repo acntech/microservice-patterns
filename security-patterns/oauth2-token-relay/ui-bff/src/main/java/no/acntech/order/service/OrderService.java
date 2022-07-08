@@ -1,19 +1,5 @@
 package no.acntech.order.service;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import no.acntech.config.ServiceProperties;
 import no.acntech.order.model.CreateItemDto;
 import no.acntech.order.model.CreateOrderDto;
@@ -21,6 +7,18 @@ import no.acntech.order.model.ItemDto;
 import no.acntech.order.model.OrderDto;
 import no.acntech.order.model.OrderQuery;
 import no.acntech.order.model.UpdateItemDto;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 

@@ -1,12 +1,10 @@
 package no.acntech.order.resource;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.order.model.CreateItemDto;
+import no.acntech.order.model.CreateOrderDto;
+import no.acntech.order.model.OrderDto;
+import no.acntech.order.model.OrderQuery;
+import no.acntech.order.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -20,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import no.acntech.order.model.CreateItemDto;
-import no.acntech.order.model.CreateOrderDto;
-import no.acntech.order.model.OrderDto;
-import no.acntech.order.model.OrderQuery;
-import no.acntech.order.service.OrderService;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("Duplicates")
 @RequestMapping(path = "orders")
@@ -53,7 +51,7 @@ public class OrdersResource {
 
     @PostMapping
     public ResponseEntity create(@Valid @RequestBody CreateOrderDto createOrder,
-                               @RegisteredOAuth2AuthorizedClient("microservice") OAuth2AuthorizedClient authorizedClient) {
+                                 @RegisteredOAuth2AuthorizedClient("microservice") OAuth2AuthorizedClient authorizedClient) {
         URI orderLocation = orderService.createOrder(createOrder, authorizedClient);
         String[] parts = orderLocation.getPath().split("/");
         String orderId = parts[parts.length - 1];

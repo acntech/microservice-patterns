@@ -2,7 +2,6 @@ package no.acntech.reservation.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.UUID;
 
 @Valid

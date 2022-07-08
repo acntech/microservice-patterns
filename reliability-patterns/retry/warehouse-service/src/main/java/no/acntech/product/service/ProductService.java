@@ -1,20 +1,18 @@
 package no.acntech.product.service;
 
-import javax.validation.constraints.NotNull;
-
-import java.util.List;
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-
 import no.acntech.product.exception.ProductNotFoundException;
 import no.acntech.product.model.CreateProductDto;
 import no.acntech.product.model.Product;
 import no.acntech.product.model.ProductQuery;
 import no.acntech.product.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {

@@ -1,19 +1,5 @@
 package no.acntech.reservation.service;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import no.acntech.product.model.Product;
 import no.acntech.product.repository.ProductRepository;
 import no.acntech.reservation.exception.ReservationNotFoundException;
@@ -23,6 +9,18 @@ import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.ReservationStatus;
 import no.acntech.reservation.model.UpdateReservationDto;
 import no.acntech.reservation.repository.ReservationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"Duplicates", "WeakerAccess"})
 @Service

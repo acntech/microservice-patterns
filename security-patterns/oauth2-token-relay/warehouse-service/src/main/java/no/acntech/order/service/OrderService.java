@@ -1,16 +1,15 @@
 package no.acntech.order.service;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import no.acntech.order.consumer.OrderRestConsumer;
 import no.acntech.order.model.OrderDto;
 import no.acntech.order.model.OrderEvent;
 import no.acntech.order.model.OrderStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrderService {

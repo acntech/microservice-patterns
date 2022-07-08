@@ -1,8 +1,7 @@
 package no.acntech.security.service;
 
-import org.springframework.stereotype.Service;
-
 import no.acntech.security.model.Session;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityService {

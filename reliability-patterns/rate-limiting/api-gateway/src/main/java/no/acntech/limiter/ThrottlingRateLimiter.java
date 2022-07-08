@@ -1,17 +1,15 @@
 package no.acntech.limiter;
 
+import no.acntech.config.GatewayProperties;
+import no.acntech.domain.RateLimitingResponse;
+import no.acntech.factory.ThrottlingRequestCounterFactory;
+import org.springframework.cloud.gateway.filter.ratelimit.AbstractRateLimiter;
+import org.springframework.cloud.gateway.support.ConfigurationService;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.springframework.cloud.gateway.filter.ratelimit.AbstractRateLimiter;
-import org.springframework.cloud.gateway.support.ConfigurationService;
-
-import no.acntech.config.GatewayProperties;
-import no.acntech.domain.RateLimitingResponse;
-import no.acntech.factory.ThrottlingRequestCounterFactory;
 
 public class ThrottlingRateLimiter extends AbstractRateLimiter<RateLimiterConfig> {
 

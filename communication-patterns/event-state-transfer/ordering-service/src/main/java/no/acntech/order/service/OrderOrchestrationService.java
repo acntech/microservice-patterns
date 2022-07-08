@@ -2,7 +2,6 @@ package no.acntech.order.service;
 
 import no.acntech.order.exception.OrderItemAlreadyExistsException;
 import no.acntech.order.exception.OrderItemNotFoundException;
-import no.acntech.order.model.*;
 import no.acntech.order.producer.OrderEventProducer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,19 +1,17 @@
 package no.acntech.product.service;
 
-import javax.validation.constraints.NotNull;
-
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.config.ServiceProperties;
+import no.acntech.product.model.ProductDto;
+import no.acntech.product.model.ProductQuery;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import no.acntech.config.ServiceProperties;
-import no.acntech.product.model.ProductDto;
-import no.acntech.product.model.ProductQuery;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 

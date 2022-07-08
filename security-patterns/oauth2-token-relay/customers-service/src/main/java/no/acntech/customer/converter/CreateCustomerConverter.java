@@ -1,13 +1,12 @@
 package no.acntech.customer.converter;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
+import no.acntech.customer.model.CreateCustomerDto;
+import no.acntech.customer.model.Customer;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import no.acntech.customer.model.CreateCustomerDto;
-import no.acntech.customer.model.Customer;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Component
 public class CreateCustomerConverter implements Converter<CreateCustomerDto, Customer> {

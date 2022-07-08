@@ -1,10 +1,10 @@
 package no.acntech.common.config;
 
-import java.util.Random;
-
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Random;
 
 @Aspect
 @Configuration

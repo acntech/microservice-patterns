@@ -1,4 +1,4 @@
-import { HandleUserActionType } from '../';
+import {HandleUserActionType} from '../';
 
 export interface User {
     userId: string;

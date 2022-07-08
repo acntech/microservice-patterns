@@ -3,7 +3,6 @@ package no.acntech.order.service;
 import no.acntech.invoice.model.CreateInvoiceDto;
 import no.acntech.invoice.producer.InvoiceRabbitProducer;
 import no.acntech.order.exception.OrderItemAlreadyExistsException;
-import no.acntech.order.model.*;
 import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.DeleteReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;

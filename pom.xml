@@ -32,25 +32,6 @@
         <spring-cloud.version>2021.0.2</spring-cloud.version>
     </properties>
 
-    <!-- DEVELOPERS -->
-    <developers>
-        <developer>
-            <id>jorgen.ringen</id>
-            <name>Jørgen Ringen</name>
-            <email>jorgen.ringen@accenture.com</email>
-        </developer>
-        <developer>
-            <id>orjan.johansen</id>
-            <name>Ørjan Johansen</name>
-            <email>orjan.johansen@accenture.com</email>
-        </developer>
-        <developer>
-            <id>thomas.johansen</id>
-            <name>Thomas Johansen</name>
-            <email>thomas.johansen@accenture.com</email>
-        </developer>
-    </developers>
-
     <!-- MODULES -->
     <modules>
         <module>ui-gateway</module>

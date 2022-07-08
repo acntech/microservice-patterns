@@ -1,11 +1,6 @@
 package no.acntech.order.consumer;
 
-import javax.validation.constraints.NotNull;
-
-import java.net.URI;
-import java.util.Optional;
-import java.util.UUID;
-
+import no.acntech.order.model.OrderDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +8,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import no.acntech.order.model.OrderDto;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.util.Optional;
+import java.util.UUID;
 
 @SuppressWarnings("Duplicates")
 @Component

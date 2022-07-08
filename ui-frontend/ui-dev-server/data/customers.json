@@ -1,72 +1,72 @@
 [
-    {
-        "customerId": "60fa2609-31d4-4876-9677-c28a1dd93f17",
-        "firstName": "Daniel",
-        "lastName": "Fisher",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:40.892+02:00"
-    },
-    {
-        "customerId": "0de88df4-931e-4f29-9269-62aec1c96818",
-        "firstName": "Holly",
-        "lastName": "Hall",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.1+02:00"
-    },
-    {
-        "customerId": "bbb5b560-612f-41d2-a038-7ee5826d2ad6",
-        "firstName": "Frank",
-        "lastName": "Wilson",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.125+02:00"
-    },
-    {
-        "customerId": "879fd377-306a-4e9a-8c97-f854e7cd1421",
-        "firstName": "Steve",
-        "lastName": "Roberts",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.14+02:00"
-    },
-    {
-        "customerId": "8f7d812e-3ea2-4d8b-bcbb-7578d44ac0cc",
-        "firstName": "Steve",
-        "lastName": "Howard",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.156+02:00"
-    },
-    {
-        "customerId": "b4948657-a7b1-43d1-b7dc-55fff35c449e",
-        "firstName": "Daniel",
-        "lastName": "Williams",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.173+02:00"
-    },
-    {
-        "customerId": "f952d4a0-dc84-4666-8e05-8f6f3a00f8f8",
-        "firstName": "Hayden",
-        "lastName": "Morris",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.189+02:00"
-    },
-    {
-        "customerId": "e4d99fda-e7f8-4eeb-9a50-0a98f415c15e",
-        "firstName": "Daniel",
-        "lastName": "Morris",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.206+02:00"
-    },
-    {
-        "customerId": "6d602cfc-3557-46e6-8ea9-f2368cb6cb7d",
-        "firstName": "Ellen",
-        "lastName": "Williams",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.224+02:00"
-    },
-    {
-        "customerId": "cb583556-3a90-4efa-8294-f3758aaaeff5",
-        "firstName": "Jill",
-        "lastName": "Wilson",
-        "address": "Rolfsbuktveien 2",
-        "created": "2019-05-21T16:57:41.24+02:00"
-    }
+  {
+    "customerId": "60fa2609-31d4-4876-9677-c28a1dd93f17",
+    "firstName": "Daniel",
+    "lastName": "Fisher",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:40.892+02:00"
+  },
+  {
+    "customerId": "0de88df4-931e-4f29-9269-62aec1c96818",
+    "firstName": "Holly",
+    "lastName": "Hall",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.1+02:00"
+  },
+  {
+    "customerId": "bbb5b560-612f-41d2-a038-7ee5826d2ad6",
+    "firstName": "Frank",
+    "lastName": "Wilson",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.125+02:00"
+  },
+  {
+    "customerId": "879fd377-306a-4e9a-8c97-f854e7cd1421",
+    "firstName": "Steve",
+    "lastName": "Roberts",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.14+02:00"
+  },
+  {
+    "customerId": "8f7d812e-3ea2-4d8b-bcbb-7578d44ac0cc",
+    "firstName": "Steve",
+    "lastName": "Howard",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.156+02:00"
+  },
+  {
+    "customerId": "b4948657-a7b1-43d1-b7dc-55fff35c449e",
+    "firstName": "Daniel",
+    "lastName": "Williams",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.173+02:00"
+  },
+  {
+    "customerId": "f952d4a0-dc84-4666-8e05-8f6f3a00f8f8",
+    "firstName": "Hayden",
+    "lastName": "Morris",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.189+02:00"
+  },
+  {
+    "customerId": "e4d99fda-e7f8-4eeb-9a50-0a98f415c15e",
+    "firstName": "Daniel",
+    "lastName": "Morris",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.206+02:00"
+  },
+  {
+    "customerId": "6d602cfc-3557-46e6-8ea9-f2368cb6cb7d",
+    "firstName": "Ellen",
+    "lastName": "Williams",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.224+02:00"
+  },
+  {
+    "customerId": "cb583556-3a90-4efa-8294-f3758aaaeff5",
+    "firstName": "Jill",
+    "lastName": "Wilson",
+    "address": "Rolfsbuktveien 2",
+    "created": "2019-05-21T16:57:41.24+02:00"
+  }
 ]

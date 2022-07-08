@@ -1,16 +1,15 @@
 package no.acntech.order.converter;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
-
 import no.acntech.order.model.Item;
 import no.acntech.order.model.ItemDto;
 import no.acntech.order.model.Order;
 import no.acntech.order.model.OrderDto;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class OrderDtoConverter implements Converter<Order, OrderDto> {

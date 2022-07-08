@@ -2,7 +2,6 @@ package no.acntech.order.service;
 
 import no.acntech.order.exception.OrderItemAlreadyExistsException;
 import no.acntech.order.exception.ReservationNotReceivedException;
-import no.acntech.order.model.*;
 import no.acntech.order.producer.OrderEventProducer;
 import no.acntech.reservation.consumer.ReservationRestConsumer;
 import no.acntech.reservation.model.CreateReservationDto;

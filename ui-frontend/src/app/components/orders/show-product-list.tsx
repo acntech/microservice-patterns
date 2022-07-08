@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Button, Icon, Segment, Table } from 'semantic-ui-react';
+import {Component, ReactNode} from 'react';
+import {FormattedMessage} from 'react-intl';
+import {Button, Icon, Segment, Table} from 'semantic-ui-react';
 
-import { Currency, Product } from '../../models';
+import {Currency, Product} from '../../models';
 
 interface ComponentProps {
     products: Product[];
@@ -20,16 +20,16 @@ class ShowProductListComponent extends Component<ComponentProps> {
             <Segment basic>
                 <Button.Group>
                     <Button secondary size="tiny" onClick={onCancelButtonClick}>
-                        <Icon name="arrow left" /><FormattedMessage id="button.back.text" />
+                        <Icon name="arrow left"/><FormattedMessage id="button.back.text"/>
                     </Button>
                 </Button.Group>
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell><FormattedMessage id="label.productEntity-id.text" /></Table.HeaderCell>
-                            <Table.HeaderCell><FormattedMessage id="label.productEntity-name.text" /></Table.HeaderCell>
-                            <Table.HeaderCell><FormattedMessage id="label.productEntity-stock.text" /></Table.HeaderCell>
-                            <Table.HeaderCell><FormattedMessage id="label.productEntity-price.text" /></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-id.text"/></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-name.text"/></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-stock.text"/></Table.HeaderCell>
+                            <Table.HeaderCell><FormattedMessage id="label.productEntity-price.text"/></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -53,4 +53,4 @@ class ShowProductListComponent extends Component<ComponentProps> {
     }
 }
 
-export { ShowProductListComponent as ShowProductList };
+export {ShowProductListComponent as ShowProductList};

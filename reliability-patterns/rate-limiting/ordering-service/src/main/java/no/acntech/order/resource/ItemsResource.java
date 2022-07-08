@@ -1,9 +1,9 @@
 package no.acntech.order.resource;
 
-import javax.validation.Valid;
-
-import java.util.UUID;
-
+import no.acntech.order.model.ItemDto;
+import no.acntech.order.model.OrderDto;
+import no.acntech.order.model.UpdateItemDto;
+import no.acntech.order.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.acntech.order.model.ItemDto;
-import no.acntech.order.model.OrderDto;
-import no.acntech.order.model.UpdateItemDto;
-import no.acntech.order.service.OrderService;
+import javax.validation.Valid;
+import java.util.UUID;
 
 @RequestMapping(path = "items")
 @RestController

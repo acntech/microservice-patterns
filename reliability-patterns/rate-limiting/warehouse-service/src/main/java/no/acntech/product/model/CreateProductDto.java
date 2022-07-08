@@ -3,7 +3,6 @@ package no.acntech.product.model;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 
 @Valid
