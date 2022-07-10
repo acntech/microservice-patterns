@@ -32,7 +32,6 @@ management:
 logging:
   level:
     root: INFO
-    org.apache.kafka: WARN
     no.acntech: DEBUG
 
 ### Server ###

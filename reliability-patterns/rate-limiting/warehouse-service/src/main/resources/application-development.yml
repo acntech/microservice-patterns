@@ -2,15 +2,39 @@
 # SPRING Configuration #
 ########################
 spring:
-  profiles:
-    include:
-      - postgres
-      - local
-      - test-data
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  # Datasource
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:warehouse;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  # H2
+  h2:
+    console:
+      enabled: true
+  # Flyway
+  flyway:
+    locations:
+      - classpath:db/migration
+      - classpath:db/testdata
 
-# Logging
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
+### Logging ###
 logging:
   level:
-    org.springframework: INFO
-    org.hibernate: WARN
+    root: INFO
     no.acntech: DEBUG
+
+### Server ###
+server:
+  port: 9004

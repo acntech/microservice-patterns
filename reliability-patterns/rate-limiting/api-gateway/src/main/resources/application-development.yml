@@ -1,0 +1,40 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # Cloud
+  cloud:
+    gateway:
+      routes:
+        - id: ordering
+          uri: http://localhost:9001
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@headerKeyResolver}"
+                rate-limiter: "#{@defaultRateLimiter}"
+                rate-limiter.limit: 3
+                rate-limiter.duration: 1s
+        - id: warehouse
+          uri: http://localhost:9004
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@headerKeyResolver}"
+                rate-limiter: "#{@defaultRateLimiter}"
+                rate-limiter.limit: 3
+                rate-limiter.duration: 1s
+
+### Logging ###
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+
+### Server ###
+server:
+  port: 9000
