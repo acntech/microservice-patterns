@@ -1,7 +1,19 @@
-import { ClearNotificationsAction, DismissNotificationAction, NotificationActionType, ShowNotification, ShowNotificationAction } from '../../models';
+import {
+    ClearNotificationsAction,
+    DismissNotificationAction,
+    NotificationActionType,
+    ShowNotification,
+    ShowNotificationAction
+} from '../../models';
 
-const showNotificationAction = (notification: ShowNotification): ShowNotificationAction => ({type: NotificationActionType.SHOW, notification: notification});
-const dismissNotificationAction = (uuid: string): DismissNotificationAction => ({type: NotificationActionType.DISMISS, uuid: uuid});
+const showNotificationAction = (notification: ShowNotification): ShowNotificationAction => ({
+    type: NotificationActionType.SHOW,
+    notification: notification
+});
+const dismissNotificationAction = (uuid: string): DismissNotificationAction => ({
+    type: NotificationActionType.DISMISS,
+    uuid: uuid
+});
 const clearNotificationsAction = (): ClearNotificationsAction => ({type: NotificationActionType.CLEAR});
 
 export function showInfoNotification(title: string, message?: string, permanent?: boolean) {

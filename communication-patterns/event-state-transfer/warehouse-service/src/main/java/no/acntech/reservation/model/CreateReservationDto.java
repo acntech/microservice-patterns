@@ -1,12 +1,9 @@
 package no.acntech.reservation.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 import java.util.UUID;
 
-@Valid
 public class CreateReservationDto {
 
     @NotNull
@@ -58,11 +55,11 @@ public class CreateReservationDto {
         }
 
         public CreateReservationDto build() {
-            CreateReservationDto createReservationDto = new CreateReservationDto();
-            createReservationDto.orderId = this.orderId;
-            createReservationDto.productId = this.productId;
-            createReservationDto.quantity = this.quantity;
-            return createReservationDto;
+            final var target = new CreateReservationDto();
+            target.orderId = this.orderId;
+            target.productId = this.productId;
+            target.quantity = this.quantity;
+            return target;
         }
     }
 }

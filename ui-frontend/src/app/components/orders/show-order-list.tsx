@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Button, Icon, Label, Segment, Table } from 'semantic-ui-react';
+import {Component, ReactNode} from 'react';
+import {FormattedMessage} from 'react-intl';
+import {Button, Icon, Label, Segment, Table} from 'semantic-ui-react';
 
-import { getOrderStatusLabelColor, Order } from '../../models';
+import {getOrderStatusLabelColor, Order} from '../../models';
 
 interface ComponentProps {
     orders: Order[];
@@ -20,16 +20,19 @@ class ShowOrderListComponent extends Component<ComponentProps> {
             <Segment basic>
                 <Button.Group>
                     <Button primary size="tiny" onClick={onCreateOrderButtonClick}>
-                        <Icon name="dolly" /><FormattedMessage id="button.new-order.text" />
+                        <Icon name="dolly"/><FormattedMessage id="button.new-order.text"/>
                     </Button>
                 </Button.Group>
                 <Table celled selectable>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell width={6}><FormattedMessage id="label.order-id.text" /></Table.HeaderCell>
-                            <Table.HeaderCell width={4}><FormattedMessage id="label.order-name.text" /></Table.HeaderCell>
-                            <Table.HeaderCell width={10}><FormattedMessage id="label.order-description.text" /></Table.HeaderCell>
-                            <Table.HeaderCell width={4}><FormattedMessage id="label.order-status.text" /></Table.HeaderCell>
+                            <Table.HeaderCell width={6}><FormattedMessage id="label.order-id.text"/></Table.HeaderCell>
+                            <Table.HeaderCell width={4}><FormattedMessage
+                                id="label.order-name.text"/></Table.HeaderCell>
+                            <Table.HeaderCell width={10}><FormattedMessage
+                                id="label.order-description.text"/></Table.HeaderCell>
+                            <Table.HeaderCell width={4}><FormattedMessage
+                                id="label.order-status.text"/></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -45,7 +48,7 @@ class ShowOrderListComponent extends Component<ComponentProps> {
                                     <Table.Cell>{description}</Table.Cell>
                                     <Table.Cell>
                                         <Label color={statusColor}>
-                                            <FormattedMessage id={`enum.order-status.${status}`} />
+                                            <FormattedMessage id={`enum.order-status.${status}`}/>
                                         </Label>
                                     </Table.Cell>
                                 </Table.Row>
@@ -58,4 +61,4 @@ class ShowOrderListComponent extends Component<ComponentProps> {
     }
 }
 
-export { ShowOrderListComponent as ShowOrderList };
+export {ShowOrderListComponent as ShowOrderList};

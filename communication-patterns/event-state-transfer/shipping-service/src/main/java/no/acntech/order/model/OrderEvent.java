@@ -2,7 +2,6 @@ package no.acntech.order.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -19,7 +18,7 @@ public class OrderEvent implements Serializable {
     private OrderStatus orderStatus;
     private UUID productId;
     private Long quantity;
-    private ItemStatus itemStatus;
+    private OrderItemStatus itemStatus;
 
     public OrderEventType getEventType() {
         return eventType;
@@ -45,7 +44,7 @@ public class OrderEvent implements Serializable {
         return quantity;
     }
 
-    public ItemStatus getItemStatus() {
+    public OrderItemStatus getItemStatus() {
         return itemStatus;
     }
 
@@ -61,8 +60,7 @@ public class OrderEvent implements Serializable {
         private OrderStatus orderStatus;
         private UUID productId;
         private Long quantity;
-
-        private ItemStatus itemStatus;
+        private OrderItemStatus itemStatus;
 
         private Builder() {
         }
@@ -97,21 +95,21 @@ public class OrderEvent implements Serializable {
             return this;
         }
 
-        public Builder itemStatus(ItemStatus itemStatus) {
-            this.itemStatus = itemStatus;
+        public Builder itemStatus(OrderItemStatus orderItemStatus) {
+            this.itemStatus = orderItemStatus;
             return this;
         }
 
         public OrderEvent build() {
-            OrderEvent orderEvent = new OrderEvent();
-            orderEvent.eventType = this.eventType;
-            orderEvent.customerId = this.customerId;
-            orderEvent.orderId = this.orderId;
-            orderEvent.orderStatus = this.orderStatus;
-            orderEvent.productId = this.productId;
-            orderEvent.quantity = this.quantity;
-            orderEvent.itemStatus = this.itemStatus;
-            return orderEvent;
+            var target = new OrderEvent();
+            target.eventType = this.eventType;
+            target.customerId = this.customerId;
+            target.orderId = this.orderId;
+            target.orderStatus = this.orderStatus;
+            target.productId = this.productId;
+            target.quantity = this.quantity;
+            target.itemStatus = this.itemStatus;
+            return target;
         }
     }
 }

@@ -1,5 +1,5 @@
-import { HandleUserActionType, LoginUserAction, LogoutUserAction, UserAction, UserState } from '../../models';
-import { initialCustomerState, initialUserState } from '../store/initial-state';
+import {HandleUserActionType, LoginUserAction, LogoutUserAction, UserAction, UserState} from '../../models';
+import {initialCustomerState, initialUserState} from '../store/initial-state';
 
 export const reducer = (state: UserState = initialUserState, action: UserAction): UserState => {
     switch (action.type) {

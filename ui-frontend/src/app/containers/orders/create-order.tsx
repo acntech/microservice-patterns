@@ -1,16 +1,23 @@
 import * as React from 'react';
-import { ChangeEventHandler, Component, ReactNode } from 'react';
-import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { Container } from 'semantic-ui-react';
+import {ChangeEventHandler, Component, ReactNode} from 'react';
+import {injectIntl} from 'react-intl';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
+import {Action} from 'redux';
+import {ThunkDispatch} from 'redux-thunk';
+import {Container} from 'semantic-ui-react';
 import uuidv4 from 'uuid/v4';
-import { CreateOrderForm, CreateOrderFormData, initialCreateOrderFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
+import {
+    CreateOrderForm,
+    CreateOrderFormData,
+    initialCreateOrderFormData,
+    LoadingIndicator,
+    PrimaryHeader,
+    SecondaryHeader
+} from '../../components';
 
-import { ActionType, CreateOrder, EntityType, OrderState, RootState, UserState } from '../../models';
-import { createOrder } from '../../state/actions';
+import {ActionType, CreateOrder, EntityType, OrderState, RootState, UserState} from '../../models';
+import {createOrder} from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentStateProps {
@@ -46,22 +53,22 @@ class CreateOrderContainer extends Component<ComponentProps, ComponentState> {
         const {loading, modified} = this.props.orderState;
 
         if (cancel) {
-            return <Redirect to="/" />;
+            return <Redirect to="/"/>;
         } else if (loading) {
-            return <LoadingIndicator />;
+            return <LoadingIndicator/>;
         } else if (modified && this.shouldRedirectToOrder()) {
             const {id: orderId} = modified;
-            return <Redirect to={`/orders/${orderId}`} />;
+            return <Redirect to={`/orders/${orderId}`}/>;
         } else {
             return (
                 <Container>
-                    <PrimaryHeader />
-                    <SecondaryHeader />
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
                     <CreateOrderForm onCancelButtonClick={this.onCancelButtonClick}
-                        onFormSubmit={this.onFormSubmit}
-                        onFormInputNameChange={this.onFormInputNameChange}
-                        onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
-                        formData={formData} />
+                                     onFormSubmit={this.onFormSubmit}
+                                     onFormInputNameChange={this.onFormInputNameChange}
+                                     onFormTextAreaDescriptionChange={this.onFormTextAreaDescriptionChange}
+                                     formData={formData}/>
                 </Container>
             );
         }
@@ -188,4 +195,4 @@ const IntlCreateOrderContainer = injectIntl(CreateOrderContainer);
 
 const ConnectedCreateOrderContainer = connect(mapStateToProps, mapDispatchToProps)(IntlCreateOrderContainer);
 
-export { ConnectedCreateOrderContainer as CreateOrderContainer };
+export {ConnectedCreateOrderContainer as CreateOrderContainer};

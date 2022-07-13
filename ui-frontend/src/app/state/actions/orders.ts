@@ -1,30 +1,73 @@
 import client from '../../core/client';
 
 import {
-    CreateOrder, CreateOrderActionType, CreateOrderErrorAction, CreateOrderLoadingAction, CreateOrderSuccessAction, DeleteOrderActionType, DeleteOrderErrorAction, DeleteOrderLoadingAction,
-    DeleteOrderSuccessAction, FindOrdersActionType, FindOrdersErrorAction, FindOrdersLoadingAction, FindOrdersSuccessAction, GetOrderActionType, GetOrderErrorAction, GetOrderLoadingAction,
-    GetOrderSuccessAction, Order, UpdateOrderActionType, UpdateOrderErrorAction, UpdateOrderLoadingAction, UpdateOrderSuccessAction
+    CreateOrder,
+    CreateOrderActionType,
+    CreateOrderErrorAction,
+    CreateOrderLoadingAction,
+    CreateOrderSuccessAction,
+    DeleteOrderActionType,
+    DeleteOrderErrorAction,
+    DeleteOrderLoadingAction,
+    DeleteOrderSuccessAction,
+    FindOrdersActionType,
+    FindOrdersErrorAction,
+    FindOrdersLoadingAction,
+    FindOrdersSuccessAction,
+    GetOrderActionType,
+    GetOrderErrorAction,
+    GetOrderLoadingAction,
+    GetOrderSuccessAction,
+    Order,
+    UpdateOrderActionType,
+    UpdateOrderErrorAction,
+    UpdateOrderLoadingAction,
+    UpdateOrderSuccessAction
 } from '../../models';
-import { showErrorNotification, showSuccessNotification } from '../actions';
+import {showErrorNotification, showSuccessNotification} from '../actions';
 
 const getOrderLoading = (loading: boolean): GetOrderLoadingAction => ({type: GetOrderActionType.LOADING, loading});
 const getOrderSuccess = (payload: Order): GetOrderSuccessAction => ({type: GetOrderActionType.SUCCESS, payload});
 const getOrderError = (error: any): GetOrderErrorAction => ({type: GetOrderActionType.ERROR, error});
 
-const findOrdersLoading = (loading: boolean): FindOrdersLoadingAction => ({type: FindOrdersActionType.LOADING, loading});
-const findOrdersSuccess = (payload: Order[]): FindOrdersSuccessAction => ({type: FindOrdersActionType.SUCCESS, payload});
+const findOrdersLoading = (loading: boolean): FindOrdersLoadingAction => ({
+    type: FindOrdersActionType.LOADING,
+    loading
+});
+const findOrdersSuccess = (payload: Order[]): FindOrdersSuccessAction => ({
+    type: FindOrdersActionType.SUCCESS,
+    payload
+});
 const findOrdersError = (error: any): FindOrdersErrorAction => ({type: FindOrdersActionType.ERROR, error});
 
-const createOrderLoading = (loading: boolean): CreateOrderLoadingAction => ({type: CreateOrderActionType.LOADING, loading});
-const createOrderSuccess = (orderId?: string): CreateOrderSuccessAction => ({type: CreateOrderActionType.SUCCESS, orderId});
+const createOrderLoading = (loading: boolean): CreateOrderLoadingAction => ({
+    type: CreateOrderActionType.LOADING,
+    loading
+});
+const createOrderSuccess = (orderId?: string): CreateOrderSuccessAction => ({
+    type: CreateOrderActionType.SUCCESS,
+    orderId
+});
 const createOrderError = (error: any): CreateOrderErrorAction => ({type: CreateOrderActionType.ERROR, error});
 
-const updateOrderLoading = (loading: boolean): UpdateOrderLoadingAction => ({type: UpdateOrderActionType.LOADING, loading});
-const updateOrderSuccess = (orderId: string): UpdateOrderSuccessAction => ({type: UpdateOrderActionType.SUCCESS, orderId});
+const updateOrderLoading = (loading: boolean): UpdateOrderLoadingAction => ({
+    type: UpdateOrderActionType.LOADING,
+    loading
+});
+const updateOrderSuccess = (orderId: string): UpdateOrderSuccessAction => ({
+    type: UpdateOrderActionType.SUCCESS,
+    orderId
+});
 const updateOrderError = (error: any): UpdateOrderErrorAction => ({type: UpdateOrderActionType.ERROR, error});
 
-const deleteOrderLoading = (loading: boolean): DeleteOrderLoadingAction => ({type: DeleteOrderActionType.LOADING, loading});
-const deleteOrderSuccess = (orderId: string): DeleteOrderSuccessAction => ({type: DeleteOrderActionType.SUCCESS, orderId});
+const deleteOrderLoading = (loading: boolean): DeleteOrderLoadingAction => ({
+    type: DeleteOrderActionType.LOADING,
+    loading
+});
+const deleteOrderSuccess = (orderId: string): DeleteOrderSuccessAction => ({
+    type: DeleteOrderActionType.SUCCESS,
+    orderId
+});
 const deleteOrderError = (error: any): DeleteOrderErrorAction => ({type: DeleteOrderActionType.ERROR, error});
 
 const rootPath = 'orders';

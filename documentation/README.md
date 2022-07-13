@@ -1,6 +1,7 @@
 # Synchronous HTTP between services
 
 Consists of two services:
+
 - order (utilising timeout)
 - shipping
 
@@ -12,9 +13,11 @@ The shipping-service endpoint fails randomly in order to show the
 timeout functionality.
 
 ##### Run example
-Build and start each application (spring-boot). 
+
+Build and start each application (spring-boot).
 
 Call the order services by doing a `POST` to `localhost:8080/orders` with the following requestbody:
+
 ```js
 {
     "orderlines": [
@@ -26,5 +29,5 @@ Call the order services by doing a `POST` to `localhost:8080/orders` with the fo
 }
 ``` 
 
-The shipping timeout configuration can be found in the 
+The shipping timeout configuration can be found in the
 `no.acntech.order.integration.shipping.ShippingRestClient` class.

@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { Container } from 'semantic-ui-react';
-import { LoadingIndicator, NotFoundError, PrimaryHeader, SecondaryHeader } from '../../components';
-import { ShowItem } from '../../components/orders/show-item';
+import {Component, ReactNode} from 'react';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
+import {Action} from 'redux';
+import {ThunkDispatch} from 'redux-thunk';
+import {Container} from 'semantic-ui-react';
+import {LoadingIndicator, NotFoundError, PrimaryHeader, SecondaryHeader} from '../../components';
+import {ShowItem} from '../../components/orders/show-item';
 
-import { Item, ItemState, Product, ProductState, RootState } from '../../models';
-import { deleteItem, getItem, getProduct } from '../../state/actions';
+import {Item, ItemState, Product, ProductState, RootState} from '../../models';
+import {deleteItem, getItem, getProduct} from '../../state/actions';
 
 interface RouteProps {
     match: any;
@@ -81,39 +81,39 @@ class ItemContainer extends Component<ComponentProps, ComponentState> {
         const {back, item, product} = this.state;
 
         if (back) {
-            return <Redirect to={`/orders/${orderId}`} />;
+            return <Redirect to={`/orders/${orderId}`}/>;
         } else if (itemLoading || productLoading) {
-            return <LoadingIndicator />;
+            return <LoadingIndicator/>;
         } else if (!item) {
             return (
                 <Container className="error error-not-found">
-                    <PrimaryHeader />
+                    <PrimaryHeader/>
                     <NotFoundError
                         icon="warning sign"
                         header={{id: 'error.item-not-found.header.text'}}
-                        content={{id: 'error.item-not-found.content.text', values: {itemId}}} />
+                        content={{id: 'error.item-not-found.content.text', values: {itemId}}}/>
                 </Container>
             );
         } else if (!product) {
             return (
                 <Container className="error error-not-found">
-                    <PrimaryHeader />
+                    <PrimaryHeader/>
                     <NotFoundError
                         icon="warning sign"
                         header={{id: 'error.product-not-found.header.text'}}
-                        content={{id: 'error.product-not-found.content.text', values: {itemId}}} />
+                        content={{id: 'error.product-not-found.content.text', values: {itemId}}}/>
                 </Container>
             );
         } else {
             return (
                 <Container>
-                    <PrimaryHeader />
-                    <SecondaryHeader />
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
                     <ShowItem item={item}
-                        product={product}
-                        onBackButtonClick={this.onBackButtonClick}
-                        onDeleteButtonClick={this.onDeleteButtonClick}
-                        onRefreshButtonClick={this.onRefreshButtonClick} />
+                              product={product}
+                              onBackButtonClick={this.onBackButtonClick}
+                              onDeleteButtonClick={this.onDeleteButtonClick}
+                              onRefreshButtonClick={this.onRefreshButtonClick}/>
                 </Container>
             );
         }
@@ -153,4 +153,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): C
 
 const ConnectedItemContainer = connect(mapStateToProps, mapDispatchToProps)(ItemContainer);
 
-export { ConnectedItemContainer as ItemContainer };
+export {ConnectedItemContainer as ItemContainer};

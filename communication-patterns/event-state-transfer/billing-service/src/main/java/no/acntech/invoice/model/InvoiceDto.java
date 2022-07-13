@@ -1,7 +1,6 @@
 package no.acntech.invoice.model;
 
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 

@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { NotificationActionType } from '../';
+import {ReactNode} from 'react';
+import {NotificationActionType} from '../';
 
 export interface ShowNotification {
     severity: 'info' | 'warning' | 'error' | 'success';

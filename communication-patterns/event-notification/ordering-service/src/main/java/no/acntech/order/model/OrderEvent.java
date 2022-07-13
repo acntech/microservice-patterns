@@ -1,16 +1,19 @@
 package no.acntech.order.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.util.UUID;
 
-@Valid
 public class OrderEvent implements Serializable {
 
     @NotNull
+    private UUID eventId;
+    @NotNull
     private UUID orderId;
+
+    public UUID getEventId() {
+        return eventId;
+    }
 
     public UUID getOrderId() {
         return orderId;
@@ -33,9 +36,10 @@ public class OrderEvent implements Serializable {
         }
 
         public OrderEvent build() {
-            OrderEvent orderEvent = new OrderEvent();
-            orderEvent.orderId = this.orderId;
-            return orderEvent;
+            final var target = new OrderEvent();
+            target.eventId = UUID.randomUUID();
+            target.orderId = this.orderId;
+            return target;
         }
     }
 }

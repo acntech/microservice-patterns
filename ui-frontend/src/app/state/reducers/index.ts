@@ -1,7 +1,7 @@
-import { intlReducer } from 'react-intl-redux';
-import { combineReducers } from 'redux';
+import {intlReducer} from 'react-intl-redux';
+import {combineReducers} from 'redux';
 
-import { RootState } from '../../models';
+import {RootState} from '../../models';
 import * as config from './config';
 import * as customers from './customers';
 import * as items from './items';

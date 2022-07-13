@@ -5,9 +5,9 @@
 
     <!-- PROJECT -->
     <parent>
-        <artifactId>microservice-patterns</artifactId>
         <groupId>no.acntech</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>microservice-patterns</artifactId>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>communication-patterns</artifactId>

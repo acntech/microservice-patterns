@@ -1,30 +1,29 @@
 package no.acntech.reservation.service;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import no.acntech.product.exception.ProductNotFoundException;
+import no.acntech.product.repository.ProductRepository;
+import no.acntech.reservation.exception.ReservationAlreadyExistsException;
+import no.acntech.reservation.exception.ReservationNotFoundException;
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.ReservationEntity;
+import no.acntech.reservation.model.UpdateReservationDto;
+import no.acntech.reservation.repository.ReservationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
-import no.acntech.product.model.Product;
-import no.acntech.product.repository.ProductRepository;
-import no.acntech.reservation.exception.ReservationNotFoundException;
-import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.Reservation;
-import no.acntech.reservation.model.ReservationDto;
-import no.acntech.reservation.model.ReservationStatus;
-import no.acntech.reservation.model.UpdateReservationDto;
-import no.acntech.reservation.repository.ReservationRepository;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"Duplicates", "WeakerAccess"})
+@Validated
 @Service
 public class ReservationService {
 
@@ -62,119 +61,66 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationDto createReservation(@Valid final CreateReservationDto createReservation) {
-        final UUID orderId = createReservation.getOrderId();
-        final UUID productId = createReservation.getProductId();
-        final Long quantity = createReservation.getQuantity();
+    public ReservationDto createReservation(@NotNull @Valid final CreateReservationDto createReservationDto) {
+        reservationRepository
+                .findByOrderIdAndProduct_ProductId(createReservationDto.getOrderId(), createReservationDto.getProductId())
+                .ifPresent(reservationEntity -> {
+                    throw new ReservationAlreadyExistsException(createReservationDto.getOrderId(), createReservationDto.getProductId());
+                });
 
-        final Optional<Reservation> existingReservation = reservationRepository.findByOrderIdAndProduct_ProductId(orderId, productId);
+        final var productEntity = productRepository.findByProductId(createReservationDto.getProductId())
+                .orElseThrow(() -> new ProductNotFoundException(createReservationDto.getProductId()));
 
-        if (existingReservation.isPresent()) {
-            final Reservation existing = existingReservation.get();
-            final Reservation reservation = Reservation.builder()
-                    .reservationId(existing.getReservationId())
-                    .orderId(orderId)
-                    .quantity(quantity)
-                    .statusFailed()
+        if (productEntity.getStock() < createReservationDto.getQuantity()) {
+            final var reservationEntity = ReservationEntity.builder()
+                    .orderId(createReservationDto.getOrderId())
+                    .quantity(createReservationDto.getQuantity())
+                    .product(productEntity)
+                    .statusRejected()
                     .build();
-            reservationRepository.save(reservation);
-
-            LOGGER.error("Reservation already exists for order-id {} and product-id {}", orderId, productId);
-            return convert(reservation);
+            final var savedReservationEntity = reservationRepository.save(reservationEntity);
+            LOGGER.error("Product stock insufficient for reservation-id {}", savedReservationEntity.getReservationId());
+            return convert(savedReservationEntity);
         } else {
-            final Optional<Product> existingProduct = productRepository.findByProductId(productId);
-
-            if (existingProduct.isPresent()) {
-                final Product product = existingProduct.get();
-
-                if (product.getStock() < quantity) {
-                    final Reservation reservation = Reservation.builder()
-                            .orderId(orderId)
-                            .product(product)
-                            .quantity(quantity)
-                            .statusRejected()
-                            .build();
-                    reservationRepository.save(reservation);
-
-                    LOGGER.error("Product stock insufficient for product-id {}", productId);
-                    return convert(reservation);
-                } else {
-                    final Reservation reservation = Reservation.builder()
-                            .orderId(orderId)
-                            .product(product)
-                            .quantity(quantity)
-                            .statusReserved()
-                            .build();
-                    reservationRepository.save(reservation);
-
-                    LOGGER.info("Created reservation for order-id {} and product-id {}", orderId, productId);
-                    return convert(reservation);
-
-                }
-            } else {
-                final Reservation reservation = Reservation.builder()
-                        .orderId(orderId)
-                        .quantity(quantity)
-                        .statusFailed()
-                        .build();
-                reservationRepository.save(reservation);
-
-                LOGGER.error("No product found for product-id {}", productId);
-                return convert(reservation);
-
-            }
+            final var reservationEntity = ReservationEntity.builder()
+                    .orderId(createReservationDto.getOrderId())
+                    .quantity(createReservationDto.getQuantity())
+                    .product(productEntity)
+                    .statusReserved()
+                    .build();
+            final var savedReservationEntity = reservationRepository.save(reservationEntity);
+            LOGGER.info("Created reservation for reservation-id {}", savedReservationEntity.getReservationId());
+            return convert(savedReservationEntity);
         }
     }
 
     @Transactional
     public ReservationDto updateReservation(@NotNull final UUID reservationId,
-                                            @Valid final UpdateReservationDto updateReservation) {
-        final Long quantity = updateReservation.getQuantity();
-        final ReservationStatus status = updateReservation.getStatus();
-
-        final Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
-
-        if (existingReservation.isPresent()) {
-            final Reservation reservation = existingReservation.get();
-
-            if (quantity != null) {
-                reservation.setQuantity(quantity);
-            }
-            if (status != null && canUpdateStatus(reservation.getStatus())) {
-                reservation.setStatus(status);
-            }
-
-            reservationRepository.save(reservation);
-
-            LOGGER.info("Updated reservation for reservation-id {}", reservationId);
-            return convert(reservation);
-        } else {
-            throw new ReservationNotFoundException(reservationId);
+                                            @NotNull @Valid final UpdateReservationDto updateReservation) {
+        final var reservationEntity = reservationRepository.findByReservationId(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException(reservationId));
+        if (updateReservation.getQuantity() != null) {
+            reservationEntity.setQuantity(updateReservation.getQuantity());
         }
-
+        if (updateReservation.getStatus() != null && reservationEntity.canUpdateStatus()) {
+            reservationEntity.setStatus(updateReservation.getStatus());
+        }
+        final var savedReservationEntity = reservationRepository.save(reservationEntity);
+        LOGGER.info("Updated reservation for reservation-id {}", reservationId);
+        return convert(savedReservationEntity);
     }
 
     @Transactional
     public ReservationDto deleteReservation(@NotNull final UUID reservationId) {
-        final Optional<Reservation> existingReservation = reservationRepository.findByReservationId(reservationId);
-
-        if (existingReservation.isPresent()) {
-            final Reservation reservation = existingReservation.get();
-            reservation.setStatus(ReservationStatus.CANCELED);
-            reservationRepository.save(reservation);
-
-            LOGGER.info("Updated reservation for reservation-id {}", reservationId);
-            return convert(reservation);
-        } else {
-            throw new ReservationNotFoundException(reservationId);
-        }
+        final var reservationEntity = reservationRepository.findByReservationId(reservationId)
+                .orElseThrow(() -> new ReservationNotFoundException(reservationId));
+        reservationEntity.cancelReservation();
+        final var savedReservationEntity = reservationRepository.save(reservationEntity);
+        LOGGER.info("Updated reservation for reservation-id {}", reservationId);
+        return convert(savedReservationEntity);
     }
 
-    private boolean canUpdateStatus(final ReservationStatus status) {
-        return status != null && status != ReservationStatus.CANCELED && status != ReservationStatus.CONFIRMED;
-    }
-
-    private ReservationDto convert(final Reservation reservation) {
+    private ReservationDto convert(final ReservationEntity reservation) {
         return conversionService.convert(reservation, ReservationDto.class);
     }
 }

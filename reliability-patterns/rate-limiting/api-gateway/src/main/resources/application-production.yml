@@ -1,0 +1,36 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # Cloud
+  cloud:
+    gateway:
+      routes:
+        - id: ordering
+          uri: http://acntech.ordering.service:8080
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@throttlingRateLimiter}"
+                key-resolver: "#{@headerKeyResolver}"
+                rate-limiter.limit: 3
+                rate-limiter.duration: 1s
+        - id: warehouse
+          uri: http://acntech.warehouse.service:8080
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@throttlingRateLimiter}"
+                key-resolver: "#{@headerKeyResolver}"
+                rate-limiter.limit: 3
+                rate-limiter.duration: 1s
+
+### Logging ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

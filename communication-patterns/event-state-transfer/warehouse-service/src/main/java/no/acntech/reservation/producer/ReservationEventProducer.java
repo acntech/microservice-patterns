@@ -1,14 +1,13 @@
 package no.acntech.reservation.producer;
 
-import javax.validation.constraints.NotNull;
-
+import no.acntech.common.config.KafkaTopic;
+import no.acntech.reservation.model.ReservationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import no.acntech.common.config.KafkaTopic;
-import no.acntech.reservation.model.ReservationEvent;
+import javax.validation.constraints.NotNull;
 
 @Component
 public class ReservationEventProducer {
@@ -22,7 +21,7 @@ public class ReservationEventProducer {
     }
 
     public void publish(@NotNull final ReservationEvent reservationEvent) {
-        LOGGER.debug("Sending event for reservation-id {} to topic {}", reservationEvent.getReservationId(), KafkaTopic.RESERVATIONS.getName());
-        kafkaTemplate.send(KafkaTopic.RESERVATIONS.getName(), reservationEvent);
+        LOGGER.debug("Sending event for reservation-id {} to topic {}", reservationEvent.getReservationId(), KafkaTopic.RESERVATIONS);
+        kafkaTemplate.send(KafkaTopic.RESERVATIONS, reservationEvent.getEventId().toString(), reservationEvent);
     }
 }

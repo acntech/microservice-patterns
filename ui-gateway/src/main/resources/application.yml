@@ -7,23 +7,20 @@ spring:
   cloud:
     gateway:
       routes:
-        -
-          id: customers
-          uri: http://localhost:9000
+        - id: customers
+          uri: http://localhost:9001
           predicates:
             - Path=/api/customers/**
-        -
-          id: ordering
-          uri: http://localhost:9010
+        - id: ordering
+          uri: http://localhost:9002
           predicates:
             - Path=/api/orders/**, /api/items/**
           filters:
             - AddResponseHeader=set-cookie, yolo-cookie=hey; Path=/
             - AddResponseHeader=set-cookie, XSRF-TOKEN=hey; Path=/
             - AddResponseHeader=yolo-header, hey
-        -
-          id: warehouse
-          uri: http://localhost:9040
+        - id: warehouse
+          uri: http://localhost:9003
           predicates:
             - Path=/api/products/**, /api/reservations/**
           filters:

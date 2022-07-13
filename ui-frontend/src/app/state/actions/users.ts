@@ -1,4 +1,4 @@
-import { HandleUserActionType, LoginUserAction, LogoutUserAction, User } from '../../models';
+import {HandleUserActionType, LoginUserAction, LogoutUserAction, User} from '../../models';
 
 const loginUserAction = (user: User): LoginUserAction => ({type: HandleUserActionType.LOGIN, user});
 const logoutUserAction = (): LogoutUserAction => ({type: HandleUserActionType.LOGOUT});

@@ -1,13 +1,12 @@
 package no.acntech.order.model;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Valid
 public class OrderDto {
 
     @NotNull
@@ -20,7 +19,7 @@ public class OrderDto {
     @NotNull
     private OrderStatus status;
     @NotNull
-    private List<ItemDto> items;
+    private List<OrderItemDto> items;
     @NotNull
     private ZonedDateTime modified;
     private ZonedDateTime created;
@@ -45,7 +44,7 @@ public class OrderDto {
         return status;
     }
 
-    public List<ItemDto> getItems() {
+    public List<OrderItemDto> getItems() {
         return items;
     }
 
@@ -55,6 +54,13 @@ public class OrderDto {
 
     public ZonedDateTime getModified() {
         return modified;
+    }
+
+    @JsonIgnore
+    public boolean hasItemWithProductId(UUID productId) {
+        return items.stream()
+                .map(OrderItemDto::getProductId)
+                .anyMatch(productId::equals);
     }
 
     public static Builder builder() {
@@ -68,7 +74,7 @@ public class OrderDto {
         private String name;
         private String description;
         private OrderStatus status;
-        private List<ItemDto> items;
+        private List<OrderItemDto> items;
         private ZonedDateTime created;
         private ZonedDateTime modified;
 
@@ -100,7 +106,7 @@ public class OrderDto {
             return this;
         }
 
-        public Builder items(List<ItemDto> items) {
+        public Builder items(List<OrderItemDto> items) {
             this.items = items;
             return this;
         }
@@ -116,16 +122,16 @@ public class OrderDto {
         }
 
         public OrderDto build() {
-            OrderDto orderDto = new OrderDto();
-            orderDto.customerId = this.customerId;
-            orderDto.orderId = this.orderId;
-            orderDto.name = this.name;
-            orderDto.description = this.description;
-            orderDto.status = this.status;
-            orderDto.modified = this.modified;
-            orderDto.items = this.items;
-            orderDto.created = this.created;
-            return orderDto;
+            final var target = new OrderDto();
+            target.customerId = this.customerId;
+            target.orderId = this.orderId;
+            target.name = this.name;
+            target.description = this.description;
+            target.status = this.status;
+            target.modified = this.modified;
+            target.items = this.items;
+            target.created = this.created;
+            return target;
         }
     }
 }

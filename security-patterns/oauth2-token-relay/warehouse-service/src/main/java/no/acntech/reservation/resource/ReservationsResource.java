@@ -1,11 +1,9 @@
 package no.acntech.reservation.resource;
 
-import javax.validation.Valid;
-
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.UpdateReservationDto;
+import no.acntech.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import no.acntech.reservation.model.CreateReservationDto;
-import no.acntech.reservation.model.ReservationDto;
-import no.acntech.reservation.model.UpdateReservationDto;
-import no.acntech.reservation.service.ReservationService;
+import java.util.List;
+import java.util.UUID;
 
-@RequestMapping(path = "reservations")
+@RequestMapping(path = "/api/reservations")
 @RestController
 public class ReservationsResource {
 
@@ -34,38 +29,33 @@ public class ReservationsResource {
     }
 
     @GetMapping(path = "{reservationId}")
-    public ResponseEntity<ReservationDto> get(@PathVariable("reservationId") UUID reservationId) {
-        final ReservationDto reservation = reservationService.getReservation(reservationId);
-        return ResponseEntity.ok(reservation);
+    public ResponseEntity<ReservationDto> get(@PathVariable("reservationId") final UUID reservationId) {
+        final var reservationDto = reservationService.getReservation(reservationId);
+        return ResponseEntity.ok(reservationDto);
     }
 
     @GetMapping
     public ResponseEntity<List<ReservationDto>> find(@RequestParam(name = "orderId", required = false) final UUID orderId) {
-        final List<ReservationDto> reservations = reservationService.findReservations(orderId);
-        return ResponseEntity.ok(reservations);
+        final var reservationDtos = reservationService.findReservations(orderId);
+        return ResponseEntity.ok(reservationDtos);
     }
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody final CreateReservationDto createReservation) {
-        ReservationDto reservation = reservationService.createReservation(createReservation);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .pathSegment(reservation.getReservationId().toString())
-                .build()
-                .toUri();
-        return ResponseEntity.created(location).build();
+    public ResponseEntity<ReservationDto> create(@RequestBody final CreateReservationDto createReservation) {
+        final var reservationDto = reservationService.createReservation(createReservation);
+        return ResponseEntity.ok(reservationDto);
     }
 
     @PutMapping(path = "{reservationId}")
-    public ResponseEntity<ReservationDto> update(@PathVariable("reservationId") UUID reservationId,
-                                                 @Valid @RequestBody final UpdateReservationDto updateReservation) {
-        ReservationDto reservation = reservationService.updateReservation(reservationId, updateReservation);
-        return ResponseEntity.ok(reservation);
+    public ResponseEntity<ReservationDto> update(@PathVariable("reservationId") final UUID reservationId,
+                                                 @RequestBody final UpdateReservationDto updateReservation) {
+        final var reservationDto = reservationService.updateReservation(reservationId, updateReservation);
+        return ResponseEntity.ok(reservationDto);
     }
 
     @DeleteMapping(path = "{reservationId}")
-    public ResponseEntity delete(@PathVariable("reservationId") UUID reservationId) {
-        reservationService.deleteReservation(reservationId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ReservationDto> delete(@PathVariable("reservationId") final UUID reservationId) {
+        final var reservationDto = reservationService.deleteReservation(reservationId);
+        return ResponseEntity.ok(reservationDto);
     }
 }

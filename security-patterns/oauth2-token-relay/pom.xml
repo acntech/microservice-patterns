@@ -7,7 +7,7 @@
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>security-patterns</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>oauth2-token-relay</artifactId>
@@ -15,9 +15,9 @@
 
     <!-- MODULES -->
     <modules>
+        <module>ui-gateway</module>
         <module>customers-service</module>
         <module>ordering-service</module>
         <module>warehouse-service</module>
-        <module>ui-bff</module>
     </modules>
 </project>

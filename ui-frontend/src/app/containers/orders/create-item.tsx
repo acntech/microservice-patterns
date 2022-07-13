@@ -1,16 +1,23 @@
 import * as React from 'react';
-import { ChangeEventHandler, Component, ReactNode } from 'react';
-import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { Container } from 'semantic-ui-react';
-import { CreateItemForm, CreateItemFormData, initialCreateItemFormData, LoadingIndicator, PrimaryHeader, SecondaryHeader } from '../../components';
-import { ShowProductList } from '../../components/orders/show-product-list';
+import {ChangeEventHandler, Component, ReactNode} from 'react';
+import {injectIntl} from 'react-intl';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
+import {Action} from 'redux';
+import {ThunkDispatch} from 'redux-thunk';
+import {Container} from 'semantic-ui-react';
+import {
+    CreateItemForm,
+    CreateItemFormData,
+    initialCreateItemFormData,
+    LoadingIndicator,
+    PrimaryHeader,
+    SecondaryHeader
+} from '../../components';
+import {ShowProductList} from '../../components/orders/show-product-list';
 
-import { ActionType, CreateItem, EntityType, ItemState, Product, ProductState, RootState } from '../../models';
-import { createItem, findProducts } from '../../state/actions';
+import {ActionType, CreateItem, EntityType, ItemState, Product, ProductState, RootState} from '../../models';
+import {createItem, findProducts} from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface RouteProps {
@@ -58,29 +65,29 @@ class CreateItemContainer extends Component<ComponentProps, ComponentState> {
         const {cancel, product, formData} = this.state;
 
         if (itemLoading || productLoading) {
-            return <LoadingIndicator />;
+            return <LoadingIndicator/>;
         } else if (cancel || this.shouldRedirectToOrder()) {
-            return <Redirect to={`/orders/${orderId}`} />;
+            return <Redirect to={`/orders/${orderId}`}/>;
         } else if (product) {
             return (
                 <Container>
-                    <PrimaryHeader />
-                    <SecondaryHeader />
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
                     <CreateItemForm onCancelButtonClick={this.onCancelButtonClick}
-                        onFormSubmit={this.onFormSubmit}
-                        onFormInputQuantityChange={this.onFormInputQuantityChange}
-                        product={product}
-                        formData={formData} />
+                                    onFormSubmit={this.onFormSubmit}
+                                    onFormInputQuantityChange={this.onFormInputQuantityChange}
+                                    product={product}
+                                    formData={formData}/>
                 </Container>
             );
         } else {
             return (
                 <Container>
-                    <PrimaryHeader />
-                    <SecondaryHeader />
+                    <PrimaryHeader/>
+                    <SecondaryHeader/>
                     <ShowProductList products={products}
-                        onCancelButtonClick={this.onCancelButtonClick}
-                        onTableRowClick={this.onTableRowClick} />
+                                     onCancelButtonClick={this.onCancelButtonClick}
+                                     onTableRowClick={this.onTableRowClick}/>
                 </Container>
             );
         }
@@ -202,4 +209,4 @@ const IntlCreateItemContainer = injectIntl(CreateItemContainer);
 
 const ConnectedCreateItemContainer = connect(mapStateToProps, mapDispatchToProps)(IntlCreateItemContainer);
 
-export { ConnectedCreateItemContainer as CreateItemContainer };
+export {ConnectedCreateItemContainer as CreateItemContainer};

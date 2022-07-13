@@ -2,12 +2,6 @@
 # ACNTECH Configuration #
 #########################
 acntech:
-  gateway:
-    api-key-header: X-API-Key
-    rate-limiter:
-      throttling:
-        remaining-requests-header: X-Throttling-Remaining-Requests
-        remaining-retry-delay-millis-header: X-Throttling-Remaining-Retry-Delay-Millis
   hazelcast:
     name: ${spring.application.name}
     hosts:
@@ -17,43 +11,15 @@ acntech:
 # SPRING Configuration #
 ########################
 spring:
+  # Application
   application:
-    name: api-gateway
+    name: rate-limiting-api-gateway
+  # Profiles
+  profiles:
+    active: development
+  # Cloud
   cloud:
     gateway:
-      routes:
-        - id: ordering
-          uri: http://localhost:9010
-          predicates:
-            - Path=/api/orders/**, /api/items/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                rate-limiter: "#{@throttlingRateLimiter}"
-                key-resolver: "#{@headerKeyResolver}"
-                rate-limiter.limit: 3
-                rate-limiter.duration: 1s
-        - id: warehouse
-          uri: http://localhost:9040
-          predicates:
-            - Path=/api/products/**, /api/reservations/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                rate-limiter: "#{@throttlingRateLimiter}"
-                key-resolver: "#{@headerKeyResolver}"
-                rate-limiter.limit: 3
-                rate-limiter.duration: 1s
-
-### Logging ###
-logging:
-  level:
-    root: INFO
-    no.acntech: DEBUG
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-    org.springframework.security.oauth2: INFO
-
-### Server ###
-server:
-  port: 8000
+      filter:
+        request-rate-limiter:
+          deny-empty-key: true

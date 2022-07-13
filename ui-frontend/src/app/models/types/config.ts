@@ -1,4 +1,4 @@
-import { SecurityType } from '../';
+import {SecurityType} from '../';
 
 export interface ConfigState {
     securityType: SecurityType;

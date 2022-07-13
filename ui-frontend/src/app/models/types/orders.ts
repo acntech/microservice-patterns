@@ -1,5 +1,15 @@
-import { CreateOrderActionType, DeleteOrderActionType, Entity, StateError, FindOrdersActionType, GetOrderActionType, Modified, OrderStatus, UpdateOrderActionType } from '../';
-import { Item } from './';
+import {
+    CreateOrderActionType,
+    DeleteOrderActionType,
+    Entity,
+    FindOrdersActionType,
+    GetOrderActionType,
+    Modified,
+    OrderStatus,
+    StateError,
+    UpdateOrderActionType
+} from '../';
+import {Item} from './';
 
 export interface CreateOrder {
     customerId: string;

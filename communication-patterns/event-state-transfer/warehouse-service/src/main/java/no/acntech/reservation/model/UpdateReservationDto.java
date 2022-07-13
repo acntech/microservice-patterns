@@ -1,14 +1,11 @@
 package no.acntech.reservation.model;
 
-import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
-
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Valid
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import java.util.UUID;
+
 public class UpdateReservationDto {
 
     @NotNull
@@ -76,12 +73,12 @@ public class UpdateReservationDto {
         }
 
         public UpdateReservationDto build() {
-            UpdateReservationDto updateReservationDto = new UpdateReservationDto();
-            updateReservationDto.orderId = this.orderId;
-            updateReservationDto.productId = this.productId;
-            updateReservationDto.quantity = this.quantity;
-            updateReservationDto.status = this.status;
-            return updateReservationDto;
+            final var target = new UpdateReservationDto();
+            target.orderId = this.orderId;
+            target.productId = this.productId;
+            target.quantity = this.quantity;
+            target.status = this.status;
+            return target;
         }
     }
 }

@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Button, ButtonGroup, Icon, Label, Segment, Table } from 'semantic-ui-react';
+import {Component, ReactNode} from 'react';
+import {FormattedMessage} from 'react-intl';
+import {Button, ButtonGroup, Icon, Label, Segment, Table} from 'semantic-ui-react';
 
-import { Currency, getItemStatusLabelColor, Item, ItemStatus, Product } from '../../models';
+import {Currency, getItemStatusLabelColor, Item, ItemStatus, Product} from '../../models';
 
 interface ComponentProps {
-    item: Item;
-    product: Product;
+    orderItemEntity: Item;
+    productEntity: Product;
     onBackButtonClick: () => void;
     onDeleteButtonClick: () => void;
     onRefreshButtonClick: () => void;
@@ -16,9 +16,15 @@ interface ComponentProps {
 class ShowItemComponent extends Component<ComponentProps> {
 
     public render(): ReactNode {
-        const {item, product, onBackButtonClick, onDeleteButtonClick, onRefreshButtonClick} = this.props;
-        const {productId, quantity, status} = item;
-        const {name, description, price, currency} = product;
+        const {
+            orderItemEntity,
+            productEntity,
+            onBackButtonClick,
+            onDeleteButtonClick,
+            onRefreshButtonClick
+        } = this.props;
+        const {productId, quantity, status} = orderItemEntity;
+        const {name, description, price, currency} = productEntity;
 
         const statusColor = getItemStatusLabelColor(status);
         const totalPrice = price * quantity;
@@ -28,61 +34,61 @@ class ShowItemComponent extends Component<ComponentProps> {
             <Segment basic>
                 <ButtonGroup>
                     <Button secondary size="tiny" onClick={onBackButtonClick}>
-                        <Icon name="arrow left" /><FormattedMessage id="button.back.text" />
+                        <Icon name="arrow left"/><FormattedMessage id="button.back.text"/>
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button negative={deleteButtonActive}
-                        disabled={!deleteButtonActive}
-                        size="tiny"
-                        onClick={onDeleteButtonClick}>
-                        <Icon name="delete" /><FormattedMessage id="button.delete.text" />
+                            disabled={!deleteButtonActive}
+                            size="tiny"
+                            onClick={onDeleteButtonClick}>
+                        <Icon name="delete"/><FormattedMessage id="button.delete.text"/>
                     </Button>
                 </ButtonGroup>
                 <ButtonGroup>
                     <Button secondary size='tiny' onClick={onRefreshButtonClick}>
-                        <Icon name="redo" /><FormattedMessage id="button.refresh.text" />
+                        <Icon name="redo"/><FormattedMessage id="button.refresh.text"/>
                     </Button>
                 </ButtonGroup>
                 <Table celled>
                     <Table.Body>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-id.text" />
+                                <FormattedMessage id="label.productEntity-id.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{productId}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-name.text" />
+                                <FormattedMessage id="label.productEntity-name.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{name}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-description.text" />
+                                <FormattedMessage id="label.productEntity-description.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{description}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-status.text" />
+                                <FormattedMessage id="label.orderItemEntity-status.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>
                                 <Label color={statusColor}>
-                                    <FormattedMessage id={`enum.item-status.${status}`} />
+                                    <FormattedMessage id={`enum.orderItemEntity-status.${status}`}/>
                                 </Label>
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-quantity.text" />
+                                <FormattedMessage id="label.orderItemEntity-quantity.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{quantity}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-unit-price.text" />
+                                <FormattedMessage id="label.orderItemEntity-unit-price.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>
                                 {Currency[currency]} {price.toFixed(2)}
@@ -90,7 +96,7 @@ class ShowItemComponent extends Component<ComponentProps> {
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.item-total-price.text" />
+                                <FormattedMessage id="label.orderItemEntity-total-price.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>
                                 {Currency[currency]} {totalPrice.toFixed(2)}
@@ -103,9 +109,9 @@ class ShowItemComponent extends Component<ComponentProps> {
     }
 
     private deleteButtonActive = (): boolean => {
-        const {item} = this.props;
-        return item.status === ItemStatus.RESERVED || item.status === ItemStatus.REJECTED;
+        const {orderItemEntity} = this.props;
+        return orderItemEntity.status === ItemStatus.RESERVED || orderItemEntity.status === ItemStatus.REJECTED;
     };
 }
 
-export { ShowItemComponent as ShowItem };
+export {ShowItemComponent as ShowItem};

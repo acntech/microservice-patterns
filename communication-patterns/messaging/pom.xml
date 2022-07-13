@@ -7,17 +7,18 @@
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>communication-patterns</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
-    <artifactId>communication-patterns-messaging</artifactId>
+    <artifactId>messaging</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->
     <modules>
-        <module>messaging-order</module>
-        <module>messaging-warehouse</module>
-        <module>messaging-shipping</module>
-        <module>messaging-message-model</module>
+        <module>customer-service</module>
+        <module>billing-service</module>
+        <module>shipping-service</module>
+        <module>ordering-service</module>
+        <module>warehouse-service</module>
     </modules>
 </project>

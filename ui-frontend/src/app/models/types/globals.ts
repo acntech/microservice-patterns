@@ -1,5 +1,15 @@
-import { IntlState } from 'react-intl-redux';
-import { ActionType, ConfigState, CustomerState, EntityType, ItemState, NotificationState, OrderState, ProductState, UserState } from '../';
+import {IntlState} from 'react-intl-redux';
+import {
+    ActionType,
+    ConfigState,
+    CustomerState,
+    EntityType,
+    ItemState,
+    NotificationState,
+    OrderState,
+    ProductState,
+    UserState
+} from '../';
 
 export interface RootState {
     configState: ConfigState,
@@ -84,5 +94,5 @@ export interface FormData {
 export interface Translation {
     id: string;
     defaultMessage?: string;
-    values?: {[key: string]: string}
+    values?: { [key: string]: string }
 }

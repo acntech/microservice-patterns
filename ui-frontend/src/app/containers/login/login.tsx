@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { ChangeEventHandler, Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { Container, Form, Grid, Header, List, Message, Segment } from 'semantic-ui-react';
+import {ChangeEventHandler, Component, ReactNode} from 'react';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
+import {Action} from 'redux';
+import {ThunkDispatch} from 'redux-thunk';
+import {Container, Form, Grid, Header, List, Message, Segment} from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { LoadingIndicator } from '../../components';
-import { CustomerQuery, CustomerState, RootState, User, UserState } from '../../models';
-import { findCustomers, getCustomer, loginUser } from '../../state/actions';
+import {LoadingIndicator} from '../../components';
+import {CustomerQuery, CustomerState, RootState, User, UserState} from '../../models';
+import {findCustomers, getCustomer, loginUser} from '../../state/actions';
 
 interface ComponentStateProps {
     userState: UserState;
@@ -74,13 +74,13 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
         if (user) {
             this.setState(initialState);
         } else if (customerId && !loading && (!error || formSubmitted)) {
-            const customer = customers.find(c => c.customerId === customerId);
+            const customerEntity = customers.find(c => c.customerId === customerId);
 
-            if (customer) {
+            if (customerEntity) {
                 const newUser = {
-                    userId: customer.customerId,
-                    firstName: customer.firstName,
-                    lastName: customer.lastName
+                    userId: customerEntity.customerId,
+                    firstName: customerEntity.firstName,
+                    lastName: customerEntity.lastName
                 };
                 this.props.loginUser(newUser);
             }
@@ -103,9 +103,9 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
         }
 
         if (!error && loading) {
-            return <LoadingIndicator />;
+            return <LoadingIndicator/>;
         } else if (user) {
-            return <Redirect to="/" />;
+            return <Redirect to="/"/>;
         } else {
             return (
                 <Container>
@@ -114,12 +114,15 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
                             <Grid.Row>
                                 <Grid.Column className="login" textAlign="center">
                                     <Header as="h1">Login</Header>
-                                    <Form size="large" onSubmit={this.onFormSubmit} error={formError} warning={formWarning}>
+                                    <Form size="large" onSubmit={this.onFormSubmit} error={formError}
+                                          warning={formWarning}>
                                         <Segment basic>
-                                            <Form.Input fluid icon="user" iconPosition="left" placeholder='Customer ID' value={formCustomerIdValue} onChange={this.onFormInputChange} />
+                                            <Form.Input fluid icon="user" iconPosition="left" placeholder='Customer ID'
+                                                        value={formCustomerIdValue} onChange={this.onFormInputChange}/>
                                             <Form.Button primary fluid size="large">Login</Form.Button>
-                                            <Message error icon="ban" content={formErrorMessage} />
-                                            <Message warning icon="warning sign" content='customer-id might come from the login cookie' />
+                                            <Message error icon="ban" content={formErrorMessage}/>
+                                            <Message warning icon="warning sign"
+                                                     content='customerEntity-id might come from the login cookie'/>
                                         </Segment>
                                     </Form>
                                 </Grid.Column>
@@ -128,15 +131,17 @@ class LoginContainer extends Component<ComponentProps, ComponentState> {
                                 <Grid.Column className="login" textAlign="left">
                                     <List divided selection>
                                         {
-                                            customers.map((customer, index) => {
-                                                const {customerId, firstName, lastName} = customer;
+                                            customers.map((customerEntity, index) => {
+                                                const {customerId, firstName, lastName} = customerEntity;
                                                 const active = customerId === formCustomerIdValue;
 
                                                 return (
-                                                    <List.Item key={index} className="login" active={active} onClick={() => this.onListItemClick(customerId)}>
+                                                    <List.Item key={index} className="login" active={active}
+                                                               onClick={() => this.onListItemClick(customerId)}>
                                                         <List.Content>
                                                             <List.Header><h3>{firstName} {lastName}</h3></List.Header>
-                                                            <List.Description>Customer ID: {customerId}</List.Description>
+                                                            <List.Description>Customer
+                                                                ID: {customerId}</List.Description>
                                                         </List.Content>
                                                     </List.Item>
                                                 );
@@ -227,4 +232,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, void, Action>): C
 
 const ConnectedLoginContainer = connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
 
-export { ConnectedLoginContainer as LoginContainer };
+export {ConnectedLoginContainer as LoginContainer};

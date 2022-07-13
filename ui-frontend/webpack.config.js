@@ -21,8 +21,8 @@ const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
     entry: {
-        app: [ './src/app/index.tsx' ],
-        vendor: [ 'react', 'react-dom', 'react-router', 'redux', 'react-redux', 'redux-thunk' ]
+        app: ['./src/app/index.tsx'],
+        vendor: ['react', 'react-dom', 'react-router', 'redux', 'react-redux', 'redux-thunk']
     },
     output: {
         filename: 'main.bundle.js',
@@ -30,8 +30,8 @@ module.exports = {
         publicPath: '/'
     },
     resolve: {
-        extensions: [ '.js', '.jsx', '.json', '.ts', '.tsx' ],
-        modules: [ 'node_modules' ]
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+        modules: ['node_modules']
     },
     module: {
         rules: [

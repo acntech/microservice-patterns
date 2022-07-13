@@ -1,0 +1,176 @@
+# ISSUER
+issuer:
+  uri: http://localhost:8888/uaa
+
+# OAUTH
+oauth:
+  user:
+    authorities:
+      - openid
+      - uaa.user
+      - scim.me
+      - scim.userids
+      - password.write
+      - approvals.me
+      - oauth.approvals
+  clients:
+    token-relay-ui:
+      name: Token Relay UI
+      id: token-relay-ui
+      secret: abcd1234
+      authorized-grant-types: authorization_code
+      scope: openid,profile,email
+      authorities: uaa.resource
+      redirect-uri: http://localhost:3000/login/oauth2/code/token-relay-ui
+    token-relay-ui-api:
+      name: Token Relay UI API
+      id: token-relay-ui-api
+      secret: abcd1234
+      authorized-grant-types: authorization_code
+      scope: openid,profile,email
+      authorities: uaa.resource
+      redirect-uri: http://localhost:9000/login/oauth2/code/token-relay-ui-api
+    customers-resource-server:
+      name: Customers Resource Server
+      id: customers-resource-server
+      secret: abcd1234
+      authorized-grant-types: client_credentials
+      scope: openid,profile,email
+      authorities: uaa.resource
+      resource-ids: clients
+    ordering-resource-server:
+      name: Ordering Resource Server
+      id: ordering-resource-server
+      secret: abcd1234
+      authorized-grant-types: client_credentials
+      scope: openid,profile,email
+      authorities: uaa.resource
+      resource-ids: clients
+    warehouse-resource-server:
+      name: Warehouse Resource Server
+      id: warehouse-resource-server
+      secret: abcd1234
+      authorized-grant-types: client_credentials
+      scope: openid,profile,email
+      authorities: uaa.resource
+      resource-ids: clients
+
+# SCIM
+scim:
+  groups:
+    openid: OIDC
+    profile: Access profile information
+    email: Access your email address
+    orders: Access to orders
+    products: Access to products
+    read:customers: Read Customers
+    read:orders: Read Orders
+    write:orders: Write Orders
+    read:products: Read Products
+    read:reservations: Read Reservations
+    write:reservations: Write Reservations
+  users:
+    - john.doe|abcd1234|john.doe@acntech.no|John|Doe|uaa.user,profile,email,orders,products
+
+# JWT
+jwt:
+  token:
+    verification-key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv9QefUdskKi5BDESZf8E
+      im9thKyzgC4BZV7FeX1uNUZYubdzCj5MRDQEVYCgl42HkjwRh+/Xp6Fo8ZNjv2c5
+      iZ/oSxr/I5F7x1J/d54WzJU3A4/ZRKB2Nb1NozwdRp3IV0phOojwlLTZqfKr1aUn
+      nrEa/gL6qnfm4OUXY3w0iQ9084g+6pi/YzZqU/IsFchi4kh3TCKQfFgu5u+jyWfP
+      q7npvjv31vIIJ7M/psSksDWZYj2PC6YlEDjkC0KUgjuAaUDa3SLVabl1aIvoBuvk
+      vad11SNJUSE7oRbeZHN1d0heRgUHW03TTeK6uYPYF7QQ/d/s7uPeaTX9qgU8fTUY
+      qwIDAQAB
+      -----END PUBLIC KEY-----
+    signing-key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEpAIBAAKCAQEAv9QefUdskKi5BDESZf8Eim9thKyzgC4BZV7FeX1uNUZYubdz
+      Cj5MRDQEVYCgl42HkjwRh+/Xp6Fo8ZNjv2c5iZ/oSxr/I5F7x1J/d54WzJU3A4/Z
+      RKB2Nb1NozwdRp3IV0phOojwlLTZqfKr1aUnnrEa/gL6qnfm4OUXY3w0iQ9084g+
+      6pi/YzZqU/IsFchi4kh3TCKQfFgu5u+jyWfPq7npvjv31vIIJ7M/psSksDWZYj2P
+      C6YlEDjkC0KUgjuAaUDa3SLVabl1aIvoBuvkvad11SNJUSE7oRbeZHN1d0heRgUH
+      W03TTeK6uYPYF7QQ/d/s7uPeaTX9qgU8fTUYqwIDAQABAoIBAQCGGsyV2HDVUJ7H
+      h2bNV1LdVLjDn9h9K6xeKbr0C/QX2m38p3sNFjBLHfJJs/qQ+KhmWwgGeG3TCsxK
+      1jdNf+SBigDjQKRNQU+/MLVb8nEN5OLo4o+JooQBXa4BB+2PiI6eN6lxOnq1+xiP
+      7s6iNStVjYrJOVv0AI6veni3XAV+KtIVoK0SajsuPFgeXMBdCxvvGJR5AC3Qu1Ar
+      3gop2RG788mEwWlyqMTvhAC23iCfeNXvHAaWEAR+8UpaNh1+j3sGRQcCHUvo4q1f
+      OB4uAgxFGXmEeMKXpWes41d9/zXPgwmP6Pgi6/IfOWkn6aFZRE1S6pJDc04Ppgon
+      IrJWpFkBAoGBAOWcQeO2UPgKlPZ51A5gZHDz5GQITVXPO6Ri0152DS/LWtIfKc5z
+      NK3XST9DB/S/iXvnBzZJICbA50FCaqy9xCi3vQbYkdtH8g/EBi/rv0Yty1fk/Eto
+      znvGvL5eiJRkubMejszTrE6VhkHTMKYgs3TjhYbczJukHAxP0IbLNembAoGBANXg
+      OMwC2HFt3bfTkGwl4dxq/aV4u30BuSquw8ZU/WdkQHyNWmhlBgnDHEQYSf0P3Xqj
+      NVTb90AR9Rk4rng2pfTUEXRofh/ejqMYZnF9YU7/78r8QODwdXDasVsniiA90pt+
+      E8w7WVf1C3kGwxLWS3JEgZ3ppoSCBxGvx8QruUYxAoGBAL0qbBpXtQN1bF5X5n3l
+      qjpopOxI7rXYYrG+/ZbgOWL77ZoZNI8y2N6z9FObPO3F81XR814lBskGuj9Ioawp
+      N3e4UJJYUGpRLrsQa2yFk/MUfWevbrAN67eL9yn7phhjl55beZiEd3vSsmZ+wKDN
+      ZivR2stOE3/Sx4zZINo8hvErAoGACOfqVYx0yNxjVClKJUa6jfwijcZmQEFXHZDj
+      dBnL54dELCuSrTAvvS5Tuf4s7o2/kkDDksIKHK/ivecfVMApzvUZuPg08EzLMb1t
+      XqJy7+A2cwRoCzXYHhftNLeDx+3rHDB20JVUFhaNIMAIVXt47swtfY7iMThc5P6l
+      2eRcNbECgYA+ZT8BkbyD9EL5+zEhYqypLVt7E1FXoyxJqZUDwnl86c76LovGp9N1
+      XEfX2vOINHKIt9suh+UBS/Fsp5mn9KemId2dywQEfdhmAChuMjCTFg63aw9eakww
+      cwpMfehFeXKx29E3eFarIrEnvNWved4JX5dXGpsBz6ZsszEMjDTVMw==
+      -----END RSA PRIVATE KEY-----
+    policy:
+      global:
+        refreshTokenValiditySeconds: 86400
+
+# LOGIN
+login:
+  serviceProviderKey: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICXQIBAAKBgQDHtC5gUXxBKpEqZTLkNvFwNGnNIkggNOwOQVNbpO0WVHIivig5
+    L39WqS9u0hnA+O7MCA/KlrAR4bXaeVVhwfUPYBKIpaaTWFQR5cTR1UFZJL/OF9vA
+    fpOwznoD66DDCnQVpbCjtDYWX+x6imxn8HCYxhMol6ZnTbSsFW6VZjFMjQIDAQAB
+    AoGAVOj2Yvuigi6wJD99AO2fgF64sYCm/BKkX3dFEw0vxTPIh58kiRP554Xt5ges
+    7ZCqL9QpqrChUikO4kJ+nB8Uq2AvaZHbpCEUmbip06IlgdA440o0r0CPo1mgNxGu
+    lhiWRN43Lruzfh9qKPhleg2dvyFGQxy5Gk6KW/t8IS4x4r0CQQD/dceBA+Ndj3Xp
+    ubHfxqNz4GTOxndc/AXAowPGpge2zpgIc7f50t8OHhG6XhsfJ0wyQEEvodDhZPYX
+    kKBnXNHzAkEAyCA76vAwuxqAd3MObhiebniAU3SnPf2u4fdL1EOm92dyFs1JxyyL
+    gu/DsjPjx6tRtn4YAalxCzmAMXFSb1qHfwJBAM3qx3z0gGKbUEWtPHcP7BNsrnWK
+    vw6By7VC8bk/ffpaP2yYspS66Le9fzbFwoDzMVVUO/dELVZyBnhqSRHoXQcCQQCe
+    A2WL8S5o7Vn19rC0GVgu3ZJlUrwiZEVLQdlrticFPXaFrn3Md82ICww3jmURaKHS
+    N+l4lnMda79eSp3OMmq9AkA0p79BvYsLshUJJnvbk76pCjR28PK4dV1gSDUEqQMB
+    qy45ptdwJLqLJCeNoR0JUcDNIRhOCuOPND7pcMtX6hI/
+    -----END RSA PRIVATE KEY-----
+  serviceProviderKeyPassword: password
+  serviceProviderCertificate: |
+    -----BEGIN CERTIFICATE-----
+    MIIDSTCCArKgAwIBAgIBADANBgkqhkiG9w0BAQQFADB8MQswCQYDVQQGEwJhdzEO
+    MAwGA1UECBMFYXJ1YmExDjAMBgNVBAoTBWFydWJhMQ4wDAYDVQQHEwVhcnViYTEO
+    MAwGA1UECxMFYXJ1YmExDjAMBgNVBAMTBWFydWJhMR0wGwYJKoZIhvcNAQkBFg5h
+    cnViYUBhcnViYS5hcjAeFw0xNTExMjAyMjI2MjdaFw0xNjExMTkyMjI2MjdaMHwx
+    CzAJBgNVBAYTAmF3MQ4wDAYDVQQIEwVhcnViYTEOMAwGA1UEChMFYXJ1YmExDjAM
+    BgNVBAcTBWFydWJhMQ4wDAYDVQQLEwVhcnViYTEOMAwGA1UEAxMFYXJ1YmExHTAb
+    BgkqhkiG9w0BCQEWDmFydWJhQGFydWJhLmFyMIGfMA0GCSqGSIb3DQEBAQUAA4GN
+    ADCBiQKBgQDHtC5gUXxBKpEqZTLkNvFwNGnNIkggNOwOQVNbpO0WVHIivig5L39W
+    qS9u0hnA+O7MCA/KlrAR4bXaeVVhwfUPYBKIpaaTWFQR5cTR1UFZJL/OF9vAfpOw
+    znoD66DDCnQVpbCjtDYWX+x6imxn8HCYxhMol6ZnTbSsFW6VZjFMjQIDAQABo4Ha
+    MIHXMB0GA1UdDgQWBBTx0lDzjH/iOBnOSQaSEWQLx1syGDCBpwYDVR0jBIGfMIGc
+    gBTx0lDzjH/iOBnOSQaSEWQLx1syGKGBgKR+MHwxCzAJBgNVBAYTAmF3MQ4wDAYD
+    VQQIEwVhcnViYTEOMAwGA1UEChMFYXJ1YmExDjAMBgNVBAcTBWFydWJhMQ4wDAYD
+    VQQLEwVhcnViYTEOMAwGA1UEAxMFYXJ1YmExHTAbBgkqhkiG9w0BCQEWDmFydWJh
+    QGFydWJhLmFyggEAMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEEBQADgYEAYvBJ
+    0HOZbbHClXmGUjGs+GS+xC1FO/am2suCSYqNB9dyMXfOWiJ1+TLJk+o/YZt8vuxC
+    KdcZYgl4l/L6PxJ982SRhc83ZW2dkAZI4M0/Ud3oePe84k8jm3A7EvH5wi5hvCkK
+    RpuRBwn3Ei+jCRouxTbzKPsuCVB+1sNyxMTXzf0=
+    -----END CERTIFICATE-----
+
+# ENCRYPTION
+encryption:
+  active_key_label: key-1
+  encryption_keys:
+    - label: key-1
+      passphrase: abcd1234
+
+# DATABASE
+database:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://acntech.postgres:5432/uaa
+  username: uaa
+  password: abcd1234
+
+# SPRING PROFILES
+spring_profiles: default,postgresql

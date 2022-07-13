@@ -1,9 +1,7 @@
 package no.acntech.customer.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
-@Valid
 public class CreateCustomerDto {
 
     @NotBlank

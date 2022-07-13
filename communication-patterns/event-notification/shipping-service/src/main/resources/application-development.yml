@@ -1,20 +1,48 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    ordering:
+      url: http://localhost:9002
+
 ########################
 # SPRING Configuration #
 ########################
 spring:
-  profiles:
-    include:
-      - postgres
-      - local
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  # Datasource
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:shipping;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  # H2
+  h2:
+    console:
+      enabled: true
+  # Kafka
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
 
-# Logging
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
+### Logging ###
 logging:
   level:
-    org.springframework: INFO
-    org.hibernate: WARN
+    root: INFO
     org.apache.kafka: WARN
-    org.apache.kafka.clients.admin.AdminClientConfig: WARN
-    org.apache.kafka.clients.consumer.ConsumerConfig: WARN
-    org.apache.kafka.clients.producer.ProducerConfig: WARN
-    org.apache.kafka.streams.StreamsConfig: WARN
     no.acntech: DEBUG
+
+### Server ###
+server:
+  port: 9004

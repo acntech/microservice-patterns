@@ -1,11 +1,11 @@
 package no.acntech.order.exception;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.NO_CONTENT)
+import java.util.UUID;
+
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
 public class OrderNotFoundException extends RuntimeException {
 
     public OrderNotFoundException(Long id) {

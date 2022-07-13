@@ -1,4 +1,4 @@
-import { SemanticCOLORS } from 'semantic-ui-react';
+import {SemanticCOLORS} from 'semantic-ui-react';
 
 export enum OrderStatus {
     PENDING = 'PENDING',

@@ -1,8 +1,17 @@
-import { polyfill } from 'es6-promise';
+import {polyfill} from 'es6-promise';
 import 'isomorphic-fetch';
 import * as _ from 'lodash';
 import uuidv4 from 'uuid/v4';
-import { ClientError, ClientResponse, CookieName, HeaderName, HeaderValue, RequestConfig, RequestMethod, ResponseCode } from '../../models';
+import {
+    ClientError,
+    ClientResponse,
+    CookieName,
+    HeaderName,
+    HeaderValue,
+    RequestConfig,
+    RequestMethod,
+    ResponseCode
+} from '../../models';
 
 // IE Promise polyfill
 polyfill();
@@ -183,7 +192,7 @@ export class RestClient implements Client {
         }
     }
 
-    private static formatQueryParams(obj: {[index: string]: any}): string {
+    private static formatQueryParams(obj: { [index: string]: any }): string {
         return _.keys(obj).map((key: string) => obj[key] ? `${key}=${obj[key]}` : '').join('&');
     }
 

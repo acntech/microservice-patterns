@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Component, FunctionComponent, ReactNode } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { Dropdown, Header, Icon, Segment } from 'semantic-ui-react';
+import {Component, FunctionComponent, ReactNode} from 'react';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {connect} from 'react-redux';
+import {Link, Redirect} from 'react-router-dom';
+import {Dropdown, Header, Icon, Segment} from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { RootState, User, UserState } from '../../models';
-import { logoutUser } from '../../state/actions';
+import {RootState, User, UserState} from '../../models';
+import {logoutUser} from '../../state/actions';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentStateProps {
@@ -53,15 +53,16 @@ class PrimaryHeaderComponent extends Component<ComponentProps, ComponentState> {
         const {user} = userState;
 
         if (false && !user) {
-            return <Redirect to="/login" />;
+            return <Redirect to="/login"/>;
         } else {
             document.title = this.browserTitle();
             const logoutButtonText = intl.formatMessage({id: 'button.logout.text'});
 
             return (
                 <Segment basic className="primary-header">
-                    <HeaderLogoFragment title={title} subtitle={subtitle} />
-                    <HeaderLoginFragment user={user} logoutButtonText={logoutButtonText} onLogoutClick={this.onLogoutClick} />
+                    <HeaderLogoFragment title={title} subtitle={subtitle}/>
+                    <HeaderLoginFragment user={user} logoutButtonText={logoutButtonText}
+                                         onLogoutClick={this.onLogoutClick}/>
                 </Segment>
             );
         }
@@ -95,7 +96,8 @@ const HeaderLogoFragment: FunctionComponent<HeaderLogoFragmentProps> = (props: H
     return (
         <Header as="h1" floated="left" className="primary-header-title">
             <Link to="/">
-                <Icon name="box" /> < FormattedMessage id={formattedHeaderTitle} />{subtitle ? <> - <FormattedMessage id={subtitle} /></> : null}
+                <Icon name="box"/> < FormattedMessage id={formattedHeaderTitle}/>{subtitle ? <> - <FormattedMessage
+                id={subtitle}/></> : null}
             </Link>
         </Header>
     );
@@ -115,11 +117,11 @@ const HeaderLoginFragment: FunctionComponent<HeaderLoginFragmentProps> = (props:
 
         return (
             <Header as="h3" floated="right" className="primary-header-login">
-                <Icon name="user" />
+                <Icon name="user"/>
                 <Header.Content>
                     <Dropdown text={name}>
                         <Dropdown.Menu>
-                            <Dropdown.Item text={logoutButtonText} onClick={onLogoutClick} />
+                            <Dropdown.Item text={logoutButtonText} onClick={onLogoutClick}/>
                         </Dropdown.Menu>
                     </Dropdown>
                 </Header.Content>
@@ -142,4 +144,4 @@ const IntlPrimaryHeaderComponent = injectIntl(PrimaryHeaderComponent);
 
 const ConnectedPrimaryHeaderComponent = connect(mapStateToProps, mapDispatchToProps)(IntlPrimaryHeaderComponent);
 
-export { ConnectedPrimaryHeaderComponent as PrimaryHeader };
+export {ConnectedPrimaryHeaderComponent as PrimaryHeader};

@@ -1,0 +1,51 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    warehouse:
+      url: http://acntech.warehouse.service:8080
+
+########################
+# SPRING Configuration #
+########################
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  # Datasource
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://acntech.postgres:5432/ordering
+    username: ordering
+    password: abcd1234
+
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - health
+          - info
+
+### Resilience4J ###
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      default:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+
+### Logging ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

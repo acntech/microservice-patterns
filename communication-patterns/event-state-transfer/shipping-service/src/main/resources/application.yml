@@ -2,19 +2,30 @@
 # SPRING Configuration #
 ########################
 spring:
+  # Application
   application:
     name: event-state-transfer-shipping-service
+  # Profiles
+  profiles:
+    active: development
+  # Jackson
   jackson:
     date-format: com.fasterxml.jackson.databind.util.StdDateFormat
     default-property-inclusion: NON_NULL
     serialization:
-      write-dates-as-timestamps: false
+      WRITE_DATES_AS_TIMESTAMPS: false
+      WRITE_DURATIONS_AS_TIMESTAMPS: false
     deserialization:
-      adjust-dates-to-context-time-zone: false
+      ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false
+    generator:
+      WRITE_BIGDECIMAL_AS_PLAIN: true
+  # JMX
   jmx:
     enabled: false
+  # AOP
   aop:
     proxy-target-class: true
+  # JPA
   jpa:
     show-sql: false
     open-in-view: false
@@ -25,10 +36,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-  flyway:
-    locations:
-      - classpath:db/vendor/${spring.datasource.platform}
-      - classpath:db/migration
+  # Kafka
   kafka:
     producer:
       client-id: ${spring.application.name}
@@ -41,9 +49,3 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
-
-# Server
-server:
-  port: 9030
-  servlet:
-    context-path: /api

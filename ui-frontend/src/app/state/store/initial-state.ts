@@ -1,7 +1,17 @@
-import { IntlState } from 'react-intl-redux';
+import {IntlState} from 'react-intl-redux';
 
-import { defaultLocale, messages } from '../../core/locales';
-import { ConfigState, CustomerState, ItemState, NotificationState, OrderState, ProductState, RootState, SecurityType, UserState } from '../../models';
+import {defaultLocale, messages} from '../../core/locales';
+import {
+    ConfigState,
+    CustomerState,
+    ItemState,
+    NotificationState,
+    OrderState,
+    ProductState,
+    RootState,
+    SecurityType,
+    UserState
+} from '../../models';
 
 export const initialConfigState: ConfigState = {
     securityType: SecurityType.NONE

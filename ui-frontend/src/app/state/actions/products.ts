@@ -1,17 +1,37 @@
 import client from '../../core/client';
 
 import {
-    FindProductsActionType, FindProductsErrorAction, FindProductsLoadingAction, FindProductsSuccessAction, GetProductActionType, GetProductErrorAction, GetProductLoadingAction,
-    GetProductSuccessAction, Product, ProductQuery
+    FindProductsActionType,
+    FindProductsErrorAction,
+    FindProductsLoadingAction,
+    FindProductsSuccessAction,
+    GetProductActionType,
+    GetProductErrorAction,
+    GetProductLoadingAction,
+    GetProductSuccessAction,
+    Product,
+    ProductQuery
 } from '../../models';
-import { showErrorNotification } from '../actions';
+import {showErrorNotification} from '../actions';
 
-const getProductLoading = (loading: boolean): GetProductLoadingAction => ({type: GetProductActionType.LOADING, loading});
-const getProductSuccess = (payload: Product): GetProductSuccessAction => ({type: GetProductActionType.SUCCESS, payload});
+const getProductLoading = (loading: boolean): GetProductLoadingAction => ({
+    type: GetProductActionType.LOADING,
+    loading
+});
+const getProductSuccess = (payload: Product): GetProductSuccessAction => ({
+    type: GetProductActionType.SUCCESS,
+    payload
+});
 const getProductError = (error: any): GetProductErrorAction => ({type: GetProductActionType.ERROR, error});
 
-const findProductsLoading = (loading: boolean): FindProductsLoadingAction => ({type: FindProductsActionType.LOADING, loading});
-const findProductsSuccess = (payload: Product[]): FindProductsSuccessAction => ({type: FindProductsActionType.SUCCESS, payload});
+const findProductsLoading = (loading: boolean): FindProductsLoadingAction => ({
+    type: FindProductsActionType.LOADING,
+    loading
+});
+const findProductsSuccess = (payload: Product[]): FindProductsSuccessAction => ({
+    type: FindProductsActionType.SUCCESS,
+    payload
+});
 const findProductsError = (error: any): FindProductsErrorAction => ({type: FindProductsActionType.ERROR, error});
 
 const rootPath = 'products';

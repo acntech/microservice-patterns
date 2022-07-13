@@ -14,8 +14,7 @@ public class RetryListener extends RetryListenerSupport {
 
     @Override
     public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
-        LOGGER.info("Call failed - Retry-Count={}  Error={}", context.getRetryCount(), throwable.getMessage());
+        LOGGER.info("Call failed - Retry-Count={} Error={}", context.getRetryCount(), throwable.getMessage());
         super.onError(context, callback, throwable);
     }
-
 }

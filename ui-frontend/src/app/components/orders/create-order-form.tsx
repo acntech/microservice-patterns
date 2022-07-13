@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Form, Icon, InputOnChangeData, Message, Segment, TextAreaProps } from 'semantic-ui-react';
-import { FormData, FormElementData } from '../../models/types';
+import {Component, ReactNode} from 'react';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {Button, Form, Icon, InputOnChangeData, Message, Segment, TextAreaProps} from 'semantic-ui-react';
+import {FormData, FormElementData} from '../../models/types';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentParamProps {
@@ -70,24 +70,24 @@ class CreateOrderFormComponent extends Component<ComponentProps> {
                                     label={orderNameText}
                                     placeholder={orderNamePlaceholderText}
                                     value={formNameValue}
-                                    onChange={onFormInputNameChange} />
+                                    onChange={onFormInputNameChange}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.TextArea width={10}
                                        label={orderDescriptionText}
                                        placeholder={orderDescriptionPlaceholderText}
                                        value={formDescriptionValue}
-                                       onChange={onFormTextAreaDescriptionChange} />
+                                       onChange={onFormTextAreaDescriptionChange}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Button primary size="tiny">
-                            <Icon name="dolly" /><FormattedMessage id="button.create-order.text" />
+                            <Icon name="dolly"/><FormattedMessage id="button.create-order.text"/>
                         </Form.Button>
                         <Button secondary size="tiny" onClick={onCancelButtonClick}>
-                            <Icon name="cancel" /><FormattedMessage id="button.cancel.text" />
+                            <Icon name="cancel"/><FormattedMessage id="button.cancel.text"/>
                         </Button>
                     </Form.Group>
-                    <Message error><Icon name="ban" /> {formErrorMessage}</Message>
+                    <Message error><Icon name="ban"/> {formErrorMessage}</Message>
                 </Form>
             </Segment>
         );
@@ -96,4 +96,4 @@ class CreateOrderFormComponent extends Component<ComponentProps> {
 
 const IntlCreateOrderFormComponent = injectIntl(CreateOrderFormComponent);
 
-export { IntlCreateOrderFormComponent as CreateOrderForm };
+export {IntlCreateOrderFormComponent as CreateOrderForm};

@@ -1,12 +1,9 @@
 package no.acntech.shipment.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@Valid
 public class ShipmentDto {
 
     @NotNull
@@ -92,14 +89,14 @@ public class ShipmentDto {
         }
 
         public ShipmentDto build() {
-            ShipmentDto shipmentDto = new ShipmentDto();
-            shipmentDto.shipmentId = this.shipmentId;
-            shipmentDto.customerId = this.customerId;
-            shipmentDto.orderId = this.orderId;
-            shipmentDto.status = this.status;
-            shipmentDto.created = this.created;
-            shipmentDto.modified = this.modified;
-            return shipmentDto;
+            var target = new ShipmentDto();
+            target.shipmentId = this.shipmentId;
+            target.customerId = this.customerId;
+            target.orderId = this.orderId;
+            target.status = this.status;
+            target.created = this.created;
+            target.modified = this.modified;
+            return target;
         }
     }
 }

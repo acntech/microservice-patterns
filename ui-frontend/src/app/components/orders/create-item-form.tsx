@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Component, ReactNode } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Form, Icon, InputOnChangeData, Message, Segment, Table } from 'semantic-ui-react';
-import { Currency, FormData, FormElementData, Product } from '../../models';
+import {Component, ReactNode} from 'react';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {Button, Form, Icon, InputOnChangeData, Message, Segment, Table} from 'semantic-ui-react';
+import {Currency, FormData, FormElementData, Product} from '../../models';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 
 interface ComponentParamProps {
     onCancelButtonClick: () => void;
     onFormSubmit: () => void;
     onFormInputQuantityChange: (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => void;
-    product: Product;
+    productEntity: Product;
     formData: CreateItemFormData;
 }
 
@@ -37,11 +37,11 @@ class CreateItemFormComponent extends Component<ComponentProps> {
             onCancelButtonClick,
             onFormSubmit,
             onFormInputQuantityChange,
-            product,
+            productEntity,
             formData,
             intl
         } = this.props;
-        const {productId, name, description, stock, price, currency} = product;
+        const {productId, name, description, stock, price, currency} = productEntity;
         const {
             formError,
             formErrorMessage,
@@ -51,8 +51,8 @@ class CreateItemFormComponent extends Component<ComponentProps> {
             formElementError: formQuantityError,
             formElementValue: formQuantityValue
         } = formInputQuantity;
-        const itemQuantityText = intl.formatMessage({id: 'label.item-quantity.text'});
-        const itemQuantityPlaceholderText = intl.formatMessage({id: 'form.placeholder.item-quantity.text'});
+        const itemQuantityText = intl.formatMessage({id: 'label.orderItemEntity-quantity.text'});
+        const itemQuantityPlaceholderText = intl.formatMessage({id: 'form.placeholder.orderItemEntity-quantity.text'});
 
         return (
             <Segment basic>
@@ -60,31 +60,31 @@ class CreateItemFormComponent extends Component<ComponentProps> {
                     <Table.Body>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-id.text" />
+                                <FormattedMessage id="label.productEntity-id.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{productId}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-name.text" />
+                                <FormattedMessage id="label.productEntity-name.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{name}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-description.text" />
+                                <FormattedMessage id="label.productEntity-description.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{description}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-stock.text" />
+                                <FormattedMessage id="label.productEntity-stock.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{stock}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell width={2} className="table-header">
-                                <FormattedMessage id="label.product-price.text" />
+                                <FormattedMessage id="label.productEntity-price.text"/>
                             </Table.Cell>
                             <Table.Cell width={10}>{Currency[currency]} {price.toFixed(2)}</Table.Cell>
                         </Table.Row>
@@ -98,17 +98,17 @@ class CreateItemFormComponent extends Component<ComponentProps> {
                             label={itemQuantityText}
                             placeholder={itemQuantityPlaceholderText}
                             value={formQuantityValue}
-                            onChange={onFormInputQuantityChange} />
+                            onChange={onFormInputQuantityChange}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Button primary size="tiny">
-                            <Icon name="dolly" /><FormattedMessage id="button.add-item.text" />
+                            <Icon name="dolly"/><FormattedMessage id="button.add-orderItemEntity.text"/>
                         </Form.Button>
                         <Button secondary size="tiny" onClick={onCancelButtonClick}>
-                            <Icon name="cancel" /><FormattedMessage id="button.cancel.text" />
+                            <Icon name="cancel"/><FormattedMessage id="button.cancel.text"/>
                         </Button>
                     </Form.Group>
-                    <Message error><Icon name="ban" /> {formErrorMessage}</Message>
+                    <Message error><Icon name="ban"/> {formErrorMessage}</Message>
                 </Form>
             </Segment>
         );
@@ -117,4 +117,4 @@ class CreateItemFormComponent extends Component<ComponentProps> {
 
 const IntlCreateItemFormComponent = injectIntl(CreateItemFormComponent);
 
-export { IntlCreateItemFormComponent as CreateItemForm };
+export {IntlCreateItemFormComponent as CreateItemForm};

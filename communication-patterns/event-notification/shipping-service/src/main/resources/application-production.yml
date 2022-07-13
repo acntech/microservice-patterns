@@ -1,0 +1,41 @@
+#########################
+# ACNTECH Configuration #
+#########################
+acntech:
+  service:
+    ordering:
+      url: http://acntech.ordering.service:8080
+
+########################
+# SPRING Configuration #
+########################
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  # Datasource
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://acntech.postgres:5432/shipping
+    username: shipping
+    password: abcd1234
+  # Kafka
+  kafka:
+    bootstrap-servers:
+      - acntech.kafka:9092
+
+### Management ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - health
+          - info
+
+### Logging ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

@@ -1,19 +1,18 @@
 package no.acntech.shipment.resource;
 
-import java.util.List;
-import java.util.UUID;
-
+import no.acntech.shipment.model.ShipmentDto;
+import no.acntech.shipment.model.ShipmentQuery;
+import no.acntech.shipment.service.ShipmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.acntech.shipment.model.ShipmentDto;
-import no.acntech.shipment.model.ShipmentQuery;
-import no.acntech.shipment.service.ShipmentService;
+import java.util.List;
+import java.util.UUID;
 
-@RequestMapping(path = "shipments")
+@RequestMapping(path = "/api/shipments")
 @RestController
 public class ShipmentResource {
 
@@ -25,13 +24,13 @@ public class ShipmentResource {
 
     @GetMapping
     public ResponseEntity<List<ShipmentDto>> get(final ShipmentQuery shipmentQuery) {
-        List<ShipmentDto> shipments = shipmentService.findShipments(shipmentQuery);
-        return ResponseEntity.ok(shipments);
+        final var shipmentDtos = shipmentService.findShipments(shipmentQuery);
+        return ResponseEntity.ok(shipmentDtos);
     }
 
     @GetMapping(path = "{shipmentId}")
     public ResponseEntity<ShipmentDto> get(@PathVariable("shipmentId") final UUID shipmentId) {
-        ShipmentDto shipment = shipmentService.getShipment(shipmentId);
-        return ResponseEntity.ok(shipment);
+        final var shipmentDto = shipmentService.getShipment(shipmentId);
+        return ResponseEntity.ok(shipmentDto);
     }
 }

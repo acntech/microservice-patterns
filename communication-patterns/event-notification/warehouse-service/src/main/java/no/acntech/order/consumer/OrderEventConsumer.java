@@ -1,58 +1,29 @@
 package no.acntech.order.consumer;
 
-import java.time.Duration;
-
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
-
 import no.acntech.common.config.KafkaTopic;
 import no.acntech.order.model.OrderEvent;
 import no.acntech.order.service.OrderService;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
 
 @SuppressWarnings("Duplicates")
 @Component
 public class OrderEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderEventConsumer.class);
-    private final KafkaConsumer<String, OrderEvent> kafkaConsumer;
     private final OrderService orderService;
 
-    public OrderEventConsumer(@Qualifier("orderKafkaConsumer") final KafkaConsumer<String, OrderEvent> kafkaConsumer,
-                              final OrderService orderService) {
-        this.kafkaConsumer = kafkaConsumer;
+    public OrderEventConsumer(final OrderService orderService) {
         this.orderService = orderService;
     }
 
-    @SuppressWarnings("InfiniteLoopStatement")
-    @Async
-    public void startConsumer() {
-        try {
-            kafkaConsumer.subscribe(KafkaTopic.ORDERS.toList());
-            LOGGER.info("Subscribe to topics {} and starting consumption of events...", KafkaTopic.ORDERS.toList());
-            while (true) {
-                final ConsumerRecords<String, OrderEvent> records = kafkaConsumer.poll(Duration.ofMillis(200));
-                records.forEach(this::consume);
-            }
-        } finally {
-            LOGGER.info("Unsubscribe from topics {} and ending consumption of events...", KafkaTopic.ORDERS.toList());
-            kafkaConsumer.unsubscribe();
-            kafkaConsumer.close();
-        }
-    }
-
-    private void consume(final ConsumerRecord<String, OrderEvent> record) {
-        final OrderEvent orderEvent = record.value();
-        if (orderEvent == null) {
-            LOGGER.error("Received order event which was null from topic {}", KafkaTopic.ORDERS.getName());
-        } else {
-            LOGGER.debug("Received order event with order-id {} from topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS.getName());
-            orderService.receiveOrderEvent(orderEvent);
-        }
+    @KafkaListener(topics = KafkaTopic.ORDERS)
+    public void consume(final ConsumerRecord<String, OrderEvent> record) {
+        final var orderEvent = record.value();
+        LOGGER.debug("Received OrderEvent with order-id {} from topic {}", orderEvent.getOrderId(), KafkaTopic.ORDERS);
+        orderService.processOrderEvent(orderEvent);
     }
 }

@@ -1,17 +1,15 @@
 package no.acntech.order.service;
 
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
-
 import no.acntech.order.model.OrderEvent;
 import no.acntech.order.model.OrderEventType;
 import no.acntech.order.model.OrderStatus;
 import no.acntech.shipment.model.CreateShipmentDto;
 import no.acntech.shipment.service.ShipmentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class OrderService {
@@ -27,7 +25,9 @@ public class OrderService {
         this.shipmentService = shipmentService;
     }
 
-    public void receiveOrderEvent(final OrderEvent orderEvent) {
+    public void processOrderEvent(final OrderEvent orderEvent) {
+        LOGGER.debug("Processing OrderEvent with order-id {}", orderEvent.getOrderId());
+
         try {
             processReservationEvent(orderEvent);
         } catch (Exception e) {
@@ -36,25 +36,12 @@ public class OrderService {
     }
 
     private void processReservationEvent(final OrderEvent orderEvent) {
-        OrderEventType eventType = orderEvent.getEventType();
-        UUID orderId = orderEvent.getOrderId();
-        OrderStatus orderStatus = orderEvent.getOrderStatus();
-
-        LOGGER.debug("Processing order event for order-id {}", orderId);
-
-        if (OrderEventType.ORDER_UPDATED.equals(eventType) && OrderStatus.CONFIRMED.equals(orderStatus)) {
-            processOrderUpdated(orderEvent);
+        if (orderEvent.getEventType() == OrderEventType.ORDER_UPDATED && orderEvent.getOrderStatus() == OrderStatus.CONFIRMED) {
+            var createShipmentDto = conversionService.convert(orderEvent, CreateShipmentDto.class);
+            Assert.notNull(createShipmentDto, "Failed to convert OrderEvent to CreateShipmentDto");
+            shipmentService.createShipment(createShipmentDto);
         } else {
-            LOGGER.debug("Ignoring order event with type {} for order-id {}", eventType, orderId);
-        }
-    }
-
-    private void processOrderUpdated(final OrderEvent orderEvent) {
-        CreateShipmentDto createShipment = conversionService.convert(orderEvent, CreateShipmentDto.class);
-        if (createShipment != null) {
-            shipmentService.createShipment(createShipment);
-        } else {
-            LOGGER.error("Could not convert order event to update reservation DTO");
+            LOGGER.debug("Ignoring order event with type {} for order-id {}", orderEvent.getEventType(), orderEvent.getOrderId());
         }
     }
 }

@@ -7,11 +7,10 @@
     <parent>
         <groupId>no.acntech</groupId>
         <artifactId>microservice-patterns</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>ui-gateway</artifactId>
-    <packaging>war</packaging>
 
     <!-- DEPENDENCIES -->
     <dependencies>
@@ -27,13 +26,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
             </plugin>
         </plugins>
     </build>

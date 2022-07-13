@@ -2,7 +2,6 @@ package no.acntech.product.model;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -115,16 +114,16 @@ public class ProductDto {
         }
 
         public ProductDto build() {
-            ProductDto productDto = new ProductDto();
-            productDto.name = this.name;
-            productDto.price = this.price;
-            productDto.created = this.created;
-            productDto.modified = this.modified;
-            productDto.productId = this.productId;
-            productDto.stock = this.stock;
-            productDto.description = this.description;
-            productDto.currency = this.currency;
-            return productDto;
+            final var target = new ProductDto();
+            target.name = this.name;
+            target.price = this.price;
+            target.created = this.created;
+            target.modified = this.modified;
+            target.productId = this.productId;
+            target.stock = this.stock;
+            target.description = this.description;
+            target.currency = this.currency;
+            return target;
         }
     }
 }

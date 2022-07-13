@@ -1,61 +1,47 @@
 package no.acntech.reservation.service;
 
-import java.util.Optional;
-import java.util.UUID;
-
+import no.acntech.order.model.UpdateOrderItemDto;
+import no.acntech.order.service.OrderOrchestrationService;
+import no.acntech.reservation.consumer.ReservationRestConsumer;
+import no.acntech.reservation.model.ReservationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
-
-import no.acntech.order.model.ItemStatus;
-import no.acntech.order.service.OrderFacadeService;
-import no.acntech.reservation.consumer.ReservationRestConsumer;
-import no.acntech.reservation.model.ReservationDto;
-import no.acntech.reservation.model.ReservationEvent;
-import no.acntech.reservation.model.ReservationStatus;
+import org.springframework.util.Assert;
 
 @Service
 public class ReservationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
+    private final ConversionService conversionService;
     private final ReservationRestConsumer reservationRestConsumer;
-    private final OrderFacadeService orderFacadeService;
+    private final OrderOrchestrationService orderOrchestrationService;
 
-    public ReservationService(final ReservationRestConsumer reservationRestConsumer,
-                              final OrderFacadeService orderFacadeService) {
+    public ReservationService(final ConversionService conversionService,
+                              final ReservationRestConsumer reservationRestConsumer,
+                              final OrderOrchestrationService orderOrchestrationService) {
+        this.conversionService = conversionService;
         this.reservationRestConsumer = reservationRestConsumer;
-        this.orderFacadeService = orderFacadeService;
+        this.orderOrchestrationService = orderOrchestrationService;
     }
 
-    public void receiveReservationEvent(final ReservationEvent reservationEvent) {
-        UUID reservationId = reservationEvent.getReservationId();
-
-        LOGGER.debug("Retrieving reservation event for reservation-id {}", reservationId);
+    public void processReservationEvent(final ReservationEvent reservationEvent) {
+        LOGGER.debug("Processing ReservationEvent for reservation-id {}", reservationEvent.getReservationId());
 
         try {
-            Optional<ReservationDto> reservationOptional = reservationRestConsumer.get(reservationId);
-
-            if (reservationOptional.isPresent()) {
-                ReservationDto reservation = reservationOptional.get();
-
-                processReservation(reservation);
+            LOGGER.debug("Retrieving ReservationDto for reservation-id {}", reservationEvent.getReservationId());
+            final var optionalReservationDto = reservationRestConsumer.get(reservationEvent.getReservationId());
+            if (optionalReservationDto.isPresent()) {
+                final var reservationDto = optionalReservationDto.get();
+                final var updateOrderItemDto = conversionService.convert(reservationDto, UpdateOrderItemDto.class);
+                Assert.notNull(updateOrderItemDto, "Failed to ReservationDto to UpdateOrderItemDto");
+                orderOrchestrationService.updateOrderItemReservation(updateOrderItemDto);
             } else {
-                LOGGER.error("Reservation with reservation-id {} could not be found", reservationId);
+                LOGGER.error("Reservation with reservation-id {} could not be found", reservationEvent.getReservationId());
             }
         } catch (Exception e) {
             LOGGER.error("Error occurred while processing reservation event", e);
         }
-    }
-
-    private void processReservation(final ReservationDto reservationDto) {
-        UUID reservationId = reservationDto.getReservationId();
-        Long quantity = reservationDto.getQuantity();
-        ReservationStatus reservationStatus = reservationDto.getStatus();
-
-        LOGGER.debug("Processing reservation event for reservation-id {}", reservationId);
-
-        ItemStatus status = ItemStatus.valueOf(reservationStatus.name());
-
-        orderFacadeService.updateItemReservation(reservationId, quantity, status);
     }
 }

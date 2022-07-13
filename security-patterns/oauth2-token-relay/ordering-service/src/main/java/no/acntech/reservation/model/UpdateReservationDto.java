@@ -1,11 +1,5 @@
 package no.acntech.reservation.model;
 
-import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@Valid
 public class UpdateReservationDto {
 
     private Long quantity;
@@ -17,13 +11,6 @@ public class UpdateReservationDto {
 
     public ReservationStatus getStatus() {
         return status;
-    }
-
-    @JsonIgnore
-    @AssertTrue
-    public boolean isValid() {
-        return (quantity != null && quantity > 0) ||
-                (ReservationStatus.CONFIRMED.equals(status));
     }
 
     public static Builder builder() {
@@ -49,10 +36,10 @@ public class UpdateReservationDto {
         }
 
         public UpdateReservationDto build() {
-            UpdateReservationDto updateReservationDto = new UpdateReservationDto();
-            updateReservationDto.quantity = this.quantity;
-            updateReservationDto.status = this.status;
-            return updateReservationDto;
+            final var target = new UpdateReservationDto();
+            target.quantity = this.quantity;
+            target.status = this.status;
+            return target;
         }
     }
 }
