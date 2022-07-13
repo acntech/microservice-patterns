@@ -4,7 +4,7 @@
 acntech:
   service:
     ordering:
-      url: http://localhost:9001
+      url: http://localhost:9002
 
 ########################
 # SPRING Configuration #
@@ -45,4 +45,4 @@ logging:
 
 ### Server ###
 server:
-  port: 9002
+  port: 9005

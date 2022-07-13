@@ -2,16 +2,17 @@ package no.acntech.product.service;
 
 import no.acntech.product.exception.ProductNotFoundException;
 import no.acntech.product.model.CreateProductDto;
-import no.acntech.product.model.Product;
 import no.acntech.product.model.ProductDto;
+import no.acntech.product.model.ProductEntity;
 import no.acntech.product.model.ProductQuery;
 import no.acntech.product.repository.ProductRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
     private static final Sort SORT_BY_ID = Sort.by("id");
     private final ConversionService conversionService;
     private final ProductRepository productRepository;
@@ -31,10 +31,9 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductDto> findProducts(@NotNull final ProductQuery productQuery) {
-        String name = productQuery.getName();
-        if (name != null) {
-            return productRepository.findAllByName(name)
+    public List<ProductDto> findProducts(@NotNull @Valid final ProductQuery productQuery) {
+        if (productQuery.getName() != null) {
+            return productRepository.findAllByName(productQuery.getName())
                     .stream()
                     .map(this::convert)
                     .collect(Collectors.toList());
@@ -47,25 +46,22 @@ public class ProductService {
     }
 
     public ProductDto getProduct(@NotNull final UUID productId) {
-        Product product = productRepository.findByProductId(productId)
+        return productRepository.findByProductId(productId)
+                .map(this::convert)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
-        return convert(product);
     }
 
-    public ProductDto createProduct(@NotNull final CreateProductDto createProduct) {
-        Product product = Product.builder()
-                .name(createProduct.getName())
-                .description(createProduct.getDescription())
-                .build();
-
-        Product savedProduct = productRepository.save(product);
-
-        LOGGER.info("Created product with product-id {}", savedProduct.getProductId());
-
-        return convert(savedProduct);
+    @Transactional
+    public ProductDto createProduct(@NotNull @Valid final CreateProductDto createProductDto) {
+        final var productEntity = conversionService.convert(createProductDto, ProductEntity.class);
+        Assert.notNull(productEntity, "Failed to convert CreateProductDto to ProductEntity");
+        final var savedProductEntity = productRepository.save(productEntity);
+        return convert(savedProductEntity);
     }
 
-    private ProductDto convert(final Product product) {
-        return conversionService.convert(product, ProductDto.class);
+    private ProductDto convert(final ProductEntity product) {
+        final var productDto = conversionService.convert(product, ProductDto.class);
+        Assert.notNull(productDto, "Failed to convert ProductEntity to ProductDto");
+        return productDto;
     }
 }

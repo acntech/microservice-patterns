@@ -4,10 +4,10 @@ services:
   acntech.postgres:
     image: postgres
     container_name: acntech.postgres
-    environment:
-      - POSTGRES_PASSWORD=abcd1234
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=abcd1234
     volumes:
       - ./resources/postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql
       - acntech.postgres:/var/lib/postgresql/data
@@ -52,6 +52,22 @@ services:
     networks:
       - acntech.zipkin
 
+  acntech.uaa:
+    image: acntechie/uaa
+    container_name: acntech.uaa
+    depends_on:
+      - acntech.postgres
+    ports:
+      - "8888:8080"
+    environment:
+      - UAA_CONFIG_PATH=/usr/local/uaa
+    volumes:
+      - ./resources/uaa.yml:/usr/local/uaa/uaa.yml
+      - ./resources/log4j.properties:/usr/local/uaa/log4j.properties
+    networks:
+      - acntech.uaa
+      - acntech.postgres
+
 volumes:
   acntech.postgres:
     name: acntech.postgres
@@ -65,3 +81,5 @@ networks:
     name: acntech.rabbitmq
   acntech.zipkin:
     name: acntech.zipkin
+  acntech.uaa:
+    name: acntech.uaa

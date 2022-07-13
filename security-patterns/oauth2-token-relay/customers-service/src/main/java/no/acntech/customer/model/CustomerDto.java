@@ -1,11 +1,9 @@
 package no.acntech.customer.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@Valid
 public class CustomerDto {
 
     @NotNull
@@ -91,14 +89,14 @@ public class CustomerDto {
         }
 
         public CustomerDto build() {
-            CustomerDto customerDto = new CustomerDto();
-            customerDto.customerId = this.customerId;
-            customerDto.lastName = this.lastName;
-            customerDto.created = this.created;
-            customerDto.modified = this.modified;
-            customerDto.firstName = this.firstName;
-            customerDto.address = this.address;
-            return customerDto;
+            var target = new CustomerDto();
+            target.customerId = this.customerId;
+            target.lastName = this.lastName;
+            target.created = this.created;
+            target.modified = this.modified;
+            target.firstName = this.firstName;
+            target.address = this.address;
+            return target;
         }
     }
 }

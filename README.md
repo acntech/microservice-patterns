@@ -13,14 +13,19 @@ of the system is typically comprised of the following microservices:
 
 * **Customers**
     * Service that maintains customerEntity records.
+    * http://localhost:9001
 * **Ordering**
     * Service where customers can create orders and add order items.
+    * http://localhost:9002
 * **Warehouse**
     * Service that maintains products and productEntity inventory.
+    * http://localhost:9003
 * **Shipping**
     * Service that ships an order when it has been completed.
+    * http://localhost:9004
 * **Billing**
     * Service that sends invoices to customers when orders have been completed and shipped.
+    * http://localhost:9005
 
 As well there is a ReactJS based UI that can be used to interact with the business logic.
 

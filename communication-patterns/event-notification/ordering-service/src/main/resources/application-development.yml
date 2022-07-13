@@ -4,7 +4,7 @@
 acntech:
   service:
     warehouse:
-      url: http://localhost:9004
+      url: http://localhost:9003
 
 ########################
 # SPRING Configuration #
@@ -45,4 +45,4 @@ logging:
 
 ### Server ###
 server:
-  port: 9001
+  port: 9002

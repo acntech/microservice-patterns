@@ -1,0 +1,42 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # Security
+  security:
+    oauth2:
+      client:
+        registration:
+          token-relay-ui:
+            provider: uaa
+            client-id: token-relay-ui
+            client-secret: abcd1234
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          uaa:
+            issuer-uri: http://acntech.uaa:8080/uaa/oauth/token
+  # Cloud
+  cloud:
+    gateway:
+      routes:
+        - id: customers
+          uri: http://acntech.customers.service:8080
+          predicates:
+            - Path=/api/customers/**
+        - id: ordering
+          uri: http://acntech.ordering.service:8080
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+        - id: warehouse
+          uri: http://acntech.warehouse.service:8080
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+
+# Logging
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

@@ -7,7 +7,7 @@ spring:
     gateway:
       routes:
         - id: ordering
-          uri: http://localhost:9001
+          uri: http://localhost:9002
           predicates:
             - Path=/api/orders/**, /api/items/**
           filters:
@@ -18,7 +18,7 @@ spring:
                 rate-limiter.limit: 3
                 rate-limiter.duration: 1s
         - id: warehouse
-          uri: http://localhost:9004
+          uri: http://localhost:9003
           predicates:
             - Path=/api/products/**, /api/reservations/**
           filters:

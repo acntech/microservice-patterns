@@ -20,9 +20,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
                 UUIDAttributeConverter.class},
         basePackages = {
                 "no.acntech.product.model",
+                "no.acntech.inventory.model",
                 "no.acntech.reservation.model"
         })
 @Configuration
 public class DatabaseConfig {
-
 }
