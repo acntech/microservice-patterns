@@ -2,8 +2,14 @@ package no.acntech.order.service;
 
 import no.acntech.order.exception.OrderItemNotFoundException;
 import no.acntech.order.exception.OrderNotFoundException;
+import no.acntech.order.model.CreateOrderDto;
+import no.acntech.order.model.CreateOrderItemDto;
+import no.acntech.order.model.OrderDto;
 import no.acntech.order.model.OrderEntity;
+import no.acntech.order.model.OrderItemDto;
 import no.acntech.order.model.OrderItemEntity;
+import no.acntech.order.model.OrderQuery;
+import no.acntech.order.model.UpdateOrderItemDto;
 import no.acntech.order.repository.OrderItemRepository;
 import no.acntech.order.repository.OrderRepository;
 import org.slf4j.Logger;

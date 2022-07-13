@@ -2,6 +2,14 @@ package no.acntech.order.service;
 
 import no.acntech.order.exception.OrderItemAlreadyExistsException;
 import no.acntech.order.exception.OrderItemNotFoundException;
+import no.acntech.order.model.CreateOrderDto;
+import no.acntech.order.model.CreateOrderItemDto;
+import no.acntech.order.model.OrderDto;
+import no.acntech.order.model.OrderEvent;
+import no.acntech.order.model.OrderEventType;
+import no.acntech.order.model.OrderItemDto;
+import no.acntech.order.model.OrderQuery;
+import no.acntech.order.model.UpdateOrderItemDto;
 import no.acntech.order.producer.OrderEventProducer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

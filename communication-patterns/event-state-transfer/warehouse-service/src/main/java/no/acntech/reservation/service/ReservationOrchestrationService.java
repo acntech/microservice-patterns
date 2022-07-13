@@ -1,5 +1,11 @@
 package no.acntech.reservation.service;
 
+import no.acntech.reservation.model.CancelReservationDto;
+import no.acntech.reservation.model.CreateReservationDto;
+import no.acntech.reservation.model.ReservationDto;
+import no.acntech.reservation.model.ReservationEvent;
+import no.acntech.reservation.model.ReservationQuery;
+import no.acntech.reservation.model.UpdateReservationDto;
 import no.acntech.reservation.producer.ReservationEventProducer;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
