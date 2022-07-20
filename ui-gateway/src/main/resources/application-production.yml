@@ -1,0 +1,26 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # Cloud
+  cloud:
+    gateway:
+      routes:
+        - id: customers
+          uri: http://acntech.customers.service:8080
+          predicates:
+            - Path=/api/customers/**
+        - id: ordering
+          uri: http://acntech.ordering.service:8080
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+        - id: warehouse
+          uri: http://acntech.warehouse.service:8080
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+
+# Logging
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

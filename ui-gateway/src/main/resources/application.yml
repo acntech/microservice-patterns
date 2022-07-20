@@ -2,40 +2,26 @@
 # SPRING Configuration #
 ########################
 spring:
+  # Application
   application:
-    name: ui-gateway
-  cloud:
-    gateway:
-      routes:
-        - id: customers
-          uri: http://localhost:9001
-          predicates:
-            - Path=/api/customers/**
-        - id: ordering
-          uri: http://localhost:9002
-          predicates:
-            - Path=/api/orders/**, /api/items/**
-          filters:
-            - AddResponseHeader=set-cookie, yolo-cookie=hey; Path=/
-            - AddResponseHeader=set-cookie, XSRF-TOKEN=hey; Path=/
-            - AddResponseHeader=yolo-header, hey
-        - id: warehouse
-          uri: http://localhost:9003
-          predicates:
-            - Path=/api/products/**, /api/reservations/**
-          filters:
-            - AddResponseHeader=set-cookie, yolo-cookie=hey; Path=/
-            - AddResponseHeader=yolo-header, hey
-
-# Logging
-logging:
-  level:
-    root: INFO
-    no.acntech: DEBUG
-    org.springframework.web: INFO
-    org.springframework.security: INFO
-    org.springframework.security.oauth2: INFO
-
-# Server
-server:
-  port: 8000
+    name: common-ui-gateway
+  # Profiles
+  profiles:
+    active: development
+  # Jackson
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: NON_NULL
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+      WRITE_DURATIONS_AS_TIMESTAMPS: false
+    deserialization:
+      ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false
+    generator:
+      WRITE_BIGDECIMAL_AS_PLAIN: true
+  # JMX
+  jmx:
+    enabled: false
+  # AOP
+  aop:
+    proxy-target-class: true

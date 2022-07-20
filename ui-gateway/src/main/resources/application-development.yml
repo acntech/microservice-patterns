@@ -1,0 +1,30 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # Cloud
+  cloud:
+    gateway:
+      routes:
+        - id: customers
+          uri: http://localhost:9001
+          predicates:
+            - Path=/api/customers/**
+        - id: ordering
+          uri: http://localhost:9002
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+        - id: warehouse
+          uri: http://localhost:9003
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+
+# Logging
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+
+# Server
+server:
+  port: 9000

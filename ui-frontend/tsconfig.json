@@ -1,28 +1,34 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
-    "baseUrl": "src",
-    "outDir": "build",
-    "module": "esnext",
     "target": "es6",
+    "module": "commonjs",
     "lib": [
-      "es6",
-      "es7",
-      "dom"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "jsx": "react",
-    "moduleResolution": "node",
     "allowJs": true,
-    "sourceMap": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": false,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "forceConsistentCasingInFileNames": true
+    "jsx": "react",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "isolatedModules": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": "./src",
+    "esModuleInterop": true,
+    "types": [
+      "react",
+      "node"
+    ],
+    "forceConsistentCasingInFileNames": true,
   },
+  "include": [
+    "./src/**/*"
+  ],
   "exclude": [
     "node_modules",
-    "dist"
+    "webpack.*.js"
   ]
 }
