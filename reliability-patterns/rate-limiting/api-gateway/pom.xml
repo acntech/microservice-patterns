@@ -14,7 +14,8 @@
 
     <!-- PROPERTIES -->
     <properties>
-        <bucket4j.version>7.5.0</bucket4j.version>
+        <bucket4j.version>8.1.1</bucket4j.version>
+        <ehcache.version>3.10.3</ehcache.version>
     </properties>
 
     <!-- DEPENDENCIES -->
@@ -33,17 +34,18 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.github.vladimir-bukhtoyarov</groupId>
-            <artifactId>bucket4j-jcache</artifactId>
-            <version>${bucket4j.version}</version>
-        </dependency>
-        <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j-jcache</artifactId>
+            <version>${bucket4j.version}</version>
         </dependency>
     </dependencies>
 

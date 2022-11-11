@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Component
 public class ReservationRabbitProducer {

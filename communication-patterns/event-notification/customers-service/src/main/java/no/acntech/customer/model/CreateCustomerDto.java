@@ -1,6 +1,6 @@
 package no.acntech.customer.model;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 public class CreateCustomerDto {
 

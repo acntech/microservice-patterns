@@ -5,8 +5,8 @@ import no.acntech.shipment.model.CreateShipmentDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @Component
 public class ShipmentRabbitProducer {
