@@ -23,20 +23,25 @@ spring:
   h2:
     console:
       enabled: true
-  # ZipKin
-  zipkin:
-    base-url: http://localhost:9411
 
 ### Management ###
 management:
+  # Endpoints
   endpoints:
     web:
       base-path: /management
       exposure:
         include: "*"
+  # OTLP
+#  otlp:
+#    metrics:
+#      export:
+#        url: http://localhost:9411/v1/metrics
 
 ### Logging ###
 logging:
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){blue} %clr(%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] %-48.48c{36}){yellow} %clr(:){red} %clr(%m){faint}%n"
   level:
     root: INFO
     no.acntech: DEBUG

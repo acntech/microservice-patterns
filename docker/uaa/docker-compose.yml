@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  acntech.uaa:
+    image: acntechie/uaa
+    container_name: acntech.uaa
+    depends_on:
+      - acntech.postgres
+    ports:
+      - "8888:8080"
+    environment:
+      - UAA_CONFIG_PATH=/usr/local/uaa
+    volumes:
+      - ./resources/uaa.yml:/usr/local/uaa/uaa.yml
+      - ./resources/log4j.properties:/usr/local/uaa/log4j.properties
+    networks:
+      - acntech.uaa
+      - acntech.postgres
+
+networks:
+  acntech.postgres:
+    name: acntech.postgres
+    external: true
+  acntech.uaa:
+    name: acntech.uaa

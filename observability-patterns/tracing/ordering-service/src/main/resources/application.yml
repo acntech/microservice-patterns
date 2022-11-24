@@ -36,3 +36,9 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+
+### Management ###
+management:
+  tracing:
+    sampling:
+      probability: 1.0

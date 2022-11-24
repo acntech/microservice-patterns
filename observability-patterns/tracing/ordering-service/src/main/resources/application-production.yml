@@ -19,9 +19,6 @@ spring:
     url: jdbc:postgresql://acntech.postgres:5432/ordering
     username: ordering
     password: abcd1234
-  # ZipKin
-  zipkin:
-    base-url: http://acntech.zipkin:9411
 
 ### Management ###
 management:
@@ -32,6 +29,11 @@ management:
         include:
           - health
           - info
+  # OTLP
+  otlp:
+    metrics:
+      export:
+        url: http://acntech.jaeger:14268/api/traces
 
 ### Logging ###
 logging:

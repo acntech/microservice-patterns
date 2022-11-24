@@ -6,18 +6,15 @@
     <!-- PROJECT -->
     <parent>
         <groupId>no.acntech</groupId>
-        <artifactId>security-patterns</artifactId>
+        <artifactId>microservice-patterns</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>oauth2-token-relay</artifactId>
+    <artifactId>frontend</artifactId>
     <packaging>pom</packaging>
 
     <!-- MODULES -->
     <modules>
         <module>api-gateway</module>
-        <module>customers-service</module>
-        <module>ordering-service</module>
-        <module>warehouse-service</module>
     </modules>
 </project>
