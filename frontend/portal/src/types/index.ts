@@ -1,3 +1,4 @@
+export * from './settings';
 export * from './common';
 export * from './form';
 export * from './rest-client';

@@ -1,16 +1,15 @@
-export type SliceStatus =
-    | 'IDLE'
-    | 'LOADING'
-    | 'SUCCESS'
-    | 'FAILED';
+import {Order} from "./orders";
+import {ErrorPayload} from "./rest-client";
 
-export interface SliceState<T1, T2> {
-    status: SliceStatus;
-    data?: T1;
-    error?: T2;
-}
-
-export interface SliceError {
+export interface ApiError {
     errorId: string;
     errorCode: string;
+}
+
+export type PageStatus = 'PENDING' | 'LOADING' | 'SUCCESS' | 'FAILED'
+
+export interface PageState<T> {
+    status: PageStatus;
+    data?: T;
+    error?: ErrorPayload
 }

@@ -1,5 +1,3 @@
-import {IntlState} from 'react-intl-redux';
-
 import en from './translations/en.json';
 import no from './translations/no.json';
 import {CookieSetOptions} from "universal-cookie";
@@ -17,12 +15,9 @@ export const supportedLocales: SupportedLocale[] = ['en', 'no'];
 
 export type SupportedLocale = 'en' | 'no';
 
-export const getIntlState = (locale: SupportedLocale): IntlState => {
-    return {
-        locale,
-        messages: messages[locale]
-    };
-};
+export const getLocaleMessages = (locale: SupportedLocale): Record<string, string> => {
+    return messages[locale]
+}
 
 export interface LocaleOption {
     key: SupportedLocale;
@@ -35,7 +30,7 @@ export const getLocaleOption = (locale: SupportedLocale): LocaleOption => {
         key: locale,
         value: locale,
         text: locale.toUpperCase()
-    };
+    }
 };
 
 export const getSupportedLocaleOptions = (): LocaleOption[] => {

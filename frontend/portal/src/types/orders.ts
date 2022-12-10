@@ -1,6 +1,3 @@
-import {SliceStatus} from "./common";
-import {ErrorPayload} from "./rest-client";
-
 export enum OrderItemStatus {
     PENDING = 'PENDING',
     RESERVED = 'RESERVED',

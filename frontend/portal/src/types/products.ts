@@ -1,5 +1,3 @@
-import {ErrorPayload, SliceStatus} from './';
-
 export enum Currency {
     USD = '$',
     EUR = '€',
@@ -21,8 +19,3 @@ export interface ProductQuery {
     name: string;
 }
 
-export interface ProductState {
-    status: SliceStatus;
-    data: Product[];
-    error?: ErrorPayload;
-}

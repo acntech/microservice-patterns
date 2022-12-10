@@ -12,7 +12,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http
                 .csrf().disable()
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeHttpRequests().anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer()
                 .jwt()

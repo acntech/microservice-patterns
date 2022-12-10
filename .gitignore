@@ -1,23 +1,35 @@
-# General
-**/build-details.properties
+# Generic
+*.orig
+*.mine
+*.bak
+*.log
+*.gz
+*.pem
+
+# Java
+out/
+build/
 classes/
 eclipse-classes/
 .classpath
 .project
 .settings/
 target/
-version.txt
-*.lst
-blaze.properties
-*.orig
-*.mine
-*.mymetadata
 generated/
-ignoreme.txt
-*.log
-*.gz
+version.txt
 
-sql.log.*
+# Node
+node_modules/
+.pnp/
+.pnp.js
+coverage/
+.next/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
 
 # Intellij
 .idea/
@@ -31,24 +43,6 @@ atlassian-ide-plugin.xml
 *.code-workspace
 .factorypath
 
-data.json
-json2html.pyc
-stats.html
-jsconfig.json
-
-# Node
-node_modules/
-build/
-dist/
-yarn.lock
-
+# OS
 Session.vim
 .DS_Store
-
-# JRebel
-rebel.xml
-.rebel.xml.bak
-rebel-remote.xml
-.rebel-remote.xml.bak
-grunt.status
-docker-compose.local.yml

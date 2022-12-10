@@ -1,6 +1,4 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING Configuration #
 spring:
   # JPA
   jpa:
