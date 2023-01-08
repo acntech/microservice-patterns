@@ -28,10 +28,11 @@ management:
       exposure:
         include: "*"
   # OTLP
-#  otlp:
-#    metrics:
-#      export:
-#        url: http://localhost:9411/v1/metrics
+  otlp:
+    tracing:
+      export:
+        grpc:
+          url: http://localhost:4317
 
 ### Logging ###
 logging:

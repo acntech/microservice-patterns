@@ -11,8 +11,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(final ServerHttpSecurity http,
-                                                            final ReactiveClientRegistrationRepository clientRegistrationRepository) {
+    public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http,
+                                                         final ReactiveClientRegistrationRepository clientRegistrationRepository) {
         return http
                 .csrf().disable()
                 .authorizeExchange().anyExchange().authenticated()

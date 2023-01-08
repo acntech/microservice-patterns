@@ -65,7 +65,6 @@ const OrderPage: FC = (): ReactElement => {
     const [pageState, setPageState] = useState<PageState<any>>({status: 'LOADING'});
     const [getOrderState, setGetOrderState] = useState<PageState<Order>>({status: 'LOADING'});
     const [getProductListState, setGetProductListState] = useState<PageState<Product[]>>({status: 'LOADING'});
-    const [deleteOrderState, setDeleteOrderState] = useState<PageState<Order>>({status: 'PENDING'});
     const {orderId: orderIdParam} = router.query;
     const orderId = !orderIdParam ? undefined : typeof orderIdParam === 'string' ? orderIdParam : orderIdParam.length > 0 ? orderIdParam[0] : undefined;
 
@@ -93,15 +92,29 @@ const OrderPage: FC = (): ReactElement => {
             });
     };
 
-    const deleteOrder = () => {
-        setDeleteOrderState({status: 'LOADING', data: undefined});
-        RestClient.DELETE<Order>(`/api/orders/${orderId}`)
+    const confirmOrder = () => {
+        setPageState({status: 'LOADING'});
+        setGetOrderState({status: 'LOADING', data: undefined});
+        RestClient.PUT<Order>(`/api/orders/${orderId}`)
             .then(response => {
-                setDeleteOrderState({status: 'SUCCESS', data: response.body});
+                setGetOrderState({status: 'SUCCESS', data: response.body});
             })
             .catch(e => {
                 const error = e as ClientError<ErrorPayload>;
-                setDeleteOrderState({status: 'FAILED', error: error.response?.body});
+                setGetOrderState({status: 'FAILED', error: error.response?.body});
+            });
+    };
+
+    const deleteOrder = () => {
+        setPageState({status: 'LOADING'});
+        setGetOrderState({status: 'LOADING', data: undefined});
+        RestClient.DELETE<Order>(`/api/orders/${orderId}`)
+            .then(response => {
+                setGetOrderState({status: 'SUCCESS', data: response.body});
+            })
+            .catch(e => {
+                const error = e as ClientError<ErrorPayload>;
+                setGetOrderState({status: 'FAILED', error: error.response?.body});
             });
     };
 
@@ -113,18 +126,13 @@ const OrderPage: FC = (): ReactElement => {
     }, []);
 
     useEffect(() => {
-        if ((getOrderState.status === 'FAILED' || getProductListState.status === 'FAILED') && pageState.status === 'LOADING') {
-            setPageState({status: 'FAILED'});
+        if ((getOrderState.status === 'FAILED' || getProductListState.status === 'FAILED') && pageState.status !== 'FAILED') {
+            const error = getOrderState.error || getProductListState.error;
+            setPageState({status: 'FAILED', error});
         } else if (getOrderState.status === 'SUCCESS' && getProductListState.status === 'SUCCESS' && pageState.status === 'LOADING') {
             setPageState({status: 'SUCCESS'});
         }
     }, [getOrderState, getProductListState]);
-
-    useEffect(() => {
-        if (deleteOrderState.status === 'SUCCESS') {
-            router.push(`/orders/${orderId}`);
-        }
-    }, [deleteOrderState]);
 
     const onRefreshOrderButtonClick = () => {
         if (!!orderId) {
@@ -135,39 +143,30 @@ const OrderPage: FC = (): ReactElement => {
     };
 
     if (!orderId) {
+        console.log("ID")
         return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING'}/>
     } else if (pageState.status === 'LOADING') {
-        return <LoadingIndicatorFragment/>;
+        return <LoadingIndicatorFragment/>
     } else if (pageState.status === 'FAILED') {
-        if (!!getOrderState.error) {
-            const {errorId, errorCode} = mapErrorPayload(getOrderState.error);
-            return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-        } else if (!!getProductListState.error) {
-            const {errorId, errorCode} = mapErrorPayload(getProductListState.error);
-            return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-        } else {
-            return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE'}/>
-        }
-    } else if (getProductListState.status === 'FAILED') {
-        if (getProductListState.error) {
-            const sliceError = mapErrorPayload(getProductListState.error);
-            const {errorId, errorCode} = sliceError;
-            return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-        } else {
-            return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE'}/>
-        }
+        console.log("FAILED")
+        const {errorId, errorCode} = mapErrorPayload(pageState.error);
+        return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
     } else if (getOrderState.status === 'SUCCESS') {
         if (!getOrderState.data) {
+            console.log("ORDER")
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.ORDERS.ORDER_NOT_FOUND'}/>
         } else if (!getProductListState.data) {
+            console.log("PRODUCTS")
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.PRODUCTS.PRODUCTS_NOT_FOUND'}/>
         } else {
-            const {orderId, name, description, status, created, items} = getOrderState.data;
-            const products = getProductListState.data;
+            const {data: order} = getOrderState;
+            const {data: products} = getProductListState;
+            const {orderId, name, description, status, created, items} = order;
+
             const statusColor = getOrderStatusLabelColor(status);
-            const createOrderItemButtonActive = isCreateOrderItemButtonActive(getOrderState.data);
-            const confirmOrderButtonActive = isConfirmOrderButtonActive(getOrderState.data);
-            const cancelOrderButtonActive = isCancelOrderButtonActive(getOrderState.data);
+            const createOrderItemButtonActive = isCreateOrderItemButtonActive(order);
+            const confirmOrderButtonActive = isConfirmOrderButtonActive(order);
+            const cancelOrderButtonActive = isCancelOrderButtonActive(order);
             const viewOrderItemList = items.map(orderItem => enrichOrderItem(orderItem, products));
 
             return (
@@ -189,14 +188,14 @@ const OrderPage: FC = (): ReactElement => {
                             <Menu.Item>
                                 <Button positive={confirmOrderButtonActive}
                                         disabled={!confirmOrderButtonActive}
-                                        size="tiny" onClick={() => router.push(`/orders/${orderId}/items`)}>
+                                        size="tiny" onClick={confirmOrder}>
                                     <Icon name="check"/><FormattedMessage id="button.confirm"/>
                                 </Button>
                             </Menu.Item>
                             <Menu.Item>
                                 <Button negative={cancelOrderButtonActive}
                                         disabled={!cancelOrderButtonActive}
-                                        size="tiny" onClick={() => deleteOrder()}>
+                                        size="tiny" onClick={deleteOrder}>
                                     <Icon name="delete"/><FormattedMessage id="button.cancel"/>
                                 </Button>
                             </Menu.Item>

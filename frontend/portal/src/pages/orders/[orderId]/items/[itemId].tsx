@@ -79,7 +79,8 @@ const OrderItemPage: FC = (): ReactElement => {
 
     useEffect(() => {
         if ((getOrderState.status === 'FAILED' || getProductState.status === 'FAILED') && pageState.status !== 'FAILED') {
-            setPageState({status: 'FAILED'});
+            const error = getOrderState.error || getProductState.error;
+            setPageState({status: 'FAILED', error});
         } else if (getOrderState.status === 'SUCCESS' && getProductState.status === 'SUCCESS' && pageState.status === 'LOADING') {
             setPageState({status: 'SUCCESS'});
         }
@@ -102,17 +103,8 @@ const OrderItemPage: FC = (): ReactElement => {
     } else if (pageState.status === 'LOADING') {
         return <LoadingIndicatorFragment/>;
     } else if (pageState.status === 'FAILED') {
-        if (!!getOrderState.error) {
-            const sliceError = mapErrorPayload(getOrderState.error);
-            const {errorId, errorCode} = sliceError;
-            return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-        } else if (!!getOrderState.error) {
-            const sliceError = mapErrorPayload(getOrderState.error);
-            const {errorId, errorCode} = sliceError;
-            return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-        } else {
-            return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE'}/>
-        }
+        const {errorId, errorCode} = mapErrorPayload(pageState.error);
+        return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
     } else if (pageState.status === 'SUCCESS') {
         if (!getOrderState.data) {
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.ORDERS.ORDER_NOT_FOUND'}/>

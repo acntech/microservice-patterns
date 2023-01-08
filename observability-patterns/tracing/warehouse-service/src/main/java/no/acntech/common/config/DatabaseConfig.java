@@ -23,6 +23,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
                 "no.acntech.inventory.model",
                 "no.acntech.reservation.model"
         })
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class DatabaseConfig {
 }

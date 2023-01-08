@@ -1,5 +1,7 @@
 package no.acntech.order.service;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import no.acntech.invoice.consumer.InvoiceRestConsumer;
 import no.acntech.invoice.model.CreateInvoiceDto;
 import no.acntech.order.exception.OrderItemAlreadyExistsException;
@@ -23,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,7 +67,8 @@ public class OrderOrchestrationService {
     @Transactional
     public OrderDto updateOrder(@NotNull final UUID orderId) {
         final var orderDto = orderService.updateOrder(orderId);
-        orderDto.getItems()
+        orderDto.getItems().stream()
+                .filter(OrderItemDto::isReserved)
                 .forEach(item -> {
                     final var updateReservationDto = UpdateReservationDto.builder()
                             .statusConfirmed()

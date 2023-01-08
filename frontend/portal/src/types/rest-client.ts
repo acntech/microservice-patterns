@@ -66,14 +66,14 @@ export interface Page<T> {
 }
 
 export interface ErrorPayload {
-    timestamp: string;
+    timestamp?: string;
     sessionId?: string;
     exchangeId?: string;
     traceId?: string;
     requestId?: string;
-    errorId: string;
+    errorId?: string;
     errorCode?: string;
-    status: number;
+    status?: number;
     error?: string;
     message?: string;
     path?: string;

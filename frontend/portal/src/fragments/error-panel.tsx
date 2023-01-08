@@ -1,23 +1,24 @@
 import React, {FC, ReactElement} from 'react'
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Message, Segment} from 'semantic-ui-react';
-import {ApiError, ErrorPayload} from '../types';
+import {ErrorPayload} from '../types';
 
-export const mapErrorPayload = (error: ErrorPayload): ApiError => {
-    let errorCause = error;
+export interface FragmentProps {
+    errorId?: string;
+    errorCode: string;
+}
+
+export const mapErrorPayload = (error?: ErrorPayload): FragmentProps => {
+    const defaultErrorCause = 'ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE';
+    let errorCause = error || {errorCode: defaultErrorCause};
     while (errorCause.cause) {
         errorCause = errorCause.cause;
     }
     return {
         errorId: errorCause.errorId,
-        errorCode: errorCause.errorCode || 'ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE'
+        errorCode: errorCause.errorCode || defaultErrorCause
     }
 };
-
-interface FragmentProps {
-    errorId?: string;
-    errorCode: string;
-}
 
 export const ErrorPanelFragment: FC<FragmentProps> = (props: FragmentProps): ReactElement => {
     const {errorId, errorCode} = props;

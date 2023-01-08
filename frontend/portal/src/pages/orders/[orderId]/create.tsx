@@ -49,6 +49,7 @@ const CreateOrderItemPage: FC = (): ReactElement => {
     };
 
     const createOrderItem = (body: CreateOrderItem) => {
+        setPageState({status: 'LOADING'});
         setGetOrderState({status: 'LOADING', data: undefined});
         RestClient.POST<Order>(`/api/orders/${orderId}/items`, body)
             .then(response => {
@@ -66,8 +67,9 @@ const CreateOrderItemPage: FC = (): ReactElement => {
     }, []);
 
     useEffect(() => {
-        if ((getOrderState.status === 'FAILED' || getProductListState.status === 'FAILED') && pageState.status === 'LOADING') {
-            setPageState({status: 'FAILED'});
+        if ((getOrderState.status === 'FAILED' || getProductListState.status === 'FAILED') && pageState.status !== 'FAILED') {
+            const error = getOrderState.error || getProductListState.error;
+            setPageState({status: 'FAILED', error});
         } else if (getOrderState.status === 'SUCCESS' && getProductListState.status === 'SUCCESS' && pageState.status === 'LOADING') {
             setPageState({status: 'SUCCESS'});
         }
@@ -107,23 +109,19 @@ const CreateOrderItemPage: FC = (): ReactElement => {
     if (pageState.status === 'LOADING') {
         return <LoadingIndicatorFragment/>;
     } else if (pageState.status === 'FAILED') {
-        if (!!getOrderState.error) {
-            const {errorId, errorCode} = mapErrorPayload(getOrderState.error);
-            return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-        } else if (!!getProductListState.error) {
-            const {errorId, errorCode} = mapErrorPayload(getProductListState.error);
-            return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-        } else {
-            return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE'}/>
-        }
+        console.log("CREATE FAILED")
+        const {errorId, errorCode} = mapErrorPayload(pageState.error);
+        return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
     } else if (pageState.status === 'SUCCESS') {
         const {data: product} = pageState;
         const {data: order} = getOrderState;
         const {data: productList} = getProductListState;
 
         if (!order) {
+            console.log("CREATE ORDER")
             return <ErrorPanelFragment errorCode={'ACNTECH.FUNCTIONAL.ORDERS.ORDER_NOT_FOUND'}/>;
         } else if (!productList) {
+            console.log("CREATE PRODUCTS")
             return <ErrorPanelFragment errorCode={'ACNTECH.FUNCTIONAL.PRODUCTS.PRODUCTS_NOT_FOUND'}/>
         } else if (product) {
             const {productId, name, description, stock, currency, price} = product;

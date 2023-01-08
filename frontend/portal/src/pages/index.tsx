@@ -1,6 +1,5 @@
-import {Button, Icon, Item, Label, Menu, Segment, Table} from "semantic-ui-react";
+import {Button, Icon, Label, Menu, Segment, Table} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
-import Link from "next/link";
 import {FC, ReactElement, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {ClientError, ErrorPayload, Order, PageState} from "../types";
@@ -28,17 +27,10 @@ const HomePage: FC = (): ReactElement => {
             <LoadingIndicatorFragment/>
         );
     } else if (pageState.status === 'FAILED') {
-        if (!!pageState.error) {
-            const sliceError = mapErrorPayload(pageState.error);
-            const {errorId, errorCode} = sliceError;
-            return (
-                <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-            );
-        } else {
-            return (
-                <ErrorPanelFragment errorCode={'ACNTECH.FUNCTIONAL.COMMON.MISSING_ERROR_RESPONSE'}/>
-            );
-        }
+        const {errorId, errorCode} = mapErrorPayload(pageState.error);
+        return (
+            <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
+        );
     } else {
         const orders = pageState.data || [];
         return (

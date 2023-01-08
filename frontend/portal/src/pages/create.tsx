@@ -52,16 +52,10 @@ const CreateOrderPage: FC = (): ReactElement => {
     if (pageState.status === 'LOADING') {
         return <LoadingIndicatorFragment/>;
     } else if (pageState.status === 'FAILED') {
-        if (!!pageState.error) {
-            const {errorId, errorCode} = mapErrorPayload(pageState.error);
-            return (
-                <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
-            );
-        } else {
-            return (
-                <ErrorPanelFragment errorCode={'ACNTECH.FUNCTIONAL.COMMON.MISSING_ERROR_RESPONSE'}/>
-            );
-        }
+        const {errorId, errorCode} = mapErrorPayload(pageState.error);
+        return (
+            <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
+        );
     } else if (pageState.status === 'SUCCESS') {
         if (!!pageState.data) {
             return <></>; // Will be redirected

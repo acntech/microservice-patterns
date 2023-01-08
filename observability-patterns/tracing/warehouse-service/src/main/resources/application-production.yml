@@ -24,9 +24,10 @@ management:
           - info
   # OTLP
   otlp:
-    metrics:
+    tracing:
       export:
-        url: http://localhost:14268/api/traces
+        grpc:
+          url: http://acntech.jaeger:4317
 
 ### Logging ###
 logging:

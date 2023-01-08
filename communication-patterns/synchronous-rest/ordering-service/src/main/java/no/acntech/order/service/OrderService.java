@@ -92,8 +92,8 @@ public class OrderService {
         final var orderEntity = orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         if (orderEntity.areAllItemsReserved()) {
-            orderEntity.getItems().forEach(OrderItemEntity::statusConfirmed);
-            orderEntity.statusConfirmed();
+            orderEntity.getItems().forEach(OrderItemEntity::setStatusConfirmed);
+            orderEntity.setStatusConfirmed();
             final var updatedOrderEntity = orderRepository.save(orderEntity);
             LOGGER.debug("Updated order with order-id {}", orderId);
             return convert(updatedOrderEntity);
@@ -106,8 +106,8 @@ public class OrderService {
     public OrderDto deleteOrder(@NotNull final UUID orderId) {
         final var orderEntity = orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
-        orderEntity.statusCanceled();
-        orderEntity.getItems().forEach(OrderItemEntity::statusCanceled);
+        orderEntity.setStatusCanceled();
+        orderEntity.getItems().forEach(OrderItemEntity::setStatusCanceled);
         final var deletedOrderEntity = orderRepository.save(orderEntity);
         LOGGER.debug("Deleted order with order-id {}", orderId);
         return convert(deletedOrderEntity);

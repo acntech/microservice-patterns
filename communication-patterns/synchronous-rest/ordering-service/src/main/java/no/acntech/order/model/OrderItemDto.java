@@ -1,6 +1,7 @@
 package no.acntech.order.model;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -51,6 +52,10 @@ public class OrderItemDto {
 
     public ZonedDateTime getModified() {
         return modified;
+    }
+
+    public boolean isReserved() {
+        return OrderItemStatus.RESERVED.equals(status);
     }
 
     public static Builder builder() {

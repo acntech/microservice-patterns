@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Configuration
-public class ApplicationConfig {
+@Configuration(proxyBeanMethods = false)
+public class WebClientConfig {
 
     @Bean
     public WebClient webClient(final WebClient.Builder webClientBuilder) {

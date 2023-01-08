@@ -20,7 +20,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         basePackages = {
                 "no.acntech.order.model"
         })
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class DatabaseConfig {
 
 }
