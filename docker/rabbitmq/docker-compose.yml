@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  acntech.rabbitmq:
+    image: rabbitmq
+    container_name: acntech.rabbitmq
+    ports:
+      - "5672:5672"
+    networks:
+      - acntech.rabbitmq
+
+networks:
+  acntech.rabbitmq:
+    name: acntech.rabbitmq

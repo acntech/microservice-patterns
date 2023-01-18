@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  acntech.zipkin:
+    image: openzipkin/zipkin
+    container_name: acntech.zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - acntech.zipkin
+
+networks:
+  acntech.zipkin:
+    name: acntech.zipkin

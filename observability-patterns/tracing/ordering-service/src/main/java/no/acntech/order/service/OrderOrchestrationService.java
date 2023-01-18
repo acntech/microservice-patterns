@@ -1,5 +1,7 @@
 package no.acntech.order.service;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import no.acntech.order.exception.OrderItemAlreadyExistsException;
 import no.acntech.order.model.CreateOrderDto;
 import no.acntech.order.model.CreateOrderItemDto;
@@ -19,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,21 +41,25 @@ public class OrderOrchestrationService {
         this.reservationRestConsumer = reservationRestConsumer;
     }
 
-    public List<OrderDto> findOrders(@NotNull @Valid final OrderQuery orderQuery) {
-        return orderService.findOrders(orderQuery);
+    public OrderDto getOrder(@NotNull final UUID orderId) {
+        LOGGER.debug("Getting order for ID {}", orderId);
+        return orderService.getOrder(orderId);
     }
 
-    public OrderDto getOrder(@NotNull final UUID orderId) {
-        return orderService.getOrder(orderId);
+    public List<OrderDto> findOrders(@NotNull @Valid final OrderQuery orderQuery) {
+        LOGGER.debug("Finding orders");
+        return orderService.findOrders(orderQuery);
     }
 
     @Transactional
     public OrderDto createOrder(@Valid final CreateOrderDto createOrder) {
+        LOGGER.debug("Create order");
         return orderService.createOrder(createOrder);
     }
 
     @Transactional
     public OrderDto updateOrder(@NotNull final UUID orderId) {
+        LOGGER.debug("Update order for ID {}", orderId);
         final var orderDto = orderService.updateOrder(orderId);
         orderDto.getItems()
                 .forEach(item -> {
@@ -70,6 +74,7 @@ public class OrderOrchestrationService {
 
     @Transactional
     public OrderDto deleteOrder(@NotNull final UUID orderId) {
+        LOGGER.debug("Delete order for ID {}", orderId);
         final var orderDto = orderService.deleteOrder(orderId);
         orderDto.getItems().stream()
                 .map(OrderItemDto::getReservationId)
@@ -78,12 +83,14 @@ public class OrderOrchestrationService {
     }
 
     public OrderItemDto getOrderItem(@NotNull final UUID itemId) {
+        LOGGER.debug("Getting order item for ID {}", itemId);
         return orderService.getOrderItem(itemId);
     }
 
     @Transactional
     public OrderDto createOrderItem(@NotNull final UUID orderId,
                                     @NotNull @Valid final CreateOrderItemDto createOrderItemDto) {
+        LOGGER.debug("Create order item for order with ID {}", orderId);
         final var orderDto = orderService.getOrder(orderId);
         if (orderDto.hasItemWithProductId(createOrderItemDto.getProductId())) {
             throw new OrderItemAlreadyExistsException(orderId, createOrderItemDto.getProductId());
@@ -102,6 +109,7 @@ public class OrderOrchestrationService {
     @Transactional
     public OrderDto updateOrderItem(@NotNull final UUID itemId,
                                     @NotNull @Valid final UpdateOrderItemDto updateOrderItemDto) {
+        LOGGER.debug("Update order item for ID {}", itemId);
         final var orderItemDto = orderService.getOrderItem(itemId);
         final var updateReservationDto = conversionService.convert(updateOrderItemDto, UpdateReservationDto.class);
         Assert.notNull(updateReservationDto, "Failed to convert UpdateOrderItemDto to UpdateReservationDto");
@@ -118,6 +126,7 @@ public class OrderOrchestrationService {
 
     @Transactional
     public OrderDto deleteOrderItem(@NotNull final UUID itemId) {
+        LOGGER.debug("Delete order item for ID {}", itemId);
         final var orderItemDto = orderService.getOrderItem(itemId);
         final var reservationDto = reservationRestConsumer.delete(orderItemDto.getReservationId());
         LOGGER.debug("Deleted order item for item-id {}", itemId);

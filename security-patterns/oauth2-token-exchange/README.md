@@ -1,28 +1,30 @@
-#Token Exchange
+# Token Exchange
+
+https://curity.io/resources/learn/impersonation-flow-approaches
 
 Token exchange er en oauth2 flyt som gjør det mulig å veksle inn et token utstedt av en autorisasjonsserver, inn i et
 token fra en annen autorisasjonsserver
 Her går vi gjennom hvordan man kan sette opp denne flyten i Keycloak.
 
-##Hvordan konfigurere opp Keycloak for Token Exchange
+## Hvordan konfigurere opp Keycloak for Token Exchange
 
 Keycloak bruker Quarkus for bygg og kjøring, og det ligger mer info inne i keycloak mappen, men under følger noen
 hovedpunkter.
 
-###For å bygge keycloak for kjøring samt starte opp:
+### For å bygge keycloak for kjøring samt starte opp:
 
 1. Last ned keycloak distribusjon: https://www.keycloak.org/downloads
 2. Pakk ut zip eller tar.gz pakke
 3. Åpne en terminal i keycloak mappen
 4. Rediger kc.sh filen inne i /bin mappen. Fjern "--auto-build" fra følgende kode i script:
-    * ``` 
-      if [[ "$1" = "start-dev" ]]; then
-      CONFIG_ARGS="$CONFIG_ARGS --profile=dev $1 --auto-dev" 
-     ```
+   ``` 
+   if [[ "$1" = "start-dev" ]]; then
+   CONFIG_ARGS="$CONFIG_ARGS --profile=dev $1 --auto-dev" 
+   ```
 5. Kjør så følgende kommando ./bin/kc.sh build --features=admin-fine-grained-authz, token-exchange
 6. Så for å starte opp keycloak for utvikling kan man kjøre følgende kommando: ./bin/kc.sh start-dev
 
-###Første kjøring med oppsett for token exchange
+### Første kjøring med oppsett for token exchange
 
 1. Ved første kjøring av Keycloak opprett en admin bruker og gå til administration console.
 2. Opprett et nytt Realm

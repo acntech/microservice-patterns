@@ -1,6 +1,4 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING Configuration #
 spring:
   # JPA
   jpa:
@@ -20,23 +18,30 @@ spring:
     locations:
       - classpath:db/migration
       - classpath:db/testdata
-  # ZipKin
-  zipkin:
-    base-url: http://localhost:9411
 
 ### Management ###
 management:
+  # Endpoints
   endpoints:
     web:
       base-path: /management
       exposure:
         include: "*"
+  # OTLP
+  otlp:
+    tracing:
+      export:
+        grpc:
+          url: http://localhost:4317
 
 ### Logging ###
 logging:
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){blue} %clr(%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] %-48.48c{36}){yellow} %clr(:){red} %clr(%m){faint}%n"
   level:
     root: INFO
     no.acntech: DEBUG
+    io.opentelemetry: DEBUG
 
 ### Server ###
 server:

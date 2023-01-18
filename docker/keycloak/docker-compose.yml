@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  acntech.keycloak:
+    image: bitnami/keycloak
+    container_name: acntech.keycloak
+    ports:
+      - "8888:8080"
+    environment:
+      - KEYCLOAK_ADMIN_USER=admin
+      - KEYCLOAK_ADMIN_PASSWORD=abcd1234
+      - KEYCLOAK_MANAGEMENT_USER=manager
+      - KEYCLOAK_MANAGEMENT_PASSWORD=abcd1234
+      - KEYCLOAK_DATABASE_HOST=acntech.postgres
+      - KEYCLOAK_DATABASE_PORT=5432
+      - KEYCLOAK_DATABASE_NAME=keycloak
+      - KEYCLOAK_DATABASE_USER=keycloak
+      - KEYCLOAK_DATABASE_PASSWORD=abcd1234
+    networks:
+      - acntech.keycloak
+      - acntech.postgres
+
+networks:
+  acntech.postgres:
+    name: acntech.postgres
+    external: true
+  acntech.keycloak:
+    name: acntech.keycloak

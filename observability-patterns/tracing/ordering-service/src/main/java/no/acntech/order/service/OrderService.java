@@ -1,5 +1,7 @@
 package no.acntech.order.service;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import no.acntech.order.exception.NotAllOrderItemsHaveStatusException;
 import no.acntech.order.exception.OrderItemNotFoundException;
 import no.acntech.order.exception.OrderNotFoundException;
@@ -23,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -46,6 +46,12 @@ public class OrderService {
         this.conversionService = conversionService;
         this.orderRepository = orderRepository;
         this.itemRepository = orderItemRepository;
+    }
+
+    public OrderDto getOrder(@NotNull final UUID orderId) {
+        return orderRepository.findByOrderId(orderId)
+                .map(this::convert)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
     public List<OrderDto> findOrders(@NotNull @Valid final OrderQuery orderQuery) {
@@ -70,12 +76,6 @@ public class OrderService {
                     .map(this::convert)
                     .collect(Collectors.toList());
         }
-    }
-
-    public OrderDto getOrder(@NotNull final UUID orderId) {
-        return orderRepository.findByOrderId(orderId)
-                .map(this::convert)
-                .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
     @Transactional

@@ -1,7 +1,5 @@
 package no.acntech.order.model;
 
-import org.hibernate.annotations.SortNatural;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +13,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.SortNatural;
+
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,22 +87,18 @@ public class OrderEntity {
         items.add(orderItemEntity);
     }
 
-    public void statusConfirmed() {
+    public void setStatusConfirmed() {
         status = OrderStatus.CONFIRMED;
     }
 
-    public void statusCanceled() {
+    public void setStatusCanceled() {
         status = OrderStatus.CANCELED;
     }
 
     public boolean areAllItemsReserved() {
-        List<OrderItemEntity> activeItems = items.stream()
-                .filter(activeItem -> !OrderItemStatus.CANCELED.equals(activeItem.getStatus()))
-                .toList();
-        boolean allActiveItemsConfirmed = activeItems.stream()
-                .map(OrderItemEntity::getStatus)
-                .allMatch(OrderItemStatus.RESERVED::equals);
-        return !activeItems.isEmpty() && allActiveItemsConfirmed;
+        return items.stream()
+                .filter(OrderItemEntity::isNotCanceled)
+                .allMatch(OrderItemEntity::isReserved);
     }
 
     @PrePersist

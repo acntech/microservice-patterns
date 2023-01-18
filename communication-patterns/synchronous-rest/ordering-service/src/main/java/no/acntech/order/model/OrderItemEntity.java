@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -89,12 +90,20 @@ public class OrderItemEntity {
         this.parent = parent;
     }
 
-    public void statusConfirmed() {
+    public void setStatusConfirmed() {
         status = OrderItemStatus.CONFIRMED;
     }
 
-    public void statusCanceled() {
+    public void setStatusCanceled() {
         status = OrderItemStatus.CANCELED;
+    }
+
+    public boolean isReserved() {
+        return OrderItemStatus.RESERVED.equals(status);
+    }
+
+    public boolean isNotCanceled() {
+        return !OrderItemStatus.CANCELED.equals(status);
     }
 
     @PrePersist

@@ -1,5 +1,7 @@
 package no.acntech.reservation.service;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import no.acntech.product.exception.ProductNotFoundException;
 import no.acntech.product.repository.ProductRepository;
 import no.acntech.reservation.exception.ReservationAlreadyExistsException;
@@ -16,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,12 +41,14 @@ public class ReservationService {
     }
 
     public ReservationDto getReservation(@NotNull final UUID reservationId) {
+        LOGGER.debug("Getting reservation for ID {}", reservationId);
         return reservationRepository.findByReservationId(reservationId)
                 .map(this::convert)
                 .orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 
     public List<ReservationDto> findReservations(final UUID orderId) {
+        LOGGER.debug("Finding reservations");
         if (orderId == null) {
             return reservationRepository.findAll()
                     .stream()
@@ -62,6 +64,7 @@ public class ReservationService {
 
     @Transactional
     public ReservationDto createReservation(@NotNull @Valid final CreateReservationDto createReservationDto) {
+        LOGGER.debug("Create reservation");
         reservationRepository
                 .findByOrderIdAndProduct_ProductId(createReservationDto.getOrderId(), createReservationDto.getProductId())
                 .ifPresent(reservationEntity -> {
@@ -97,6 +100,7 @@ public class ReservationService {
     @Transactional
     public ReservationDto updateReservation(@NotNull final UUID reservationId,
                                             @NotNull @Valid final UpdateReservationDto updateReservation) {
+        LOGGER.debug("Update reservation for ID {}", reservationId);
         final var reservationEntity = reservationRepository.findByReservationId(reservationId)
                 .orElseThrow(() -> new ReservationNotFoundException(reservationId));
         if (updateReservation.getQuantity() != null) {
@@ -112,6 +116,7 @@ public class ReservationService {
 
     @Transactional
     public ReservationDto deleteReservation(@NotNull final UUID reservationId) {
+        LOGGER.debug("Deleting reservation for ID {}", reservationId);
         final var reservationEntity = reservationRepository.findByReservationId(reservationId)
                 .orElseThrow(() -> new ReservationNotFoundException(reservationId));
         reservationEntity.cancelReservation();
