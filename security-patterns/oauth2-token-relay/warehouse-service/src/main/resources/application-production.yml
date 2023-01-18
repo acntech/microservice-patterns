@@ -16,7 +16,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://acntech.uaa:8080/uaa/oauth/token
+          issuer-uri: http://localhost:8888/realms/acntech
 
 ### Management ###
 management:

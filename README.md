@@ -27,14 +27,14 @@ of the system is typically comprised of the following microservices:
     * Service that sends invoices to customers when orders have been completed and shipped.
     * http://localhost:9005
 
-As well there is a ReactJS based UI that can be used to interact with the business logic.
+As well there is a ReactJS based portal that can be used to interact with the business logic.
 
-[/ ui-frontend / README](https://github.com/acntech/microservice-patterns/tree/develop/ui-frontend)
+[/ frontend / portal / README](https://github.com/acntech/microservice-patterns/tree/develop/frontend/portal)
 
-The UI uses an API Gateway to proxy all communication with the microservices, and to create a common facade for API
+The portal uses an API Gateway to proxy all communication with the microservices, and to create a common facade for API
 calls.
 
-[/ ui-gateway / README](https://github.com/acntech/microservice-patterns/tree/develop/ui-gateway)
+[/ frontend / api-gateway / README](https://github.com/acntech/microservice-patterns/tree/develop/frontend/api-gateway)
 
 ## Pattern areas
 

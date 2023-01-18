@@ -1,0 +1,272 @@
+{
+  "realm": "acntech",
+  "displayName": "AcnTech",
+  "displayNameHtml": "AcnTech",
+  "enabled": true,
+  "users": [
+    {
+      "username": "john.doe",
+      "email": "john.doe@acntech.no",
+      "firstName": "John",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"r/e2a8hHjXpAzDkmNwjUFNYk9lvl/rC9njU+Li6UEd7slI4myYt0YKV8ZLE1pbBlKpqRGEM5hLnmyXH2vL5nog==\",\"salt\":\"hhwoDaI+kkGtb12x7sHudg==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "jane.doe",
+      "email": "jane.doe@acntech.no",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"TfVmTmU/aKpI5+gzpxjIZ3ytrknFzX6Yld4nMHbZdcE6qPjQfl+2bxMKqc6Ka1nw9I2px0qdRCLor0WriSGCTg==\",\"salt\":\"qLPgZZWnYyCdfsFuljPeFg==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "james.doe",
+      "email": "james.doe@acntech.no",
+      "firstName": "James",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"TvsbsV6ibVqQQJG3Ako6Y/SeESI9cM3aIJKecM2H7BJkFBySp1BpSQNxOKHG5avzbXeKZmN9hn3ggAG8MEOraw==\",\"salt\":\"N4pSDj2wXXMU6fgd585vXw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "jenny.doe",
+      "email": "jenny.doe@acntech.no",
+      "firstName": "Jenny",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"e4WChksk8zacLkbjwj2AIrCd1F5Wy5uSBgIPDD8Y7WVLmo8OLDQbSevzLp5tbMx0l4Kq88yMGjyAPpKFMbYAFA==\",\"salt\":\"4E0Xguy9hoLjxz5UZd4lRg==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "jimmy.doe",
+      "email": "jimmy.doe@acntech.no",
+      "firstName": "Jimmy",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"L52CdTRpGWLsNWJwqBjI41jYMDXBjyJujzVnsvkBDgtT1nQRLhu+Ze1wRS3Kr/odolTud7x0CrVctjp3x3crPg==\",\"salt\":\"0Te+4QkpzCdvZaJ43eRzDw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "julie.doe",
+      "email": "julie.doe@acntech.no",
+      "firstName": "Julie",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"Uh8lGnbFJWE3h/PfT+wMbKWE8GsEJ4YEhWN6n6hxb3J8ScT0JRIXx+/IHSLLILjVprKRJouY/tdWc75Qbba4pQ==\",\"salt\":\"0tHfJNdKxEDSAt3HYdJ9Dw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    }
+  ],
+  "clients": [
+    {
+      "id": "a44583f0-c6bd-4c23-b333-a1f9abe04a3a",
+      "clientId": "acntech-token-relay-portal",
+      "name": "AcnTech Token Relay Portal",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "abcdefgh12345678",
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:9000/*"
+      ],
+      "webOrigins": [],
+      "protocol": "openid-connect",
+      "bearerOnly": false,
+      "publicClient": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "frontchannelLogout": true,
+      "surrogateAuthRequired": false,
+      "alwaysDisplayInConsole": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "read:reservations",
+        "address",
+        "read:orders",
+        "phone",
+        "offline_access",
+        "write:products",
+        "write:reservations",
+        "microprofile-jwt",
+        "write:orders",
+        "read:products"
+      ]
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "read:orders",
+      "description": "AcnTech Read Orders",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "write:orders",
+      "description": "AcnTech Write Orders",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "read:products",
+      "description": "AcnTech Read Products",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "write:products",
+      "description": "AcnTech Write Products",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "write:reservations",
+      "description": "AcnTech Write Reservations",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "read:reservations",
+      "description": "AcnTech Read Reservations",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    }
+  ],
+  "defaultDefaultClientScopes": [
+    "profile",
+    "roles",
+    "role_list",
+    "email"
+  ],
+  "defaultOptionalClientScopes": [
+    "acr",
+    "web-origins",
+    "offline_access",
+    "address",
+    "phone",
+    "microprofile-jwt",
+    "read:orders",
+    "write:orders",
+    "read:products",
+    "write:products",
+    "read:reservations",
+    "write:reservations"
+  ]
+}

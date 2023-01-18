@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.7"
 
 services:
   acntech.keycloak-config-cli:
@@ -11,9 +11,9 @@ services:
       - KEYCLOAK_LOGINREALM=master
       - KEYCLOAK_AVAILABILITYCHECK_ENABLED=true
       - KEYCLOAK_AVAILABILITYCHECK_TIMEOUT=60s
-      - IMPORT_FILES='/docker-entrypoint-init-realm.d/*'
+      - IMPORT_FILES_LOCATIONS=/config/*.json
     volumes:
-      - ./resources/config:/docker-entrypoint-init-realm.d
+      - ./resources/config:/config
     networks:
       - acntech.keycloak
       - acntech.postgres

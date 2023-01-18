@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.7"
 
 services:
   acntech.postgres:
@@ -7,6 +7,7 @@ services:
     ports:
       - "5432:5432"
     environment:
+      - POSTGRES_USER=root
       - POSTGRES_PASSWORD=abcd1234
     volumes:
       - ./resources/postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql

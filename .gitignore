@@ -40,6 +40,7 @@ next-env.d.ts
 atlassian-ide-plugin.xml
 
 # VS Code
+.vscode/
 *.code-workspace
 .factorypath
 

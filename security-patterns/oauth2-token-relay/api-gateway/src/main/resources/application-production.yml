@@ -7,17 +7,22 @@ spring:
     oauth2:
       client:
         registration:
-          token-relay-ui:
-            provider: uaa
-            client-id: token-relay-ui
-            client-secret: abcd1234
+          acntech-token-relay-portal:
+            provider: keycloak
+            authorization-grant-type: authorization_code
+            client-id: acntech-token-relay-portal
+            client-secret: abcdefgh12345678
             scope:
               - openid
               - profile
-              - email
+              - roles
+              - read:orders
+              - read:products
+              - read:reservations
+              - write:orders
         provider:
-          uaa:
-            issuer-uri: http://acntech.uaa:8080/uaa/oauth/token
+          keycloak:
+            issuer-uri: http://acntech.keycloak:8080/realms/acntech
   # Cloud
   cloud:
     gateway:

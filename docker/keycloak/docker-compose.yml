@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.7"
 
 services:
   acntech.keycloak:
@@ -16,8 +16,6 @@ services:
       - KEYCLOAK_DATABASE_NAME=keycloak
       - KEYCLOAK_DATABASE_USER=keycloak
       - KEYCLOAK_DATABASE_PASSWORD=abcd1234
-    volumes:
-      - ./resources/init-scripts:/docker-entrypoint-initdb.d
     networks:
       - acntech.keycloak
       - acntech.postgres
