@@ -1,22 +1,33 @@
 import React, {FC, ReactElement} from 'react'
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Message, Segment} from 'semantic-ui-react';
-import {ErrorPayload} from '../types';
+import {ErrorPayload, PageResponse} from '../types';
 
 export interface FragmentProps {
     errorId?: string;
     errorCode: string;
 }
 
-export const mapErrorPayload = (error?: ErrorPayload): FragmentProps => {
-    const defaultErrorCause = 'ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE';
-    let errorCause = error || {errorCode: defaultErrorCause};
+const mapErrorCode = (error?: PageResponse<ErrorPayload>): string => {
+    const errorCode = error?.body?.errorCode
+    if (errorCode) {
+        return errorCode;
+    } else if (error?.status === 401) {
+        return 'ACNTECH.TECHNICAL.SECURITY.NOT_AUTHENTICATED';
+    } else {
+        return 'ACNTECH.TECHNICAL.COMMON.UNRECOGNIZED_ERROR';
+    }
+};
+
+export const mapErrorPayload = (error?: PageResponse<ErrorPayload>): FragmentProps => {
+    const errorCode = mapErrorCode(error);
+    let errorCause = error?.body || {errorCode};
     while (errorCause.cause) {
         errorCause = errorCause.cause;
     }
     return {
         errorId: errorCause.errorId,
-        errorCode: errorCause.errorCode || defaultErrorCause
+        errorCode: errorCause.errorCode || errorCode
     }
 };
 

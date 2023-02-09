@@ -28,3 +28,7 @@ logging:
 # Server
 server:
   port: 9000
+  error:
+    include-stacktrace: ALWAYS
+    whitelabel:
+      enabled: false

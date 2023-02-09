@@ -16,7 +16,6 @@
     <!-- MODULES -->
     <modules>
         <module>api-gateway</module>
-        <module>customers-service</module>
         <module>ordering-service</module>
         <module>warehouse-service</module>
     </modules>

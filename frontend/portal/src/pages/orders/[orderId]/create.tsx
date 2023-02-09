@@ -4,8 +4,8 @@ import {useForm} from "react-hook-form";
 import {useRouter} from "next/router";
 import {Button, Form, Icon, Menu, Message, Segment, Table} from "semantic-ui-react";
 import {ErrorPanelFragment, LoadingIndicatorFragment, mapErrorPayload} from "../../../fragments";
-import {ClientError, CreateOrderItem, ErrorPayload, Order, PageState, Product} from "../../../types";
-import {RestClient} from "../../../core/client";
+import {ClientError, ClientResponse, ErrorPayload, Order, PageState, Product} from "../../../types";
+import {RestConsumer} from "../../../core/consumer";
 
 const filterProductList = (order: Order, products: Product[]): Product[] => {
     const productIdList = order.items.map(item => item.productId);
@@ -18,52 +18,27 @@ const CreateOrderItemPage: FC = (): ReactElement => {
     const router = useRouter();
     const {formatMessage: t} = useIntl();
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const [pageState, setPageState] = useState<PageState<Product>>({status: 'LOADING'});
+    const [pageState, setPageState] = useState<PageState<any>>({status: 'LOADING'});
     const [getOrderState, setGetOrderState] = useState<PageState<Order>>({status: 'LOADING'});
+    const [productState, setProductState] = useState<PageState<Product>>({status: 'LOADING'});
     const [getProductListState, setGetProductListState] = useState<PageState<Product[]>>({status: 'LOADING'});
     const [createOrderItemState, setCreateOrderItemState] = useState<PageState<Order>>({status: 'PENDING'});
-    const {orderId} = router.query
-
-    const getOrder = () => {
-        setGetOrderState({status: 'LOADING', data: undefined});
-        RestClient.GET<Order>(`/api/orders/${orderId}`)
-            .then(response => {
-                setGetOrderState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetOrderState({status: 'FAILED', error: error.response?.body});
-            });
-    };
-
-    const getProducts = () => {
-        setGetProductListState({status: 'LOADING', data: undefined});
-        RestClient.GET<Product[]>('/api/products')
-            .then(response => {
-                setGetProductListState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetProductListState({status: 'FAILED', error: error.response?.body});
-            });
-    };
-
-    const createOrderItem = (body: CreateOrderItem) => {
-        setPageState({status: 'LOADING'});
-        setGetOrderState({status: 'LOADING', data: undefined});
-        RestClient.POST<Order>(`/api/orders/${orderId}/items`, body)
-            .then(response => {
-                setCreateOrderItemState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setCreateOrderItemState({status: 'FAILED', error: error.response?.body});
-            });
-    };
+    const {orderId: orderIdParam} = router.query;
+    const orderId = !orderIdParam ? undefined : typeof orderIdParam === 'string' ? orderIdParam : orderIdParam.length > 0 ? orderIdParam[0] : undefined;
 
     useEffect(() => {
-        getOrder();
-        getProducts();
+        if (orderId) {
+            RestConsumer.getOrder(orderId,
+                (response: ClientResponse<Order>) =>
+                    setGetOrderState({status: 'SUCCESS', data: response}),
+                (error: ClientError<ErrorPayload>) =>
+                    setGetOrderState({status: 'FAILED', error: error.response}));
+            RestConsumer.getProducts(
+                (response: ClientResponse<Product[]>) =>
+                    setGetProductListState({status: 'SUCCESS', data: response}),
+                (error: ClientError<ErrorPayload>) =>
+                    setGetProductListState({status: 'FAILED', error: error.response}));
+        }
     }, []);
 
     useEffect(() => {
@@ -82,16 +57,21 @@ const CreateOrderItemPage: FC = (): ReactElement => {
     }, [createOrderItemState]);
 
     const onFormSubmit = (formData: any) => {
-        if (!Object.keys(errors).length) {
-            createOrderItem({
-                productId: formData.productId,
-                quantity: formData.orderItemQuantity
-            });
+        if (!Object.keys(errors).length && !!orderId) {
+            setPageState({status: 'LOADING'});
+            setGetOrderState({status: 'LOADING', data: undefined});
+            const {productId, orderItemQuantity: quantity} = formData;
+            RestConsumer.createOrderItem(orderId, {productId, quantity},
+                (response: ClientResponse<Order>) =>
+                    setCreateOrderItemState({status: 'SUCCESS', data: response}),
+                (error: ClientError<ErrorPayload>) =>
+                    setCreateOrderItemState({status: 'FAILED', error: error.response}));
         }
     };
 
     const onProductTableRowClick = (selectedProduct: Product) => {
-        setPageState({...pageState, data: selectedProduct});
+        const data = {status: 200, body: selectedProduct}
+        setProductState({status: 'SUCCESS', data});
     };
 
     const onCancelButtonClick = () => {
@@ -108,20 +88,17 @@ const CreateOrderItemPage: FC = (): ReactElement => {
 
     if (pageState.status === 'LOADING') {
         return <LoadingIndicatorFragment/>;
-    } else if (pageState.status === 'FAILED') {
-        console.log("CREATE FAILED")
+    } else if ((getOrderState.status === 'FAILED' || getProductListState.status === 'FAILED') && pageState.status !== 'FAILED') {
         const {errorId, errorCode} = mapErrorPayload(pageState.error);
         return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
     } else if (pageState.status === 'SUCCESS') {
-        const {data: product} = pageState;
-        const {data: order} = getOrderState;
-        const {data: productList} = getProductListState;
+        const product = productState.data?.body;
+        const order = getOrderState.data?.body;
+        const productList = getProductListState.data?.body;
 
         if (!order) {
-            console.log("CREATE ORDER")
             return <ErrorPanelFragment errorCode={'ACNTECH.FUNCTIONAL.ORDERS.ORDER_NOT_FOUND'}/>;
         } else if (!productList) {
-            console.log("CREATE PRODUCTS")
             return <ErrorPanelFragment errorCode={'ACNTECH.FUNCTIONAL.PRODUCTS.PRODUCTS_NOT_FOUND'}/>
         } else if (product) {
             const {productId, name, description, stock, currency, price} = product;

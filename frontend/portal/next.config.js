@@ -1,36 +1,28 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-    reactStrictMode: true,
+    reactStrictMode: false,
     swcMinify: true,
     rewrites: () => {
         return [
             {
-                source: "/api/orders",
-                destination: "http://localhost:9000/api/orders"
+                source: "/login",
+                destination: "http://localhost:9000/login"
             },
             {
-                source: "/api/orders/:orderId",
-                destination: "http://localhost:9000/api/orders/:orderId"
+                source: "/login/oauth2/code/:registrationId",
+                destination: "http://localhost:9000/login/oauth2/code/:registrationId"
             },
             {
-                source: "/api/orders/:orderId/items",
-                destination: "http://localhost:9000/api/orders/:orderId/items"
+                source: "/oauth2/authorization/:registrationId",
+                destination: "http://localhost:9000/oauth2/authorization/:registrationId"
             },
             {
-                source: "/api/orders/:orderId/items/:itemId",
-                destination: "http://localhost:9000/api/orders/:orderId/items/:itemId"
+                source: "/_api/:resource*", // Static resources
+                destination: "http://localhost:9000/_api/:resource*"
             },
             {
-                source: "/api/items/:itemId",
-                destination: "http://localhost:9000/api/items/:itemId"
-            },
-            {
-                source: "/api/products",
-                destination: "http://localhost:9000/api/products"
-            },
-            {
-                source: "/api/products/:productsId",
-                destination: "http://localhost:9000/api/products/:productsId"
+                source: "/api/:resource*", // API resources
+                destination: "http://localhost:9000/api/:resource*"
             }
         ]
     },

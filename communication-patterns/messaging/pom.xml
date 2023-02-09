@@ -15,7 +15,6 @@
 
     <!-- MODULES -->
     <modules>
-        <module>customer-service</module>
         <module>billing-service</module>
         <module>shipping-service</module>
         <module>ordering-service</module>

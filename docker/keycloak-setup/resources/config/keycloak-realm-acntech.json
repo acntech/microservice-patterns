@@ -1,0 +1,466 @@
+{
+  "realm": "acntech",
+  "displayName": "AcnTech",
+  "displayNameHtml": "AcnTech",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "acntech-token-relay-portal",
+      "name": "AcnTech Token Relay Portal",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "abcdefgh12345678",
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:9000/*"
+      ],
+      "webOrigins": [],
+      "protocol": "openid-connect",
+      "bearerOnly": false,
+      "publicClient": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "frontchannelLogout": true,
+      "surrogateAuthRequired": false,
+      "alwaysDisplayInConsole": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "sub",
+        "uid",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "read:orders",
+        "write:orders",
+        "read:products",
+        "write:products",
+        "read:reservations",
+        "write:reservations"
+      ]
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "read:orders",
+      "description": "AcnTech Read Orders",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "write:orders",
+      "description": "AcnTech Write Orders",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "read:products",
+      "description": "AcnTech Read Products",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "write:products",
+      "description": "AcnTech Write Products",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "write:reservations",
+      "description": "AcnTech Write Reservations",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "read:reservations",
+      "description": "AcnTech Read Reservations",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "gui.order": "",
+        "consent.screen.text": ""
+      }
+    },
+    {
+      "name": "sub",
+      "description": "Override sub claim",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false",
+        "gui.order": ""
+      },
+      "protocolMappers": [
+        {
+          "name": "username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.name": "sub",
+            "user.attribute": "username",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "uid",
+      "description": "User ID",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false",
+        "gui.order": ""
+      },
+      "protocolMappers": [
+        {
+          "name": "id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.name": "uid",
+            "user.attribute": "id",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "defaultDefaultClientScopes": [
+    "sub",
+    "profile",
+    "roles",
+    "email"
+  ],
+  "defaultOptionalClientScopes": [
+    "read:orders",
+    "write:orders",
+    "read:products",
+    "write:products",
+    "read:reservations",
+    "write:reservations"
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "system",
+        "description": "AcnTech System",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "acntech",
+        "attributes": {}
+      },
+      {
+        "name": "administrator",
+        "description": "AcnTech Administrator",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "acntech",
+        "attributes": {}
+      },
+      {
+        "name": "moderator",
+        "description": "AcnTech Moderator",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "acntech",
+        "attributes": {}
+      },
+      {
+        "name": "auditor",
+        "description": "AcnTech Auditor",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "acntech",
+        "attributes": {}
+      },
+      {
+        "name": "user",
+        "description": "AcnTech User",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "acntech",
+        "attributes": {}
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "acntech",
+      "path": "/acntech",
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {},
+      "subGroups": [
+        {
+          "name": "system",
+          "path": "/acntech/system",
+          "attributes": {},
+          "realmRoles": [
+            "system"
+          ],
+          "clientRoles": {},
+          "subGroups": []
+        },
+        {
+          "name": "administrator",
+          "path": "/acntech/administrator",
+          "attributes": {},
+          "realmRoles": [
+            "administrator"
+          ],
+          "clientRoles": {},
+          "subGroups": []
+        },
+        {
+          "name": "moderator",
+          "path": "/acntech/moderator",
+          "attributes": {},
+          "realmRoles": [
+            "moderator"
+          ],
+          "clientRoles": {},
+          "subGroups": []
+        },
+        {
+          "name": "auditor",
+          "path": "/acntech/auditor",
+          "attributes": {},
+          "realmRoles": [
+            "auditor"
+          ],
+          "clientRoles": {},
+          "subGroups": []
+        },
+        {
+          "name": "user",
+          "path": "/acntech/user",
+          "attributes": {},
+          "realmRoles": [
+            "user"
+          ],
+          "clientRoles": {},
+          "subGroups": []
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "john.doe",
+      "email": "john.doe@acntech.no",
+      "firstName": "John",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"r/e2a8hHjXpAzDkmNwjUFNYk9lvl/rC9njU+Li6UEd7slI4myYt0YKV8ZLE1pbBlKpqRGEM5hLnmyXH2vL5nog==\",\"salt\":\"hhwoDaI+kkGtb12x7sHudg==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [
+        "/acntech/administrator"
+      ],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "jane.doe",
+      "email": "jane.doe@acntech.no",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"TfVmTmU/aKpI5+gzpxjIZ3ytrknFzX6Yld4nMHbZdcE6qPjQfl+2bxMKqc6Ka1nw9I2px0qdRCLor0WriSGCTg==\",\"salt\":\"qLPgZZWnYyCdfsFuljPeFg==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [
+        "/acntech/administrator"
+      ],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "james.doe",
+      "email": "james.doe@acntech.no",
+      "firstName": "James",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"TvsbsV6ibVqQQJG3Ako6Y/SeESI9cM3aIJKecM2H7BJkFBySp1BpSQNxOKHG5avzbXeKZmN9hn3ggAG8MEOraw==\",\"salt\":\"N4pSDj2wXXMU6fgd585vXw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [
+        "/acntech/moderator"
+      ],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "jenny.doe",
+      "email": "jenny.doe@acntech.no",
+      "firstName": "Jenny",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"e4WChksk8zacLkbjwj2AIrCd1F5Wy5uSBgIPDD8Y7WVLmo8OLDQbSevzLp5tbMx0l4Kq88yMGjyAPpKFMbYAFA==\",\"salt\":\"4E0Xguy9hoLjxz5UZd4lRg==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [
+        "/acntech/moderator"
+      ],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "jimmy.doe",
+      "email": "jimmy.doe@acntech.no",
+      "firstName": "Jimmy",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"L52CdTRpGWLsNWJwqBjI41jYMDXBjyJujzVnsvkBDgtT1nQRLhu+Ze1wRS3Kr/odolTud7x0CrVctjp3x3crPg==\",\"salt\":\"0Te+4QkpzCdvZaJ43eRzDw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [
+        "/acntech/user"
+      ],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    },
+    {
+      "username": "julie.doe",
+      "email": "julie.doe@acntech.no",
+      "firstName": "Julie",
+      "lastName": "Doe",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "userLabel": "My password",
+          "secretData": "{\"value\":\"Uh8lGnbFJWE3h/PfT+wMbKWE8GsEJ4YEhWN6n6hxb3J8ScT0JRIXx+/IHSLLILjVprKRJouY/tdWc75Qbba4pQ==\",\"salt\":\"0tHfJNdKxEDSAt3HYdJ9Dw==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "groups": [
+        "/acntech/user"
+      ],
+      "realmRoles": [],
+      "requiredActions": [],
+      "disableableCredentialTypes": []
+    }
+  ],
+  "components": {
+    "org.keycloak.keys.KeyProvider": [
+      {
+        "id": "4a25071c-a6e7-4fb9-a339-f78499f7c616",
+        "name": "acntech-rsa",
+        "providerId": "rsa",
+        "subComponents": {},
+        "config": {
+          "enabled": [
+            "true"
+          ],
+          "active": [
+            "true"
+          ],
+          "priority": [
+            "199"
+          ],
+          "algorithm": [
+            "RS256"
+          ],
+          "keyUse": [
+            "SIG"
+          ],
+          "kid": [
+            "acntech-rsa-signing-key"
+          ],
+          "privateKey": [
+            "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMJwwKt66KO9coNkWo5jOQIF8vvzi03rIlsDfnQQ0q+HspRT3PsfTQ5nTVq5DgGzweVT95KycCSTCKcbICTch6XMyQVpWo8htnsslpbFmY1QYYsQQPPxwoT/KV/W3m0xA3rVrsa63cl35iXsie1AsKSoRZtqQuT27fSLAtZgVChzAgMBAAECgYAWUeEcDiDUYvPZN1TZ0XQC0nIBEATmrd4kunLymdfFhHswYawVO5OZ2qvbhTCha2QPkiLyOP98g1BT9l4rPRFo+G0CKd8NiuQUF31Il3pspoDD/4LDrf/8nf8QWxfql3C8vIQTcG6W6r/2qnVdXWD33tezgbxmXyGB1O3WhtPfqQJBAPavGz0I79sknWKqPgx3nscFkkJC8LZsLrpAkW/d6icTVhg/Vn/xLxFP/t/ak79EJUUaEUopJIIpreamceR3p4cCQQDJyJC/wk/jUfXlXzENsapycZAwrzHtdM5S8LBiKR6BTO884VW9BBrzXlSzu2+ZXm9mc5Enjl2MwuHMoOCZURq1AkAwXEPKw2XCYHs6TIW9i/XkroLt2pG2MZ83hFD+zVKKNpA6ULB0hKPlkPk2iXNNm95ynZmmIEq3+dPN0/OgBpUhAkEAhbrhA9WZ8IQfPZbrAbJfzl0pPLq/kio5m4pcu5GY4ATHAUgt9IlF+0jnRf7RJYoKtpGc/+RAZ8u4rk9oyvOPiQJBAJdmwjO9cbF3c9eJkni5j1+Rl11Gr3ZPU3c23yvBiwIfzVo95hGXcEfKgXAsGTACb2Vx/LqXS3KpbiV8uQImuL8="
+          ],
+          "certificate": [
+            "MIIC/jCCAmegAwIBAgIUewqYT/dFO5KKOLXZnAX9m77LAIEwDQYJKoZIhvcNAQELBQAwgY8xCzAJBgNVBAYTAk5PMQ0wCwYDVQQIDARPc2xvMQ0wCwYDVQQHDARPc2xvMRAwDgYDVQQKDAdBY25UZWNoMQwwCgYDVQQLDANDSUUxHDAaBgNVBAMME2tleWNsb2FrLmFjbnRlY2gubm8xJDAiBgkqhkiG9w0BCQEWFWhvc3RtYXN0ZXJAYWNudGVjaC5ubzAgFw0yMzAxMjkxNTM0MzJaGA8yMTIzMDEwNTE1MzQzMlowgY8xCzAJBgNVBAYTAk5PMQ0wCwYDVQQIDARPc2xvMQ0wCwYDVQQHDARPc2xvMRAwDgYDVQQKDAdBY25UZWNoMQwwCgYDVQQLDANDSUUxHDAaBgNVBAMME2tleWNsb2FrLmFjbnRlY2gubm8xJDAiBgkqhkiG9w0BCQEWFWhvc3RtYXN0ZXJAYWNudGVjaC5ubzCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwnDAq3roo71yg2RajmM5AgXy+/OLTesiWwN+dBDSr4eylFPc+x9NDmdNWrkOAbPB5VP3krJwJJMIpxsgJNyHpczJBWlajyG2eyyWlsWZjVBhixBA8/HChP8pX9bebTEDetWuxrrdyXfmJeyJ7UCwpKhFm2pC5Pbt9IsC1mBUKHMCAwEAAaNTMFEwHQYDVR0OBBYEFCeZ4FrZ8Ra0RkxQHCMBQWndDeTOMB8GA1UdIwQYMBaAFCeZ4FrZ8Ra0RkxQHCMBQWndDeTOMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADgYEAs8zlpSjdZ8BY/OXl9pdGgp+/dJLa9+ainrA4wzWwWK4CupSzirAfkDThIYX+b/CH6PypORLrZCGo7MdWtqKUiuavqavy9E5shaPebwAkb9+AcFYZ1nfM/YNuJ42bkS14jGL3ikIIcfR+TLY4djYPEhcb+JNuP45XRnznZbrisSY="
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * This customizer overrides this behavior so that callbacks can be placed in packages other than 'db.callback'.
  * This allows for controlling callback activation by Spring profiles.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class FlywayConfig implements FlywayConfigurationCustomizer {
 
     private final FlywayProperties properties;

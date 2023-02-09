@@ -5,9 +5,9 @@ import {useRouter} from "next/router";
 import {Button, Icon, Label, Menu, Segment, SemanticCOLORS, Table} from "semantic-ui-react";
 import {ErrorPanelFragment, LoadingIndicatorFragment, mapErrorPayload} from "../../../fragments";
 import {getOrderItemStatusLabelColor, getOrderStatusLabelColor} from "../../../core/utils";
-import {RestClient} from "../../../core/client";
 import {
     ClientError,
+    ClientResponse,
     ErrorPayload,
     Order,
     OrderItem,
@@ -16,6 +16,7 @@ import {
     PageState,
     Product
 } from "../../../types";
+import {RestConsumer} from "../../../core/consumer";
 
 interface ViewOrderItem {
     itemId: string;
@@ -31,7 +32,7 @@ const isCreateOrderItemButtonActive = (order: Order): boolean => {
 };
 
 const isConfirmOrderButtonActive = (order: Order): boolean => {
-    return order.status === OrderStatus.PENDING &&
+    return order.status === OrderStatus.PENDING && order.items.length > 0 &&
         order.items
             .map(item => item.status)
             .filter(status => status !== OrderItemStatus.RESERVED && status !== OrderItemStatus.CANCELED).length === 0;
@@ -70,52 +71,32 @@ const OrderPage: FC = (): ReactElement => {
 
     const getOrder = (orderId: string) => {
         setGetOrderState({status: 'LOADING', data: undefined});
-        RestClient.GET<Order>(`/api/orders/${orderId}`)
-            .then(response => {
-                setGetOrderState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetOrderState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.getOrder(orderId,
+            (response: ClientResponse<Order>) => setGetOrderState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setGetOrderState({status: 'FAILED', error: error.response}));
     };
 
     const getProductList = () => {
         setGetProductListState({status: 'LOADING', data: undefined});
-        RestClient.GET<Product[]>('/api/products')
-            .then(response => {
-                setGetProductListState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetProductListState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.getProducts(
+            (response: ClientResponse<Product[]>) => setGetProductListState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setGetProductListState({status: 'FAILED', error: error.response}));
     };
 
-    const confirmOrder = () => {
+    const confirmOrder = (orderId: string) => {
         setPageState({status: 'LOADING'});
         setGetOrderState({status: 'LOADING', data: undefined});
-        RestClient.PUT<Order>(`/api/orders/${orderId}`)
-            .then(response => {
-                setGetOrderState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetOrderState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.updateOrder(orderId,
+            (response: ClientResponse<Order>) => setGetOrderState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setGetOrderState({status: 'FAILED', error: error.response}));
     };
 
-    const deleteOrder = () => {
+    const deleteOrder = (orderId: string) => {
         setPageState({status: 'LOADING'});
         setGetOrderState({status: 'LOADING', data: undefined});
-        RestClient.DELETE<Order>(`/api/orders/${orderId}`)
-            .then(response => {
-                setGetOrderState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetOrderState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.deleteOrder(orderId,
+            (response: ClientResponse<Order>) => setGetOrderState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setGetOrderState({status: 'FAILED', error: error.response}));
     };
 
     useEffect(() => {
@@ -143,24 +124,20 @@ const OrderPage: FC = (): ReactElement => {
     };
 
     if (!orderId) {
-        console.log("ID")
         return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING'}/>
     } else if (pageState.status === 'LOADING') {
         return <LoadingIndicatorFragment/>
     } else if (pageState.status === 'FAILED') {
-        console.log("FAILED")
         const {errorId, errorCode} = mapErrorPayload(pageState.error);
         return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
     } else if (getOrderState.status === 'SUCCESS') {
-        if (!getOrderState.data) {
-            console.log("ORDER")
+        if (!getOrderState.data?.body) {
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.ORDERS.ORDER_NOT_FOUND'}/>
-        } else if (!getProductListState.data) {
-            console.log("PRODUCTS")
+        } else if (!getProductListState.data?.body) {
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.PRODUCTS.PRODUCTS_NOT_FOUND'}/>
         } else {
-            const {data: order} = getOrderState;
-            const {data: products} = getProductListState;
+            const {body: order} = getOrderState.data;
+            const {body: products} = getProductListState.data;
             const {orderId, name, description, status, created, items} = order;
 
             const statusColor = getOrderStatusLabelColor(status);
@@ -188,14 +165,14 @@ const OrderPage: FC = (): ReactElement => {
                             <Menu.Item>
                                 <Button positive={confirmOrderButtonActive}
                                         disabled={!confirmOrderButtonActive}
-                                        size="tiny" onClick={confirmOrder}>
+                                        size="tiny" onClick={() => confirmOrder(orderId)}>
                                     <Icon name="check"/><FormattedMessage id="button.confirm"/>
                                 </Button>
                             </Menu.Item>
                             <Menu.Item>
                                 <Button negative={cancelOrderButtonActive}
                                         disabled={!cancelOrderButtonActive}
-                                        size="tiny" onClick={deleteOrder}>
+                                        size="tiny" onClick={() => deleteOrder(orderId)}>
                                     <Icon name="delete"/><FormattedMessage id="button.cancel"/>
                                 </Button>
                             </Menu.Item>

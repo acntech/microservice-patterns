@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -31,6 +31,9 @@
 
         <spring-cloud.version>2022.0.0</spring-cloud.version>
         <opentelemetry.version>1.21.0</opentelemetry.version>
+        <webjars-jquery.version>3.6.3</webjars-jquery.version>
+        <webjars-bootstrap.version>5.2.3</webjars-bootstrap.version>
+        <webjars-locator.version>0.46</webjars-locator.version>
     </properties>
 
     <!-- MODULES -->
@@ -49,6 +52,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -56,12 +60,29 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- OpenTelemetry -->
             <dependency>
                 <groupId>io.opentelemetry</groupId>
                 <artifactId>opentelemetry-bom</artifactId>
                 <version>${opentelemetry.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- WebJars -->
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery</artifactId>
+                <version>${webjars-jquery.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>bootstrap</artifactId>
+                <version>${webjars-bootstrap.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>webjars-locator</artifactId>
+                <version>${webjars-locator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

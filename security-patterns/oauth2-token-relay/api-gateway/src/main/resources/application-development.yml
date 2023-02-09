@@ -12,6 +12,7 @@ spring:
             authorization-grant-type: authorization_code
             client-id: acntech-token-relay-portal
             client-secret: abcdefgh12345678
+            redirect-uri: http://localhost:3000/login/oauth2/code/keycloak
             scope:
               - openid
               - profile
