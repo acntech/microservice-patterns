@@ -1,11 +1,20 @@
 import {FC, ReactElement, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {ClientError, ErrorPayload, Order, OrderItem, OrderItemStatus, PageState, Product} from "../../../../types";
+import {
+    ClientError,
+    ClientResponse,
+    ErrorPayload,
+    Order,
+    OrderItem,
+    OrderItemStatus,
+    PageState,
+    Product
+} from "../../../../types";
 import {ErrorPanelFragment, LoadingIndicatorFragment, mapErrorPayload} from "../../../../fragments";
-import {RestClient} from "../../../../core/client";
 import {Button, Icon, Label, Menu, Segment, Table} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
 import {getOrderItemStatusLabelColor} from "../../../../core/utils";
+import {RestConsumer} from "../../../../core/consumer";
 
 const OrderItemPage: FC = (): ReactElement => {
 
@@ -21,38 +30,23 @@ const OrderItemPage: FC = (): ReactElement => {
 
     const getOrder = (orderId: string) => {
         setGetOrderState({status: 'LOADING', data: undefined});
-        RestClient.GET<Order>(`/api/orders/${orderId}`)
-            .then(response => {
-                setGetOrderState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetOrderState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.getOrder(orderId,
+            (response: ClientResponse<Order>) => setGetOrderState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setGetOrderState({status: 'FAILED', error: error.response}));
     };
 
     const getProduct = (productId: string) => {
         setGetProductState({status: 'LOADING', data: undefined});
-        RestClient.GET<Product>(`/api/products/${productId}`)
-            .then(response => {
-                setGetProductState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setGetProductState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.getProduct(productId,
+            (response: ClientResponse<Product>) => setGetProductState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setGetProductState({status: 'FAILED', error: error.response}));
     };
 
     const deleteOrderItem = (itemId: string) => {
         setDeleteOrderItemState({status: 'LOADING', data: undefined});
-        RestClient.DELETE<Order>(`/api/items/${itemId}`)
-            .then(response => {
-                setDeleteOrderItemState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setDeleteOrderItemState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.deleteOrderItem(itemId,
+            (response: ClientResponse<Order>) => setDeleteOrderItemState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setDeleteOrderItemState({status: 'FAILED', error: error.response}));
     };
 
     useEffect(() => {
@@ -63,7 +57,8 @@ const OrderItemPage: FC = (): ReactElement => {
 
     useEffect(() => {
         if (getOrderState.status === 'SUCCESS' && !!getOrderState.data) {
-            const orderItem = getOrderState.data.items.find(item => item.itemId === itemId);
+            const orderItems = getOrderState.data.body?.items || []
+            const orderItem = orderItems.find(item => item.itemId === itemId);
             if (!!orderItem) {
                 getProduct(orderItem.productId);
                 setOrderItem(orderItem);
@@ -106,14 +101,14 @@ const OrderItemPage: FC = (): ReactElement => {
         const {errorId, errorCode} = mapErrorPayload(pageState.error);
         return <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
     } else if (pageState.status === 'SUCCESS') {
-        if (!getOrderState.data) {
+        if (!getOrderState.data?.body) {
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.ORDERS.ORDER_NOT_FOUND'}/>
-        } else if (!getProductState.data) {
+        } else if (!getProductState.data?.body) {
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.PRODUCTS.PRODUCTS_NOT_FOUND'}/>
         } else if (!orderItem) {
             return <ErrorPanelFragment errorCode={'ACNTECH.TECHNICAL.ORDERS.ORDER_ITEM_NOT_FOUND'}/>
         } else {
-            const {name, description, price, currency} = getProductState.data;
+            const {name, description, price, currency} = getProductState.data.body;
             const {productId, quantity, status} = orderItem;
 
             const totalPrice = price * quantity;

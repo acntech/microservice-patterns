@@ -24,3 +24,11 @@ logging:
   level:
     root: WARN
     no.acntech: INFO
+
+# Server
+server:
+  port: 8080
+  error:
+    include-stacktrace: NEVER
+    whitelabel:
+      enabled: false

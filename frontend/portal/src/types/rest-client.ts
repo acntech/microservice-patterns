@@ -34,7 +34,9 @@ export interface ClientError<T = any> extends Error {
 
 export interface ClientErrorConstructor<T = any> extends ErrorConstructor {
     new(response?: ClientResponse<T>): ClientError<T>;
+
     (response?: ClientResponse<T>): ClientError<T>;
+
     readonly prototype: ClientError<T>;
 }
 
@@ -66,16 +68,10 @@ export interface Page<T> {
 }
 
 export interface ErrorPayload {
-    timestamp?: string;
-    sessionId?: string;
-    exchangeId?: string;
-    traceId?: string;
-    requestId?: string;
-    errorId?: string;
-    errorCode?: string;
-    status?: number;
-    error?: string;
-    message?: string;
-    path?: string;
-    cause?: ErrorPayload;
+    timestamp: string;
+    status: number;
+    error: string;
+    message: string;
+    path: string;
+    redirectUrl?: string;
 }

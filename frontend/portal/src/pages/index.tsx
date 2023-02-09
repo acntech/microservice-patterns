@@ -2,24 +2,19 @@ import {Button, Icon, Label, Menu, Segment, Table} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
 import {FC, ReactElement, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {ClientError, ErrorPayload, Order, PageState} from "../types";
-import {RestClient} from "../core/client";
+import {ClientError, ClientResponse, ErrorPayload, Order, PageState} from "../types";
 import {ErrorPanelFragment, LoadingIndicatorFragment, mapErrorPayload} from "../fragments";
 import {getOrderStatusLabelColor} from "../core/utils";
+import {RestConsumer} from "../core/consumer";
 
 const HomePage: FC = (): ReactElement => {
     const router = useRouter();
     const [pageState, setPageState] = useState<PageState<Order[]>>({status: 'LOADING'});
 
     useEffect(() => {
-        RestClient.GET<Order[]>("/api/orders")
-            .then(response => {
-                setPageState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setPageState({status: 'FAILED', error: error.response?.body});
-            });
+        RestConsumer.getOrders(
+            (response: ClientResponse<Order[]>) => setPageState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setPageState({status: 'FAILED', error: error.response}));
     }, []);
 
     if (pageState.status === 'LOADING') {
@@ -32,7 +27,7 @@ const HomePage: FC = (): ReactElement => {
             <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
         );
     } else {
-        const orders = pageState.data || [];
+        const orders = pageState.data?.body || [];
         return (
             <Segment basic>
                 <Menu>

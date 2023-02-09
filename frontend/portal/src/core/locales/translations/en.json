@@ -52,12 +52,14 @@
   "button.new": "New",
   "button.new-item": "New Item",
   "button.confirm": "Confirm",
-  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.title":  "Parameters Missing",
-  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.content":  "Page parameters missing",
+  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.title": "Parameters Missing",
+  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.content": "Page parameters missing",
+  "error.ACNTECH.TECHNICAL.SECURITY.NOT_AUTHENTICATED.title": "Not authenticated",
+  "error.ACNTECH.TECHNICAL.SECURITY.NOT_AUTHENTICATED.content": "You need to be authenticated to use this portal",
   "error.ACNTECH.FUNCTIONAL.ORDERS.ORDER_NOT_FOUND.title": "Orders Missing",
   "error.ACNTECH.FUNCTIONAL.ORDERS.ORDER_NOT_FOUND.content": "Business entity missing for Orders",
   "error.ACNTECH.FUNCTIONAL.PRODUCTS.PRODUCTS_NOT_FOUND.title": "Products Missing",
   "error.ACNTECH.FUNCTIONAL.PRODUCTS.PRODUCTS_NOT_FOUND.content": "Business entity missing for Products",
-  "error.ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE.title": "Error Missing",
-  "error.ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE.content": "Error details missing for current error"
+  "error.ACNTECH.TECHNICAL.COMMON.UNRECOGNIZED_ERROR.title": "Error",
+  "error.ACNTECH.TECHNICAL.COMMON.UNRECOGNIZED_ERROR.content": "An unrecognized error occurred"
 }

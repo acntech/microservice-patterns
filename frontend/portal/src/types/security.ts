@@ -1,12 +1,12 @@
 export interface UserContext {
-    userUid: string;
+    uid: string;
     username: string;
     firstName: string;
     lastName: string;
     roles: []
 }
 
-export interface SecurityContext {
-    sessionUid: string;
+export interface SessionContext {
+    sid: string;
     userContext: UserContext;
 }

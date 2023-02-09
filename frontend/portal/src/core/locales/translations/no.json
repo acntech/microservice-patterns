@@ -52,12 +52,16 @@
   "button.new": "Ny",
   "button.new-item": "Ny Enhet",
   "button.confirm": "Bekreft",
-  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.title":  "Parametre Mangler",
-  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.content":  "Sideparametre mangler",
+  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.title": "Parametre Mangler",
+  "error.ACNTECH.TECHNICAL.COMMON.PAGE_PARAM_MISSING.content": "Sideparametre mangler",
+  "error.ACNTECH.TECHNICAL.SECURITY.NOT_AUTHENTICATED.title": "Ikke autentisert",
+  "error.ACNTECH.TECHNICAL.SECURITY.NOT_AUTHENTICATED.content": "Du må være autentisert for å benytte denne portalen",
   "error.ACNTECH.FUNCTIONAL.ORDERS.ORDER_NOT_FOUND.title": "Ordere Mangler",
   "error.ACNTECH.FUNCTIONAL.ORDERS.ORDER_NOT_FOUND.content": "Forretningsobjekt mangler for ordre",
   "error.ACNTECH.FUNCTIONAL.PRODUCTS.PRODUCTS_NOT_FOUND.title": "Produkt Mangler",
   "error.ACNTECH.FUNCTIONAL.PRODUCTS.PRODUCTS_NOT_FOUND.content": "Forretningsobjekt mangler for produkt",
   "error.ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE.title": "Feil Mangler",
-  "error.ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE.content": "Feildetaljer mangler for nåværende feil"
+  "error.ACNTECH.TECHNICAL.COMMON.MISSING_ERROR_RESPONSE.content": "Feildetaljer mangler for nåværende feil",
+  "error.ACNTECH.TECHNICAL.COMMON.UNRECOGNIZED_ERROR.title": "Feil",
+  "error.ACNTECH.TECHNICAL.COMMON.UNRECOGNIZED_ERROR.content": "EN ukjent feil oppsto"
 }

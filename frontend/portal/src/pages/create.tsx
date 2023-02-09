@@ -5,8 +5,8 @@ import {FormattedMessage, useIntl} from "react-intl";
 import {Button, Form, Icon, Message, Segment} from "semantic-ui-react";
 import {v4 as uuid} from "uuid";
 import {ErrorPanelFragment, LoadingIndicatorFragment, mapErrorPayload} from "../fragments";
-import {ClientError, CreateOrder, ErrorPayload, Order, PageState} from "../types";
-import {RestClient} from "../core/client";
+import {ClientError, ClientResponse, ErrorPayload, Order, PageState} from "../types";
+import {RestConsumer} from "../core/consumer";
 
 const CreateOrderPage: FC = (): ReactElement => {
 
@@ -16,30 +16,22 @@ const CreateOrderPage: FC = (): ReactElement => {
     const {register, handleSubmit, formState: {errors: formErrors}} = useForm();
 
     useEffect(() => {
-        if (pageState.status === 'SUCCESS' && !!pageState.data) {
-            const {orderId} = pageState.data;
+        if (pageState.status === 'SUCCESS' && !!pageState.data?.body) {
+            const {orderId} = pageState.data.body;
             router.push(`/orders/${orderId}`);
         }
     }, [pageState]);
 
-    const createOrder = (body: CreateOrder) => {
-        setPageState({status: 'LOADING'})
-        RestClient.POST<Order>("/api/orders", body)
-            .then(response => {
-                setPageState({status: 'SUCCESS', data: response.body});
-            })
-            .catch(e => {
-                const error = e as ClientError<ErrorPayload>;
-                setPageState({status: 'FAILED', error: error.response?.body});
-            });
-    };
-
     const onFormSubmit = (formData: any) => {
-        createOrder({
-            customerId: uuid(),
+        const body = {
+            customerId: uuid(), // TODO: Remove hardcoded UUID
             name: formData.orderName,
             description: formData.orderDescription
-        });
+        };
+        setPageState({status: 'LOADING'})
+        RestConsumer.createOrder(body,
+            (response: ClientResponse<Order>) => setPageState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setPageState({status: 'FAILED', error: error.response}));
     };
     const onFormError = (formErrors: any) => {
         console.log("FORM ERROR", formErrors)

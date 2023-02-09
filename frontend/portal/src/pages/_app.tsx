@@ -1,5 +1,5 @@
 import type {AppProps} from "next/app";
-import {createContext, FC, ReactElement, ReactNode, useState} from "react";
+import {createContext, FC, ReactElement, ReactNode, useEffect, useState} from "react";
 import {IntlProvider} from "react-intl";
 import {CookiesProvider, useCookies} from "react-cookie";
 import {Container} from "semantic-ui-react";
@@ -10,10 +10,11 @@ import {
     userLocaleCookieName,
     userLocaleCookieOptions
 } from "../core/locales";
-import {AppSettings} from "../types";
+import {AppSettings, ClientError, ClientResponse, ErrorPayload, PageState, SessionContext} from "../types";
 import {HeaderMenuFragment} from "../fragments";
 import "semantic-ui-css/semantic.min.css";
 import "../styles/globals.css";
+import {RestConsumer} from "../core/consumer";
 
 interface LocaleAwareAppProps {
     children: ReactNode
@@ -59,11 +60,20 @@ const LocaleAwareApp: FC<LocaleAwareAppProps> = (props: LocaleAwareAppProps): Re
 }
 
 const App: FC<AppProps> = ({Component, pageProps}: AppProps): ReactElement => {
+
+    const [pageState, setPageState] = useState<PageState<SessionContext>>({status: 'LOADING'});
+
+    useEffect(() => {
+        RestConsumer.getSessionContext(
+            (response: ClientResponse<SessionContext>) => setPageState({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => setPageState({status: 'FAILED', error: error.response}));
+    }, []);
+
     return (
         <CookiesProvider>
             <LocaleAwareApp>
                 <Container>
-                    <HeaderMenuFragment/>
+                    <HeaderMenuFragment sessionContext={pageState.data?.body}/>
                     <Component {...pageProps} />
                 </Container>
             </LocaleAwareApp>
