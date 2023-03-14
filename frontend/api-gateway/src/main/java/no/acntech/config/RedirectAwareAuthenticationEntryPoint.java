@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.time.Instant;
 
 @Component
@@ -47,6 +48,7 @@ public class RedirectAwareAuthenticationEntryPoint implements ServerAuthenticati
             final var response = exchange.getResponse();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+            response.getHeaders().setLocation(URI.create("/login"));
             final var redirectResponse = getRedirectResponse(exchange.getRequest());
             final var dataBuffer = response.bufferFactory().wrap(objectMapper.writeValueAsBytes(redirectResponse));
             return response.writeWith(Mono.just(dataBuffer));
@@ -61,7 +63,6 @@ public class RedirectAwareAuthenticationEntryPoint implements ServerAuthenticati
         problemDetail.setProperty("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
         problemDetail.setProperty("message", "Not authenticated");
         problemDetail.setProperty("path", request.getURI().getPath());
-        problemDetail.setProperty("redirectUrl", "/login");
         return problemDetail;
     }
 }

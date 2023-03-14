@@ -17,8 +17,8 @@ module.exports = {
                 destination: "http://localhost:9000/oauth2/authorization/:registrationId"
             },
             {
-                source: "/_api/:resource*", // Static resources
-                destination: "http://localhost:9000/_api/:resource*"
+                source: "/resources/:resource*", // Static resources
+                destination: "http://localhost:9000/resources/:resource*"
             },
             {
                 source: "/api/:resource*", // API resources

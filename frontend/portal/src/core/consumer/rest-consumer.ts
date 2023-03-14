@@ -10,10 +10,10 @@ import {
 } from "../../types";
 import {RestClient} from "../client";
 
-const internalErrorHandler = (error: ClientError<ErrorPayload>,
+const authenticationAwareErrorHandler = (error: ClientError<ErrorPayload>,
                               errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-    if (error.response?.status === 401 && error.response.body) {
-        const {redirectUrl} = error.response.body
+    if (error.response?.status === 401) {
+        const redirectUrl = error.response.headers.get("location")
         if (redirectUrl) {
             location.replace(redirectUrl);
         }
@@ -28,7 +28,7 @@ const GET = <T>(url: string,
         .then(successHandler)
         .catch(e => {
             const error = e as ClientError<ErrorPayload>;
-            internalErrorHandler(error, errorHandler);
+            authenticationAwareErrorHandler(error, errorHandler);
         });
 };
 
@@ -40,7 +40,7 @@ const POST = <T>(url: string,
         .then(successHandler)
         .catch(e => {
             const error = e as ClientError<ErrorPayload>;
-            internalErrorHandler(error, errorHandler);
+            authenticationAwareErrorHandler(error, errorHandler);
         });
 };
 
@@ -52,7 +52,7 @@ const PUT = <T>(url: string,
         .then(successHandler)
         .catch(e => {
             const error = e as ClientError<ErrorPayload>;
-            internalErrorHandler(error, errorHandler);
+            authenticationAwareErrorHandler(error, errorHandler);
         });
 };
 
@@ -63,7 +63,7 @@ const DELETE = <T>(url: string,
         .then(successHandler)
         .catch(e => {
             const error = e as ClientError<ErrorPayload>;
-            internalErrorHandler(error, errorHandler);
+            authenticationAwareErrorHandler(error, errorHandler);
         });
 };
 

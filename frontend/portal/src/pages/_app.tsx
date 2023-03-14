@@ -1,5 +1,5 @@
 import type {AppProps} from "next/app";
-import {createContext, FC, ReactElement, ReactNode, useEffect, useState} from "react";
+import {createContext, FC, ReactElement, ReactNode, useEffect, useReducer, useState} from "react";
 import {IntlProvider} from "react-intl";
 import {CookiesProvider, useCookies} from "react-cookie";
 import {Container} from "semantic-ui-react";
@@ -10,11 +10,12 @@ import {
     userLocaleCookieName,
     userLocaleCookieOptions
 } from "../core/locales";
-import {AppSettings, ClientError, ClientResponse, ErrorPayload, PageState, SessionContext} from "../types";
+import {AppSettings, ClientError, ClientResponse, ErrorPayload, SessionContext} from "../types";
 import {HeaderMenuFragment} from "../fragments";
 import "semantic-ui-css/semantic.min.css";
 import "../styles/globals.css";
 import {RestConsumer} from "../core/consumer";
+import {sessionReducer} from "../state/reducers";
 
 interface LocaleAwareAppProps {
     children: ReactNode
@@ -61,19 +62,19 @@ const LocaleAwareApp: FC<LocaleAwareAppProps> = (props: LocaleAwareAppProps): Re
 
 const App: FC<AppProps> = ({Component, pageProps}: AppProps): ReactElement => {
 
-    const [pageState, setPageState] = useState<PageState<SessionContext>>({status: 'LOADING'});
+    const [sessionState, sessionDispatch] = useReducer(sessionReducer, {status: 'LOADING'});
 
     useEffect(() => {
         RestConsumer.getSessionContext(
-            (response: ClientResponse<SessionContext>) => setPageState({status: 'SUCCESS', data: response}),
-            (error: ClientError<ErrorPayload>) => setPageState({status: 'FAILED', error: error.response}));
+            (response: ClientResponse<SessionContext>) => sessionDispatch({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => sessionDispatch({status: 'FAILED', error: error.response}));
     }, []);
 
     return (
         <CookiesProvider>
             <LocaleAwareApp>
                 <Container>
-                    <HeaderMenuFragment sessionContext={pageState.data?.body}/>
+                    <HeaderMenuFragment sessionContext={sessionState.data}/>
                     <Component {...pageProps} />
                 </Container>
             </LocaleAwareApp>

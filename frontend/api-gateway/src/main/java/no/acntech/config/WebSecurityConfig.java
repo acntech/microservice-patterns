@@ -20,7 +20,7 @@ public class WebSecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeExchange()
-                .pathMatchers("/", "/favicon.ico", "/_api/**", "/webjars/**", "/login*").permitAll()
+                .pathMatchers("/", "/favicon.ico", "/resources/**", "/webjars/**", "/login*").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .formLogin()

@@ -1,26 +1,27 @@
-import {FC, ReactElement, useEffect, useState} from "react";
+import {FC, ReactElement, useEffect, useReducer} from "react";
 import {useRouter} from "next/router";
 import {useForm} from "react-hook-form";
 import {FormattedMessage, useIntl} from "react-intl";
 import {Button, Form, Icon, Message, Segment} from "semantic-ui-react";
 import {v4 as uuid} from "uuid";
-import {ErrorPanelFragment, LoadingIndicatorFragment, mapErrorPayload} from "../fragments";
-import {ClientError, ClientResponse, ErrorPayload, Order, PageState} from "../types";
+import {ErrorPanelFragment, LoadingIndicatorFragment} from "../fragments";
+import {ClientError, ClientResponse, ErrorPayload, Order} from "../types";
 import {RestConsumer} from "../core/consumer";
+import {orderReducer} from "../state/reducers";
 
 const CreateOrderPage: FC = (): ReactElement => {
 
     const router = useRouter();
     const {formatMessage: t} = useIntl();
-    const [pageState, setPageState] = useState<PageState<Order>>({status: 'PENDING'});
+    const [orderState, orderDispatch] = useReducer(orderReducer, {status: 'PENDING'});
     const {register, handleSubmit, formState: {errors: formErrors}} = useForm();
 
     useEffect(() => {
-        if (pageState.status === 'SUCCESS' && !!pageState.data?.body) {
-            const {orderId} = pageState.data.body;
+        if (orderState.status === 'SUCCESS' && !!orderState.data) {
+            const {orderId} = orderState.data;
             router.push(`/orders/${orderId}`);
         }
-    }, [pageState]);
+    }, [orderState]);
 
     const onFormSubmit = (formData: any) => {
         const body = {
@@ -28,10 +29,10 @@ const CreateOrderPage: FC = (): ReactElement => {
             name: formData.orderName,
             description: formData.orderDescription
         };
-        setPageState({status: 'LOADING'})
+        orderDispatch({status: 'LOADING'})
         RestConsumer.createOrder(body,
-            (response: ClientResponse<Order>) => setPageState({status: 'SUCCESS', data: response}),
-            (error: ClientError<ErrorPayload>) => setPageState({status: 'FAILED', error: error.response}));
+            (response: ClientResponse<Order>) => orderDispatch({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => orderDispatch({status: 'FAILED', error: error.response}));
     };
     const onFormError = (formErrors: any) => {
         console.log("FORM ERROR", formErrors)
@@ -41,19 +42,18 @@ const CreateOrderPage: FC = (): ReactElement => {
         router.push('/');
     };
 
-    if (pageState.status === 'LOADING') {
+    if (orderState.status === 'LOADING') {
         return <LoadingIndicatorFragment/>;
-    } else if (pageState.status === 'FAILED') {
-        const {errorId, errorCode} = mapErrorPayload(pageState.error);
+    } else if (orderState.status === 'FAILED') {
         return (
-            <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
+            <ErrorPanelFragment error={orderState.error}/>
         );
-    } else if (pageState.status === 'SUCCESS') {
-        if (!!pageState.data) {
+    } else if (orderState.status === 'SUCCESS') {
+        if (!!orderState.data) {
             return <></>; // Will be redirected
         } else {
             return (
-                <ErrorPanelFragment errorCode={'ACNTECH.FUNCTIONAL.ORDERS.ORDER_NOT_FOUND'}/>
+                <ErrorPanelFragment/>
             );
         }
     } else {

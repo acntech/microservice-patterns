@@ -27,6 +27,8 @@ spring:
   # Cloud
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay
       routes:
         - id: customers
           uri: http://acntech.customers.service:8080

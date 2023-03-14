@@ -1,33 +1,33 @@
 import {Button, Icon, Label, Menu, Segment, Table} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
-import {FC, ReactElement, useEffect, useState} from "react";
+import {FC, ReactElement, useEffect, useReducer} from "react";
 import {useRouter} from "next/router";
-import {ClientError, ClientResponse, ErrorPayload, Order, PageState} from "../types";
-import {ErrorPanelFragment, LoadingIndicatorFragment, mapErrorPayload} from "../fragments";
+import {ClientError, ClientResponse, ErrorPayload, Order} from "../types";
+import {ErrorPanelFragment, LoadingIndicatorFragment} from "../fragments";
 import {getOrderStatusLabelColor} from "../core/utils";
 import {RestConsumer} from "../core/consumer";
+import {orderListReducer} from "../state/reducers";
 
 const HomePage: FC = (): ReactElement => {
     const router = useRouter();
-    const [pageState, setPageState] = useState<PageState<Order[]>>({status: 'LOADING'});
+    const [orderListState, orderListDispatch] = useReducer(orderListReducer, {status: 'LOADING'});
 
     useEffect(() => {
         RestConsumer.getOrders(
-            (response: ClientResponse<Order[]>) => setPageState({status: 'SUCCESS', data: response}),
-            (error: ClientError<ErrorPayload>) => setPageState({status: 'FAILED', error: error.response}));
+            (response: ClientResponse<Order[]>) => orderListDispatch({status: 'SUCCESS', data: response}),
+            (error: ClientError<ErrorPayload>) => orderListDispatch({status: 'FAILED', error: error.response}));
     }, []);
 
-    if (pageState.status === 'LOADING') {
+    if (orderListState.status === 'LOADING') {
         return (
             <LoadingIndicatorFragment/>
         );
-    } else if (pageState.status === 'FAILED') {
-        const {errorId, errorCode} = mapErrorPayload(pageState.error);
+    } else if (orderListState.status === 'FAILED') {
         return (
-            <ErrorPanelFragment errorId={errorId} errorCode={errorCode}/>
+            <ErrorPanelFragment error={orderListState.error}/>
         );
     } else {
-        const orders = pageState.data?.body || [];
+        const orders = orderListState.data || [];
         return (
             <Segment basic>
                 <Menu>

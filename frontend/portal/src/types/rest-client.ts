@@ -7,25 +7,18 @@ export type ClientMethod =
     | 'PUT'
     | 'PATCH';
 
-export type ClientResponseType =
-    | 'NORMAL'
-    | 'REDIRECT'
-    | 'ERROR';
-
 export interface ClientRequestConfig {
     url?: string;
     method?: ClientMethod;
-    headers?: any;
+    headers?: HeadersInit;
     params?: any;
     body?: any;
 }
 
 export interface ClientResponse<T = any> {
-    type: ClientResponseType;
     body?: T;
     status: number;
-    statusText: string;
-    headers?: any;
+    headers: Headers;
 }
 
 export interface ClientError<T = any> extends Error {
@@ -73,5 +66,4 @@ export interface ErrorPayload {
     error: string;
     message: string;
     path: string;
-    redirectUrl?: string;
 }

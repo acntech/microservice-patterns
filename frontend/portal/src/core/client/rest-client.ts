@@ -33,28 +33,23 @@ function createFilePayload(payload: any): FormData {
 }
 
 async function handleResponse<T = any>(response: Response): Promise<ClientResponse<T>> {
-    if (response.status < 400) {
-        const {status, statusText, type: responseType} = response;
-        const type = responseType === 'opaqueredirect' ? 'REDIRECT' : 'NORMAL';
+    const {status, headers} = response;
+    if (status < 400) {
         const body = response.ok ? await response.json() : undefined;
         return Promise.resolve({
-            type,
             body,
             status,
-            statusText
+            headers
         });
     } else {
-        console.log("RESPONSE", response)
-        const {status, statusText} = response;
         const body = await response.json();
         return Promise.reject({
             name: 'ClientError',
             message: 'Client Error',
             response: {
-                type: 'ERROR',
                 body,
                 status,
-                statusText
+                headers
             }
         });
     }

@@ -25,8 +25,3 @@ spring:
   # AOP
   aop:
     proxy-target-class: true
-  # Cloud
-  cloud:
-    gateway:
-      default-filters:
-        - TokenRelay
