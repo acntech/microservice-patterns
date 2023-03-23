@@ -1,6 +1,11 @@
 import {ClientResponse, ErrorPayload} from "./rest-client";
 
-export type Status = 'PENDING' | 'LOADING' | 'SUCCESS' | 'FAILED'
+export enum Status {
+    PENDING,
+    LOADING,
+    SUCCESS,
+    FAILED
+}
 
 export interface Action<T> {
     status: Status,

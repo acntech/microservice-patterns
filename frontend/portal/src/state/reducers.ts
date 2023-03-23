@@ -1,14 +1,14 @@
-import {Action, Order, Product, SessionContext, State} from "../types";
+import {Action, Order, Product, SessionContext, State, Status} from "../types";
 
 const genericReducer = <T>(state: State<T>, action: Action<T>): State<T> => {
     const {status, data, error} = action;
     switch (status) {
-        case 'SUCCESS':
+        case Status.SUCCESS:
             return {
                 status,
                 data: data?.body
             }
-        case 'FAILED':
+        case Status.FAILED:
             return {
                 status,
                 error: error?.body

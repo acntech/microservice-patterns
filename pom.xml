@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -29,9 +29,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
-        <spring-cloud.version>2022.0.0</spring-cloud.version>
-        <opentelemetry.version>1.21.0</opentelemetry.version>
-        <webjars-jquery.version>3.6.3</webjars-jquery.version>
+        <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <opentelemetry.version>1.24.0</opentelemetry.version>
+        <webjars-jquery.version>3.6.4</webjars-jquery.version>
         <webjars-bootstrap.version>5.2.3</webjars-bootstrap.version>
         <webjars-locator.version>0.46</webjars-locator.version>
     </properties>

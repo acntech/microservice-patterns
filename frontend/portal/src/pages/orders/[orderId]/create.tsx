@@ -19,61 +19,61 @@ const CreateOrderItemPage: FC = (): ReactElement => {
     const router = useRouter();
     const {formatMessage: t} = useIntl();
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const [pageStatus, setPageStatus] = useState<Status>('LOADING');
-    const [orderState, orderDispatch] = useReducer(orderReducer, {status: 'LOADING'});
-    const [productState, productDispatch] = useReducer(productReducer, {status: 'LOADING'});
-    const [productListState, productListDispatch] = useReducer(productListReducer, {status: 'LOADING'});
-    const [createOrderItemState, setCreateOrderItemState] = useState<State<Order>>({status: 'PENDING'});
+    const [pageStatus, setPageStatus] = useState<Status>(Status.LOADING);
+    const [orderState, orderDispatch] = useReducer(orderReducer, {status: Status.LOADING});
+    const [productState, productDispatch] = useReducer(productReducer, {status: Status.LOADING});
+    const [productListState, productListDispatch] = useReducer(productListReducer, {status: Status.LOADING});
+    const [createOrderItemState, setCreateOrderItemState] = useState<State<Order>>({status: Status.PENDING});
     const {orderId: orderIdParam} = router.query;
-    const orderId = !orderIdParam ? undefined : typeof orderIdParam === 'string' ? orderIdParam : orderIdParam.length > 0 ? orderIdParam[0] : undefined;
+    const orderId = Array.isArray(orderIdParam) ? orderIdParam[0] : orderIdParam;
 
     useEffect(() => {
         if (orderId) {
             RestConsumer.getOrder(orderId,
                 (response: ClientResponse<Order>) =>
-                    orderDispatch({status: 'SUCCESS', data: response}),
+                    orderDispatch({status: Status.SUCCESS, data: response}),
                 (error: ClientError<ErrorPayload>) =>
-                    orderDispatch({status: 'FAILED', error: error.response}));
+                    orderDispatch({status: Status.FAILED, error: error.response}));
             RestConsumer.getProducts(
                 (response: ClientResponse<Product[]>) =>
-                    productListDispatch({status: 'SUCCESS', data: response}),
+                    productListDispatch({status: Status.SUCCESS, data: response}),
                 (error: ClientError<ErrorPayload>) =>
-                    productListDispatch({status: 'FAILED', error: error.response}));
+                    productListDispatch({status: Status.FAILED, error: error.response}));
         }
     }, []);
 
     useEffect(() => {
-        if (orderState.status === 'LOADING' && productListState.status === 'LOADING' && pageStatus !== 'LOADING') {
-            setPageStatus('LOADING');
-        } else if (orderState.status === 'SUCCESS' && productListState.status === 'SUCCESS' && pageStatus === 'LOADING') {
-            setPageStatus('SUCCESS');
-        } else if ((orderState.status === 'FAILED' || productListState.status === 'FAILED') && pageStatus !== 'FAILED') {
-            setPageStatus('FAILED');
+        if (orderState.status === Status.LOADING && productListState.status === Status.LOADING && pageStatus !== Status.LOADING) {
+            setPageStatus(Status.LOADING);
+        } else if (orderState.status === Status.SUCCESS && productListState.status === Status.SUCCESS && pageStatus === Status.LOADING) {
+            setPageStatus(Status.SUCCESS);
+        } else if ((orderState.status === Status.FAILED || productListState.status === Status.FAILED) && pageStatus !== Status.FAILED) {
+            setPageStatus(Status.FAILED);
         }
     }, [orderState, productListState]);
 
     useEffect(() => {
-        if (createOrderItemState.status === 'SUCCESS') {
+        if (createOrderItemState.status === Status.SUCCESS) {
             router.push(`/orders/${orderId}`);
         }
     }, [createOrderItemState]);
 
     const onFormSubmit = (formData: any) => {
         if (!Object.keys(errors).length && !!orderId) {
-            setPageStatus('LOADING');
-            orderDispatch({status: 'LOADING', data: undefined});
+            setPageStatus(Status.LOADING);
+            orderDispatch({status: Status.LOADING, data: undefined});
             const {productId, orderItemQuantity: quantity} = formData;
             RestConsumer.createOrderItem(orderId, {productId, quantity},
                 (response: ClientResponse<Order>) =>
-                    setCreateOrderItemState({status: 'SUCCESS', data: response.body}),
+                    setCreateOrderItemState({status: Status.SUCCESS, data: response.body}),
                 (error: ClientError<ErrorPayload>) =>
-                    setCreateOrderItemState({status: 'FAILED', error: error.response?.body}));
+                    setCreateOrderItemState({status: Status.FAILED, error: error.response?.body}));
         }
     };
 
     const onProductTableRowClick = (selectedProduct: Product) => {
         const data = {status: 200, body: selectedProduct, headers: new Headers}
-        productDispatch({status: 'SUCCESS', data});
+        productDispatch({status: Status.SUCCESS, data});
     };
 
     const onCancelButtonClick = () => {
@@ -88,11 +88,11 @@ const CreateOrderItemPage: FC = (): ReactElement => {
         return value !== '' && !isNaN(Number(value));
     };
 
-    if (pageStatus === 'LOADING') {
+    if (pageStatus === Status.LOADING) {
         return <LoadingIndicatorFragment/>;
-    } else if (pageStatus === 'FAILED') {
+    } else if (pageStatus === Status.FAILED) {
         return <ErrorPanelFragment error={orderState.error || productListState.error}/>
-    } else if (pageStatus === 'SUCCESS') {
+    } else if (pageStatus === Status.SUCCESS) {
         const product = productState.data;
         const order = orderState.data;
         const productList = productListState.data;

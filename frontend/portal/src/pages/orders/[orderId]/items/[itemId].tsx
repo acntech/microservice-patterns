@@ -9,7 +9,6 @@ import {
     OrderItem,
     OrderItemStatus,
     Product,
-    State,
     Status
 } from "../../../../types";
 import {ErrorPanelFragment, LoadingIndicatorFragment} from "../../../../fragments";
@@ -22,37 +21,34 @@ import {orderReducer, productReducer} from "../../../../state/reducers";
 const OrderItemPage: FC = (): ReactElement => {
 
     const router = useRouter();
-    const [pageStatus, setPageStatus] = useState<Status>('LOADING');
-    const [orderState, orderDispatch] = useReducer(orderReducer, {status: 'LOADING'});
-    const [productState, productDispatch] = useReducer(productReducer, {status: 'LOADING'});
-    const [deleteOrderItemState, setDeleteOrderItemState] = useState<State<Order>>({status: 'PENDING'});
+    const [pageStatus, setPageStatus] = useState<Status>(Status.LOADING);
+    const [orderState, orderDispatch] = useReducer(orderReducer, {status: Status.LOADING});
+    const [productState, productDispatch] = useReducer(productReducer, {status: Status.LOADING});
+    const [deleteOrderState, deleteOrderDispatch] = useReducer(orderReducer, {status: Status.PENDING});
     const [orderItem, setOrderItem] = useState<OrderItem>();
-    const {orderId: orderIdParam, itemId: itemIdParam} = router.query
-    const orderId = !orderIdParam ? undefined : typeof orderIdParam === 'string' ? orderIdParam : orderIdParam.length > 0 ? orderIdParam[0] : undefined;
-    const itemId = !itemIdParam ? undefined : typeof itemIdParam === 'string' ? itemIdParam : itemIdParam.length > 0 ? itemIdParam[0] : undefined;
+    const {orderId: orderIdParam, itemId: itemIdParam} = router.query;
+    const orderId = Array.isArray(orderIdParam) ? orderIdParam[0] : orderIdParam;
+    const itemId = Array.isArray(itemIdParam) ? itemIdParam[0] : itemIdParam;
 
     const getOrder = (orderId: string) => {
-        orderDispatch({status: 'LOADING', data: undefined});
+        orderDispatch({status: Status.LOADING, data: undefined});
         RestConsumer.getOrder(orderId,
-            (response: ClientResponse<Order>) => orderDispatch({status: 'SUCCESS', data: response}),
-            (error: ClientError<ErrorPayload>) => orderDispatch({status: 'FAILED', error: error.response}));
+            (response: ClientResponse<Order>) => orderDispatch({status: Status.SUCCESS, data: response}),
+            (error: ClientError<ErrorPayload>) => orderDispatch({status: Status.FAILED, error: error.response}));
     };
 
     const getProduct = (productId: string) => {
-        productDispatch({status: 'LOADING', data: undefined});
+        productDispatch({status: Status.LOADING, data: undefined});
         RestConsumer.getProduct(productId,
-            (response: ClientResponse<Product>) => productDispatch({status: 'SUCCESS', data: response}),
-            (error: ClientError<ErrorPayload>) => productDispatch({status: 'FAILED', error: error.response}));
+            (response: ClientResponse<Product>) => productDispatch({status: Status.SUCCESS, data: response}),
+            (error: ClientError<ErrorPayload>) => productDispatch({status: Status.FAILED, error: error.response}));
     };
 
     const deleteOrderItem = (itemId: string) => {
-        setDeleteOrderItemState({status: 'LOADING', data: undefined});
+        deleteOrderDispatch({status: Status.LOADING, data: undefined});
         RestConsumer.deleteOrderItem(itemId,
-            (response: ClientResponse<Order>) => setDeleteOrderItemState({status: 'SUCCESS', data: response.body}),
-            (error: ClientError<ErrorPayload>) => setDeleteOrderItemState({
-                status: 'FAILED',
-                error: error.response?.body
-            }));
+            (response: ClientResponse<Order>) => deleteOrderDispatch({status: Status.SUCCESS, data: response}),
+            (error: ClientError<ErrorPayload>) => deleteOrderDispatch({status: Status.FAILED, error: error.response}));
     };
 
     useEffect(() => {
@@ -62,7 +58,7 @@ const OrderItemPage: FC = (): ReactElement => {
     }, []);
 
     useEffect(() => {
-        if (orderState.status === 'SUCCESS' && !!orderState.data) {
+        if (orderState.status === Status.SUCCESS && !!orderState.data) {
             const orderItems = orderState.data.items || []
             const orderItem = orderItems.find(item => item.itemId === itemId);
             if (!!orderItem) {
@@ -73,18 +69,18 @@ const OrderItemPage: FC = (): ReactElement => {
     }, [orderState]);
 
     useEffect(() => {
-        if (deleteOrderItemState.status === 'SUCCESS') {
+        if (deleteOrderState.status === Status.SUCCESS) {
             router.push(`/orders/${orderId}`);
         }
-    }, [deleteOrderItemState]);
+    }, [deleteOrderState]);
 
     useEffect(() => {
-        if (orderState.status === 'LOADING' && productState.status === 'LOADING' && pageStatus !== 'LOADING') {
-            setPageStatus('LOADING');
-        } else if (orderState.status === 'SUCCESS' && productState.status === 'SUCCESS' && pageStatus === 'LOADING') {
-            setPageStatus('SUCCESS');
-        } else if ((orderState.status === 'FAILED' || productState.status === 'FAILED') && pageStatus !== 'FAILED') {
-            setPageStatus('FAILED');
+        if (orderState.status === Status.LOADING && productState.status === Status.LOADING && pageStatus !== Status.LOADING) {
+            setPageStatus(Status.LOADING);
+        } else if (orderState.status === Status.SUCCESS && productState.status === Status.SUCCESS && pageStatus === Status.LOADING) {
+            setPageStatus(Status.SUCCESS);
+        } else if ((orderState.status === Status.FAILED || productState.status === Status.FAILED) && pageStatus !== Status.FAILED) {
+            setPageStatus(Status.FAILED);
         }
     }, [orderState, productState]);
 
@@ -102,11 +98,11 @@ const OrderItemPage: FC = (): ReactElement => {
 
     if (!orderId || !itemId) {
         return <ErrorPanelFragment error={{status: ErrorCode.PARAM_MISSING}}/>
-    } else if (pageStatus === 'LOADING') {
+    } else if (pageStatus === Status.LOADING) {
         return <LoadingIndicatorFragment/>;
-    } else if (pageStatus === 'FAILED') {
+    } else if (pageStatus === Status.FAILED) {
         return <ErrorPanelFragment error={orderState.error || productState.error}/>
-    } else if (pageStatus === 'SUCCESS') {
+    } else if (pageStatus === Status.SUCCESS) {
         if (!orderState.data) {
             return <ErrorPanelFragment error={{status: ErrorCode.ORDER_DATA_MISSING}}/>
         } else if (!productState.data) {

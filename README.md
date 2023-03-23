@@ -11,23 +11,20 @@ The same business case is used in all the examples in order to make it easier to
 business case is that of an ordering system where customers can order products and have them shipped. The architecture
 of the system is typically comprised of the following microservices:
 
-* **Customers**
-    * Service that maintains customerEntity records.
-    * http://localhost:9001
 * **Ordering**
-    * Service where customers can create orders and add order items.
-    * http://localhost:9002
+  * Service where customers can create orders and add order items.
+  * http://localhost:9002
 * **Warehouse**
-    * Service that maintains products and productEntity inventory.
-    * http://localhost:9003
-* **Shipping**
-    * Service that ships an order when it has been completed.
-    * http://localhost:9004
-* **Billing**
-    * Service that sends invoices to customers when orders have been completed and shipped.
-    * http://localhost:9005
+  * Service that maintains products and product inventory.
+  * http://localhost:9003
+* **Shipping** (optional)
+  * Service that ships an order when it has been completed.
+  * http://localhost:9004
+* **Billing** (optional)
+  * Service that sends invoices to customers when orders have been completed and shipped.
+  * http://localhost:9005
 
-As well there is a ReactJS based portal that can be used to interact with the business logic.
+As well there is an order web frontend.
 
 [/ frontend / portal / README](https://github.com/acntech/microservice-patterns/tree/develop/frontend/portal)
 
@@ -40,29 +37,21 @@ calls.
 
 Below are the pattern areas that are being explored. Each subfolder has its own README with further details.
 
-### Communication Patterns
+* **Communication Patterns**
+  * Examples that explore different patterns related to communication between microservices.
+  * [/ communication-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns)
 
-Examples that explore different patterns related to communication between microservices.
+* **Reliability Patterns**
+  * Examples that explore different patterns related to microservice reliability and resilience.
+  * [/ reliability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/reliability-patterns)
 
-[/ communication-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/communication-patterns)
+* **Observability Patterns**
+  * Examples that explore different patterns related to microservice observability and monitoring.
+  * [/ observability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/observability-patterns)
 
-### Reliability Patterns
-
-Examples that explore different patterns related to microservice reliability and resilience.
-
-[/ reliability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/reliability-patterns)
-
-### Observability Patterns
-
-Examples that explore different patterns related to microservice observability and monitoring.
-
-[/ observability-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/observability-patterns)
-
-### Security Patterns
-
-Examples that explore different patterns related to microservice security and privacy.
-
-[/ security-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/security-patterns)
+* **Security Patterns**
+  * Examples that explore different patterns related to microservice security and privacy.
+  * [/ security-patterns / README](https://github.com/acntech/microservice-patterns/tree/develop/security-patterns)
 
 ## Talking Points
 

@@ -10,7 +10,7 @@ import {
     userLocaleCookieName,
     userLocaleCookieOptions
 } from "../core/locales";
-import {AppSettings, ClientError, ClientResponse, ErrorPayload, SessionContext} from "../types";
+import {AppSettings, ClientError, ClientResponse, ErrorPayload, SessionContext, Status} from "../types";
 import {HeaderMenuFragment} from "../fragments";
 import "semantic-ui-css/semantic.min.css";
 import "../styles/globals.css";
@@ -62,12 +62,12 @@ const LocaleAwareApp: FC<LocaleAwareAppProps> = (props: LocaleAwareAppProps): Re
 
 const App: FC<AppProps> = ({Component, pageProps}: AppProps): ReactElement => {
 
-    const [sessionState, sessionDispatch] = useReducer(sessionReducer, {status: 'LOADING'});
+    const [sessionState, sessionDispatch] = useReducer(sessionReducer, {status: Status.LOADING});
 
     useEffect(() => {
         RestConsumer.getSessionContext(
-            (response: ClientResponse<SessionContext>) => sessionDispatch({status: 'SUCCESS', data: response}),
-            (error: ClientError<ErrorPayload>) => sessionDispatch({status: 'FAILED', error: error.response}));
+            (response: ClientResponse<SessionContext>) => sessionDispatch({status: Status.SUCCESS, data: response}),
+            (error: ClientError<ErrorPayload>) => sessionDispatch({status: Status.FAILED, error: error.response}));
     }, []);
 
     return (

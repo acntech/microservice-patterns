@@ -2,7 +2,7 @@ import {Button, Icon, Label, Menu, Segment, Table} from "semantic-ui-react";
 import {FormattedMessage} from "react-intl";
 import {FC, ReactElement, useEffect, useReducer} from "react";
 import {useRouter} from "next/router";
-import {ClientError, ClientResponse, ErrorPayload, Order} from "../types";
+import {ClientError, ClientResponse, ErrorPayload, Order, Status} from "../types";
 import {ErrorPanelFragment, LoadingIndicatorFragment} from "../fragments";
 import {getOrderStatusLabelColor} from "../core/utils";
 import {RestConsumer} from "../core/consumer";
@@ -10,19 +10,19 @@ import {orderListReducer} from "../state/reducers";
 
 const HomePage: FC = (): ReactElement => {
     const router = useRouter();
-    const [orderListState, orderListDispatch] = useReducer(orderListReducer, {status: 'LOADING'});
+    const [orderListState, orderListDispatch] = useReducer(orderListReducer, {status: Status.LOADING});
 
     useEffect(() => {
         RestConsumer.getOrders(
-            (response: ClientResponse<Order[]>) => orderListDispatch({status: 'SUCCESS', data: response}),
-            (error: ClientError<ErrorPayload>) => orderListDispatch({status: 'FAILED', error: error.response}));
+            (response: ClientResponse<Order[]>) => orderListDispatch({status: Status.SUCCESS, data: response}),
+            (error: ClientError<ErrorPayload>) => orderListDispatch({status: Status.FAILED, error: error.response}));
     }, []);
 
-    if (orderListState.status === 'LOADING') {
+    if (orderListState.status === Status.LOADING) {
         return (
             <LoadingIndicatorFragment/>
         );
-    } else if (orderListState.status === 'FAILED') {
+    } else if (orderListState.status === Status.FAILED) {
         return (
             <ErrorPanelFragment error={orderListState.error}/>
         );
