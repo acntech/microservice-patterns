@@ -1,20 +1,20 @@
 # Event Notification Pattern
 
-This example explores the use of asynchronous event notification. Each service holds its own
-state in a local data store. When the state of a service is modified it will publish a
-notification event. The events are "thin" messages that are distributed between the microservices
+This example explores the use of asynchronous event notification. Moreover, it expresses a
+*coordinated* business process pattern. 
+Each service holds its own state in a local data store. When the state of a service is modified it will publish a
+notification event. The events are "*thin*" messages that are distributed between the microservices
 using a message broker in a publish/subscribe fashion.
 
 ## Architecture
 
-The architecture is based on a combination of synchronous reads and asynchronous writes, with
-messaging for notification of state change, in a CQRS style communication pattern.
+The architecture is based on a combination of synchronous reads and asynchronous writes. It uses
+events as notification of state change.
 
 ### Microservices
 
 The system is made up of the following microservices:
 
-* Customers
 * Warehouse
 * Ordering
 * Billing
@@ -38,17 +38,19 @@ The user interface uses the exposed REST APIs of the microservices to drive its 
 
 The Spring Boot based microservices uses an embedded Apache Tomcat server.
 
+#### Runtime
+
 The applications can be started from the source code using the `spring-boot-maven-plugin` by running
 the command `mvn spring-boot:run`.
-They can also be started from the archive using the command `java -jar <arhive>.war`.
+They can also be started from the archive using the command `java -jar <arhive>.jar`.
+
+#### Spring profiles:
 
 Supply Spring profiles to specify configuration options either using en environment variable
 `SPRING_PROFILES_ACTIVE=<profile>` or a JVM option `-Dspring.profiles.active=<profile>`.
 
-Available profiles:
-
-* `default` (used if no profiles are specified): Local environment using an embedded H2 in-memory database.
-* `development`: Local environment using a Postgres database.
+* `development`: Development environment using an embedded H2 in-memory database (used if no profiles are specified).
+* `production`: Production environment using a Postgres database.
 
 ### ReactJS UI App
 

@@ -29,7 +29,8 @@ public class ErrorResponseAuthenticationEntryPoint implements ServerAuthenticati
     @Override
     public Mono<Void> commence(final ServerWebExchange exchange,
                                final AuthenticationException exception) {
-        Assert.notNull(exchange, "exchange cannot be null");
+        Assert.notNull(exchange, "Exchange cannot be null");
+        Assert.notNull(exception, "Exception cannot be null");
 
         final var registrationId = properties.getRegistration().keySet().stream()
                 .findFirst()

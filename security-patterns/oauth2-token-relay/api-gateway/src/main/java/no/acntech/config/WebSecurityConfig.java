@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2Clien
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
@@ -23,19 +24,14 @@ public class WebSecurityConfig {
                                                          @NonNull final ServerAuthenticationEntryPoint authenticationEntryPoint,
                                                          @NonNull final ReactiveClientRegistrationRepository clientRegistrationRepository) {
         return http
-                .csrf().disable()
-                .authorizeExchange()
-                .pathMatchers("/", "/favicon.ico").permitAll()
-                .anyExchange().authenticated()
-                .and()
-                .oauth2Login()
-                .and()
-                .requestCache().requestCache(serverRequestCache)
-                .and()
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .logout().logoutSuccessHandler(new OidcClientInitiatedServerLogoutSuccessHandler(clientRegistrationRepository))
-                .and()
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .authorizeExchange(config -> config
+                        .pathMatchers("/", "/favicon.ico").permitAll()
+                        .anyExchange().authenticated())
+                .oauth2Login(Customizer.withDefaults())
+                .requestCache(config -> config.requestCache(serverRequestCache))
+                .exceptionHandling(config -> config.authenticationEntryPoint(authenticationEntryPoint))
+                .logout(config -> config.logoutSuccessHandler(new OidcClientInitiatedServerLogoutSuccessHandler(clientRegistrationRepository)))
                 .build();
     }
 

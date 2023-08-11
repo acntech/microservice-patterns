@@ -1,15 +1,15 @@
 # Microservice Patterns
 
-Projects for exploring different microservice architectures and patterns. Each subfolder focuses on a specific area of
-patterns.
+Projects for exploring different microservice architectures and patterns. Each subfolder focuses on a
+specific area of patterns.
 
 [![Build Status](https://travis-ci.org/acntech/microservice-patterns.svg?branch=develop)](https://travis-ci.org/acntech/microservice-patterns)
 
 ## Business case
 
-The same business case is used in all the examples in order to make it easier to compare the different patterns. This
-business case is that of an ordering system where customers can order products and have them shipped. The architecture
-of the system is typically comprised of the following microservices:
+The same business case is used in all the examples in order to make it easier to compare the different
+patterns. This business case is that of an ordering system where customers can order products and have
+them shipped. The architecture of the system is typically comprised of the following microservices:
 
 * **Ordering**
   * Service where customers can create orders and add order items.
@@ -24,12 +24,12 @@ of the system is typically comprised of the following microservices:
   * Service that sends invoices to customers when orders have been completed and shipped.
   * http://localhost:9005
 
-As well there is an order web frontend.
+As well there is an order portal web frontend.
 
 [/ frontend / portal / README](https://github.com/acntech/microservice-patterns/tree/develop/frontend/portal)
 
-The portal uses an API Gateway to proxy all communication with the microservices, and to create a common facade for API
-calls.
+The portal uses an API Gateway to proxy all communication with the microservices, and to create a common
+facade for API calls.
 
 [/ frontend / api-gateway / README](https://github.com/acntech/microservice-patterns/tree/develop/frontend/api-gateway)
 
@@ -62,13 +62,15 @@ Below are the pattern areas that are being explored. Each subfolder has its own 
     * General
         * Delivery guaranty
         * Recover from errors
+        * Orchestrated vs Coordinated
     * Event Notifications
         * Decoupling
         * Thin events
         * Fuzzy side effects
         * Process flow is not obvious
         * Events vs Commands
-        * Callback pressure
+        * Callback storm
+        * Backpressure
     * Event-Carried State Transfer
         * More decoupling
         * Local copy of state
@@ -76,11 +78,11 @@ Below are the pattern areas that are being explored. Each subfolder has its own 
         * Eventual consistency
     * Event Sourcing
         * Event store is principal source of truth
-        * Event log can recreate application state
-        * Snapshots and history
+        * Recreate application state from events
+        * Aggregates/Snapshots and history
         * Schema and versioning
         * Application state can be in-memory
-        * Memory grid between instances
+        * Service mesh/Memory grid between instances
         * Store all events
         * Ability to look back in time
         * No intermediates

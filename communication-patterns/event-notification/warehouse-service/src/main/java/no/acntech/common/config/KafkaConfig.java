@@ -8,11 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 @SuppressWarnings("Duplicates")
@@ -20,36 +16,31 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 @Configuration
 public class KafkaConfig {
 
-    private final KafkaProperties kafkaProperties;
-
-    public KafkaConfig(final KafkaProperties kafkaProperties) {
-        this.kafkaProperties = kafkaProperties;
-    }
-
     @Bean
     public NewTopic ordersTopic() {
         return new NewTopic(KafkaTopic.ORDERS, 1, (short) 1);
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        return new KafkaTemplate<>(kafkaProducerFactory());
+    public KafkaTemplate<String, Object> kafkaTemplate(final ProducerFactory<String, Object> kafkaProducerFactory) {
+        return new KafkaTemplate<>(kafkaProducerFactory);
     }
 
     @Bean
-    public ProducerFactory<String, Object> kafkaProducerFactory() {
+    public ProducerFactory<String, Object> kafkaProducerFactory(final KafkaProperties kafkaProperties) {
         return new DefaultKafkaProducerFactory<>(kafkaProperties.buildProducerProperties());
     }
 
     @Bean
-    public ConsumerFactory<String, OrderEvent> ordersKafkaConsumerFactory() {
+    public ConsumerFactory<String, OrderEvent> ordersKafkaConsumerFactory(final KafkaProperties kafkaProperties) {
         return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties());
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, OrderEvent>> ordersKafkaListenerContainerFactory() {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, OrderEvent>> ordersKafkaListenerContainerFactory(
+            final ConsumerFactory<String, OrderEvent> ordersKafkaConsumerFactory) {
         final var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderEvent>();
-        factory.setConsumerFactory(ordersKafkaConsumerFactory());
+        factory.setConsumerFactory(ordersKafkaConsumerFactory);
         return factory;
     }
 }

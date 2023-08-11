@@ -1,0 +1,105 @@
+<mxfile host="Electron" modified="2023-08-04T19:20:28.180Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.5 Chrome/114.0.5735.243 Electron/25.3.1 Safari/537.36" etag="QfYnA2E7yXkioHJiMi4N" version="21.6.5" type="device" pages="2">
+  <diagram id="RpUevuTHoHEFwYLk8Q5u" name="Architecture">
+    <mxGraphModel dx="2004" dy="3541" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="wyBAbEmt-2VLmbQjomDQ-79" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="CVM62WLAV-cAn3YD_vOV-5" edge="1" target="04INntoPi-Xuz7hY6phd-7">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="406.64" y="-2092" as="sourcePoint" />
+            <mxPoint x="421.64" y="-2000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wyBAbEmt-2VLmbQjomDQ-85" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="461.64" y="-1610" as="targetPoint" />
+            <mxPoint x="421.64" y="-1730" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9DJgsK9skh-0R60IqajH-1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="381.64" y="-1740" as="sourcePoint" />
+            <mxPoint x="331.64" y="-1610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wyBAbEmt-2VLmbQjomDQ-84" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;" parent="1" source="04INntoPi-Xuz7hY6phd-7" target="04INntoPi-Xuz7hY6phd-8" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="406.64" y="-1907.5" as="sourcePoint" />
+            <mxPoint x="408.240341462959" y="-1839.8428536480642" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jafw9STl_7blaZxUmmIB-32" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="451.64" y="-1740" as="sourcePoint" />
+            <mxPoint x="621.64" y="-1610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CVM62WLAV-cAn3YD_vOV-5" value="&lt;b&gt;User&lt;/b&gt;" style="shape=image;html=1;verticalAlign=bottom;verticalLabelPosition=top;labelBackgroundColor=none;imageAspect=0;aspect=fixed;image=https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/11_avatar-128.png;labelPosition=center;align=center;" parent="1" vertex="1">
+          <mxGeometry x="375.14" y="-2200" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="04INntoPi-Xuz7hY6phd-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="361.64" y="-1760" as="sourcePoint" />
+            <mxPoint x="171.64" y="-1610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="04INntoPi-Xuz7hY6phd-7" value="Portal" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.web_server;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="378.64" y="-2040" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="04INntoPi-Xuz7hY6phd-8" value="Portal API" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.proxy_server;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="376.89" y="-1840" width="76.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="04INntoPi-Xuz7hY6phd-9" value="Ordering&lt;br&gt;Service" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.database_server;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="120" y="-1600" width="80" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="04INntoPi-Xuz7hY6phd-11" value="Warehouse&lt;br&gt;Service" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.database_server;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280.30000000000007" y="-1600" width="80" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="04INntoPi-Xuz7hY6phd-14" value="Shipping&lt;br&gt;Service" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.database_server;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="442.05000000000007" y="-1600" width="80" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="04INntoPi-Xuz7hY6phd-17" value="Billing&lt;br&gt;Service" style="verticalLabelPosition=bottom;sketch=0;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.database_server;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="591.64" y="-1600" width="80" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="otKpdVcG0ZSbTF2Wp8Rl-2" value="" style="curved=1;endArrow=classic;html=1;rounded=0;dashed=1;startArrow=classic;startFill=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="191.64" y="-1460" as="sourcePoint" />
+            <mxPoint x="301.64" y="-1460" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="211.64" y="-1430" />
+              <mxPoint x="281.64" y="-1430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="otKpdVcG0ZSbTF2Wp8Rl-3" value="" style="curved=1;endArrow=classic;html=1;rounded=0;dashed=1;startArrow=classic;startFill=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="161.64" y="-1450" as="sourcePoint" />
+            <mxPoint x="471.64" y="-1460" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="201.64" y="-1390" />
+              <mxPoint x="441.64" y="-1400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="otKpdVcG0ZSbTF2Wp8Rl-4" value="" style="curved=1;endArrow=classic;html=1;rounded=0;dashed=1;startArrow=classic;startFill=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="131.64" y="-1450" as="sourcePoint" />
+            <mxPoint x="621.64" y="-1460" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="171.64" y="-1340" />
+              <mxPoint x="561.64" y="-1370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="6X-DIEo0DFhXXcoNUKNq" name="Business Process">
+    <mxGraphModel dx="2004" dy="1203" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

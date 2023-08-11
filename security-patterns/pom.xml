@@ -13,27 +13,8 @@
     <artifactId>security-patterns</artifactId>
     <packaging>pom</packaging>
 
-    <!-- PROPERTIES -->
-    <properties>
-        <spring-security-oauth2.version>2.1.6.RELEASE</spring-security-oauth2.version>
-    </properties>
-
     <!-- MODULES -->
     <modules>
         <module>oauth2-token-relay</module>
     </modules>
-
-    <!-- DEPENDENCIES -->
-    <dependencies>
-    </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.security.oauth.boot</groupId>
-                <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-                <version>${spring-security-oauth2.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 </project>

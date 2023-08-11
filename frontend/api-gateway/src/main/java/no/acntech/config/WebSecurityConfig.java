@@ -18,19 +18,16 @@ public class WebSecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(@NonNull final ServerHttpSecurity http,
                                                          @NonNull final RedirectAwareAuthenticationEntryPoint authenticationEntryPoint) {
         return http
-                .csrf().disable()
-                .authorizeExchange()
-                .pathMatchers("/", "/favicon.ico", "/resources/**", "/webjars/**", "/login*").permitAll()
-                .anyExchange().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler())
-                .authenticationFailureHandler(new RedirectServerAuthenticationFailureHandler("/login?error"))
-                .and()
-                .requestCache().requestCache(new CookieServerRequestCache())
-                .and()
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .authorizeExchange(config -> config
+                        .pathMatchers("/", "/favicon.ico", "/resources/**", "/webjars/**", "/login*").permitAll()
+                        .anyExchange().authenticated())
+                .formLogin(config -> config
+                        .loginPage("/login")
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler())
+                        .authenticationFailureHandler(new RedirectServerAuthenticationFailureHandler("/login?error")))
+                .requestCache(config -> config.requestCache(new CookieServerRequestCache()))
                 .build();
     }
 
