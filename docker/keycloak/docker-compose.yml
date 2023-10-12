@@ -16,6 +16,7 @@ services:
       - KEYCLOAK_DATABASE_NAME=keycloak
       - KEYCLOAK_DATABASE_USER=keycloak
       - KEYCLOAK_DATABASE_PASSWORD=abcd1234
+      - KEYCLOAK_EXTRA_ARGS="--features=preview" # For Token Exchange feature
     networks:
       - acntech.keycloak
       - acntech.postgres

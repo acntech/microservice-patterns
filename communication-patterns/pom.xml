@@ -15,10 +15,10 @@
 
     <!-- MODULES -->
     <modules>
-        <module>synchronous-rest</module>
+        <module>rest-webservices</module>
         <module>messaging</module>
-        <module>event-notification</module>
-        <module>event-state-transfer</module>
-        <module>event-sourcing</module>
+        <module>coordinated-event-notification</module>
+        <module>coordinated-event-carried-state-transfer</module>
+        <module>coordinated-event-sourcing</module>
     </modules>
 </project>

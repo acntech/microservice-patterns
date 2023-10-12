@@ -1,0 +1,54 @@
+########################
+# SPRING Configuration #
+########################
+spring:
+  # Security
+  security:
+    oauth2:
+      client:
+        registration:
+          acntech-token-relay-portal:
+            provider: keycloak
+            authorization-grant-type: authorization_code
+            client-id: acntech-token-relay-portal
+            client-secret: abcdefgh12345678
+            redirect-uri: http://localhost:3000/login/oauth2/code/keycloak
+            scope:
+              - openid
+              - profile
+              - roles
+              - read:orders
+              - read:products
+              - read:reservations
+              - write:orders
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8888/realms/acntech
+  # Cloud
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: customers
+          uri: http://localhost:9001
+          predicates:
+            - Path=/api/customers/**
+        - id: ordering
+          uri: http://localhost:9002
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+        - id: warehouse
+          uri: http://localhost:9003
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+
+# Logging
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+
+# Server
+server:
+  port: 9000
