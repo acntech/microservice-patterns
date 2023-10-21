@@ -1,10 +1,8 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Application
   application:
-    name: oauth2-token-relay-warehouse-service
+    name: oauth2-token-exchange-warehouse-service
   # Profiles
   profiles:
     active: development
@@ -36,3 +34,10 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+  # Security
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          audiences:
+            - acntech-token-exchange-backend

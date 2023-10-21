@@ -1,6 +1,4 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Cloud
   cloud:
@@ -29,12 +27,12 @@ spring:
                 rate-limiter.limit: 3
                 rate-limiter.duration: 1s
 
-### Logging ###
+### LOGGING ###
 logging:
   level:
     root: INFO
     no.acntech: DEBUG
 
-### Server ###
+### SERVER ###
 server:
   port: 9000

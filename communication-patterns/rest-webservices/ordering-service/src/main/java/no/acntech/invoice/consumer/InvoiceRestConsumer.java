@@ -17,7 +17,7 @@ public class InvoiceRestConsumer {
     private final String url;
 
     public InvoiceRestConsumer(final WebClient webClient,
-                               @Value("${acntech.service.billing.url}/api/invoices") final String url) {
+                               @Value("${app.service.billing.url}/api/invoices") final String url) {
         this.webClient = webClient;
         this.url = url;
     }

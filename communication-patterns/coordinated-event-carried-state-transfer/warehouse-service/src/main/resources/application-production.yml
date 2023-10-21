@@ -1,10 +1,8 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   # Datasource
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -16,7 +14,7 @@ spring:
     bootstrap-servers:
       - acntech.kafka:9092
 
-### Management ###
+### MANAGEMENT ###
 management:
   endpoints:
     web:
@@ -26,7 +24,7 @@ management:
           - health
           - info
 
-### Logging ###
+### LOGGING ###
 logging:
   level:
     root: WARN

@@ -10,7 +10,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>oauth2-token-relay-ui-gateway</artifactId>
+    <artifactId>oauth2-token-relay-api-gateway</artifactId>
 
     <!-- DEPENDENCIES -->
     <dependencies>

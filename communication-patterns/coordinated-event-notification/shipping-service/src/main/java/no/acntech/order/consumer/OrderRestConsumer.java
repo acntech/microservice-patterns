@@ -19,7 +19,7 @@ public class OrderRestConsumer {
     private final String url;
 
     public OrderRestConsumer(final WebClient webClient,
-                             @Value("${acntech.service.ordering.url}/api/orders") final String url) {
+                             @Value("${app.service.ordering.url}/api/orders") final String url) {
         this.webClient = webClient;
         this.url = url;
     }

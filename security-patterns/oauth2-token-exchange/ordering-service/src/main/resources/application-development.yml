@@ -1,18 +1,14 @@
-#########################
-# ACNTECH Configuration #
-#########################
-acntech:
+### APP ###
+app:
   service:
     warehouse:
       url: http://localhost:9003
 
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   # Datasource
   datasource:
     driver-class-name: org.h2.Driver
@@ -30,7 +26,7 @@ spring:
         jwt:
           issuer-uri: http://localhost:8888/realms/acntech
 
-### Management ###
+### MANAGEMENT ###
 management:
   endpoints:
     web:
@@ -38,12 +34,12 @@ management:
       exposure:
         include: "*"
 
-### Logging ###
+### LOGGING ###
 logging:
   level:
     root: INFO
     no.acntech: DEBUG
 
-### Server ###
+### SERVER ###
 server:
   port: 9002

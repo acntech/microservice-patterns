@@ -1,8 +1,8 @@
-### SPRING Configuration #
+### SPRING ###
 spring:
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   # Datasource
   datasource:
     driver-class-name: org.h2.Driver
@@ -19,7 +19,7 @@ spring:
       - classpath:db/migration
       - classpath:db/testdata
 
-### Management ###
+### MANAGEMENT ###
 management:
   # Endpoints
   endpoints:
@@ -34,7 +34,7 @@ management:
         grpc:
           url: http://localhost:4317
 
-### Logging ###
+### LOGGING ###
 logging:
   pattern:
     console: "%clr(%d{HH:mm:ss.SSS}){blue} %clr(%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] %-48.48c{36}){yellow} %clr(:){red} %clr(%m){faint}%n"
@@ -43,6 +43,6 @@ logging:
     no.acntech: DEBUG
     io.opentelemetry: DEBUG
 
-### Server ###
+### SERVER ###
 server:
   port: 9003

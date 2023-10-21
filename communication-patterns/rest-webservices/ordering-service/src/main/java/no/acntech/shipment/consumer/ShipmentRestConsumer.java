@@ -17,7 +17,7 @@ public class ShipmentRestConsumer {
     private final String url;
 
     public ShipmentRestConsumer(final WebClient webClient,
-                                @Value("${acntech.service.shipping.url}/api/shipments") final String url) {
+                                @Value("${app.service.shipping.url}/api/shipments") final String url) {
         this.webClient = webClient;
         this.url = url;
     }

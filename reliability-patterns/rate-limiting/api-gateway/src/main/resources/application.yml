@@ -1,15 +1,11 @@
-#########################
-# ACNTECH Configuration #
-#########################
-acntech:
+### APP ###
+app:
   hazelcast:
     name: ${spring.application.name}
     hosts:
       - localhost
 
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Application
   application:

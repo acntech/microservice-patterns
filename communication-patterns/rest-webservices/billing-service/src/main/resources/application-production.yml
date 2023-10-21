@@ -1,10 +1,8 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   # Datasource
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -12,7 +10,7 @@ spring:
     username: billing
     password: abcd1234
 
-### Management ###
+### MANAGEMENT ###
 management:
   endpoints:
     web:
@@ -22,7 +20,7 @@ management:
           - health
           - info
 
-### Logging ###
+### LOGGING ###
 logging:
   level:
     root: WARN

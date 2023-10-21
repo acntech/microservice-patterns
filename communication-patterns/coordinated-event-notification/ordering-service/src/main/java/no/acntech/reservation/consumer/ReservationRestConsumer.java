@@ -23,7 +23,7 @@ public class ReservationRestConsumer {
     private final String url;
 
     public ReservationRestConsumer(final WebClient webClient,
-                                   @Value("${acntech.service.warehouse.url}/api/reservations") final String url) {
+                                   @Value("${app.service.warehouse.url}/api/reservations") final String url) {
         this.webClient = webClient;
         this.url = url;
     }

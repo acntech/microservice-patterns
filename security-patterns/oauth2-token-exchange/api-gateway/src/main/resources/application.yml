@@ -1,10 +1,8 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Application
   application:
-    name: oauth2-token-relay-ui-gateway
+    name: oauth2-token-exchange-api-gateway
   # Profiles
   profiles:
     active: development

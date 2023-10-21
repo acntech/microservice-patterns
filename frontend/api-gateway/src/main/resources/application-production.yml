@@ -1,6 +1,4 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Cloud
   cloud:
@@ -19,13 +17,13 @@ spring:
           predicates:
             - Path=/api/products/**, /api/reservations/**
 
-# Logging
+### LOGGING ###
 logging:
   level:
     root: WARN
     no.acntech: INFO
 
-# Server
+### SERVER ###
 server:
   port: 8080
   error:

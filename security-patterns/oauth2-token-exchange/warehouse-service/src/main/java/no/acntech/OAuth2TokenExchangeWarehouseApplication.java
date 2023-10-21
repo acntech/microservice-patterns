@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @SpringBootApplication
-public class OAuth2TokenRelayWarehouseApplication {
+public class OAuth2TokenExchangeWarehouseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OAuth2TokenRelayWarehouseApplication.class, args);
+        SpringApplication.run(OAuth2TokenExchangeWarehouseApplication.class, args);
     }
 }

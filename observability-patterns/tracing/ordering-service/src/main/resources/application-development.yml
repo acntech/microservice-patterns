@@ -1,18 +1,14 @@
-#########################
-# ACNTECH Configuration #
-#########################
-acntech:
+### APP ###
+app:
   service:
     warehouse:
       url: http://localhost:9003
 
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   # Datasource
   datasource:
     driver-class-name: org.h2.Driver
@@ -24,7 +20,7 @@ spring:
     console:
       enabled: true
 
-### Management ###
+### MANAGEMENT ###
 management:
   # Endpoints
   endpoints:
@@ -39,7 +35,7 @@ management:
         grpc:
           url: http://localhost:4317
 
-### Logging ###
+### LOGGING ###
 logging:
   pattern:
     console: "%clr(%d{HH:mm:ss.SSS}){blue} %clr(%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] %-48.48c{36}){yellow} %clr(:){red} %clr(%m){faint}%n"
@@ -47,6 +43,6 @@ logging:
     root: INFO
     no.acntech: DEBUG
 
-### Server ###
+### SERVER ###
 server:
   port: 9002

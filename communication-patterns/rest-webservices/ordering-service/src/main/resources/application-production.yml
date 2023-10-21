@@ -1,7 +1,5 @@
-#########################
-# ACNTECH Configuration #
-#########################
-acntech:
+### APP ###
+app:
   service:
     billing:
       url: http://acntech.billing.service:8080
@@ -10,13 +8,11 @@ acntech:
     warehouse:
       url: http://acntech.warehouse.service:8080
 
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   # Datasource
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -24,7 +20,7 @@ spring:
     username: ordering
     password: abcd1234
 
-### Management ###
+### MANAGEMENT ###
 management:
   endpoints:
     web:
@@ -34,7 +30,7 @@ management:
           - health
           - info
 
-### Logging ###
+### LOGGING ###
 logging:
   level:
     root: WARN

@@ -5,6 +5,7 @@
   "enabled": true,
   "clients": [
     {
+      "id": "76370fd0-964e-4ae3-9947-14ece07b21aa",
       "clientId": "acntech-token-relay-portal",
       "name": "AcnTech Token Relay Portal",
       "description": "",
@@ -53,6 +54,56 @@
       ]
     },
     {
+      "id": "2b25993e-06d7-4eb5-9b68-f440e0487374",
+      "clientId": "acntech-token-exchange-portal",
+      "name": "AcnTech Token Exchange Portal",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "abcdefgh12345678",
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:9000/*"
+      ],
+      "webOrigins": [],
+      "protocol": "openid-connect",
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "sub",
+        "uid",
+        "roles",
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "phone",
+        "address",
+        "web-origins",
+        "microprofile-jwt",
+        "offline_access",
+        "read:orders",
+        "write:orders",
+        "read:products",
+        "write:products",
+        "read:reservations",
+        "write:reservations"
+      ]
+    },
+    {
+      "id": "99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
       "clientId": "acntech-token-exchange-backend",
       "name": "AcnTech Token Exchange Backend",
       "description": "",
@@ -95,42 +146,7 @@
       ]
     },
     {
-      "clientId": "acntech-token-exchange-portal",
-      "name": "AcnTech Token Exchange Portal",
-      "description": "",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "abcdefgh12345678",
-      "redirectUris": [
-        "http://localhost:3000/*",
-        "http://localhost:9000/*"
-      ],
-      "webOrigins": [],
-      "protocol": "openid-connect",
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "fullScopeAllowed": true,
-      "defaultClientScopes": [
-        "sub",
-        "uid",
-        "roles",
-        "profile",
-        "email"
-      ],
-      "optionalClientScopes": []
-    },
-    {
+      "id": "533d8136-a8cd-4a6e-8893-9209f7913c03",
       "clientId": "realm-management",
       "name": "${client_realm-management}",
       "enabled": true,
@@ -161,9 +177,10 @@
         "policyEnforcementMode": "ENFORCING",
         "resources": [
           {
-            "name": "acntech-token-exchange-backend-client-resource",
+            "name": "client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
             "type": "Client",
             "ownerManagedAccess": false,
+            "displayName": "",
             "attributes": {},
             "uris": [],
             "scopes": [
@@ -174,19 +191,19 @@
                 "name": "map-roles-client-scope"
               },
               {
-                "name": "map-roles"
+                "name": "configure"
               },
               {
-                "name": "configure"
+                "name": "map-roles"
               },
               {
                 "name": "manage"
               },
               {
-                "name": "map-roles-composite"
+                "name": "token-exchange"
               },
               {
-                "name": "token-exchange"
+                "name": "map-roles-composite"
               }
             ],
             "icon_uri": ""
@@ -194,7 +211,7 @@
         ],
         "policies": [
           {
-            "name": "acntech-token-exchange-backend-client-permission-policy",
+            "name": "token-exchange.policy.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
             "description": "",
             "type": "client",
             "logic": "POSITIVE",
@@ -204,75 +221,81 @@
             }
           },
           {
-            "name": "acntech-token-exchange-backend-manage-scope-permission-policy",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"acntech-token-exchange-backend-client-resource\"]",
-              "scopes": "[\"manage\"]"
-            }
-          },
-          {
-            "name": "acntech-token-exchange-backend-configure-scope-permission-policy",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"acntech-token-exchange-backend-client-resource\"]",
-              "scopes": "[\"configure\"]"
-            }
-          },
-          {
-            "name": "acntech-token-exchange-backend-view-scope-permission-policy",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"acntech-token-exchange-backend-client-resource\"]",
-              "scopes": "[\"view\"]"
-            }
-          },
-          {
-            "name": "acntech-token-exchange-backend-map-roles-scope-permission-policy",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"acntech-token-exchange-backend-client-resource\"]",
-              "scopes": "[\"map-roles\"]"
-            }
-          },
-          {
-            "name": "acntech-token-exchange-backend-map-roles-client-scope-permission-policy",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"acntech-token-exchange-backend-client-resource\"]",
-              "scopes": "[\"map-roles-client-scope\"]"
-            }
-          },
-          {
-            "name": "acntech-token-exchange-backend-map-roles-composite-scope-permission-policy",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"acntech-token-exchange-backend-client-resource\"]",
-              "scopes": "[\"map-roles-composite\"]"
-            }
-          },
-          {
-            "name": "acntech-token-exchange-backend-permission",
+            "name": "token-exchange.permission.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
             "description": "",
             "type": "scope",
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "resources": "[\"acntech-token-exchange-backend-client-resource\"]",
+              "resources": "[\"client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]",
               "scopes": "[\"token-exchange\"]",
-              "applyPolicies": "[\"acntech-token-exchange-backend-client-permission-policy\"]"
+              "applyPolicies": "[\"token-exchange.policy.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]"
+            }
+          },
+          {
+            "name": "configure.permission.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]",
+              "scopes": "[\"configure\"]"
+            }
+          },
+          {
+            "name": "manage.permission.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]",
+              "scopes": "[\"manage\"]"
+            }
+          },
+          {
+            "name": "map-roles-client-scope.permission.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]",
+              "scopes": "[\"map-roles-client-scope\"]"
+            }
+          },
+          {
+            "name": "map-roles-composite.permission.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]",
+              "scopes": "[\"map-roles-composite\"]"
+            }
+          },
+          {
+            "name": "map-roles.permission.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]",
+              "scopes": "[\"map-roles\"]"
+            }
+          },
+          {
+            "name": "view.permission.client.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.99a5ddd8-1b02-47ad-ab99-1ebeaec97b9c\"]",
+              "scopes": "[\"view\"]"
             }
           }
         ],

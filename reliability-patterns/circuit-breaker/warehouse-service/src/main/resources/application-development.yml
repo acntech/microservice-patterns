@@ -1,10 +1,8 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # JPA
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   # Datasource
   datasource:
     driver-class-name: org.h2.Driver
@@ -21,7 +19,7 @@ spring:
       - classpath:db/migration
       - classpath:db/testdata
 
-### Management ###
+### MANAGEMENT ###
 management:
   endpoints:
     web:
@@ -29,12 +27,12 @@ management:
       exposure:
         include: "*"
 
-### Logging ###
+### LOGGING ###
 logging:
   level:
     root: INFO
     no.acntech: DEBUG
 
-### Server ###
+### SERVER ###
 server:
   port: 9003

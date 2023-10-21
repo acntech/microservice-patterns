@@ -1,16 +1,14 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Security
   security:
     oauth2:
       client:
         registration:
-          acntech-token-relay-portal:
+          acntech-token-exchange-portal:
             provider: keycloak
             authorization-grant-type: authorization_code
-            client-id: acntech-token-relay-portal
+            client-id: acntech-token-exchange-portal
             client-secret: abcdefgh12345678
             redirect-uri: http://acntech.frontend-portal:3000/login/oauth2/code/keycloak
             scope:
@@ -43,7 +41,7 @@ spring:
           predicates:
             - Path=/api/products/**, /api/reservations/**
 
-# Logging
+### LOGGING ###
 logging:
   level:
     root: WARN
