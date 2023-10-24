@@ -69,7 +69,7 @@
   "error.status-400.title": "Illegal data",
   "error.status-400.content": "Data is illegal",
   "error.status-401.title": "Not authenticated",
-  "error.status-401.content": "You need to be authenticated to use this portal",
+  "error.status-401.content": "You need to be authenticated to access this portal",
   "error.status-403.title": "No access",
   "error.status-403.content": "You have no access to the resource",
   "error.status-500.title": "Error",

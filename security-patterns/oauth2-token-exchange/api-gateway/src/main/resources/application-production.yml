@@ -15,10 +15,6 @@ spring:
               - openid
               - profile
               - roles
-              - read:orders
-              - read:products
-              - read:reservations
-              - write:orders
         provider:
           keycloak:
             issuer-uri: http://acntech.keycloak:8080/realms/acntech
@@ -26,12 +22,11 @@ spring:
   cloud:
     gateway:
       default-filters:
-        - TokenRelay
+        - name: TokenExchange
+          args:
+            audience: acntech-token-exchange-backend
+            scopes: read:orders write:orders read:products read:reservations
       routes:
-        - id: customers
-          uri: http://acntech.customers.service:8080
-          predicates:
-            - Path=/api/customers/**
         - id: ordering
           uri: http://acntech.ordering.service:8080
           predicates:

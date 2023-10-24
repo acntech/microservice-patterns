@@ -11,7 +11,7 @@ import {
 import {RestClient} from "../client";
 
 const authenticationAwareErrorHandler = (error: ClientError<ErrorPayload>,
-                              errorHandler: (error: ClientError<ErrorPayload>) => void) => {
+                                         errorHandler: (error: ClientError<ErrorPayload>) => void) => {
     if (error.response?.status === 401) {
         const redirectUrl = error.response.headers.get("location")
         if (redirectUrl) {
