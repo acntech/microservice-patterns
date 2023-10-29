@@ -36,7 +36,7 @@ public class TokenExchangeGatewayFilterFactory extends AbstractGatewayFilterFact
                 .cast(OAuth2AuthenticationToken.class)
                 .flatMap(token -> this.authorizedClient(config, token))
                 .map(OAuth2AuthorizedClient::getAccessToken)
-                .map(token -> withBearerAuth(exchange, token))
+                .map(token -> this.withBearerAuth(exchange, token))
                 .defaultIfEmpty(exchange)
                 .flatMap(chain::filter);
     }

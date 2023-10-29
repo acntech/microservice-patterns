@@ -1,10 +1,12 @@
 import {FC, ReactElement} from 'react';
-import {Segment} from 'semantic-ui-react';
+import {Container, Spinner} from "react-bootstrap";
 
 export const LoadingIndicatorFragment: FC = (): ReactElement => {
     return (
-        <Segment loading>
-            <div className="loading-indicator-body"/>
-        </Segment>
+        <Container as="main">
+            <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+        </Container>
     );
 }

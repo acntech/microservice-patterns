@@ -5,13 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
 @EnableAsync
 @EnableTransactionManagement
 @SpringBootApplication
-public class SynchronousRestBillingApplication {
+public class RestWebservicesWarehouseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SynchronousRestBillingApplication.class, args);
+        SpringApplication.run(RestWebservicesWarehouseApplication.class, args);
     }
 }

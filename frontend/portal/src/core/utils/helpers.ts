@@ -1,48 +1,48 @@
 import {OrderItemStatus, OrderStatus} from "../../types";
-import {SemanticCOLORS} from "semantic-ui-react";
+import {Variant} from "react-bootstrap/types";
 
-export const getOrderStatusLabelColor = (status: OrderStatus): SemanticCOLORS => {
+export const getOrderStatusLabelColor = (status: OrderStatus): Variant => {
     switch (status) {
         case OrderStatus.PENDING: {
-            return 'blue';
+            return 'primary';
         }
         case OrderStatus.CONFIRMED: {
-            return 'green';
+            return 'success';
         }
         case OrderStatus.CANCELED: {
-            return 'yellow';
+            return 'warning';
         }
         case OrderStatus.REJECTED: {
-            return 'red';
+            return 'danger';
         }
         default: {
-            return 'grey';
+            return 'secondary';
         }
     }
 };
 
-export const getOrderItemStatusLabelColor = (status: OrderItemStatus): SemanticCOLORS => {
+export const getOrderItemStatusLabelColor = (status: OrderItemStatus): Variant => {
     switch (status) {
         case OrderItemStatus.PENDING: {
-            return 'blue';
+            return 'primary';
         }
         case OrderItemStatus.RESERVED: {
-            return 'green';
+            return 'success';
         }
         case OrderItemStatus.CONFIRMED: {
-            return 'green';
+            return 'success';
         }
         case OrderItemStatus.CANCELED: {
-            return 'yellow';
+            return 'warning';
         }
         case OrderItemStatus.REJECTED: {
-            return 'red';
+            return 'danger';
         }
         case OrderItemStatus.FAILED: {
-            return 'red';
+            return 'danger';
         }
         default: {
-            return 'grey';
+            return 'secondary';
         }
     }
 };

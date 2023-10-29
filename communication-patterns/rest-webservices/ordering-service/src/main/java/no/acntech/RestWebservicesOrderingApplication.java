@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 @EnableTransactionManagement
 @SpringBootApplication
-public class SynchronousRestShippingApplication {
+public class RestWebservicesOrderingApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SynchronousRestShippingApplication.class, args);
+        SpringApplication.run(RestWebservicesOrderingApplication.class, args);
     }
 }

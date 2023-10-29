@@ -1,13 +1,40 @@
-import React, {FC, ReactElement, useContext} from 'react'
-import {FormattedMessage, useIntl} from 'react-intl'
-import Link from "next/link";
-import {Dropdown, Image, Menu, Segment} from 'semantic-ui-react'
-import {getLocaleOption, getSupportedLocaleOptions, SupportedLocale} from '../core/locales';
+import React, {FC, ReactElement, useContext, useEffect, useState} from 'react'
+import {useIntl} from 'react-intl'
+import {Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {faGlobe, faUser} from "@fortawesome/free-solid-svg-icons";
+import {SupportedLocale, supportedLocales} from '../core/locales';
 import {SessionContext} from '../types';
 import {SettingsContext} from "../pages/_app";
-import {useRouter} from "next/router";
-import {DropdownItemProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/DropdownItem";
 import Head from "next/head";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+
+const LocaleMenuItem: FC = (): ReactElement => {
+    const {locale, setLocale} = useContext(SettingsContext);
+
+    const onLocaleChange = (eventKey: string | null) => {
+        if (!!eventKey) {
+            setLocale(eventKey as SupportedLocale);
+        }
+    }
+
+    return (
+        <NavDropdown className="me-3" align="end" onSelect={onLocaleChange}
+                     title={<FontAwesomeIcon icon={faGlobe}/>}>
+            {
+                supportedLocales.map(supportedLocale => {
+                    return (
+                        <NavDropdown.Item key={supportedLocale}
+                                          eventKey={supportedLocale}
+                                          disabled={supportedLocale === locale}>
+                            {supportedLocale.toUpperCase()}
+                        </NavDropdown.Item>
+                    );
+                })
+            }
+        </NavDropdown>
+    );
+};
 
 interface ProfileMenuItemProps {
     sessionContext?: SessionContext;
@@ -16,23 +43,20 @@ interface ProfileMenuItemProps {
 const ProfileMenuItem: FC<ProfileMenuItemProps> = (props: ProfileMenuItemProps): ReactElement => {
     const {sessionContext} = props;
 
-    const {formatMessage: t} = useIntl();
+    const [user, setUser] = useState<string>("N/A");
 
-    if (sessionContext) {
-        const {userContext} = sessionContext;
-        const {username, firstName, lastName} = userContext;
-        return (
-            <Dropdown simple item text={t({id: 'main-menu.menu-item.profile'})}>
-                <Dropdown.Menu>
-                    <Dropdown.Item disabled>{`${firstName} ${lastName} (${username})`}</Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
-        );
-    } else {
-        return (
-            <Dropdown simple item disabled text={t({id: 'main-menu.menu-item.profile'})}/>
-        );
-    }
+    useEffect(() => {
+        if (!!sessionContext) {
+            const {username, firstName, lastName} = sessionContext.userContext;
+            setUser(`${firstName} ${lastName} (${username})`);
+        }
+    }, [sessionContext]);
+
+    return (
+        <NavDropdown className="me-3" align="end" title={<FontAwesomeIcon icon={faUser}/>}>
+            <NavDropdown.Item disabled>{user}</NavDropdown.Item>
+        </NavDropdown>
+    );
 };
 
 interface HeaderMenuProps {
@@ -42,19 +66,7 @@ interface HeaderMenuProps {
 export const HeaderMenuFragment: FC<HeaderMenuProps> = (props: HeaderMenuProps): ReactElement => {
     const {sessionContext} = props;
 
-    const router = useRouter();
     const {formatMessage: t} = useIntl();
-    const {locale, setLocale} = useContext(SettingsContext);
-    const currentLocale = getLocaleOption(locale);
-    const supportedLocales = getSupportedLocaleOptions();
-    const filteredLocales = supportedLocales.filter(l => l.key !== currentLocale.key);
-
-    const onLocaleChange = (event: React.MouseEvent<HTMLDivElement>, data: DropdownItemProps) => {
-        const {value: newLocale} = data;
-        if (!!newLocale) {
-            setLocale(newLocale as SupportedLocale);
-        }
-    }
 
     return (
         <>
@@ -62,33 +74,19 @@ export const HeaderMenuFragment: FC<HeaderMenuProps> = (props: HeaderMenuProps):
                 <title>{t({id: 'site.title'})}</title>
                 <meta property="og:title" content="AcnTech Order Portal" key="title"/>
             </Head>
-            <Segment basic className="main-menu">
-                <Menu>
-                    <Menu.Menu position='left'>
+            <header className="mb-5">
+                <Navbar expand="lg" bg="dark" data-bs-theme="dark" className="p-4">
+                    <Navbar.Brand>
                         <Link href="/">
-                            <Menu.Item>
-                                <Image src="/assets/favicon-32x32.png" className="main-menu-icon"/>
-                                <FormattedMessage id="main-menu.title"/>
-                            </Menu.Item>
+                            <Image className="main-menu-icon" src="/assets/logo.png" alt="Logo"/>
                         </Link>
-                    </Menu.Menu>
-                    <Menu.Menu position='right'>
-                        <Dropdown labeled item icon='globe' className="main-menu-locale" text={currentLocale.text}>
-                            <Dropdown.Menu>
-                                {
-                                    filteredLocales.map(locale => {
-                                        return (
-                                            <Dropdown.Item key={locale.key} value={locale.value} text={locale.text}
-                                                           onClick={onLocaleChange}/>
-                                        );
-                                    })
-                                }
-                            </Dropdown.Menu>
-                        </Dropdown>
+                    </Navbar.Brand>
+                    <Nav className="ms-auto">
+                        <LocaleMenuItem/>
                         <ProfileMenuItem sessionContext={sessionContext}/>
-                    </Menu.Menu>
-                </Menu>
-            </Segment>
+                    </Nav>
+                </Navbar>
+            </header>
         </>
     );
 };

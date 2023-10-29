@@ -1,8 +1,11 @@
-import {FC, ReactElement, useEffect, useReducer} from "react";
+import React, {FC, ReactElement, useEffect, useReducer, useState} from "react";
 import {useRouter} from "next/router";
-import {useForm} from "react-hook-form";
+import {FieldValues, useForm} from "react-hook-form";
 import {FormattedMessage, useIntl} from "react-intl";
-import {Button, Form, Icon, Message, Segment} from "semantic-ui-react";
+import {Alert, Button, Container, Form} from "react-bootstrap";
+import {FieldErrors} from "react-hook-form/dist/types/errors";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBan, faDolly, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {v4 as uuid} from "uuid";
 import {ErrorPanelFragment, LoadingIndicatorFragment} from "../fragments";
 import {ClientError, ClientResponse, ErrorPayload, Order, Status} from "../types";
@@ -13,6 +16,8 @@ const CreateOrderPage: FC = (): ReactElement => {
 
     const router = useRouter();
     const {formatMessage: t} = useIntl();
+    const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+    const [formValid, setFormValid] = useState<boolean>(true);
     const [orderState, orderDispatch] = useReducer(orderReducer, {status: Status.PENDING});
     const {register, handleSubmit, formState: {errors: formErrors}} = useForm();
 
@@ -24,6 +29,8 @@ const CreateOrderPage: FC = (): ReactElement => {
     }, [orderState]);
 
     const onFormSubmit = (formData: any) => {
+        setFormSubmitted(true);
+        setFormValid(true);
         const body = {
             customerId: uuid(), // TODO: Remove hardcoded UUID
             name: formData.orderName,
@@ -34,8 +41,10 @@ const CreateOrderPage: FC = (): ReactElement => {
             (response: ClientResponse<Order>) => orderDispatch({status: Status.SUCCESS, data: response}),
             (error: ClientError<ErrorPayload>) => orderDispatch({status: Status.FAILED, error: error.response}));
     };
-    const onFormError = (formErrors: any) => {
-        console.log("FORM ERROR", formErrors)
+    const onFormError = (formErrors: FieldErrors<FieldValues>) => {
+        console.log("FORM ERROR", formErrors);
+        setFormSubmitted(true);
+        setFormValid(Object.keys(formErrors).length == 0);
     };
 
     const onCancelButtonClick = () => {
@@ -45,49 +54,49 @@ const CreateOrderPage: FC = (): ReactElement => {
     if (orderState.status === Status.LOADING) {
         return <LoadingIndicatorFragment/>;
     } else if (orderState.status === Status.FAILED) {
-        return (
-            <ErrorPanelFragment error={orderState.error}/>
-        );
+        return <ErrorPanelFragment error={orderState.error}/>;
     } else if (orderState.status === Status.SUCCESS) {
         if (!!orderState.data) {
             return <></>; // Will be redirected
         } else {
-            return (
-                <ErrorPanelFragment/>
-            );
+            return <ErrorPanelFragment/>;
         }
     } else {
         return (
-            <Segment basic>
-                <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}
-                      error={!!Object.keys(formErrors).length}>
-                    <Form.Group>
-                        <Form.Field error={!!formErrors.orderName}>
-                            <label>{t({id: 'form.create-order.field.order-name.label'})}</label>
-                            <input type="text" size={20}
-                                   placeholder={t({id: 'form.create-order.field.order-name.placeholder'})}
-                                   {...register("orderName", {required: true, minLength: 4, maxLength: 20})} />
-                        </Form.Field>
+            <Container as="main">
+                <h2 className="mb-3"><FormattedMessage id="title.create-order"/></h2>
+
+                <Form noValidate validated={formSubmitted && formValid}
+                      onSubmit={handleSubmit(onFormSubmit, onFormError)}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>
+                            <FormattedMessage id="form.create-order.field.order-name.label"/>
+                        </Form.Label>
+                        <Form.Control type="text" isInvalid={formSubmitted && !!formErrors.orderName}
+                                      placeholder={t({id: 'form.create-order.field.order-name.placeholder'})}
+                                      {...register("orderName", {required: true, minLength: 3, maxLength: 20})}/>
                     </Form.Group>
-                    <Form.Group>
-                        <Form.Field error={!!formErrors.orderDescription}>
-                            <label>{t({id: 'form.create-order.field.order-description.label'})}</label>
-                            <input type="text" size={60}
-                                   placeholder={t({id: 'form.create-order.field.order-description.placeholder'})}
-                                   {...register("orderDescription", {maxLength: 200})} />
-                        </Form.Field>
+                    <Form.Group className="mb-4">
+                        <Form.Label>
+                            <FormattedMessage id="form.create-order.field.order-description.label"/>
+                        </Form.Label>
+                        <Form.Control type="text" isInvalid={formSubmitted && !!formErrors.orderDescription}
+                                      placeholder={t({id: 'form.create-order.field.order-description.placeholder'})}
+                                      {...register("orderDescription", {maxLength: 200})}/>
                     </Form.Group>
-                    <Form.Group>
-                        <Form.Button primary size="tiny">
-                            <Icon name="dolly"/><FormattedMessage id="button.submit"/>
-                        </Form.Button>
-                        <Button secondary size="tiny" onClick={onCancelButtonClick}>
-                            <Icon name="cancel"/><FormattedMessage id="button.cancel"/>
+                    <Form.Group className="mb-3">
+                        <Button variant="primary" type="submit" className="me-2">
+                            <FontAwesomeIcon icon={faDolly}/> <FormattedMessage id="button.submit"/>
+                        </Button>
+                        <Button variant="secondary" onClick={onCancelButtonClick}>
+                            <FontAwesomeIcon icon={faXmark}/> <FormattedMessage id="button.cancel"/>
                         </Button>
                     </Form.Group>
-                    <Message error><Icon name="ban"/> {t({id: 'form.create-order.error'})}</Message>
+                    <Alert variant="danger" hidden={!formSubmitted && formValid}>
+                        <FontAwesomeIcon icon={faBan}/> <FormattedMessage id="form.create-order.error"/>
+                    </Alert>
                 </Form>
-            </Segment>
+            </Container>
         );
     }
 };

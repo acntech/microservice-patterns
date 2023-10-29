@@ -1,8 +1,11 @@
-import {FC, ReactElement, useEffect, useReducer, useState} from "react";
+import React, {FC, ReactElement, useEffect, useReducer, useState} from "react";
 import {FormattedMessage} from "react-intl";
 import Moment from "react-moment";
 import {useRouter} from "next/router";
-import {Button, Icon, Label, Menu, Segment, SemanticCOLORS, Table} from "semantic-ui-react";
+import {Badge, Button, Container, Nav, Table} from "react-bootstrap";
+import {Variant} from "react-bootstrap/types";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft, faCheck, faDolly, faRotateRight, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {ErrorPanelFragment, LoadingIndicatorFragment} from "../../../fragments";
 import {getOrderItemStatusLabelColor, getOrderStatusLabelColor} from "../../../core/utils";
 import {
@@ -26,7 +29,7 @@ interface ViewOrderItem {
     name?: string;
     quantity: number;
     status: OrderItemStatus;
-    statusColor: SemanticCOLORS;
+    statusColor: Variant;
 }
 
 const isCreateOrderItemButtonActive = (order: Order): boolean => {
@@ -85,20 +88,32 @@ const OrderPage: FC = (): ReactElement => {
             (error: ClientError<ErrorPayload>) => productListDispatch({status: Status.FAILED, error: error.response}));
     };
 
-    const confirmOrder = (orderId: string) => {
-        setPageStatus(Status.LOADING);
-        orderDispatch({status: Status.LOADING, data: undefined});
-        RestConsumer.updateOrder(orderId,
-            (response: ClientResponse<Order>) => orderDispatch({status: Status.SUCCESS, data: response}),
-            (error: ClientError<ErrorPayload>) => orderDispatch({status: Status.FAILED, error: error.response}));
+    const onConfirmOrderButtonClick = () => {
+        if (!!orderId) {
+            setPageStatus(Status.LOADING);
+            orderDispatch({status: Status.LOADING, data: undefined});
+            RestConsumer.updateOrder(orderId,
+                (response: ClientResponse<Order>) => orderDispatch({status: Status.SUCCESS, data: response}),
+                (error: ClientError<ErrorPayload>) => orderDispatch({status: Status.FAILED, error: error.response}));
+        }
     };
 
-    const deleteOrder = (orderId: string) => {
-        setPageStatus(Status.LOADING);
-        orderDispatch({status: Status.LOADING, data: undefined});
-        RestConsumer.deleteOrder(orderId,
-            (response: ClientResponse<Order>) => orderDispatch({status: Status.SUCCESS, data: response}),
-            (error: ClientError<ErrorPayload>) => orderDispatch({status: Status.FAILED, error: error.response}));
+    const onDeleteOrderButtonClick = () => {
+        if (!!orderId) {
+            setPageStatus(Status.LOADING);
+            orderDispatch({status: Status.LOADING, data: undefined});
+            RestConsumer.deleteOrder(orderId,
+                (response: ClientResponse<Order>) => orderDispatch({status: Status.SUCCESS, data: response}),
+                (error: ClientError<ErrorPayload>) => orderDispatch({status: Status.FAILED, error: error.response}));
+        }
+    };
+
+    const onRefreshOrderButtonClick = () => {
+        if (!!orderId) {
+            setPageStatus(Status.LOADING);
+            getOrder(orderId);
+            getProductList();
+        }
     };
 
     useEffect(() => {
@@ -106,7 +121,7 @@ const OrderPage: FC = (): ReactElement => {
             getOrder(orderId);
             getProductList();
         }
-    }, []);
+    }, [orderId]);
 
     useEffect(() => {
         if (orderState.status === Status.LOADING && productListState.status === Status.LOADING && pageStatus !== Status.LOADING) {
@@ -116,15 +131,7 @@ const OrderPage: FC = (): ReactElement => {
         } else if ((orderState.status === Status.FAILED || productListState.status === Status.FAILED) && pageStatus !== Status.FAILED) {
             setPageStatus(Status.FAILED);
         }
-    }, [orderState, productListState]);
-
-    const onRefreshOrderButtonClick = () => {
-        if (!!orderId) {
-            setPageStatus(Status.LOADING);
-            getOrder(orderId);
-            getProductList();
-        }
-    };
+    }, [pageStatus, orderState, productListState]);
 
     if (!orderId) {
         return <ErrorPanelFragment error={{status: ErrorCode.PARAM_MISSING}}/>
@@ -149,129 +156,130 @@ const OrderPage: FC = (): ReactElement => {
             const viewOrderItemList = items.map(orderItem => enrichOrderItem(orderItem, products));
 
             return (
-                <Segment basic>
-                    <Menu>
-                        <Menu.Menu position='left'>
-                            <Menu.Item>
-                                <Button secondary size="tiny" onClick={() => router.push('/')}>
-                                    <Icon name="arrow left"/><FormattedMessage id="button.back"/>
-                                </Button>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Button secondary size='tiny' onClick={onRefreshOrderButtonClick}>
-                                    <Icon name="redo"/><FormattedMessage id="button.refresh"/>
-                                </Button>
-                            </Menu.Item>
-                        </Menu.Menu>
-                        <Menu.Menu position='right'>
-                            <Menu.Item>
-                                <Button positive={confirmOrderButtonActive}
-                                        disabled={!confirmOrderButtonActive}
-                                        size="tiny" onClick={() => confirmOrder(orderId)}>
-                                    <Icon name="check"/><FormattedMessage id="button.confirm"/>
-                                </Button>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Button negative={cancelOrderButtonActive}
-                                        disabled={!cancelOrderButtonActive}
-                                        size="tiny" onClick={() => deleteOrder(orderId)}>
-                                    <Icon name="delete"/><FormattedMessage id="button.cancel"/>
-                                </Button>
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Button primary={createOrderItemButtonActive}
-                                        disabled={!createOrderItemButtonActive}
-                                        size="tiny" onClick={() => router.push(`/orders/${orderId}/create`)}>
-                                    <Icon name="dolly"/><FormattedMessage id="button.new-item"/>
-                                </Button>
-                            </Menu.Item>
-                        </Menu.Menu>
-                    </Menu>
+                <Container as="main">
+                    <h2 className="mb-3"><FormattedMessage id="title.order"/></h2>
 
-                    <Table celled>
-                        <Table.Body>
-                            <Table.Row>
-                                <Table.Cell width={2} className="table-header">
-                                    <FormattedMessage id="label.order.order-id"/>
-                                </Table.Cell>
-                                <Table.Cell width={10}>{orderId}</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell width={2} className="table-header">
-                                    <FormattedMessage id="label.order.name"/>
-                                </Table.Cell>
-                                <Table.Cell width={10}>{name}</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell width={2} className="table-header">
-                                    <FormattedMessage id="label.order.description"/>
-                                </Table.Cell>
-                                <Table.Cell width={10}>{description}</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell width={2} className="table-header">
-                                    <FormattedMessage id="label.order.created-timestamp"/>
-                                </Table.Cell>
-                                <Table.Cell width={10}>
-                                    <Moment format='YYYY-MM-DD hh:mm:ss'>{created}</Moment>
-                                </Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell width={2} className="table-header">
-                                    <FormattedMessage id="label.order.status"/>
-                                </Table.Cell>
-                                <Table.Cell width={10}>
-                                    <Label color={statusColor}>
-                                        <FormattedMessage id={`enum.order-status.${status}`}/>
-                                    </Label>
-                                </Table.Cell>
-                            </Table.Row>
-                        </Table.Body>
+                    <Nav className="justify-content-end mb-3">
+                        <Nav.Item className="me-2">
+                            <Button variant="secondary" onClick={() => router.push('/')}>
+                                <FontAwesomeIcon icon={faArrowLeft}/><FormattedMessage id="button.back"/>
+                            </Button>
+                        </Nav.Item>
+                        <Nav.Item className="me-2">
+                            <Button variant="secondary" onClick={onRefreshOrderButtonClick}>
+                                <FontAwesomeIcon icon={faRotateRight}/><FormattedMessage id="button.refresh"/>
+                            </Button>
+                        </Nav.Item>
+                        <Nav.Item className="me-2">
+                            <Button variant="danger"
+                                    disabled={!cancelOrderButtonActive}
+                                    onClick={onDeleteOrderButtonClick}>
+                                <FontAwesomeIcon icon={faXmark}/><FormattedMessage id="button.cancel"/>
+                            </Button>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Button variant="success"
+                                    disabled={!confirmOrderButtonActive}
+                                    onClick={onConfirmOrderButtonClick}>
+                                <FontAwesomeIcon icon={faCheck}/><FormattedMessage id="button.confirm"/>
+                            </Button>
+                        </Nav.Item>
+                    </Nav>
+
+                    <Table bordered>
+                        <tbody>
+                        <tr>
+                            <td width={2} className="table-header">
+                                <FormattedMessage id="label.order.order-id"/>
+                            </td>
+                            <td width={10}>{orderId}</td>
+                        </tr>
+                        <tr>
+                            <td width={2} className="table-header">
+                                <FormattedMessage id="label.order.name"/>
+                            </td>
+                            <td width={10}>{name}</td>
+                        </tr>
+                        <tr>
+                            <td width={2} className="table-header">
+                                <FormattedMessage id="label.order.description"/>
+                            </td>
+                            <td width={10}>{description}</td>
+                        </tr>
+                        <tr>
+                            <td width={2} className="table-header">
+                                <FormattedMessage id="label.order.created-timestamp"/>
+                            </td>
+                            <td width={10}>
+                                <Moment format='YYYY-MM-DD hh:mm:ss'>{created}</Moment>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width={2} className="table-header">
+                                <FormattedMessage id="label.order.status"/>
+                            </td>
+                            <td width={10}>
+                                <Badge bg={statusColor}>
+                                    <FormattedMessage id={`enum.order-status.${status}`}/>
+                                </Badge>
+                            </td>
+                        </tr>
+                        </tbody>
                     </Table>
 
-                    <Table celled selectable>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={6}><FormattedMessage
-                                    id="label.order-item.product-id"/></Table.HeaderCell>
-                                <Table.HeaderCell width={6}><FormattedMessage
-                                    id="label.order-item.name"/></Table.HeaderCell>
-                                <Table.HeaderCell width={2}><FormattedMessage
-                                    id="label.order-item.quantity"/></Table.HeaderCell>
-                                <Table.HeaderCell width={8}><FormattedMessage
-                                    id="label.order-item.status"/></Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {
-                                viewOrderItemList.map((viewOrderItem, index) => {
-                                    const {
-                                        itemId,
-                                        productId,
-                                        name,
-                                        quantity,
-                                        status,
-                                        statusColor
-                                    } = viewOrderItem;
+                    <h3 className="mb-3"><FormattedMessage id="title.order-items"/></h3>
+                    <Nav className="justify-content-end mb-3">
+                        <Nav.Item>
+                            <Button variant="primary"
+                                    disabled={!createOrderItemButtonActive}
+                                    onClick={() => router.push(`/orders/${orderId}/create`)}>
+                                <FontAwesomeIcon icon={faDolly}/><FormattedMessage id="button.new-item"/>
+                            </Button>
+                        </Nav.Item>
+                    </Nav>
+                    <Table bordered hover>
+                        <thead>
+                        <tr>
+                            <th><FormattedMessage
+                                id="label.order-item.product-id"/></th>
+                            <th><FormattedMessage
+                                id="label.order-item.name"/></th>
+                            <th><FormattedMessage
+                                id="label.order-item.quantity"/></th>
+                            <th><FormattedMessage
+                                id="label.order-item.status"/></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            viewOrderItemList.map((viewOrderItem, index) => {
+                                const {
+                                    itemId,
+                                    productId,
+                                    name,
+                                    quantity,
+                                    status,
+                                    statusColor
+                                } = viewOrderItem;
 
-                                    return (
-                                        <Table.Row key={index} className="clickable-table-row"
-                                                   onClick={() => router.push(`/orders/${orderId}/items/${itemId}`)}>
-                                            <Table.Cell>{productId}</Table.Cell>
-                                            <Table.Cell>{name || 'N/A'}</Table.Cell>
-                                            <Table.Cell>{quantity}</Table.Cell>
-                                            <Table.Cell>
-                                                <Label color={statusColor}>
-                                                    <FormattedMessage id={`enum.order-item-status.${status}`}/>
-                                                </Label>
-                                            </Table.Cell>
-                                        </Table.Row>
-                                    );
-                                })
-                            }
-                        </Table.Body>
+                                return (
+                                    <tr key={index} className="clickable-table-row"
+                                        onClick={() => router.push(`/orders/${orderId}/items/${itemId}`)}>
+                                        <td>{productId}</td>
+                                        <td>{name || 'N/A'}</td>
+                                        <td>{quantity}</td>
+                                        <td>
+                                            <Badge bg={statusColor}>
+                                                <FormattedMessage id={`enum.order-item-status.${status}`}/>
+                                            </Badge>
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        }
+                        </tbody>
                     </Table>
-                </Segment>
+                </Container>
             );
         }
     } else {

@@ -1,8 +1,8 @@
 import type {AppProps} from "next/app";
-import {createContext, FC, ReactElement, ReactNode, useEffect, useReducer, useState} from "react";
+import React, {createContext, FC, ReactElement, ReactNode, useEffect, useReducer, useState} from "react";
 import {IntlProvider} from "react-intl";
 import {CookiesProvider, useCookies} from "react-cookie";
-import {Container} from "semantic-ui-react";
+import {config} from "@fortawesome/fontawesome-svg-core";
 import {
     defaultLocale,
     getLocaleMessages,
@@ -12,10 +12,14 @@ import {
 } from "../core/locales";
 import {AppSettings, ClientError, ClientResponse, ErrorPayload, SessionContext, Status} from "../types";
 import {HeaderMenuFragment} from "../fragments";
-import "semantic-ui-css/semantic.min.css";
-import "../styles/globals.css";
 import {RestConsumer} from "../core/consumer";
 import {sessionReducer} from "../state/reducers";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import "../styles/globals.css";
+
+config.autoAddCss = false;
 
 interface LocaleAwareAppProps {
     children: ReactNode
@@ -73,10 +77,8 @@ const App: FC<AppProps> = ({Component, pageProps}: AppProps): ReactElement => {
     return (
         <CookiesProvider>
             <LocaleAwareApp>
-                <Container>
-                    <HeaderMenuFragment sessionContext={sessionState.data}/>
-                    <Component {...pageProps} />
-                </Container>
+                <HeaderMenuFragment sessionContext={sessionState.data}/>
+                <Component {...pageProps} />
             </LocaleAwareApp>
         </CookiesProvider>
     )

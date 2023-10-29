@@ -3,13 +3,23 @@
     "short_name": "AcnTech Order Portal",
     "icons": [
         {
-            "src": "/assets/favicon-192x192.png",
+            "src": "favicon.ico",
+            "type": "image/x-icon",
+            "sizes": "64x64 32x32 24x24 16x16"
+        },
+        {
+            "src": "assets/favicon-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/assets/favicon-384x384.png",
+            "src": "assets/favicon-384x384.png",
             "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/favicon-512x512.png",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ],

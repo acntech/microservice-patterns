@@ -1,6 +1,6 @@
 import React, {FC, ReactElement} from 'react'
-import {useIntl} from 'react-intl';
-import {Message, Segment} from 'semantic-ui-react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {Alert, Container} from "react-bootstrap";
 import {Error} from '../types';
 
 export interface FragmentProps {
@@ -10,8 +10,6 @@ export interface FragmentProps {
 export const ErrorPanelFragment: FC<FragmentProps> = (props: FragmentProps): ReactElement => {
     const {status} = props.error || {status: 500};
     const {formatMessage: t} = useIntl();
-    const errorTitle = t({id: `error.status-${status}.title`});
-    const errorContent = t({id: `error.status-${status}.content`});
     let icon = "exclamation triangle";
     switch (status) {
         case 401:
@@ -20,8 +18,11 @@ export const ErrorPanelFragment: FC<FragmentProps> = (props: FragmentProps): Rea
     }
 
     return (
-        <Segment basic>
-            <Message attached negative icon={icon} header={errorTitle} content={errorContent}/>
-        </Segment>
+        <Container as="main">
+            <Alert variant="danger">
+                <Alert.Heading><FormattedMessage id={`error.status-${status}.title`}/></Alert.Heading>
+                <p><FormattedMessage id={`error.status-${status}.content`}/></p>
+            </Alert>
+        </Container>
     );
 };

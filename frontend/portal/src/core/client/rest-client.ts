@@ -35,14 +35,14 @@ function createFilePayload(payload: any): FormData {
 async function handleResponse<T = any>(response: Response): Promise<ClientResponse<T>> {
     const {status, headers} = response;
     if (status < 400) {
-        const body = response.bodyUsed ? await response.json() : undefined;
+        const body = response.ok ? await response.json() : undefined;
         return Promise.resolve({
             body,
             status,
             headers
         });
     } else {
-        const body = response.bodyUsed ? await response.json() : {status};
+        const body = await response.json();
         return Promise.reject({
             name: 'ClientError',
             message: 'Client Error',

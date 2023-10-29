@@ -24,6 +24,7 @@ public class SessionResource {
     public Mono<SessionContext> getSessionContext(final WebSession session,
                                                   final Authentication authentication) {
         return Mono.just(authentication)
-                .mapNotNull(token -> conversionService.convert(Tuples.of(session, token), SessionContext.class));
+                .map(token -> Tuples.of(session, token))
+                .mapNotNull(source -> conversionService.convert(source, SessionContext.class));
     }
 }
