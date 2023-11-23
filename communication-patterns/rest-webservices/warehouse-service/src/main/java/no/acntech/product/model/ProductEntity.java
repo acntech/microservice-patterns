@@ -1,15 +1,7 @@
 package no.acntech.product.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -24,10 +16,20 @@ public class ProductEntity {
     @Column(nullable = false)
     private UUID productId;
     @Column(nullable = false)
+    private String code;
+    @Column(nullable = false)
     private String name;
     private String description;
     @Column(nullable = false)
     private Long stock;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Packaging packaging;
+    @Column(nullable = false)
+    private Integer quantity;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Measure measure;
     @Column(nullable = false)
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
@@ -46,6 +48,10 @@ public class ProductEntity {
         return productId;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public String getName() {
         return name;
     }
@@ -56,6 +62,18 @@ public class ProductEntity {
 
     public Long getStock() {
         return stock;
+    }
+
+    public Packaging getPackaging() {
+        return packaging;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Measure getMeasure() {
+        return measure;
     }
 
     public BigDecimal getPrice() {
@@ -91,13 +109,22 @@ public class ProductEntity {
 
     public static final class Builder {
 
+        private String code;
         private String name;
         private String description;
         private Long stock;
+        private Packaging packaging;
+        private Integer quantity;
+        private Measure measure;
         private BigDecimal price;
         private Currency currency;
 
         private Builder() {
+        }
+
+        public Builder code(String code) {
+            this.code = code;
+            return this;
         }
 
         public Builder name(String name) {
@@ -115,6 +142,21 @@ public class ProductEntity {
             return this;
         }
 
+        public Builder packaging(Packaging packaging) {
+            this.packaging = packaging;
+            return this;
+        }
+
+        public Builder quantity(Integer quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder measure(Measure measure) {
+            this.measure = measure;
+            return this;
+        }
+
         public Builder price(BigDecimal price) {
             this.price = price;
             return this;
@@ -127,11 +169,15 @@ public class ProductEntity {
 
         public ProductEntity build() {
             final var target = new ProductEntity();
+            target.code = this.code;
+            target.name = this.name;
             target.description = this.description;
             target.stock = this.stock;
+            target.packaging = this.packaging;
+            target.quantity = this.quantity;
+            target.measure = this.measure;
             target.price = this.price;
             target.currency = this.currency;
-            target.name = this.name;
             return target;
         }
     }

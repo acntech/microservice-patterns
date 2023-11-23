@@ -26,6 +26,9 @@ logging:
 ### SERVER ###
 server:
   port: 9000
+#  reactive:
+#    session:
+#      timeout: 8h
   error:
     include-stacktrace: ALWAYS
     whitelabel:

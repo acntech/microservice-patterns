@@ -32,17 +32,29 @@ function createFilePayload(payload: any): FormData {
     return formData;
 }
 
+async function unmarshal<T = any>(response: Response): Promise<T | undefined> {
+    try {
+        return await response.json();
+    } catch (e) {
+        if (e instanceof SyntaxError) {
+            return Promise.resolve(undefined);
+        } else {
+            throw e;
+        }
+    }
+}
+
 async function handleResponse<T = any>(response: Response): Promise<ClientResponse<T>> {
     const {status, headers} = response;
     if (status < 400) {
-        const body = response.ok ? await response.json() : undefined;
+        const body = response.ok ? await unmarshal(response) : undefined;
         return Promise.resolve({
             body,
             status,
             headers
         });
     } else {
-        const body = await response.json();
+        const body = await unmarshal(response);
         return Promise.reject({
             name: 'ClientError',
             message: 'Client Error',

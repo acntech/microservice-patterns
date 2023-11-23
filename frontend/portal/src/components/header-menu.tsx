@@ -1,16 +1,25 @@
-import React, {FC, ReactElement, useContext, useEffect, useState} from 'react'
+import React, {FC, ReactElement, useContext} from 'react'
 import {useIntl} from 'react-intl'
-import {Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
-import {faGlobe, faUser} from "@fortawesome/free-solid-svg-icons";
-import {SupportedLocale, supportedLocales} from '../core/locales';
-import {SessionContext} from '../types';
-import {SettingsContext} from "../pages/_app";
 import Head from "next/head";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import {Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCartShopping, faGlobe, faUser} from "@fortawesome/free-solid-svg-icons";
+import {Settings} from "../providers/settings-provider";
+import {SupportedLocale, supportedLocales} from '../core/locales';
+import {Session} from "../providers/session-provider";
+
+const CartMenuItem: FC = (): ReactElement => {
+
+    return (
+        <Nav.Link className="me-3" href="/cart">
+            <FontAwesomeIcon icon={faCartShopping}/>
+        </Nav.Link>
+    );
+};
 
 const LocaleMenuItem: FC = (): ReactElement => {
-    const {locale, setLocale} = useContext(SettingsContext);
+    const {locale, setLocale} = useContext(Settings);
 
     const onLocaleChange = (eventKey: string | null) => {
         if (!!eventKey) {
@@ -37,34 +46,45 @@ const LocaleMenuItem: FC = (): ReactElement => {
 };
 
 interface ProfileMenuItemProps {
-    sessionContext?: SessionContext;
 }
 
 const ProfileMenuItem: FC<ProfileMenuItemProps> = (props: ProfileMenuItemProps): ReactElement => {
-    const {sessionContext} = props;
-
-    const [user, setUser] = useState<string>("N/A");
-
-    useEffect(() => {
-        if (!!sessionContext) {
-            const {username, firstName, lastName} = sessionContext.userContext;
-            setUser(`${firstName} ${lastName} (${username})`);
-        }
-    }, [sessionContext]);
+    const {userContext} = useContext(Session);
+    const {username, firstName, lastName} = userContext;
 
     return (
         <NavDropdown className="me-3" align="end" title={<FontAwesomeIcon icon={faUser}/>}>
-            <NavDropdown.Item disabled>{user}</NavDropdown.Item>
+            <NavDropdown.Item disabled>{`${firstName} ${lastName} (${username})`}</NavDropdown.Item>
         </NavDropdown>
     );
 };
 
-interface HeaderMenuProps {
-    sessionContext?: SessionContext;
+interface MainMenuProps {
+    hideMenu?: boolean;
 }
 
-export const HeaderMenuFragment: FC<HeaderMenuProps> = (props: HeaderMenuProps): ReactElement => {
-    const {sessionContext} = props;
+const MainMenu: FC<MainMenuProps> = (props: MainMenuProps): ReactElement => {
+    const {hideMenu} = props;
+
+    if (!!hideMenu) {
+        return <></>;
+    } else {
+        return (
+            <Nav className="ms-auto">
+                <CartMenuItem/>
+                <LocaleMenuItem/>
+                <ProfileMenuItem/>
+            </Nav>
+        );
+    }
+};
+
+export interface HeaderMenuProps {
+    hideMenu?: boolean;
+}
+
+export const HeaderMenu: FC<HeaderMenuProps> = (props: HeaderMenuProps): ReactElement => {
+    const {hideMenu} = props;
 
     const {formatMessage: t} = useIntl();
 
@@ -74,17 +94,14 @@ export const HeaderMenuFragment: FC<HeaderMenuProps> = (props: HeaderMenuProps):
                 <title>{t({id: 'site.title'})}</title>
                 <meta property="og:title" content="AcnTech Order Portal" key="title"/>
             </Head>
-            <header className="mb-5">
+            <header className="mb-3">
                 <Navbar expand="lg" bg="dark" data-bs-theme="dark" className="p-4">
                     <Navbar.Brand>
                         <Link href="/">
                             <Image className="main-menu-icon" src="/assets/logo.png" alt="Logo"/>
                         </Link>
                     </Navbar.Brand>
-                    <Nav className="ms-auto">
-                        <LocaleMenuItem/>
-                        <ProfileMenuItem sessionContext={sessionContext}/>
-                    </Nav>
+                    <MainMenu hideMenu={hideMenu}/>
                 </Navbar>
             </header>
         </>

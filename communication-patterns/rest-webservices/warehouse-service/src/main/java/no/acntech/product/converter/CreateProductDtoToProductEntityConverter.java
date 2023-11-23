@@ -13,9 +13,13 @@ public class CreateProductDtoToProductEntityConverter implements Converter<Creat
     @Override
     public ProductEntity convert(@NonNull final CreateProductDto source) {
         return ProductEntity.builder()
+                .code(source.getCode())
                 .name(source.getName())
                 .description(source.getDescription())
                 .stock(source.getStock())
+                .packaging(source.getPackaging())
+                .quantity(source.getQuantity())
+                .measure(source.getMeasure())
                 .price(source.getPrice())
                 .currency(source.getCurrency())
                 .build();

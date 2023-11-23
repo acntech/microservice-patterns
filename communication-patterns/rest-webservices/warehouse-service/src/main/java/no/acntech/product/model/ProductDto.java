@@ -2,6 +2,7 @@ package no.acntech.product.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -11,10 +12,18 @@ public class ProductDto {
     @NotNull
     private UUID productId;
     @NotBlank
+    private String code;
+    @NotBlank
     private String name;
     private String description;
     @NotNull
     private Long stock;
+    @NotNull
+    private Packaging packaging;
+    @NotNull
+    private Integer quantity;
+    @NotNull
+    private Measure measure;
     @NotNull
     private BigDecimal price;
     @NotNull
@@ -27,6 +36,10 @@ public class ProductDto {
         return productId;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public String getName() {
         return name;
     }
@@ -37,6 +50,18 @@ public class ProductDto {
 
     public Long getStock() {
         return stock;
+    }
+
+    public Packaging getPackaging() {
+        return packaging;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Measure getMeasure() {
+        return measure;
     }
 
     public BigDecimal getPrice() {
@@ -62,9 +87,13 @@ public class ProductDto {
     public static final class Builder {
 
         private UUID productId;
+        private String code;
         private String name;
         private String description;
         private Long stock;
+        private Packaging packaging;
+        private Integer quantity;
+        private Measure measure;
         private BigDecimal price;
         private Currency currency;
         private ZonedDateTime created;
@@ -75,6 +104,11 @@ public class ProductDto {
 
         public Builder productId(UUID productId) {
             this.productId = productId;
+            return this;
+        }
+
+        public Builder code(String code) {
+            this.code = code;
             return this;
         }
 
@@ -90,6 +124,21 @@ public class ProductDto {
 
         public Builder stock(Long stock) {
             this.stock = stock;
+            return this;
+        }
+
+        public Builder packaging(Packaging packaging) {
+            this.packaging = packaging;
+            return this;
+        }
+
+        public Builder quantity(Integer quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder measure(Measure measure) {
+            this.measure = measure;
             return this;
         }
 
@@ -115,14 +164,18 @@ public class ProductDto {
 
         public ProductDto build() {
             final var target = new ProductDto();
-            target.name = this.name;
-            target.price = this.price;
-            target.created = this.created;
-            target.modified = this.modified;
             target.productId = this.productId;
-            target.stock = this.stock;
+            target.code = this.code;
+            target.name = this.name;
             target.description = this.description;
+            target.stock = this.stock;
+            target.packaging = this.packaging;
+            target.quantity = this.quantity;
+            target.measure = this.measure;
+            target.price = this.price;
             target.currency = this.currency;
+            target.modified = this.modified;
+            target.created = this.created;
             return target;
         }
     }

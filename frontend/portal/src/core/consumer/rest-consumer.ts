@@ -6,12 +6,15 @@ import {
     ErrorPayload,
     Order,
     Product,
-    SessionContext
+    SessionContext,
+    UpdateOrderItem
 } from "../../types";
 import {RestClient} from "../client";
 
-const authenticationAwareErrorHandler = (error: ClientError<ErrorPayload>,
+const authenticationAwareErrorHandler = (e: any,
                                          errorHandler: (error: ClientError<ErrorPayload>) => void) => {
+    const error = e as ClientError<ErrorPayload>;
+
     if (error.response?.status === 401) {
         const redirectUrl = error.response.headers.get("location")
         if (redirectUrl) {
@@ -21,109 +24,92 @@ const authenticationAwareErrorHandler = (error: ClientError<ErrorPayload>,
     errorHandler(error);
 };
 
-const GET = <T>(url: string,
-                successHandler: (response: ClientResponse<T>) => void,
-                errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-    RestClient.GET<T>(url)
-        .then(successHandler)
-        .catch(e => {
-            const error = e as ClientError<ErrorPayload>;
-            authenticationAwareErrorHandler(error, errorHandler);
-        });
-};
-
-const POST = <T>(url: string,
-                 body: any,
-                 successHandler: (response: ClientResponse<T>) => void,
-                 errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-    RestClient.POST<T>(url, body)
-        .then(successHandler)
-        .catch(e => {
-            const error = e as ClientError<ErrorPayload>;
-            authenticationAwareErrorHandler(error, errorHandler);
-        });
-};
-
-const PUT = <T>(url: string,
-                body: any,
-                successHandler: (response: ClientResponse<T>) => void,
-                errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-    RestClient.PUT<T>(url, body)
-        .then(successHandler)
-        .catch(e => {
-            const error = e as ClientError<ErrorPayload>;
-            authenticationAwareErrorHandler(error, errorHandler);
-        });
-};
-
-const DELETE = <T>(url: string,
-                   successHandler: (response: ClientResponse<T>) => void,
-                   errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-    RestClient.DELETE<T>(url)
-        .then(successHandler)
-        .catch(e => {
-            const error = e as ClientError<ErrorPayload>;
-            authenticationAwareErrorHandler(error, errorHandler);
-        });
-};
-
 export namespace RestConsumer {
 
     export const getSessionContext = (successHandler: (response: ClientResponse<SessionContext>) => void,
                                       errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        GET<SessionContext>('/api/session', successHandler, errorHandler);
+        RestClient.GET<SessionContext>("/api/session")
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const getOrder = (orderId: string,
                              successHandler: (response: ClientResponse<Order>) => void,
                              errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        GET<Order>(`/api/orders/${orderId}`, successHandler, errorHandler);
+        RestClient.GET<Order>(`/api/orders/${orderId}`)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const getOrders = (successHandler: (response: ClientResponse<Order[]>) => void,
                               errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        GET<Order[]>('/api/orders', successHandler, errorHandler);
+        RestClient.GET<Order[]>("/api/orders")
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const createOrder = (body: CreateOrder,
                                 successHandler: (response: ClientResponse<Order>) => void,
                                 errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        POST<Order>('/api/orders', body, successHandler, errorHandler);
+        RestClient.POST<Order>("/api/orders", body)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const updateOrder = (orderId: string,
                                 successHandler: (response: ClientResponse<Order>) => void,
                                 errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        PUT<Order>(`/api/orders/${orderId}`, undefined, successHandler, errorHandler);
+        RestClient.PUT<Order>(`/api/orders/${orderId}`, undefined)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const deleteOrder = (orderId: string,
                                 successHandler: (response: ClientResponse<Order>) => void,
                                 errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        DELETE<Order>(`/api/orders/${orderId}`, successHandler, errorHandler);
+        RestClient.DELETE<Order>(`/api/orders/${orderId}`)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const createOrderItem = (orderId: string,
                                     body: CreateOrderItem,
                                     successHandler: (response: ClientResponse<Order>) => void,
                                     errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        POST<Order>(`/api/orders/${orderId}/items`, body, successHandler, errorHandler);
+        RestClient.POST<Order>(`/api/orders/${orderId}/items`, body)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
+    };
+
+    export const updateOrderItem = (itemId: string,
+                                    body: UpdateOrderItem,
+                                    successHandler: (response: ClientResponse<Order>) => void,
+                                    errorHandler: (error: ClientError<ErrorPayload>) => void) => {
+        RestClient.PUT<Order>(`/api/items/${itemId}`, body)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const deleteOrderItem = (itemId: string,
                                     successHandler: (response: ClientResponse<Order>) => void,
                                     errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        DELETE<Order>(`/api/items/${itemId}`, successHandler, errorHandler);
+        RestClient.DELETE<Order>(`/api/items/${itemId}`)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const getProduct = (productId: string,
                                successHandler: (response: ClientResponse<Product>) => void,
                                errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        GET<Product>(`/api/products/$${productId}`, successHandler, errorHandler);
+        RestClient.GET<Product>(`/api/products/${productId}`)
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 
     export const getProducts = (successHandler: (response: ClientResponse<Product[]>) => void,
                                 errorHandler: (error: ClientError<ErrorPayload>) => void) => {
-        GET<Product[]>('/api/products', successHandler, errorHandler);
+        RestClient.GET<Product[]>("/api/products")
+            .then(successHandler)
+            .catch(e => authenticationAwareErrorHandler(e, errorHandler));
     };
 }

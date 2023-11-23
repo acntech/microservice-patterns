@@ -8,13 +8,13 @@ export enum Status {
 }
 
 export interface Action<T> {
-    status: Status,
-    data?: ClientResponse<T>,
-    error?: ClientResponse<ErrorPayload>
+    status: Status;
+    data?: ClientResponse<T>;
+    error?: ClientResponse<ErrorPayload>;
 }
 
 export interface State<T> {
     status: Status;
     data?: T;
-    error?: ErrorPayload
+    error?: ErrorPayload;
 }

@@ -11,16 +11,20 @@ public class ProductEntityToProductDtoConverter implements Converter<ProductEnti
 
     @NonNull
     @Override
-    public ProductDto convert(@NonNull final ProductEntity productEntity) {
+    public ProductDto convert(@NonNull final ProductEntity source) {
         return ProductDto.builder()
-                .productId(productEntity.getProductId())
-                .name(productEntity.getName())
-                .description(productEntity.getDescription())
-                .stock(productEntity.getStock())
-                .price(productEntity.getPrice())
-                .currency(productEntity.getCurrency())
-                .created(productEntity.getCreated())
-                .modified(productEntity.getModified())
+                .productId(source.getProductId())
+                .code(source.getCode())
+                .name(source.getName())
+                .description(source.getDescription())
+                .stock(source.getStock())
+                .packaging(source.getPackaging())
+                .quantity(source.getQuantity())
+                .measure(source.getMeasure())
+                .price(source.getPrice())
+                .currency(source.getCurrency())
+                .created(source.getCreated())
+                .modified(source.getModified())
                 .build();
     }
 }

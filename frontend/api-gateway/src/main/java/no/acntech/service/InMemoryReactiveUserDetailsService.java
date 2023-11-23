@@ -15,39 +15,42 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryReactiveUserDetailsService implements ReactiveUserDetailsService, ReactiveUserDetailsPasswordService {
 
-    private final Map<String, User> users;
+    private final Map<String, UserDetails> users;
 
-    public InMemoryReactiveUserDetailsService(User... users) {
+    public InMemoryReactiveUserDetailsService(final UserDetails... users) {
         this(Arrays.asList(users));
     }
 
-    public InMemoryReactiveUserDetailsService(Collection<User> users) {
+    public InMemoryReactiveUserDetailsService(final Collection<UserDetails> users) {
         Assert.notEmpty(users, "users cannot be null or empty");
         this.users = new ConcurrentHashMap<>();
-        for (User user : users) {
+        for (UserDetails user : users) {
             this.users.put(user.getUsername().toLowerCase(), user);
         }
     }
 
     @Override
-    public Mono<UserDetails> findByUsername(String username) {
+    public Mono<UserDetails> findByUsername(final String username) {
         Assert.hasText(username, "username cannot be null or blank");
-        final var result = this.users.get(username.toLowerCase());
-        return (result != null) ? Mono.just(org.springframework.security.core.userdetails.User.withUserDetails(result).build()) : Mono.empty();
+        return Mono.just(username)
+                .map(String::toLowerCase)
+                .map(this.users::get);
     }
 
     @Override
-    public Mono<UserDetails> updatePassword(UserDetails userDetails, String newPassword) {
+    public Mono<UserDetails> updatePassword(final UserDetails userDetails,
+                                            final String newPassword) {
         Assert.notNull(userDetails, "user cannot be null");
         Assert.hasText(newPassword, "new password cannot be null or blank");
-        final var mono = Mono.just(userDetails)
+        return Mono.just(userDetails)
                 .map(user -> this.users.get(user.getUsername()))
+                .filter(user -> user instanceof User)
+                .map(user -> (User) user)
                 .map(user -> User.builder(user).password(newPassword).build())
-                .doOnNext(user -> this.users.put(user.getUsername().toLowerCase(), user));
-        return mono.map(UserDetails.class::cast);
+                .mapNotNull(user -> this.users.put(user.getUsername().toLowerCase(), user));
     }
 
-    public Flux<User> getUsers() {
+    public Flux<UserDetails> findAll() {
         return Flux.fromIterable(this.users.values());
     }
 }
