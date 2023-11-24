@@ -54,6 +54,12 @@ async function handleResponse<T = any>(response: Response): Promise<ClientRespon
             headers
         });
     } else {
+        if (status === 401) {
+            const redirectUrl = headers.get("location")
+            if (redirectUrl) {
+                location.replace(redirectUrl);
+            }
+        }
         const body = await unmarshal(response);
         return Promise.reject({
             name: 'ClientError',

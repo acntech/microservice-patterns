@@ -9,7 +9,6 @@ import {Quantity} from "./quantity";
 import {Stock} from "./stock";
 import {AmountSelector} from "./amount";
 import moment from "moment";
-import {Variant} from "react-bootstrap/types";
 import Link from "next/link";
 import {Session} from "../providers";
 import {useAppDispatch} from "../state/store";
@@ -71,10 +70,9 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
     const dispatch = useAppDispatch();
     const {userContext} = useContext(Session);
     const [amount, setAmount] = useState<number>(1);
-    const [border, setBorder] = useState<Variant>();
-    const [hideButton, setHideButton] = useState<boolean>(false);
-    const [buttonTextId, setButtonTextId] = useState<string>("button.add");
     const [orderItem, setOrderItem] = useState<OrderItem>();
+    const [productSelected, setProductSelected] = useState<boolean>(false);
+    const [productChanged, setProductChanged] = useState<boolean>(false);
     const [addOrUpdate, setAddOrUpdate] = useState<boolean>(false);
 
     useEffect(() => {
@@ -94,18 +92,17 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
 
     useEffect(() => {
         if (!!orderItem) {
-            setBorder("primary");
-            if (amount === orderItem.quantity) {
-                setHideButton(true);
+            setProductSelected(true);
+            if (amount !== orderItem.quantity) {
+                setProductChanged(true);
             } else {
-                setHideButton(false);
-                setButtonTextId("button.update");
+                setProductChanged(false);
             }
         }
     }, [amount, orderItem]);
 
     useEffect(() => {
-        if (addOrUpdate && !!order) {
+        if (addOrUpdate) {
             if (!order) {
                 const timestamp = moment().unix();
                 const body = {customerId: userContext.uid, name: `order-${timestamp}`};
@@ -136,8 +133,11 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
         }
     };
 
+    const productBorder = productSelected ? "primary" : undefined;
+    const buttonTextId = productSelected ? "button.update" : "button.add";
+
     return (
-        <Card key={productId} border={border}>
+        <Card key={productId} border={productBorder}>
             <Card.Header>
                 <FontAwesomeIcon icon={faBasketShopping} size="5x"/>
             </Card.Header>
@@ -156,7 +156,7 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
             </Card.Body>
             <Card.Footer>
                 <AmountSelector amount={amount} onIncrease={onIncreaseAmount} onDecrease={onDecreaseAmount}/>
-                <Button variant="primary" className="float-end" hidden={hideButton}
+                <Button variant="primary" className="float-end" hidden={productChanged}
                         onClick={() => setAddOrUpdate(true)}>
                     <FormattedMessage id={buttonTextId}/>
                 </Button>
