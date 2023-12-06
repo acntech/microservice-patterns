@@ -1,5 +1,7 @@
 package no.acntech.reservation.consumer;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import no.acntech.reservation.model.CreateReservationDto;
 import no.acntech.reservation.model.ReservationDto;
 import no.acntech.reservation.model.UpdateReservationDto;
@@ -13,8 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,12 +27,12 @@ public class ReservationRestConsumer {
     private final String url;
 
     public ReservationRestConsumer(final WebClient webClient,
-                                   @Value("${acntech.service.warehouse.url}/api/reservations") final String url) {
+                                   @Value("${app.service.warehouse.url}/api/reservations") final String url) {
         this.webClient = webClient;
         this.url = url;
     }
 
-    @Retryable(value = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
     public List<ReservationDto> find() {
         final var uri = UriComponentsBuilder.fromUriString(url)
                 .build()
@@ -46,7 +46,7 @@ public class ReservationRestConsumer {
                 .block();
     }
 
-    @Retryable(value = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
     public ReservationDto get(@NotNull final UUID reservationId) {
         final var uri = UriComponentsBuilder.fromUriString(url)
                 .pathSegment(reservationId.toString())
@@ -60,7 +60,7 @@ public class ReservationRestConsumer {
                 .block();
     }
 
-    @Retryable(value = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
     public ReservationDto create(@Valid final CreateReservationDto createReservationDto) {
         final var uri = UriComponentsBuilder.fromUriString(url)
                 .build()
@@ -74,7 +74,7 @@ public class ReservationRestConsumer {
                 .block();
     }
 
-    @Retryable(value = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
     public ReservationDto update(@NotNull final UUID reservationId,
                                  @Valid final UpdateReservationDto updateReservationDto) {
         final var uri = UriComponentsBuilder.fromUriString(url)
@@ -90,7 +90,7 @@ public class ReservationRestConsumer {
                 .block();
     }
 
-    @Retryable(value = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 3, backoff = @Backoff(1000))
     public ReservationDto delete(@NotNull final UUID reservationId) {
         final var uri = UriComponentsBuilder.fromUriString(url)
                 .pathSegment(reservationId.toString())

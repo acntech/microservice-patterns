@@ -1,6 +1,4 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Security
   security:
@@ -43,12 +41,12 @@ spring:
           predicates:
             - Path=/api/products/**, /api/reservations/**
 
-# Logging
+### LOGGING ###
 logging:
   level:
     root: INFO
     no.acntech: DEBUG
 
-# Server
+### SERVER ###
 server:
   port: 9000

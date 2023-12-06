@@ -1,85 +1,32 @@
 import type {AppProps} from "next/app";
-import {createContext, FC, ReactElement, ReactNode, useEffect, useReducer, useState} from "react";
-import {IntlProvider} from "react-intl";
-import {CookiesProvider, useCookies} from "react-cookie";
-import {Container} from "semantic-ui-react";
-import {
-    defaultLocale,
-    getLocaleMessages,
-    SupportedLocale,
-    userLocaleCookieName,
-    userLocaleCookieOptions
-} from "../core/locales";
-import {AppSettings, ClientError, ClientResponse, ErrorPayload, SessionContext, Status} from "../types";
-import {HeaderMenuFragment} from "../fragments";
-import "semantic-ui-css/semantic.min.css";
+import React, {FC, ReactElement} from "react";
+import {CookiesProvider} from "react-cookie";
+import {Provider as StateStoreProvider} from 'react-redux';
+import {HeaderMenu} from "../components";
+import {SessionProvider, SettingProvider} from "../providers";
+import store from "../state/store";
+
+import {config} from "@fortawesome/fontawesome-svg-core";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "../styles/globals.css";
-import {RestConsumer} from "../core/consumer";
-import {sessionReducer} from "../state/reducers";
 
-interface LocaleAwareAppProps {
-    children: ReactNode
-}
-
-const defaultSettings: AppSettings = {
-    locale: defaultLocale,
-    setLocale: (newLocale: SupportedLocale) => {
-    }
-}
-
-export const SettingsContext = createContext(defaultSettings);
-
-const LocaleAwareApp: FC<LocaleAwareAppProps> = (props: LocaleAwareAppProps): ReactElement => {
-
-    const [cookies, setCookie] = useCookies([userLocaleCookieName]);
-    let initialLocale = cookies[userLocaleCookieName];
-    if (!initialLocale) {
-        initialLocale = defaultLocale
-        setCookie(userLocaleCookieName, initialLocale, userLocaleCookieOptions);
-    }
-
-    const [locale, setLocale] = useState<SupportedLocale>(initialLocale);
-    const messages = getLocaleMessages(locale)
-
-    const setNewLocale = (newLocale: SupportedLocale) => {
-        setCookie(userLocaleCookieName, newLocale, userLocaleCookieOptions);
-        setLocale(newLocale);
-    }
-
-    const updatedSettings: AppSettings = {
-        locale,
-        setLocale: setNewLocale
-    }
-
-    return (
-        <SettingsContext.Provider value={updatedSettings}>
-            <IntlProvider locale={locale} messages={messages}>
-                {props.children}
-            </IntlProvider>
-        </SettingsContext.Provider>
-    )
-}
+config.autoAddCss = false;
 
 const App: FC<AppProps> = ({Component, pageProps}: AppProps): ReactElement => {
 
-    const [sessionState, sessionDispatch] = useReducer(sessionReducer, {status: Status.LOADING});
-
-    useEffect(() => {
-        RestConsumer.getSessionContext(
-            (response: ClientResponse<SessionContext>) => sessionDispatch({status: Status.SUCCESS, data: response}),
-            (error: ClientError<ErrorPayload>) => sessionDispatch({status: Status.FAILED, error: error.response}));
-    }, []);
-
     return (
         <CookiesProvider>
-            <LocaleAwareApp>
-                <Container>
-                    <HeaderMenuFragment sessionContext={sessionState.data}/>
-                    <Component {...pageProps} />
-                </Container>
-            </LocaleAwareApp>
+            <SettingProvider>
+                <StateStoreProvider store={store}>
+                    <SessionProvider>
+                        <HeaderMenu/>
+                        <Component {...pageProps} />
+                    </SessionProvider>
+                </StateStoreProvider>
+            </SettingProvider>
         </CookiesProvider>
-    )
+    );
 }
 
 export default App;

@@ -3,8 +3,6 @@
 Projects for exploring different microservice architectures and patterns. Each subfolder focuses on a
 specific area of patterns.
 
-[![Build Status](https://travis-ci.org/acntech/microservice-patterns.svg?branch=develop)](https://travis-ci.org/acntech/microservice-patterns)
-
 ## Business case
 
 The same business case is used in all the examples in order to make it easier to compare the different

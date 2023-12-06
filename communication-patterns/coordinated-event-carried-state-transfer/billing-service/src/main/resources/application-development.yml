@@ -1,0 +1,38 @@
+### SPRING ###
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  # Datasource
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:billing;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  # H2
+  h2:
+    console:
+      enabled: true
+  # Kafka
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+
+### MANAGEMENT ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
+### LOGGING ###
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: WARN
+    no.acntech: DEBUG
+
+### SERVER ###
+server:
+  port: 9005

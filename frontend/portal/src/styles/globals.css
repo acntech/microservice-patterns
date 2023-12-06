@@ -1,27 +1,11 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-.main-menu.ui.segment {
-  padding: 0.5rem 1rem 1rem 1rem;
-}
-
-.main-menu .main-menu-icon {
-  margin-right: 1rem;
-}
-
-.main-menu .main-menu-item a {
-  color: #000;
-}
-
-.main-menu .main-menu-item:hover {
-  background-color: rgba(0,0,0,.05);
-}
-
-.main-menu .main-menu-locale i.globe.icon {
-  margin: 0 0 0 0.4rem;
+.navbar .btn svg {
+    margin-right: 0.5rem;
 }

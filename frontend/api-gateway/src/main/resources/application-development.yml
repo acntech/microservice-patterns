@@ -1,6 +1,4 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Cloud
   cloud:
@@ -19,15 +17,18 @@ spring:
           predicates:
             - Path=/api/products/**, /api/reservations/**
 
-# Logging
+### LOGGING ###
 logging:
   level:
     root: INFO
     no.acntech: DEBUG
 
-# Server
+### SERVER ###
 server:
   port: 9000
+#  reactive:
+#    session:
+#      timeout: 8h
   error:
     include-stacktrace: ALWAYS
     whitelabel:

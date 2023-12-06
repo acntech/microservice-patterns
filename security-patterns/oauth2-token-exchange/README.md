@@ -1,48 +1,72 @@
-# Token Exchange
+# Security Patterns - OAuth2 Token Exchange
 
-https://curity.io/resources/learn/impersonation-flow-approaches
+This example explores protecting microservices using the OAuth2 Token Exchange security pattern.
+* [RFC 6749](https://www.rfc-editor.org/rfc/rfc6749) - OAuth 2.0 Authorization Framework
+* [RFC 6750](https://www.rfc-editor.org/rfc/rfc6750) - OAuth 2.0 Bearer Token Usage
+* [RFC 7523](https://www.rfc-editor.org/rfc/rfc7523) - JWT Profile for OAuth 2.0 Client Grants
+* [RFC 8693](https://www.rfc-editor.org/rfc/rfc8693) - OAuth 2.0 Token Exchange
 
-Token exchange er en oauth2 flyt som gjør det mulig å veksle inn et token utstedt av en autorisasjonsserver, inn i et
-token fra en annen autorisasjonsserver
-Her går vi gjennom hvordan man kan sette opp denne flyten i Keycloak.
+The OIDC/OAuth2 flow is initiated by the frontend. The API Gateway is secured as an OAuth2 Client
+using the Authorization Code grant. When the frontend fetches data from the microservices the
+API Gateway exchanges the current OAuth2 Token with a more specialized OAuth2 Token, with increased
+or decreased authorization rights. This token is then used as a Bearer Token in calls to the microservices
+which are secured as OAuth2 resource servers.
 
-## Hvordan konfigurere opp Keycloak for Token Exchange
+## Architecture
 
-Keycloak bruker Quarkus for bygg og kjøring, og det ligger mer info inne i keycloak mappen, men under følger noen
-hovedpunkter.
+The architecture is based on microservices that communicate using synchronous REST over HTTP.
 
-### For å bygge keycloak for kjøring samt starte opp:
+### Microservices
 
-1. Last ned keycloak distribusjon: https://www.keycloak.org/downloads
-2. Pakk ut zip eller tar.gz pakke
-3. Åpne en terminal i keycloak mappen
-4. Rediger kc.sh filen inne i /bin mappen. Fjern "--auto-build" fra følgende kode i script:
-   ``` 
-   if [[ "$1" = "start-dev" ]]; then
-   CONFIG_ARGS="$CONFIG_ARGS --profile=dev $1 --auto-dev" 
-   ```
-5. Kjør så følgende kommando ./bin/kc.sh build --features=admin-fine-grained-authz, token-exchange
-6. Så for å starte opp keycloak for utvikling kan man kjøre følgende kommando: ./bin/kc.sh start-dev
+The system is made up of the following microservices:
 
-### Første kjøring med oppsett for token exchange
+* API Gateway
+* Ordering Service
+* Warehouse Service
 
-1. Ved første kjøring av Keycloak opprett en admin bruker og gå til administration console.
-2. Opprett et nytt Realm
-3. I nytt realm opprett en ny client
-4. Klikk deg inn på ny klient og gå til permission tabben.
-5. Aktiver permissions og klikk deg inn på token-exchange
-6. Lag en ny policy ved å klikke på dropdown listen hvor det står "Create policy" og velg typen Client
-7. Kall denne target-client-exchange og velg klienten du opprettet i steg 3 som klient.
-8. Gå så inn på Identity Providers og legg til ny provider, dette er autorisasjonsserveren du skal konvertere tokens fra
-9. Etter opprettelsen av Identity Provider så kan du igjen klikke deg inn i Permission tabben her, og videre inn i
-   token-exchange.
-10. Her velger du da Policyen du laget i steg 6, altså target-client-exchange
-11. Nå skal du kunne gjøre en token exchange, gjør følgende kall mot Keycloak:
-    - ![img.png](img.png)
-    - client_id er klient du vil exchange token til
-    - grant_type er hva du vil gjøre, altså token-exchange
-    - subject_token_type er typen token du sender inn
-    - requested_token_type er token typen du vil ha tilbake
-    - subject_token er tokenet fra autorisasjonsserver
-    - scope openId er nødvendig om id_token er ønsket
-    
+### Data Stores
+
+Each microservice has its own data store, and is responsible to maintain its state in the data store.
+
+### User Interface
+
+The user interface uses the exposed REST APIs of the microservices to drive its view logic.
+
+## Operations
+
+### KeyCloak Setup
+
+As of KeyCloak v22.0 the Token Exchange is a preview feature and needs to be explicitly enabled to use.
+
+Use start argument `--features=preview` to enable all preview features. Alternatively use only
+`--features=token_exchange`. In order to use Token Exchange between KeyCloak and other IdPs it is
+necessary to also use `--features=admin_fine_grained_authz`.
+
+See docs:
+* [KeyCloak - Using Token Exchange](https://www.keycloak.org/docs/latest/securing_apps/#_token-exchange)
+
+See articles:
+* [Token Exchange using KeyCloak](https://medium.com/geekculture/token-exchange-using-keycloak-204da039b5e6)
+
+### Spring Boot Microservice Apps
+
+The Spring Boot based microservices uses an embedded Apache Tomcat server.
+
+#### Runtime
+
+The applications can be started from the source code using the `spring-boot-maven-plugin` by running
+the command `mvn spring-boot:run`.
+They can also be started from the archive using the command `java -jar <arhive>.jar`.
+
+#### Spring profiles:
+
+Supply Spring profiles to specify configuration options either using en environment variable
+`SPRING_PROFILES_ACTIVE=<profile>` or a JVM option `-Dspring.profiles.active=<profile>`.
+
+* `development`: Development environment using an embedded H2 in-memory database (used if no profiles are specified).
+* `production`: Production environment using a Postgres database.
+
+### ReactJS UI App
+
+The React/Redux based front end application can be started from source code using Yarn `yarn dev-start`
+or NPM `npm run start`.

@@ -16,5 +16,6 @@
     <!-- MODULES -->
     <modules>
         <module>oauth2-token-relay</module>
+        <module>oauth2-token-exchange</module>
     </modules>
 </project>

@@ -1,0 +1,43 @@
+### SPRING ###
+spring:
+  # Security
+  security:
+    oauth2:
+      client:
+        registration:
+          acntech-token-exchange-portal:
+            provider: keycloak
+            authorization-grant-type: authorization_code
+            client-id: acntech-token-exchange-portal
+            client-secret: abcdefgh12345678
+            redirect-uri: http://acntech.frontend-portal:3000/login/oauth2/code/keycloak
+            scope:
+              - openid
+              - profile
+              - roles
+        provider:
+          keycloak:
+            issuer-uri: http://acntech.keycloak:8080/realms/acntech
+  # Cloud
+  cloud:
+    gateway:
+      default-filters:
+        - name: TokenExchange
+          args:
+            audience: acntech-token-exchange-backend
+            scopes: read:orders write:orders read:products read:reservations
+      routes:
+        - id: ordering
+          uri: http://acntech.ordering.service:8080
+          predicates:
+            - Path=/api/orders/**, /api/items/**
+        - id: warehouse
+          uri: http://acntech.warehouse.service:8080
+          predicates:
+            - Path=/api/products/**, /api/reservations/**
+
+### LOGGING ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

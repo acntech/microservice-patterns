@@ -1,4 +1,4 @@
-import {ClientResponse, ErrorPayload} from "./rest-client";
+import {StateError} from "./error";
 
 export enum Status {
     PENDING,
@@ -7,14 +7,8 @@ export enum Status {
     FAILED
 }
 
-export interface Action<T> {
-    status: Status,
-    data?: ClientResponse<T>,
-    error?: ClientResponse<ErrorPayload>
-}
-
 export interface State<T> {
     status: Status;
     data?: T;
-    error?: ErrorPayload
+    error?: StateError;
 }

@@ -1,6 +1,4 @@
-########################
-# SPRING Configuration #
-########################
+### SPRING ###
 spring:
   # Application
   application:
@@ -37,7 +35,7 @@ spring:
           lob:
             non_contextual_creation: true
 
-### Management ###
+### MANAGEMENT ###
 management:
   tracing:
     sampling:

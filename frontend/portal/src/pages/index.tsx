@@ -1,88 +1,88 @@
-import {Button, Icon, Label, Menu, Segment, Table} from "semantic-ui-react";
-import {FormattedMessage} from "react-intl";
-import {FC, ReactElement, useEffect, useReducer} from "react";
-import {useRouter} from "next/router";
-import {ClientError, ClientResponse, ErrorPayload, Order, Status} from "../types";
-import {ErrorPanelFragment, LoadingIndicatorFragment} from "../fragments";
-import {getOrderStatusLabelColor} from "../core/utils";
-import {RestConsumer} from "../core/consumer";
-import {orderListReducer} from "../state/reducers";
+import React, {FC, ReactElement, useContext, useEffect, useState} from "react";
+import {Breadcrumb, Col, Container, Row} from "react-bootstrap";
+import {ErrorPage, LoadingPage, OrderDetails, OrderList, PageTitle, ProductInventory} from "../components";
+import {Order, OrderStatus, ProductListDataMissingStateError, Status} from "../types";
+import {orderSelector, setOrder} from "../state/order-slice";
+import {findOrders, orderListSelector} from "../state/order-list-slice";
+import {useAppDispatch, useAppSelector} from "../state/store";
+import {findProducts, productListSelector} from "../state/product-list-slice";
+import {Session} from "../providers";
 
-const HomePage: FC = (): ReactElement => {
-    const router = useRouter();
-    const [orderListState, orderListDispatch] = useReducer(orderListReducer, {status: Status.LOADING});
+const ProductsPage: FC = (): ReactElement => {
+
+    const dispatch = useAppDispatch();
+    const {userContext} = useContext(Session);
+    const orderState = useAppSelector(orderSelector);
+    const orderListState = useAppSelector(orderListSelector);
+    const productListState = useAppSelector(productListSelector);
+    const [openOrders, setOpenOrders] = useState<Order[]>([]);
+    const [closesOrders, setClosedOrders] = useState<Order[]>([]);
+    const {uid: customerId} = userContext;
+
 
     useEffect(() => {
-        RestConsumer.getOrders(
-            (response: ClientResponse<Order[]>) => orderListDispatch({status: Status.SUCCESS, data: response}),
-            (error: ClientError<ErrorPayload>) => orderListDispatch({status: Status.FAILED, error: error.response}));
-    }, []);
+        dispatch(findOrders({customerId}));
+    }, [dispatch, customerId]);
 
-    if (orderListState.status === Status.LOADING) {
-        return (
-            <LoadingIndicatorFragment/>
-        );
+    useEffect(() => {
+        dispatch(findProducts());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (orderListState.status === Status.SUCCESS) {
+            const {data: orders} = orderListState;
+            const filteredOpenOrders = orders?.filter(order => order.status === OrderStatus.PENDING) || [];
+            const filteredClosesOrders = orderListState.data?.filter(order => order.status === OrderStatus.CONFIRMED) || [];
+            setOpenOrders(filteredOpenOrders);
+            setClosedOrders(filteredClosesOrders);
+        }
+    }, [dispatch, orderListState]);
+
+    useEffect(() => {
+        const order = openOrders.length > 0 ? openOrders[0] : undefined;
+        dispatch(setOrder({order}));
+    }, [dispatch, openOrders]);
+
+    if (orderState.status === Status.LOADING || orderListState.status === Status.LOADING || productListState.status === Status.LOADING) {
+        return <LoadingPage/>;
+    } else if (orderState.status === Status.FAILED) {
+        return <ErrorPage error={orderState.error}/>
     } else if (orderListState.status === Status.FAILED) {
-        return (
-            <ErrorPanelFragment error={orderListState.error}/>
-        );
+        return <ErrorPage error={orderListState.error}/>
+    } else if (productListState.status === Status.FAILED) {
+        return <ErrorPage error={productListState.error}/>
+    } else if (orderListState.status === Status.SUCCESS && productListState.status === Status.SUCCESS) {
+        const {data: order} = orderState;
+        const {data: products} = productListState;
+        if (!products) {
+            return <ErrorPage error={ProductListDataMissingStateError}/>
+        } else if (openOrders.length > 1) {
+            return (
+                <Container as="main">
+                    <Breadcrumb className="mb-3"></Breadcrumb>
+                    <PageTitle id="title.orders"/>
+                    <OrderList orders={openOrders} products={products}/>
+                </Container>
+            );
+        } else {
+            return (
+                <Container as="main">
+                    <Breadcrumb className="mb-3"></Breadcrumb>
+                    <PageTitle id="title.products"/>
+                    <Row>
+                        <Col sm={8}>
+                            <ProductInventory order={order} products={products} columnCount={2}/>
+                        </Col>
+                        <Col sm={3} className="border-start ps-4">
+                            <OrderDetails order={order} products={products}/>
+                        </Col>
+                    </Row>
+                </Container>
+            );
+        }
     } else {
-        const orders = orderListState.data || [];
-        return (
-            <Segment basic>
-                <Menu>
-                    <Menu.Menu position="right">
-                        <Menu.Item>
-                            <Button primary size="tiny" onClick={() => router.push(`/create`)}>
-                                <Icon name="dolly"/><FormattedMessage id="button.new"/>
-                            </Button>
-                        </Menu.Item>
-                    </Menu.Menu>
-                </Menu>
-
-                <Table celled selectable>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell width={6}>
-                                <FormattedMessage id="label.order.order-id"/>
-                            </Table.HeaderCell>
-                            <Table.HeaderCell width={4}>
-                                <FormattedMessage id="label.order.name"/>
-                            </Table.HeaderCell>
-                            <Table.HeaderCell width={10}>
-                                <FormattedMessage id="label.order.description"/>
-                            </Table.HeaderCell>
-                            <Table.HeaderCell width={4}>
-                                <FormattedMessage id="label.order.status"/>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {
-                            orders.map((order, index) => {
-                                const {orderId, name, description, status} = order;
-                                const statusColor = getOrderStatusLabelColor(status);
-
-                                return (
-                                    <Table.Row key={index} className="clickable-table-row"
-                                               onClick={() => router.push(`/orders/${orderId}`)}>
-                                        <Table.Cell>{orderId}</Table.Cell>
-                                        <Table.Cell>{name}</Table.Cell>
-                                        <Table.Cell>{description}</Table.Cell>
-                                        <Table.Cell>
-                                            <Label color={statusColor}>
-                                                <FormattedMessage id={`enum.order-status.${status}`}/>
-                                            </Label>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                );
-                            })
-                        }
-                    </Table.Body>
-                </Table>
-            </Segment>
-        );
+        return <></>
     }
 };
 
-export default HomePage;
+export default ProductsPage;

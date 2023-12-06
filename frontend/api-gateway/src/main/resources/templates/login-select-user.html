@@ -25,27 +25,29 @@
         <input type="hidden" id="password" name="password" value="abcd1234">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
-    <h2>Users</h2>
-    <table class="table table-hover user-table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Username</th>
-            <th scope="col">First name</th>
-            <th scope="col">Last name</th>
-            <th scope="col">Roles</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user, iter : ${users}" class="user">
-            <th scope="row" th:text="${iter.index}"></th>
-            <td class="username" th:text="${user.username}"></td>
-            <td th:text="${user.firstName}"></td>
-            <td th:text="${user.lastName}"></td>
-            <td th:text="${#strings.arrayJoin(user.roles, ', ')}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="rounded-4 border bg-white mt-5 p-5">
+        <h2>Users</h2>
+        <table class="table table-hover user-table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Roles</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user, iter : ${users}" class="user">
+                <th scope="row" th:text="${iter.index}"></th>
+                <td class="username" th:text="${user.username}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${#strings.arrayJoin(user.roles, ', ')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
         integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="

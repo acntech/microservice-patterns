@@ -1,5 +1,5 @@
 import 'isomorphic-fetch';
-import {ClientMethod, ClientRequestConfig, ClientResponse} from '../../types';
+import {ClientError, ClientMethod, ClientRequestConfig, ClientResponse} from '../../types';
 
 const DEFAULT_METHOD: ClientMethod = 'GET';
 const DEFAULT_CREDENTIALS: RequestCredentials = 'same-origin';
@@ -32,26 +32,35 @@ function createFilePayload(payload: any): FormData {
     return formData;
 }
 
+async function unmarshal<T = any>(response: Response): Promise<T | undefined> {
+    try {
+        return await response.json();
+    } catch (e) {
+        if (e instanceof SyntaxError) {
+            return Promise.resolve(undefined);
+        } else {
+            throw e;
+        }
+    }
+}
+
 async function handleResponse<T = any>(response: Response): Promise<ClientResponse<T>> {
-    const {status, headers} = response;
+    const {status, headers, redirected} = response;
+    const responseHeaders = Object.fromEntries(headers.entries())
     if (status < 400) {
-        const body = response.ok ? await response.json() : undefined;
+        const body = response.ok ? await unmarshal(response) : undefined;
         return Promise.resolve({
             body,
             status,
-            headers
+            headers: responseHeaders
         });
     } else {
-        const body = await response.json();
-        return Promise.reject({
-            name: 'ClientError',
-            message: 'Client Error',
-            response: {
-                body,
-                status,
-                headers
-            }
-        });
+        const body = await unmarshal(response);
+        return Promise.reject(new ClientError({
+            body,
+            status,
+            headers: responseHeaders
+        }));
     }
 }
 
