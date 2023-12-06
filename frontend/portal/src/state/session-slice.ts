@@ -1,10 +1,23 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {ClientResponse, ErrorPayload, SessionContext, State, Status} from "../types";
+import {ClientError, ClientResponse, ErrorPayload, SessionContext, State, Status, UncategorizedStateError} from "../types";
 import {RestClient} from "../core/client";
 import {RootState} from "./store";
 
-const getSession = createAsyncThunk<ClientResponse<SessionContext>, void>('session/get', async () => {
-    return await RestClient.GET<SessionContext>("/api/session");
+const getSession = createAsyncThunk<
+    ClientResponse<SessionContext>, void, {
+    rejectValue: ClientResponse<ErrorPayload>
+}>('session/get', async (params, thunkAPI) => {
+    try {
+        return await RestClient.GET<SessionContext>("/api/session");
+    } catch (e) {
+        if (e instanceof ClientError) {
+            const error = e as ClientError;
+            if (!!error.response) {
+                return thunkAPI.rejectWithValue(error.response);
+            }
+        }
+        throw e;
+    }
 });
 
 const initialState: State<SessionContext> = {
@@ -22,11 +35,15 @@ const slice = createSlice({
             })
             .addCase(getSession.fulfilled, (state, action) => {
                 state.status = Status.SUCCESS;
-                state.data = action.payload.body
+                state.data = action.payload.body;
             })
             .addCase(getSession.rejected, (state, action) => {
                 state.status = Status.FAILED;
-                state.error = action.error as ErrorPayload
+                if (!!action.payload) {
+                    state.error = action.payload.body;
+                } else {
+                    state.error = UncategorizedStateError
+                }
             })
     }
 });

@@ -3,23 +3,25 @@ import {Button, Card, Col, Row} from "react-bootstrap";
 import {FormattedMessage} from "react-intl";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBasketShopping} from "@fortawesome/free-solid-svg-icons";
-import {Price} from "./price";
-import {Order, OrderItem, Product} from "../types";
-import {Quantity} from "./quantity";
-import {Stock} from "./stock";
+import {PricePanel} from "./price";
+import {Order, OrderItem, OrderItemStatus, Product} from "../types";
+import {QuantityPanel} from "./quantity";
+import {StockPanel} from "./stock";
 import {AmountSelector} from "./amount";
 import moment from "moment";
 import Link from "next/link";
 import {Session} from "../providers";
 import {useAppDispatch} from "../state/store";
-import {createOrder, createOrderItem, updateOrderItem} from "../state/order-slice";
+import {createOrderItem, createOrderThenOrderItem, deleteOrderItem, updateOrderItem} from "../state/order-slice";
+import {Variant} from "react-bootstrap/types";
+import {OrderItemStatusBadge} from "./status";
 
 interface ProductAttributesProps {
     detailed?: boolean;
     product: Product;
 }
 
-const ProductAttributes: FC<ProductAttributesProps> = (props: ProductAttributesProps): ReactElement => {
+const ProductAttributes: FC<ProductAttributesProps> = (props): ReactElement => {
     const {detailed, product} = props;
     const {
         stock,
@@ -34,20 +36,20 @@ const ProductAttributes: FC<ProductAttributesProps> = (props: ProductAttributesP
         return (
             <>
                 <div className="mt-4 fw-light">
-                    <Quantity packaging={packaging} quantity={quantity} measure={measure}/>
+                    <QuantityPanel packaging={packaging} quantity={quantity} measure={measure}/>
                 </div>
                 <div className="mt-2 fw-light">
-                    <Stock stock={stock}/>
+                    <StockPanel stock={stock}/>
                 </div>
                 <div className="mt-2">
-                    <Price price={price} currency={currency}/>
+                    <PricePanel price={price} currency={currency} className="fw-bold"/>
                 </div>
             </>
         );
     } else {
         return (
             <div className="mt-2">
-                <Price price={price} currency={currency}/>
+                <PricePanel price={price} currency={currency} className="fw-bold"/>
             </div>
         );
     }
@@ -59,7 +61,7 @@ export interface ProductDetailsProps {
     product: Product;
 }
 
-export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsProps): ReactElement => {
+export const ProductDetails: FC<ProductDetailsProps> = (props): ReactElement => {
     const {detailed, order, product} = props;
     const {
         productId,
@@ -71,13 +73,16 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
     const {userContext} = useContext(Session);
     const [amount, setAmount] = useState<number>(1);
     const [orderItem, setOrderItem] = useState<OrderItem>();
-    const [productSelected, setProductSelected] = useState<boolean>(false);
-    const [productChanged, setProductChanged] = useState<boolean>(false);
-    const [addOrUpdate, setAddOrUpdate] = useState<boolean>(false);
+    const [productCardBorder, setProductCardBorder] = useState<Variant>();
+    const [hideAmountSelector, setHideAmountSelector] = useState<boolean>(false);
+    const [hideAddButton, setHideAddButton] = useState<boolean>(false);
+    const [hideUpdateButton, setHideUpdateButton] = useState<boolean>(true);
+    const [hideRemoveButton, setHideRemoveButton] = useState<boolean>(true);
+    const {uid: customerId} = userContext;
 
     useEffect(() => {
         if (!!order) {
-            const item = order.items.find((i) => i.productId === productId);
+            const item = order.items.find(i => i.productId === productId);
             if (!!item) {
                 setOrderItem(item);
             }
@@ -86,40 +91,58 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
 
     useEffect(() => {
         if (!!orderItem) {
-            setAmount(orderItem.quantity);
+            const {status, quantity} = orderItem;
+            setAmount(quantity);
+
+            switch (status) {
+                case OrderItemStatus.PENDING:
+                    setProductCardBorder("primary");
+                    setHideAmountSelector(false);
+                    setHideAddButton(false);
+                    setHideUpdateButton(true);
+                    setHideRemoveButton(true);
+                    break;
+                case OrderItemStatus.RESERVED:
+                    setProductCardBorder("primary");
+                    setHideAmountSelector(false);
+                    setHideAddButton(true);
+                    setHideUpdateButton(true);
+                    setHideRemoveButton(false);
+                    break;
+                case OrderItemStatus.REJECTED:
+                case OrderItemStatus.FAILED:
+                    setProductCardBorder("danger");
+                    setHideAmountSelector(false);
+                    setHideAddButton(true);
+                    setHideUpdateButton(true);
+                    setHideRemoveButton(false);
+                    break;
+                case OrderItemStatus.CONFIRMED:
+                    setProductCardBorder("success");
+                    setHideAmountSelector(true);
+                    setHideAddButton(true);
+                    setHideUpdateButton(true);
+                    setHideRemoveButton(true);
+                    break;
+                case OrderItemStatus.CANCELED:
+                    setProductCardBorder("warning");
+                    setHideAmountSelector(true);
+                    setHideAddButton(true);
+                    setHideUpdateButton(true);
+                    setHideRemoveButton(true);
+                    break;
+            }
         }
     }, [orderItem]);
 
     useEffect(() => {
         if (!!orderItem) {
-            setProductSelected(true);
-            if (amount !== orderItem.quantity) {
-                setProductChanged(true);
-            } else {
-                setProductChanged(false);
+            const {status, quantity} = orderItem;
+            if (status === OrderItemStatus.PENDING || status === OrderItemStatus.RESERVED || status === OrderItemStatus.REJECTED) {
+                setHideUpdateButton(amount === quantity);
             }
         }
     }, [amount, orderItem]);
-
-    useEffect(() => {
-        if (addOrUpdate) {
-            if (!order) {
-                const timestamp = moment().unix();
-                const body = {customerId: userContext.uid, name: `order-${timestamp}`};
-                dispatch(createOrder({body}));
-            } else {
-                const {orderId} = order;
-                const body = {productId, quantity: amount};
-                if (!orderItem) {
-                    dispatch(createOrderItem({orderId, body}));
-                } else {
-                    const {itemId} = orderItem;
-                    dispatch(updateOrderItem({itemId, body}));
-                }
-                setAddOrUpdate(false);
-            }
-        }
-    }, [addOrUpdate, order, orderItem]);
 
     const onIncreaseAmount = () => {
         if (amount < stock) {
@@ -133,13 +156,39 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
         }
     };
 
-    const productBorder = productSelected ? "primary" : undefined;
-    const buttonTextId = productSelected ? "button.update" : "button.add";
+    const onAddButtonClicked = () => {
+        if (!order) {
+            const timestamp = moment().unix();
+            const orderBody = {customerId, name: `order-${timestamp}`};
+            const orderItemBody = {productId, quantity: amount};
+            dispatch(createOrderThenOrderItem({orderBody, orderItemBody}));
+        } else {
+            const {orderId} = order;
+            const body = {productId, quantity: amount};
+            dispatch(createOrderItem({orderId, body}));
+        }
+    };
+
+    const onUpdateButtonClicked = () => {
+        if (!!orderItem) {
+            const body = {productId, quantity: amount};
+            const {itemId} = orderItem;
+            dispatch(updateOrderItem({itemId, body}));
+        }
+    };
+
+    const onRemoveButtonClicked = () => {
+        if (!!orderItem) {
+            const {itemId} = orderItem;
+            dispatch(deleteOrderItem({itemId}));
+        }
+    };
 
     return (
-        <Card key={productId} border={productBorder}>
+        <Card key={productId} border={productCardBorder}>
             <Card.Header>
-                <FontAwesomeIcon icon={faBasketShopping} size="5x"/>
+                <FontAwesomeIcon icon={faBasketShopping} size="2x"/>
+                <OrderItemStatusBadge orderItem={orderItem} className="float-end"/>
             </Card.Header>
             <Card.Body>
                 <Card.Title>
@@ -155,11 +204,20 @@ export const ProductDetails: FC<ProductDetailsProps> = (props: ProductDetailsPro
                 </Card.Text>
             </Card.Body>
             <Card.Footer>
-                <AmountSelector amount={amount} onIncrease={onIncreaseAmount} onDecrease={onDecreaseAmount}/>
-                <Button variant="primary" className="float-end" hidden={productChanged}
-                        onClick={() => setAddOrUpdate(true)}>
-                    <FormattedMessage id={buttonTextId}/>
-                </Button>
+                <AmountSelector hidden={hideAmountSelector} amount={amount} onIncrease={onIncreaseAmount}
+                                onDecrease={onDecreaseAmount}/>
+                <div className="float-end">
+                    <Button variant="primary" hidden={hideAddButton} onClick={onAddButtonClicked}>
+                        <FormattedMessage id="button.add"/>
+                    </Button>
+                    <Button variant="primary" hidden={hideUpdateButton}
+                            onClick={onUpdateButtonClicked}>
+                        <FormattedMessage id="button.update"/>
+                    </Button>
+                    <Button variant="danger" className="ms-2" hidden={hideRemoveButton} onClick={onRemoveButtonClicked}>
+                        <FormattedMessage id="button.remove"/>
+                    </Button>
+                </div>
             </Card.Footer>
         </Card>
     );
@@ -171,7 +229,7 @@ export interface ProductInventoryProps {
     columnCount: number;
 }
 
-export const ProductInventory: FC<ProductInventoryProps> = (props: ProductInventoryProps): ReactElement => {
+export const ProductInventory: FC<ProductInventoryProps> = (props): ReactElement => {
     const {order, products, columnCount} = props;
 
     let productGrid: ReactElement[] = [];

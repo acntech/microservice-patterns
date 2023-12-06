@@ -1,13 +1,13 @@
 import React, {FC, ReactElement} from 'react';
 import {FormattedMessage} from "react-intl";
 
-export interface QuantityProps {
+export interface QuantityPanelProps {
     packaging: string;
     quantity: number;
     measure: string;
 }
 
-export const Quantity: FC<QuantityProps> = (props: QuantityProps): ReactElement => {
+export const QuantityPanel: FC<QuantityPanelProps> = (props): ReactElement => {
     const {packaging, quantity, measure} = props;
 
     return (

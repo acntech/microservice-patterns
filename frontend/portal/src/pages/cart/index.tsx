@@ -1,21 +1,24 @@
-import React, {FC, ReactElement, useEffect} from "react";
+import React, {FC, ReactElement, useContext, useEffect} from "react";
 import {useRouter} from "next/router";
 import {FormattedMessage} from "react-intl";
 import {Col, Container, Row} from "react-bootstrap";
-import {OrderListDataMissingError, Status} from "../../types";
+import {OrderListDataMissingStateError, OrderStatus, Status} from "../../types";
 import {ErrorPage, LoadingPage, PageTitle} from "../../components";
 import {useAppDispatch, useAppSelector} from "../../state/store";
 import {findOrders, orderListSelector} from "../../state/order-list-slice";
+import {Session} from "../../providers";
 
 const CartListPage: FC = (): ReactElement => {
 
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const {userContext} = useContext(Session);
     const orderListState = useAppSelector(orderListSelector);
+    const {uid: customerId} = userContext;
 
     useEffect(() => {
-        dispatch(findOrders());
-    }, [dispatch]);
+        dispatch(findOrders({customerId}));
+    }, [dispatch, customerId]);
 
     if (orderListState.status === Status.LOADING) {
         return <LoadingPage/>;
@@ -24,24 +27,27 @@ const CartListPage: FC = (): ReactElement => {
     } else {
         const {data: orders} = orderListState;
         if (!orders) {
-            return <ErrorPage error={OrderListDataMissingError}/>;
-        } else if (orders.length == 0) {
-            return (
-                <Container as="main">
-                    <PageTitle id="title.cart"/>
-                    <Row>
-                        <Col>
-                            <i>
-                                <FormattedMessage id="label.empty-cart"/>
-                            </i>
-                        </Col>
-                    </Row>
-                </Container>
-            );
+            return <ErrorPage error={OrderListDataMissingStateError}/>;
         } else {
-            const {orderId} = orders[0];
-            router.push(`/cart/${orderId}`)
-            return <></>;
+            const openOrders = orders.filter(order => order.status === OrderStatus.PENDING);
+            if (openOrders.length == 0) {
+                return (
+                    <Container as="main">
+                        <PageTitle id="title.cart"/>
+                        <Row>
+                            <Col>
+                                <i>
+                                    <FormattedMessage id="label.empty-cart"/>
+                                </i>
+                            </Col>
+                        </Row>
+                    </Container>
+                );
+            } else {
+                const {orderId} = openOrders[0];
+                router.push(`/cart/${orderId}`)
+                return <LoadingPage/>;
+            }
         }
     }
 };

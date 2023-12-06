@@ -1,5 +1,3 @@
-import {Variant} from "react-bootstrap/types";
-
 export enum OrderItemStatus {
     PENDING = 'PENDING',
     RESERVED = 'RESERVED',
@@ -36,13 +34,6 @@ export interface OrderItem {
     modified: string;
 }
 
-export interface EnrichedOrderItem extends OrderItem {
-    name?: string;
-    price?: number;
-    currency?: string;
-    statusColor: Variant;
-}
-
 export interface CreateOrder {
     customerId: string;
     name: string;
@@ -60,21 +51,53 @@ export interface Order {
     modified: string;
 }
 
-export interface EnrichedOrder extends Order {
-    enrichedItems: EnrichedOrderItem[];
-    statusColor: Variant;
+export interface CartItem {
+    itemId: string;
+    productId: string;
+    code: string;
+    status: OrderItemStatus;
+    quantity: number;
+    itemPrice: number;
+    totalPrice: number;
+    currency: string;
+}
+
+export interface Cart {
+    orderId: string;
+    status: OrderStatus;
+    items: CartItem[];
+    created: string;
+    modified: string;
 }
 
 export interface SetOrderParams {
-    order: Order;
+    order?: Order;
 }
 
 export interface GetOrderParams {
     orderId: string;
 }
 
+export interface FindOrdersParams {
+    customerId: string;
+    status?: OrderStatus;
+}
+
 export interface CreateOrderParams {
     body: CreateOrder;
+}
+
+export interface CreateOrderThenOrderItemParams {
+    orderBody: CreateOrder;
+    orderItemBody: CreateOrderItem;
+}
+
+export interface UpdateOrderParams {
+    orderId: string;
+}
+
+export interface DeleteOrderParams {
+    orderId: string;
 }
 
 export interface CreateOrderItemParams {
@@ -85,4 +108,8 @@ export interface CreateOrderItemParams {
 export interface UpdateOrderItemParams {
     itemId: string;
     body: UpdateOrderItem;
+}
+
+export interface DeleteOrderItemParams {
+    itemId: string;
 }

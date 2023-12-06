@@ -3,17 +3,17 @@ import {Button, ButtonGroup} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
 
-export interface AmountSelectorProps {
+export interface AmountSelectorProps extends React.HTMLAttributes<HTMLElement> {
     amount: number;
     onIncrease: () => void;
     onDecrease: () => void;
 }
 
-export const AmountSelector: FC<AmountSelectorProps> = (props: AmountSelectorProps): ReactElement => {
-    const {amount, onIncrease, onDecrease} = props;
+export const AmountSelector: FC<AmountSelectorProps> = (props): ReactElement => {
+    const {hidden, amount, onIncrease, onDecrease} = props;
 
     return (
-        <ButtonGroup>
+        <ButtonGroup hidden={hidden}>
             <Button variant="secondary" size="sm" onClick={onIncrease}>
                 <FontAwesomeIcon icon={faPlus}/>
             </Button>

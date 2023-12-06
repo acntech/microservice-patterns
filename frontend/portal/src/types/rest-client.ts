@@ -15,25 +15,23 @@ export interface ClientRequestConfig {
     body?: any;
 }
 
+type ClientHeaders = { [key: string]: string };
+
 export interface ClientResponse<T = any> {
     body?: T;
     status: number;
-    headers: Headers;
+    headers: ClientHeaders;
 }
 
-export interface ClientError<T = any> extends Error {
-    response?: ClientResponse<T>;
+export class ClientError extends Error {
+    readonly response: ClientResponse<ErrorPayload>;
+
+    constructor(response: ClientResponse<ErrorPayload>) {
+        super("Client Error");
+        this.name = "ClientError";
+        this.response = response;
+    }
 }
-
-export interface ClientErrorConstructor<T = any> extends ErrorConstructor {
-    new(response?: ClientResponse<T>): ClientError<T>;
-
-    (response?: ClientResponse<T>): ClientError<T>;
-
-    readonly prototype: ClientError<T>;
-}
-
-export declare let ClientResponseError: ClientErrorConstructor<ErrorPayload>;
 
 export interface Pageable {
     offset: number,

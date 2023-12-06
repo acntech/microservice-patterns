@@ -5,7 +5,7 @@ export interface PageTitleProps {
     id: string;
 }
 
-export const PageTitle: FC<PageTitleProps> = (props: PageTitleProps): ReactElement => {
+export const PageTitle: FC<PageTitleProps> = (props): ReactElement => {
     const {id} = props;
 
     return (

@@ -5,9 +5,8 @@ import Link from "next/link";
 import {Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartShopping, faGlobe, faUser} from "@fortawesome/free-solid-svg-icons";
-import {Settings} from "../providers/settings-provider";
+import {Session, Settings} from "../providers";
 import {SupportedLocale, supportedLocales} from '../core/locales';
-import {Session} from "../providers/session-provider";
 
 const CartMenuItem: FC = (): ReactElement => {
 
@@ -48,7 +47,7 @@ const LocaleMenuItem: FC = (): ReactElement => {
 interface ProfileMenuItemProps {
 }
 
-const ProfileMenuItem: FC<ProfileMenuItemProps> = (props: ProfileMenuItemProps): ReactElement => {
+const ProfileMenuItem: FC<ProfileMenuItemProps> = (props): ReactElement => {
     const {userContext} = useContext(Session);
     const {username, firstName, lastName} = userContext;
 
@@ -63,7 +62,7 @@ interface MainMenuProps {
     hideMenu?: boolean;
 }
 
-const MainMenu: FC<MainMenuProps> = (props: MainMenuProps): ReactElement => {
+const MainMenu: FC<MainMenuProps> = (props): ReactElement => {
     const {hideMenu} = props;
 
     if (!!hideMenu) {
@@ -83,7 +82,7 @@ export interface HeaderMenuProps {
     hideMenu?: boolean;
 }
 
-export const HeaderMenu: FC<HeaderMenuProps> = (props: HeaderMenuProps): ReactElement => {
+export const HeaderMenu: FC<HeaderMenuProps> = (props): ReactElement => {
     const {hideMenu} = props;
 
     const {formatMessage: t} = useIntl();

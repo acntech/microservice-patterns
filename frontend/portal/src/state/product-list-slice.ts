@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {ClientResponse, ErrorPayload, Product, State, Status} from "../types";
+import {ClientError, ClientResponse, ErrorPayload, Product, State, Status, UncategorizedStateError} from "../types";
 import {RestClient} from "../core/client";
 import {RootState} from "./store";
 
@@ -7,8 +7,20 @@ const initialState: State<Product[]> = {
     status: Status.PENDING
 }
 
-const findProducts = createAsyncThunk<ClientResponse<Product[]>, void>('products/find', async () => {
-    return await RestClient.GET<Product[]>("/api/products");
+const findProducts = createAsyncThunk<ClientResponse<Product[]>, void, {
+    rejectValue: ClientResponse<ErrorPayload>
+}>('products/find', async (params, thunkAPI) => {
+    try {
+        return await RestClient.GET<Product[]>("/api/products");
+    } catch (e) {
+        if (e instanceof ClientError) {
+            const error = e as ClientError;
+            if (!!error.response) {
+                return thunkAPI.rejectWithValue(error.response);
+            }
+        }
+        throw e;
+    }
 });
 
 const slice = createSlice({
@@ -22,11 +34,15 @@ const slice = createSlice({
             })
             .addCase(findProducts.fulfilled, (state, action) => {
                 state.status = Status.SUCCESS;
-                state.data = action.payload.body
+                state.data = action.payload.body;
             })
             .addCase(findProducts.rejected, (state, action) => {
                 state.status = Status.FAILED;
-                state.error = action.error as ErrorPayload
+                if (!!action.payload) {
+                    state.error = action.payload.body;
+                } else {
+                    state.error = UncategorizedStateError
+                }
             })
     }
 })

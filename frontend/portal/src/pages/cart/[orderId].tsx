@@ -2,13 +2,42 @@ import {FormattedMessage} from "react-intl";
 import React, {FC, ReactElement, useEffect} from "react";
 import {useRouter} from "next/router";
 import {Breadcrumb, Col, Container, Row} from "react-bootstrap";
-import {ProductListDataMissingError, Status} from "../../types";
-import {ErrorPage, LoadingPage, PageTitle, ProductInventory} from "../../components";
+import {Order, OrderItemStatus, Product, ProductListDataMissingStateError, Status} from "../../types";
+import {ErrorPage, LoadingPage, OrderSummary, PageTitle, ProductInventory} from "../../components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHouse} from "@fortawesome/free-solid-svg-icons";
 import {useAppDispatch, useAppSelector} from "../../state/store";
 import {getOrder, orderSelector} from "../../state/order-slice";
 import {findProducts, productListSelector} from "../../state/product-list-slice";
+import Link from "next/link";
+
+interface CartContentProps {
+    order?: Order;
+    products: Product[]
+}
+
+const CartContent: FC<CartContentProps> = (props): ReactElement => {
+    const {order, products} = props;
+    const {items} = order || {items: []};
+    const activeItems = items
+        .filter(item => item.status !== OrderItemStatus.CANCELED);
+
+    if (activeItems.length === 0) {
+        return (
+            <Row>
+                <Col>
+                    <i><FormattedMessage id="label.empty-cart"/></i>
+                </Col>
+            </Row>
+        );
+    } else {
+        const reservedProductIds = activeItems
+            .map(item => item.productId);
+        const reservedProducts = products
+            .filter(product => reservedProductIds.includes(product.productId))
+        return <ProductInventory order={order} products={reservedProducts} columnCount={1}/>;
+    }
+};
 
 const CartPage: FC = (): ReactElement => {
 
@@ -40,44 +69,27 @@ const CartPage: FC = (): ReactElement => {
         const {data: products} = productListState;
 
         if (!products) {
-            return <ErrorPage error={ProductListDataMissingError}/>
-        } else if (!order || !order.items || order.items.length === 0) {
+            return <ErrorPage error={ProductListDataMissingStateError}/>
+        } else {
             return (
                 <Container as="main">
                     <Breadcrumb className="mb-3">
-                        <Breadcrumb.Item href="/">
+                        <Breadcrumb.Item linkAs={Link} href="/">
                             <FontAwesomeIcon icon={faHouse}/>
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item href={`/cart/${orderId}`} active>
+                        <Breadcrumb.Item linkAs={Link} href={`/cart/${orderId}`} active>
                             <FormattedMessage id="title.cart"/>
                         </Breadcrumb.Item>
                     </Breadcrumb>
                     <PageTitle id="title.cart"/>
                     <Row>
-                        <Col>
-                            <i>
-                                <FormattedMessage id="label.empty-cart"/>
-                            </i>
+                        <Col sm={8}>
+                            <CartContent order={order} products={products}/>
+                        </Col>
+                        <Col sm={3}>
+                            <OrderSummary className="mb-2" order={order} products={products}/>
                         </Col>
                     </Row>
-                </Container>
-            );
-        } else {
-            const reservedProductIds = order.items.map(item => item.productId);
-            const reservedProducts = products.filter(product => reservedProductIds.includes(product.productId))
-
-            return (
-                <Container as="main">
-                    <Breadcrumb className="mb-3">
-                        <Breadcrumb.Item href="/">
-                            <FontAwesomeIcon icon={faHouse}/>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item href={`/cart/${orderId}`} active>
-                            <FormattedMessage id="title.cart"/>
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                    <PageTitle id="title.cart"/>
-                    <ProductInventory order={order} products={reservedProducts} columnCount={1}/>
                 </Container>
             );
         }

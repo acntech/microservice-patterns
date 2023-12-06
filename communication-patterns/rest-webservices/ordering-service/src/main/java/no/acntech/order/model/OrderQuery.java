@@ -11,7 +11,15 @@ public class OrderQuery {
         return customerId;
     }
 
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
+    }
+
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

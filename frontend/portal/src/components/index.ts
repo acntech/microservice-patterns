@@ -4,6 +4,7 @@ export * from './header-menu';
 export * from './page-title';
 export * from './order';
 export * from './product';
+export * from './status';
 export * from './stock';
 export * from './amount';
 export * from './quantity';

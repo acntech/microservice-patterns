@@ -1,4 +1,4 @@
-import {EnrichedOrder, EnrichedOrderItem, Order, OrderItem, OrderItemStatus, OrderStatus, Product} from "../../types";
+import {Cart, CartItem, Order, OrderItem, OrderItemStatus, OrderStatus, Product} from "../../types";
 import {Variant} from "react-bootstrap/types";
 
 export namespace Mapper {
@@ -49,40 +49,33 @@ export namespace Mapper {
         }
     };
 
-    export const mapEnrichOrderItem = (orderItem: OrderItem, products: Product[]): EnrichedOrderItem => {
-        const product = products
-            .filter(product => product.productId === orderItem.productId)
-            .pop();
-
+    export const mapCartItem = (item: OrderItem, product: Product): CartItem => {
         return {
-            orderId: orderItem.orderId,
-            itemId: orderItem.itemId,
-            productId: orderItem.productId,
-            name: product?.name,
-            quantity: orderItem.quantity,
-            price: product?.price,
-            currency: product?.currency,
-            status: orderItem.status,
-            statusColor: mapOrderItemStatusLabelColor(orderItem.status),
-            created: orderItem.created,
-            modified: orderItem.modified
+            itemId: item.itemId,
+            productId: product.productId,
+            code: product.code,
+            status: item.status,
+            quantity: item.quantity,
+            itemPrice: product.price,
+            totalPrice: (item.quantity * product.price),
+            currency: product.currency
         }
     };
 
-    export const mapEnrichOrder = (order: Order, products: Product[]): EnrichedOrder => {
-        const enrichedItems = order.items.map(item => mapEnrichOrderItem(item, products));
-
+    export const mapCart = (order: Order, products: Product[]): Cart => {
+        const {items} = order;
+        const cartItems = items
+            .map((item) => {
+                const product = products.find((p) => p.productId === item.productId);
+                return !!product ? Mapper.mapCartItem(item, product) : undefined;
+            })
+            .filter((c): c is CartItem => !!c);
         return {
             orderId: order.orderId,
-            customerId: order.customerId,
-            name: order.name,
-            description: order.description,
             status: order.status,
-            statusColor: mapOrderStatusLabelColor(order.status),
-            items: order.items,
-            enrichedItems: enrichedItems,
+            items: cartItems,
             created: order.created,
             modified: order.modified
         }
-    }
+    };
 }

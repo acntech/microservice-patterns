@@ -1,16 +1,16 @@
 import React, {FC, ReactElement} from 'react';
 import {FormattedMessage} from "react-intl";
 
-export interface PriceProps {
+export interface PricePanelProps extends React.HTMLAttributes<HTMLElement> {
     price: number;
     currency: string;
 }
 
-export const Price: FC<PriceProps> = (props: PriceProps): ReactElement => {
-    const {price, currency} = props;
+export const PricePanel: FC<PricePanelProps> = (props): ReactElement => {
+    const {className, price, currency} = props;
 
     return (
-        <span className="fw-bold">
+        <span className={className}>
             <FormattedMessage id={`enum.currency-code.${currency}`}/> {price.toFixed(2)}
         </span>
     );

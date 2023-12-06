@@ -17,3 +17,12 @@ export interface ProductQuery {
     name: string;
 }
 
+export interface Quantity {
+    quantity: number;
+    measure: string;
+}
+
+export interface Price {
+    price: number;
+    currency: string;
+}

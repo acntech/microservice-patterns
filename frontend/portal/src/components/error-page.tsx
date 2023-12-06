@@ -1,15 +1,15 @@
 import React, {FC, ReactElement} from 'react'
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Alert, Breadcrumb, Container} from "react-bootstrap";
-import {Error} from '../types';
+import {StateError} from '../types';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHouse} from "@fortawesome/free-solid-svg-icons";
 
 export interface ErrorPageProps {
-    error?: Error;
+    error?: StateError;
 }
 
-export const ErrorPage: FC<ErrorPageProps> = (props: ErrorPageProps): ReactElement => {
+export const ErrorPage: FC<ErrorPageProps> = (props): ReactElement => {
     const {status} = props.error || {status: 0};
     const {formatMessage: t} = useIntl();
     let icon = "exclamation triangle";

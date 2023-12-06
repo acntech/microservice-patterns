@@ -1,5 +1,5 @@
 import 'isomorphic-fetch';
-import {ClientMethod, ClientRequestConfig, ClientResponse} from '../../types';
+import {ClientError, ClientMethod, ClientRequestConfig, ClientResponse} from '../../types';
 
 const DEFAULT_METHOD: ClientMethod = 'GET';
 const DEFAULT_CREDENTIALS: RequestCredentials = 'same-origin';
@@ -45,31 +45,22 @@ async function unmarshal<T = any>(response: Response): Promise<T | undefined> {
 }
 
 async function handleResponse<T = any>(response: Response): Promise<ClientResponse<T>> {
-    const {status, headers} = response;
+    const {status, headers, redirected} = response;
+    const responseHeaders = Object.fromEntries(headers.entries())
     if (status < 400) {
         const body = response.ok ? await unmarshal(response) : undefined;
         return Promise.resolve({
             body,
             status,
-            headers
+            headers: responseHeaders
         });
     } else {
-        if (status === 401) {
-            const redirectUrl = headers.get("location")
-            if (redirectUrl) {
-                location.replace(redirectUrl);
-            }
-        }
         const body = await unmarshal(response);
-        return Promise.reject({
-            name: 'ClientError',
-            message: 'Client Error',
-            response: {
-                body,
-                status,
-                headers
-            }
-        });
+        return Promise.reject(new ClientError({
+            body,
+            status,
+            headers: responseHeaders
+        }));
     }
 }
 

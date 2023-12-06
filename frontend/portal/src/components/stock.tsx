@@ -1,11 +1,11 @@
 import React, {FC, ReactElement} from 'react';
 import {FormattedMessage} from "react-intl";
 
-export interface StockProps {
+export interface StockPanelProps {
     stock: number;
 }
 
-export const Stock: FC<StockProps> = (props: StockProps): ReactElement => {
+export const StockPanel: FC<StockPanelProps> = (props): ReactElement => {
     const {stock} = props;
 
     return (
@@ -13,4 +13,4 @@ export const Stock: FC<StockProps> = (props: StockProps): ReactElement => {
             {stock} <FormattedMessage id="label.in-stock"/>
         </span>
     );
-}
+};

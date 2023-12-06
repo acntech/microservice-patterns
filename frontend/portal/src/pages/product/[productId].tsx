@@ -1,30 +1,34 @@
-import React, {FC, ReactElement, useEffect, useState} from "react";
+import React, {FC, ReactElement, useContext, useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import Link from "next/link";
 import {FormattedMessage} from "react-intl";
 import {Breadcrumb, Col, Container, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHouse} from "@fortawesome/free-solid-svg-icons";
 import {ErrorPage, LoadingPage, OrderDetails, PageTitle, ProductDetails} from "../../components";
-import {Order, Product, ProductDataMissingError, ProductListDataMissingError, Status} from "../../types";
+import {Order, Product, ProductDataMissingStateError, ProductListDataMissingStateError, Status} from "../../types";
 import {useAppDispatch, useAppSelector} from "../../state/store";
 import {orderSelector} from "../../state/order-slice";
 import {findOrders, orderListSelector} from "../../state/order-list-slice";
 import {findProducts, productListSelector} from "../../state/product-list-slice";
+import {Session} from "../../providers";
 
 const ProductPage: FC = (): ReactElement => {
 
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const {userContext} = useContext(Session);
     const orderState = useAppSelector(orderSelector);
     const orderListState = useAppSelector(orderListSelector);
     const productListState = useAppSelector(productListSelector);
     const [order, setOrder] = useState<Order>();
     const [product, setProduct] = useState<Product>();
+    const {uid: customerId} = userContext;
     const {productId: productIdParam} = router.query;
     const productId = Array.isArray(productIdParam) ? productIdParam[0] : productIdParam;
 
     useEffect(() => {
-        dispatch(findOrders());
+        dispatch(findOrders({customerId}));
     }, [dispatch]);
 
     useEffect(() => {
@@ -61,17 +65,17 @@ const ProductPage: FC = (): ReactElement => {
         const products = productListState.data;
 
         if (!product) {
-            return <ErrorPage error={ProductDataMissingError}/>
+            return <ErrorPage error={ProductDataMissingStateError}/>
         } else if (!products) {
-            return <ErrorPage error={ProductListDataMissingError}/>
+            return <ErrorPage error={ProductListDataMissingStateError}/>
         } else {
             return (
                 <Container as="main">
                     <Breadcrumb className="mb-3">
-                        <Breadcrumb.Item href="/">
+                        <Breadcrumb.Item linkAs={Link} href="/">
                             <FontAwesomeIcon icon={faHouse}/>
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item href={`/product/${productId}`} active>
+                        <Breadcrumb.Item linkAs={Link} href={`/product/${productId}`} active>
                             <FormattedMessage id="title.product"/>
                         </Breadcrumb.Item>
                     </Breadcrumb>
