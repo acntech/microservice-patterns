@@ -242,7 +242,7 @@ export const ProductInventory: FC<ProductInventoryProps> = (props): ReactElement
         );
         if (i % columnCount === 0) {
             productGrid.push(
-                <Row key={`product-row-${i}`} className="mb-5">
+                <Row key={`product-row-${i}`} className="mb-4">
                     {productRow}
                 </Row>
             );

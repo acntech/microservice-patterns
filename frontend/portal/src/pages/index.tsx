@@ -15,8 +15,8 @@ const ProductsPage: FC = (): ReactElement => {
     const orderState = useAppSelector(orderSelector);
     const orderListState = useAppSelector(orderListSelector);
     const productListState = useAppSelector(productListSelector);
-    const [openOrders, setOpenOrders] = useState<Order[]>([])
-    const [closesOrders, setClosedOrders] = useState<Order[]>([])
+    const [openOrders, setOpenOrders] = useState<Order[]>([]);
+    const [closesOrders, setClosedOrders] = useState<Order[]>([]);
     const {uid: customerId} = userContext;
 
 

@@ -171,7 +171,7 @@ export const OrderDetails: FC<OrderDetailsProps> = (props): ReactElement => {
                     <small>
                         <Moment format="hh:mm DD-MM-YYYY">{created}</Moment>
                     </small>
-                    <Button variant="primary" className="float-end" as={Link as any} href={`/cart/${orderId}`}>
+                    <Button variant="primary" className="float-end" as={Link as any} href={"/cart"}>
                         <FormattedMessage id="button.cart"/>
                     </Button>
                 </Card.Footer>

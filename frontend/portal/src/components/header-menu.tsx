@@ -11,7 +11,7 @@ import {SupportedLocale, supportedLocales} from '../core/locales';
 const CartMenuItem: FC = (): ReactElement => {
 
     return (
-        <Nav.Link className="me-3" href="/cart">
+        <Nav.Link className="me-3" as={Link} href="/cart">
             <FontAwesomeIcon icon={faCartShopping}/>
         </Nav.Link>
     );
