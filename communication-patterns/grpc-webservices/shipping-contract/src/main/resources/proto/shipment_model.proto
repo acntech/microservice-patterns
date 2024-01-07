@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.shipment.model";
+
+enum ShipmentStatus {
+  CREATED = 0;
+  PENDING = 1;
+  COMPLETED = 2;
+}
+
+message ShipmentDto {
+  google.protobuf.StringValue shipmentId = 1;
+  google.protobuf.StringValue customerId = 2;
+  google.protobuf.StringValue orderId = 3;
+  ShipmentStatus status = 4;
+  google.protobuf.Timestamp created = 11;
+  optional google.protobuf.Timestamp modified = 12;
+}
+
+message CreateShipmentDto {
+  google.protobuf.StringValue customerId = 2;
+  google.protobuf.StringValue orderId = 3;
+}
+
+message GetShipmentHeader {
+  google.protobuf.StringValue shipmentId = 1;
+}
+
+message GetShipmentRequest {
+  GetShipmentHeader header = 1;
+}
+
+message GetShipmentResponse {
+  ShipmentDto body = 1;
+}
+
+message FindShipmentsHeader {
+  optional google.protobuf.StringValue customerId = 1;
+  optional google.protobuf.StringValue orderId = 2;
+  optional ShipmentStatus status = 3;
+}
+
+message FindShipmentsRequest {
+  FindShipmentsHeader header = 1;
+}
+
+message FindShipmentsResponse {
+  repeated ShipmentDto body = 1;
+}
+
+message CreateShipmentRequest {
+  CreateShipmentDto body = 1;
+}
+
+message CreateShipmentResponse {
+  ShipmentDto body = 1;
+}

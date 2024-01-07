@@ -13,9 +13,6 @@
     <artifactId>rest-webservices</artifactId>
     <packaging>pom</packaging>
 
-    <name>${project.artifactId}</name>
-    <description>Patterns for Synchronous REST</description>
-
     <!-- MODULES -->
     <modules>
         <module>shipping-service</module>

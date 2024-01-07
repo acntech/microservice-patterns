@@ -88,7 +88,7 @@ public class OrderEntity {
     }
 
     public void statusConfirmed() {
-        status = OrderStatus.CONFIRMED;
+        status = OrderStatus.CLOSED;
     }
 
     public void statusCanceled() {
@@ -97,7 +97,7 @@ public class OrderEntity {
 
     public boolean areAllItemsReserved() {
         List<OrderItemEntity> activeItems = items.stream()
-                .filter(activeItem -> !OrderItemStatus.CANCELED.equals(activeItem.getStatus()))
+                .filter(activeItem -> !OrderItemStatus.DELETED.equals(activeItem.getStatus()))
                 .toList();
         boolean allActiveItemsConfirmed = activeItems.stream()
                 .map(OrderItemEntity::getStatus)
@@ -108,7 +108,7 @@ public class OrderEntity {
     @PrePersist
     private void prePersist() {
         orderId = UUID.randomUUID();
-        status = OrderStatus.PENDING;
+        status = OrderStatus.OPEN;
         created = ZonedDateTime.now();
     }
 

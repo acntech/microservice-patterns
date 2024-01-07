@@ -5,16 +5,16 @@ export namespace Mapper {
 
     export const mapOrderStatusLabelColor = (status: OrderStatus): Variant => {
         switch (status) {
-            case OrderStatus.PENDING: {
+            case OrderStatus.OPEN: {
                 return 'primary';
             }
-            case OrderStatus.CONFIRMED: {
+            case OrderStatus.CLOSED: {
                 return 'success';
             }
             case OrderStatus.CANCELED: {
                 return 'warning';
             }
-            case OrderStatus.REJECTED: {
+            case OrderStatus.ABORTED: {
                 return 'danger';
             }
             default: {
@@ -34,7 +34,7 @@ export namespace Mapper {
             case OrderItemStatus.CONFIRMED: {
                 return 'success';
             }
-            case OrderItemStatus.CANCELED: {
+            case OrderItemStatus.DELETED: {
                 return 'warning';
             }
             case OrderItemStatus.REJECTED: {

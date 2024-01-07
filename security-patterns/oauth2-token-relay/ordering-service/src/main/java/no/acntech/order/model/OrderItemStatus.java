@@ -5,7 +5,7 @@ public enum OrderItemStatus {
     PENDING,
     RESERVED,
     CONFIRMED,
-    CANCELED,
+    DELETED,
     REJECTED,
     FAILED
 }

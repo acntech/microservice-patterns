@@ -1,0 +1,29 @@
+### SPRING ###
+spring:
+  # Application
+  application:
+    name: grpc-api-gateway
+  # Profiles
+  profiles:
+    active: development
+  # Messages
+  messages:
+    basename: locale/messages
+  # Jackson
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: NON_NULL
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+      WRITE_DURATIONS_AS_TIMESTAMPS: false
+    deserialization:
+      ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+    generator:
+      WRITE_BIGDECIMAL_AS_PLAIN: true
+  # JMX
+  jmx:
+    enabled: false
+  # AOP
+  aop:
+    proxy-target-class: true

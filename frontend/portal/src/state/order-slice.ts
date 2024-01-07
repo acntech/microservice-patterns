@@ -158,7 +158,7 @@ const createOrderThenOrderItem = createAsyncThunk<ClientResponse<Order>, CreateO
         const response = await RestClient.POST<Order>("/api/orders", orderBody);
         const {body: order} = response;
         if (!order) {
-            throw new ClientError({
+            return thunkAPI.rejectWithValue({
                 headers: {},
                 status: 3
             });

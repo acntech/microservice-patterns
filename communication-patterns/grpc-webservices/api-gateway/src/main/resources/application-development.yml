@@ -1,0 +1,27 @@
+### GRPC ###
+grpc:
+  client:
+    ordering-service:
+      address: static://localhost:9092
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+    warehouse-service:
+      address: static://localhost:9093
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+
+### LOGGING ###
+logging:
+  level:
+    root: INFO
+    "no.acntech": DEBUG
+
+### SERVER ###
+server:
+  port: 9000
+  error:
+    include-stacktrace: ALWAYS
+    whitelabel:
+      enabled: false

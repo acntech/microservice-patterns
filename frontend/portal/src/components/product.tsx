@@ -124,7 +124,7 @@ export const ProductDetails: FC<ProductDetailsProps> = (props): ReactElement => 
                     setHideUpdateButton(true);
                     setHideRemoveButton(true);
                     break;
-                case OrderItemStatus.CANCELED:
+                case OrderItemStatus.DELETED:
                     setProductCardBorder("warning");
                     setHideAmountSelector(true);
                     setHideAddButton(true);

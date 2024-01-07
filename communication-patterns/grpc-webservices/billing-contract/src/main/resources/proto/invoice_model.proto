@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.invoice.model";
+
+enum InvoiceStatus {
+  CREATED = 0;
+  PENDING = 1;
+  COMPLETED = 2;
+}
+
+message InvoiceDto {
+  google.protobuf.StringValue invoiceId = 1;
+  google.protobuf.StringValue customerId = 2;
+  google.protobuf.StringValue orderId = 3;
+  InvoiceStatus status = 4;
+  google.protobuf.Timestamp created = 11;
+  optional google.protobuf.Timestamp modified = 12;
+}
+
+message CreateInvoiceDto {
+  google.protobuf.StringValue customerId = 2;
+  google.protobuf.StringValue orderId = 3;
+}
+
+message GetInvoiceHeader {
+  google.protobuf.StringValue invoiceId = 1;
+}
+
+message GetInvoiceRequest {
+  GetInvoiceHeader header = 1;
+}
+
+message GetInvoiceResponse {
+  InvoiceDto body = 1;
+}
+
+message FindInvoicesHeader {
+  optional google.protobuf.StringValue customerId = 1;
+  optional google.protobuf.StringValue orderId = 2;
+  optional InvoiceStatus status = 3;
+}
+
+message FindInvoicesRequest {
+  FindInvoicesHeader header = 1;
+}
+
+message FindInvoicesResponse {
+  repeated InvoiceDto body = 1;
+}
+
+message CreateInvoiceRequest {
+  CreateInvoiceDto body = 1;
+}
+
+message CreateInvoiceResponse {
+  InvoiceDto body = 1;
+}

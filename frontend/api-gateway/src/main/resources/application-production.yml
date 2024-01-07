@@ -4,10 +4,6 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: customers
-          uri: http://acntech.customers.service:8080
-          predicates:
-            - Path=/api/customers/**
         - id: ordering
           uri: http://acntech.ordering.service:8080
           predicates:

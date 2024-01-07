@@ -1,0 +1,27 @@
+### SPRING ###
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  # Datasource
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://acntech.postgres:5432/warehouse
+    username: warehouse
+    password: abcd1234
+
+### MANAGEMENT ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - health
+          - info
+
+### LOGGING ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

@@ -1,4 +1,4 @@
-# Synchronous REST
+# WebServices REST
 
 This example explores the use of synchronous REST webservices.
 

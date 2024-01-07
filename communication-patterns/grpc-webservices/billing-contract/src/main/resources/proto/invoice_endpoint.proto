@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "invoice_model.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.invoice.endpoint";
+
+service InvoiceEndpoint {
+
+  rpc getInvoice (GetInvoiceRequest) returns (GetInvoiceResponse) {
+  }
+
+  rpc findInvoices (FindInvoicesRequest) returns (FindInvoicesResponse) {
+  }
+
+  rpc createInvoice (CreateInvoiceRequest) returns (CreateInvoiceResponse) {
+  }
+}

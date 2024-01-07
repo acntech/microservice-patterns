@@ -22,7 +22,7 @@ public class OrderEventToUpdateReservationDtoConverter implements Converter<Orde
     }
 
     private ReservationStatus convert(final OrderStatus orderStatus) {
-        if (OrderStatus.CONFIRMED.equals(orderStatus)) {
+        if (OrderStatus.CLOSED.equals(orderStatus)) {
             return ReservationStatus.CONFIRMED;
         } else {
             return null;

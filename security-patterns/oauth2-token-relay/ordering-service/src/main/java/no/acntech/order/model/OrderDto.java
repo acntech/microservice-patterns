@@ -66,7 +66,7 @@ public class OrderDto {
     @JsonIgnore
     public boolean areAllItemsConfirmed() {
         List<OrderItemDto> activeItems = items.stream()
-                .filter(activeItem -> !OrderItemStatus.CANCELED.equals(activeItem.getStatus()))
+                .filter(activeItem -> !OrderItemStatus.DELETED.equals(activeItem.getStatus()))
                 .toList();
         boolean allActiveItemsConfirmed = activeItems.stream()
                 .map(OrderItemDto::getStatus)

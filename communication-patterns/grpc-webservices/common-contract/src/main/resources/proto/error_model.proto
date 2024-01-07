@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.error.model";
+
+message ErrorResponse {
+  google.protobuf.Timestamp timestamp = 1;
+  google.protobuf.UInt32Value status = 2;
+  google.protobuf.StringValue error = 3;
+  google.protobuf.StringValue message = 4;
+}

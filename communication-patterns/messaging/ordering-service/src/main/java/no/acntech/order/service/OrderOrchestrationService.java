@@ -142,7 +142,7 @@ public class OrderOrchestrationService {
         reservationRabbitProducer.delete(deleteReservationDto);
         LOGGER.debug("Deleted order item for item-id {}", itemId);
         return orderService.updateOrderItem(itemId, UpdateOrderItemDto.builder()
-                .status(OrderItemStatus.CANCELED)
+                .status(OrderItemStatus.DELETED)
                 .build());
     }
 }

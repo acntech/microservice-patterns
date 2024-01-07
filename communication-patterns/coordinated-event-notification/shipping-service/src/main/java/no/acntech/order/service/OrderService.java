@@ -49,7 +49,7 @@ public class OrderService {
     private void processOrder(final OrderDto orderDto) {
         LOGGER.debug("Processing OrderDto with order-id {}", orderDto.getOrderId());
 
-        if (orderDto.getStatus() == OrderStatus.CONFIRMED) {
+        if (orderDto.getStatus() == OrderStatus.CLOSED) {
             final var createShipmentDto = conversionService.convert(orderDto, CreateShipmentDto.class);
             Assert.notNull(createShipmentDto, "Failed to convert OrderDto to CreateShipmentDto");
             shipmentService.createShipment(createShipmentDto);

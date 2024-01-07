@@ -1,0 +1,46 @@
+### GRPC ###
+grpc:
+  client:
+    warehouse-service:
+      address: static://acntech.warehouse.service:9090
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+    shipping-service:
+      address: static://acntech.shipping.service:9090
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+    billing-service:
+      address: static://acntech.billing.service:9090
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+
+### SPRING ###
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  # Datasource
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://acntech.postgres:5432/ordering
+    username: ordering
+    password: abcd1234
+
+### MANAGEMENT ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - health
+          - info
+
+### LOGGING ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO

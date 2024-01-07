@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "product_model.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.product.endpoint";
+
+service ProductEndpoint {
+
+  rpc getProduct (GetProductRequest) returns (GetProductResponse) {
+  }
+
+  rpc findProducts (FindProductsRequest) returns (FindProductsResponse) {
+  }
+
+  rpc createProduct (CreateProductRequest) returns (CreateProductResponse) {
+  }
+}

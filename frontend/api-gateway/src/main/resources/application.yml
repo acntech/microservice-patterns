@@ -2,7 +2,7 @@
 spring:
   # Application
   application:
-    name: common-ui-gateway
+    name: generic-api-gateway
   # Profiles
   profiles:
     active: development

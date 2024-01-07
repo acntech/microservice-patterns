@@ -1,0 +1,8 @@
+
+${AnsiColor.GREEN}     _            _____         _
+${AnsiColor.GREEN}    / \   ___ _ _|_   _|__  ___| |__
+${AnsiColor.GREEN}   / _ \ / __| '_ \| |/ _ \/ __| '_ \
+${AnsiColor.GREEN}  / ___ \ (__| | | | |  __/ (__| | | |
+${AnsiColor.GREEN} /_/   \_\___|_| |_|_|\___|\___|_| |_|
+${AnsiStyle.NORMAL}
+  Spring Boot: ${spring-boot.formatted-version}

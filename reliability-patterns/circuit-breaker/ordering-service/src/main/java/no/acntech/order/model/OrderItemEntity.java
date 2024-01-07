@@ -94,7 +94,7 @@ public class OrderItemEntity {
     }
 
     public void statusCanceled() {
-        status = OrderItemStatus.CANCELED;
+        status = OrderItemStatus.DELETED;
     }
 
     @PrePersist

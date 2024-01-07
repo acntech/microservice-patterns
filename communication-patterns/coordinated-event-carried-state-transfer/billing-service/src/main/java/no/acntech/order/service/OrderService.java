@@ -36,7 +36,7 @@ public class OrderService {
     }
 
     private void processReservationEvent(final OrderEvent orderEvent) {
-        if (orderEvent.getEventType() == OrderEventType.ORDER_UPDATED && orderEvent.getOrderStatus() == OrderStatus.CONFIRMED) {
+        if (orderEvent.getEventType() == OrderEventType.ORDER_UPDATED && orderEvent.getOrderStatus() == OrderStatus.CLOSED) {
             var createInvoiceDto = conversionService.convert(orderEvent, CreateInvoiceDto.class);
             Assert.notNull(createInvoiceDto, "Failed to convert OrderEvent to CreateInvoiceDto");
             invoiceService.createInvoice(createInvoiceDto);

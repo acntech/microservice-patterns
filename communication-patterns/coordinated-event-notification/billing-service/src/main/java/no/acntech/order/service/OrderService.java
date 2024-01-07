@@ -49,7 +49,7 @@ public class OrderService {
     private void processOrderDto(final OrderDto orderDto) {
         LOGGER.debug("Processing OrderDto for order-id {}", orderDto.getOrderId());
 
-        if (orderDto.getStatus() == OrderStatus.CONFIRMED) {
+        if (orderDto.getStatus() == OrderStatus.CLOSED) {
             final var createInvoiceDto = conversionService.convert(orderDto, CreateInvoiceDto.class);
             Assert.notNull(createInvoiceDto, "Failed to convert OrderDto to CreateInvoiceDto");
             invoiceService.createInvoice(createInvoiceDto);

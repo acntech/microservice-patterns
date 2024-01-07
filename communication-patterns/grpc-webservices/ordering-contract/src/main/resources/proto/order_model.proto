@@ -1,0 +1,186 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.order.model";
+
+enum OrderItemStatus {
+  PENDING = 0;
+  RESERVED = 1;
+  CONFIRMED = 2;
+  DELETED = 3;
+  REJECTED = 4;
+  FAILED = 5;
+}
+
+enum OrderStatus {
+  OPEN = 0;
+  CLOSED = 1;
+  CANCELED = 2;
+  ABORTED = 3;
+}
+
+message OrderItemDto {
+  google.protobuf.StringValue itemId = 1;
+  google.protobuf.StringValue orderId = 2;
+  google.protobuf.StringValue productId = 3;
+  google.protobuf.StringValue reservationId = 4;
+  google.protobuf.UInt32Value quantity = 5;
+  OrderItemStatus status = 6;
+  google.protobuf.Timestamp created = 7;
+  optional google.protobuf.Timestamp modified = 8;
+}
+
+message OrderDto {
+  google.protobuf.StringValue orderId = 1;
+  google.protobuf.StringValue customerId = 2;
+  google.protobuf.StringValue name = 3;
+  optional google.protobuf.StringValue description = 4;
+  OrderStatus status = 5;
+  repeated OrderItemDto items = 6;
+  google.protobuf.Timestamp created = 7;
+  optional google.protobuf.Timestamp modified = 8;
+}
+
+message CreateOrderDto {
+  google.protobuf.StringValue customerId = 2;
+  google.protobuf.StringValue name = 3;
+  optional google.protobuf.StringValue description = 4;
+}
+
+message CreateOrderItemDto {
+  google.protobuf.StringValue productId = 3;
+  optional google.protobuf.StringValue reservationId = 4;
+  google.protobuf.UInt32Value quantity = 5;
+  OrderItemStatus status = 6;
+}
+
+message UpdateOrderItemDto {
+  optional google.protobuf.UInt32Value quantity = 1;
+  optional OrderItemStatus status = 2;
+}
+
+message DeleteOrderItemDto {
+  google.protobuf.StringValue productId = 3;
+}
+
+message GetOrderHeader {
+  google.protobuf.StringValue orderId = 1;
+}
+
+message GetOrderRequest {
+  GetOrderHeader header = 1;
+}
+
+message GetOrderResponse {
+  OrderDto body = 1;
+}
+
+message FindOrdersHeader {
+  optional google.protobuf.StringValue customerId = 1;
+  optional OrderStatus status = 5;
+}
+
+message FindOrdersRequest {
+  FindOrdersHeader header = 1;
+}
+
+message FindOrdersResponse {
+  repeated OrderDto body = 1;
+}
+
+message CreateOrderRequest {
+  CreateOrderDto body = 1;
+}
+
+message CreateOrderResponse {
+  OrderDto body = 1;
+}
+
+message UpdateOrderHeader {
+  google.protobuf.StringValue orderId = 1;
+}
+
+message UpdateOrderRequest {
+  UpdateOrderHeader header = 1;
+}
+
+message UpdateOrderResponse {
+  OrderDto body = 1;
+}
+
+message DeleteOrderHeader {
+  google.protobuf.StringValue orderId = 1;
+}
+
+message DeleteOrderRequest {
+  DeleteOrderHeader header = 1;
+}
+
+message DeleteOrderResponse {
+  OrderDto body = 1;
+}
+
+message GetOrderItemHeader {
+  google.protobuf.StringValue itemId = 1;
+}
+
+message GetOrderItemRequest {
+  GetOrderItemHeader header = 1;
+}
+
+message GetOrderItemResponse {
+  OrderItemDto body = 1;
+}
+
+message FindOrderItemsHeader {
+  google.protobuf.StringValue orderId = 1;
+}
+
+message FindOrderItemsRequest {
+  FindOrderItemsHeader header = 1;
+}
+
+message FindOrderItemsResponse {
+  repeated OrderItemDto body = 1;
+}
+
+message CreateOrderItemsHeader {
+  google.protobuf.StringValue orderId = 1;
+}
+
+message CreateOrderItemRequest {
+  CreateOrderItemsHeader header = 1;
+  CreateOrderItemDto body = 2;
+}
+
+message CreateOrderItemResponse {
+  OrderDto body = 1;
+}
+
+message UpdateOrderItemHeader {
+  google.protobuf.StringValue itemId = 1;
+}
+
+message UpdateOrderItemRequest {
+  UpdateOrderItemHeader header = 1;
+  UpdateOrderItemDto body = 2;
+}
+
+message UpdateOrderItemResponse {
+  OrderDto body = 1;
+}
+
+message DeleteOrderItemHeader {
+  google.protobuf.StringValue itemId = 1;
+}
+
+message DeleteOrderItemRequest {
+  DeleteOrderItemHeader header = 1;
+}
+
+message DeleteOrderItemResponse {
+  OrderDto body = 1;
+}

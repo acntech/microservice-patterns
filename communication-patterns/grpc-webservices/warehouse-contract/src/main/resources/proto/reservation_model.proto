@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.reservation.model";
+
+enum ReservationStatus {
+  RESERVED = 0;
+  CONFIRMED = 1;
+  CANCELED = 2;
+  REJECTED = 3;
+  FAILED = 4;
+}
+
+message ReservationDto {
+  google.protobuf.StringValue reservationId = 1;
+  google.protobuf.StringValue orderId = 2;
+  google.protobuf.StringValue productId = 3;
+  google.protobuf.UInt32Value quantity = 4;
+  ReservationStatus status = 5;
+  google.protobuf.Timestamp created = 6;
+  optional google.protobuf.Timestamp modified = 7;
+}
+
+message CreateReservationDto {
+  google.protobuf.StringValue orderId = 1;
+  google.protobuf.StringValue productId = 2;
+  google.protobuf.UInt32Value quantity = 3;
+}
+
+message UpdateReservationDto {
+  optional google.protobuf.UInt32Value quantity = 1;
+  optional ReservationStatus status = 2;
+}
+
+message GetReservationHeader {
+  google.protobuf.StringValue reservationId = 1;
+}
+
+message GetReservationRequest {
+  GetReservationHeader header = 1;
+}
+
+message GetReservationResponse {
+  ReservationDto body = 1;
+}
+
+message FindReservationsHeader {
+  optional google.protobuf.StringValue orderId = 1;
+}
+
+message FindReservationsRequest {
+  FindReservationsHeader header = 1;
+}
+
+message FindReservationsResponse {
+  repeated ReservationDto body = 1;
+}
+
+message CreateReservationRequest {
+  CreateReservationDto body = 1;
+}
+
+message CreateReservationResponse {
+  ReservationDto body = 1;
+}
+
+message UpdateReservationHeader {
+  google.protobuf.StringValue reservationId = 1;
+}
+
+message UpdateReservationRequest {
+  UpdateReservationHeader header = 1;
+  UpdateReservationDto body = 2;
+}
+
+message UpdateReservationResponse {
+  ReservationDto body = 1;
+}
+
+message DeleteReservationHeader {
+  google.protobuf.StringValue reservationId = 1;
+}
+
+message DeleteReservationRequest {
+  DeleteReservationHeader header = 1;
+}
+
+message DeleteReservationResponse {
+  ReservationDto body = 1;
+}

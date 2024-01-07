@@ -36,7 +36,7 @@ public class OrderService {
     }
 
     private void processReservationEvent(final OrderEvent orderEvent) {
-        if (orderEvent.getEventType() == OrderEventType.ORDER_UPDATED && orderEvent.getOrderStatus() == OrderStatus.CONFIRMED) {
+        if (orderEvent.getEventType() == OrderEventType.ORDER_UPDATED && orderEvent.getOrderStatus() == OrderStatus.CLOSED) {
             var createShipmentDto = conversionService.convert(orderEvent, CreateShipmentDto.class);
             Assert.notNull(createShipmentDto, "Failed to convert OrderEvent to CreateShipmentDto");
             shipmentService.createShipment(createShipmentDto);

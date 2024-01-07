@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+import "order_model.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.order.endpoint";
+
+service OrderEndpoint {
+
+  rpc getOrder (GetOrderRequest) returns (GetOrderResponse) {
+  }
+
+  rpc findOrders (FindOrdersRequest) returns (FindOrdersResponse) {
+  }
+
+  rpc createOrder (CreateOrderRequest) returns (CreateOrderResponse) {
+  }
+
+  rpc updateOrder (UpdateOrderRequest) returns (UpdateOrderResponse) {
+  }
+
+  rpc deleteOrder (DeleteOrderRequest) returns (DeleteOrderResponse) {
+  }
+}
+
+service OrderItemEndpoint {
+
+  rpc getOrderItem (GetOrderItemRequest) returns (GetOrderItemResponse) {
+  }
+
+  rpc findOrderItems (FindOrderItemsRequest) returns (FindOrderItemsResponse) {
+  }
+
+  rpc createOrderItem (CreateOrderItemRequest) returns (CreateOrderItemResponse) {
+  }
+
+  rpc updateOrderItem (UpdateOrderItemRequest) returns (UpdateOrderItemResponse) {
+  }
+
+  rpc deleteOrderItem (DeleteOrderItemRequest) returns (DeleteOrderItemResponse) {
+  }
+}

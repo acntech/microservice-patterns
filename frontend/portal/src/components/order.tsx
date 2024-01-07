@@ -18,7 +18,7 @@ const OrderSummaryDetails: FC<OrderSummaryDetailsProps> = (props): ReactElement 
     const {order, products} = props;
     const {status, items} = order;
 
-    if (status === OrderStatus.PENDING && items.length > 0) {
+    if (status === OrderStatus.OPEN && items.length > 0) {
         const cart = Mapper.mapCart(order, products);
         const {items} = cart;
         const totalPrice = items
@@ -55,7 +55,7 @@ export const OrderSummaryButtons: FC<OrderSummaryButtonsProps> = (props): ReactE
         dispatch(updateOrder({orderId}));
     };
 
-    if (status === OrderStatus.PENDING) {
+    if (status === OrderStatus.OPEN) {
         return (
             <Navbar className="justify-content-end m-0 p-0">
                 <Button variant="danger" onClick={onCancelButtonClicked}>

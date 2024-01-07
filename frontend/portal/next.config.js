@@ -17,12 +17,16 @@ module.exports = {
                 destination: "http://localhost:9000/oauth2/authorization/:registrationId"
             },
             {
-                source: "/resources/:resource*", // Static resources
-                destination: "http://localhost:9000/resources/:resource*"
+                source: "/assets/:resource*", // Static resources
+                destination: "http://localhost:9000/assets/:resource*"
             },
             {
                 source: "/api/:resource*", // API resources
                 destination: "http://localhost:9000/api/:resource*"
+            },
+            {
+                source: "/webjars/:resource*", // WebJars resources
+                destination: "http://localhost:9000/webjars/:resource*"
             }
         ]
     },

@@ -1,0 +1,54 @@
+### GRPC ###
+grpc:
+  server:
+    port: 9092
+  client:
+    warehouse-service:
+      address: static://localhost:9093
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+    shipping-service:
+      address: static://localhost:9094
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+    billing-service:
+      address: static://localhost:9094
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+
+### SPRING ###
+spring:
+  # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  # Datasource
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:ordering;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  # H2
+  h2:
+    console:
+      enabled: true
+
+### MANAGEMENT ###
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
+### LOGGING ###
+logging:
+  level:
+    root: INFO
+    no.acntech: DEBUG
+
+### SERVER ###
+server:
+  port: 9002

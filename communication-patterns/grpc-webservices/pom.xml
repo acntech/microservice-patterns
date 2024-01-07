@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- PROJECT -->
+    <parent>
+        <groupId>no.acntech</groupId>
+        <artifactId>communication-patterns</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>grpc-webservices</artifactId>
+    <packaging>pom</packaging>
+
+    <!-- MODULES -->
+    <modules>
+        <module>common-contract</module>
+        <module>shipping-contract</module>
+        <module>billing-contract</module>
+        <module>warehouse-contract</module>
+        <module>ordering-contract</module>
+        <module>shipping-service</module>
+        <module>billing-service</module>
+        <module>warehouse-service</module>
+        <module>ordering-service</module>
+        <module>api-gateway</module>
+    </modules>
+
+    <!-- DEPENDENCIES -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>no.acntech</groupId>
+                <artifactId>grpc-webservices-common-contract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.acntech</groupId>
+                <artifactId>grpc-webservices-shipping-contract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.acntech</groupId>
+                <artifactId>grpc-webservices-billing-contract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.acntech</groupId>
+                <artifactId>grpc-webservices-warehouse-contract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.acntech</groupId>
+                <artifactId>grpc-webservices-ordering-contract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

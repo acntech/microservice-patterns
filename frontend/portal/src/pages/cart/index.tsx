@@ -21,7 +21,7 @@ const CartContent: FC<CartContentProps> = (props): ReactElement => {
     const {order, products} = props;
     const {items} = order || {items: []};
     const activeItems = items
-        .filter(item => item.status !== OrderItemStatus.CANCELED);
+        .filter(item => item.status !== OrderItemStatus.DELETED);
 
     if (activeItems.length === 0) {
         return (
@@ -63,7 +63,7 @@ const CartPage: FC = (): ReactElement => {
     useEffect(() => {
         if (orderListState.status === Status.SUCCESS) {
             const {data: orders} = orderListState;
-            const filteredOpenOrders = orders?.filter(order => order.status === OrderStatus.PENDING) || [];
+            const filteredOpenOrders = orders?.filter(order => order.status === OrderStatus.OPEN) || [];
             setOpenOrders(filteredOpenOrders);
         }
     }, [dispatch, orderListState]);

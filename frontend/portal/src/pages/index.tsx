@@ -31,8 +31,8 @@ const ProductsPage: FC = (): ReactElement => {
     useEffect(() => {
         if (orderListState.status === Status.SUCCESS) {
             const {data: orders} = orderListState;
-            const filteredOpenOrders = orders?.filter(order => order.status === OrderStatus.PENDING) || [];
-            const filteredClosesOrders = orderListState.data?.filter(order => order.status === OrderStatus.CONFIRMED) || [];
+            const filteredOpenOrders = orders?.filter(order => order.status === OrderStatus.OPEN) || [];
+            const filteredClosesOrders = orderListState.data?.filter(order => order.status === OrderStatus.CLOSED) || [];
             setOpenOrders(filteredOpenOrders);
             setClosedOrders(filteredClosesOrders);
         }

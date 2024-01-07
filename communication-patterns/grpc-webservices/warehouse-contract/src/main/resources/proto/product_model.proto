@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "no.acntech.product.model";
+
+enum Packaging {
+  BAG = 0;
+  BOX = 1;
+  BOTT = 2;
+  BULK = 3;
+  BUND = 4;
+  CAN = 5;
+  CART = 6;
+  NET = 7;
+  PACK = 8;
+}
+
+enum Measure {
+  G = 0;
+  KG = 1;
+  ML = 2;
+  L = 3;
+  PCS = 4;
+}
+
+enum Currency {
+  EUR = 0;
+  GBP = 1;
+  USD = 2;
+}
+
+message ProductDto {
+  google.protobuf.StringValue productId = 1;
+  google.protobuf.StringValue code = 2;
+  google.protobuf.StringValue name = 3;
+  optional google.protobuf.StringValue description = 4;
+  google.protobuf.UInt32Value stock = 5;
+  Packaging packaging = 6;
+  google.protobuf.UInt32Value quantity = 7;
+  Measure measure = 8;
+  google.protobuf.DoubleValue price = 9;
+  Currency currency = 10;
+  google.protobuf.Timestamp created = 11;
+  optional google.protobuf.Timestamp modified = 12;
+}
+
+message CreateProductDto {
+  google.protobuf.StringValue code = 1;
+  google.protobuf.StringValue name = 2;
+  optional google.protobuf.StringValue description = 3;
+  google.protobuf.UInt32Value stock = 4;
+  Packaging packaging = 5;
+  google.protobuf.UInt32Value quantity = 6;
+  Measure measure = 7;
+  google.protobuf.DoubleValue price = 8;
+  Currency currency = 9;
+}
+
+message GetProductHeader {
+  google.protobuf.StringValue productId = 1;
+}
+
+message GetProductRequest {
+  GetProductHeader header = 1;
+}
+
+message GetProductResponse {
+  ProductDto body = 1;
+}
+
+message FindProductsHeader {
+  optional google.protobuf.StringValue name = 1;
+}
+
+message FindProductsRequest {
+  FindProductsHeader header = 1;
+}
+
+message FindProductsResponse {
+  repeated ProductDto body = 1;
+}
+
+message CreateProductRequest {
+  CreateProductDto body = 1;
+}
+
+message CreateProductResponse {
+  ProductDto body = 1;
+}

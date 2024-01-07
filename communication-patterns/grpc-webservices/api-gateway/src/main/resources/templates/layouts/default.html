@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title th:text="#{navbar.brand}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}"/>
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main layout:fragment="content"></main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/script.js}"></script>
+</body>
+</html>

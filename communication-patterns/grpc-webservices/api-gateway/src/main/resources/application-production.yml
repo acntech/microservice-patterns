@@ -1,0 +1,27 @@
+### GRPC ###
+grpc:
+  client:
+    ordering-service:
+      address: static://acntech.ordering.service:9090
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+    warehouse-service:
+      address: static://acntech.warehouse.service:8080
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: PLAINTEXT
+
+### LOGGING ###
+logging:
+  level:
+    root: WARN
+    no.acntech: INFO
+
+### SERVER ###
+server:
+  port: 8080
+  error:
+    include-stacktrace: NEVER
+    whitelabel:
+      enabled: false

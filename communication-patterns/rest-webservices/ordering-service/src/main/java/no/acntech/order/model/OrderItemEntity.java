@@ -95,7 +95,7 @@ public class OrderItemEntity {
     }
 
     public void setStatusCanceled() {
-        status = OrderItemStatus.CANCELED;
+        status = OrderItemStatus.DELETED;
     }
 
     public boolean isReserved() {
@@ -103,7 +103,7 @@ public class OrderItemEntity {
     }
 
     public boolean isNotCanceled() {
-        return !OrderItemStatus.CANCELED.equals(status);
+        return !OrderItemStatus.DELETED.equals(status);
     }
 
     @PrePersist

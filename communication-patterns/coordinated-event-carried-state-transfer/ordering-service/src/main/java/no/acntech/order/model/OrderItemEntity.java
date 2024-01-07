@@ -90,7 +90,7 @@ public class OrderItemEntity {
     }
 
     public void cancelOrderItem() {
-        status = OrderItemStatus.CANCELED;
+        status = OrderItemStatus.DELETED;
     }
 
     @PrePersist

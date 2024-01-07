@@ -2,16 +2,16 @@ export enum OrderItemStatus {
     PENDING = 'PENDING',
     RESERVED = 'RESERVED',
     CONFIRMED = 'CONFIRMED',
-    CANCELED = 'CANCELED',
+    DELETED = 'DELETED',
     REJECTED = 'REJECTED',
     FAILED = 'FAILED'
 }
 
 export enum OrderStatus {
-    PENDING = 'PENDING',
-    CONFIRMED = 'CONFIRMED',
+    OPEN = 'OPEN',
+    CLOSED = 'CLOSED',
     CANCELED = 'CANCELED',
-    REJECTED = 'REJECTED'
+    ABORTED = 'ABORTED'
 }
 
 export interface CreateOrderItem {

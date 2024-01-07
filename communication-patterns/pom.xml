@@ -16,6 +16,7 @@
     <!-- MODULES -->
     <modules>
         <module>rest-webservices</module>
+        <module>grpc-webservices</module>
         <module>messaging</module>
         <module>coordinated-event-notification</module>
         <module>coordinated-event-carried-state-transfer</module>
